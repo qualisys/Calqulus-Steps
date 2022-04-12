@@ -1,10 +1,10 @@
 # Geometry steps
 
-- [distance](#%60distance%60)
-- [magnitude](#%60magnitude%60)
-- [plane](#%60plane%60)
-- [project](#%60project%60)
-- [unitVector](#%60unitvector%60)
+- [distance](#distance)
+- [magnitude](#magnitude)
+- [plane](#plane)
+- [project](#project)
+- [unitVector](#unitvector)
 
 
 ---
@@ -27,10 +27,10 @@
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -61,10 +61,10 @@ length of the input sequences.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -93,10 +93,10 @@ the magnitude of it (Euclidian norm).
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -128,10 +128,10 @@ length of the input sequences.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -163,10 +163,10 @@ be left untouched.*
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

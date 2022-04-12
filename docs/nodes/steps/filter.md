@@ -1,7 +1,7 @@
 # Filter steps
 
-- [highpass](#%60highpass%60)
-- [lowpass](#%60lowpass%60)
+- [highpass](#highpass)
+- [lowpass](#lowpass)
 
 These are steps that takes a single series input and runs a 
 Butterworth IIR filter function over them and outputs a resulting 
@@ -74,10 +74,10 @@ NaN values are re-inserted in their original places in the output.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -144,10 +144,10 @@ Runs a Butterworth high-pass filter over the input data.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

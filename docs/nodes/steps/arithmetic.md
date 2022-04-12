@@ -1,9 +1,9 @@
 # Arithmetic steps
 
-- [add](#%60add%60)
-- [divide](#%60divide%60)
-- [multiply](#%60multiply%60)
-- [subtract](#%60subtract%60)
+- [add](#add)
+- [divide](#divide)
+- [multiply](#multiply)
+- [subtract](#subtract)
 
 These are steps that takes a list of any kind of input (scalar / 
 series / events / numbers), i.e., _operands_, then runs a defined 
@@ -133,7 +133,7 @@ The following option is available on all Arithmetic steps.
 > 
 > The following option is available on all Arithmetic steps.
 >
-> * [frameSequenceOrder](#%60framesequenceorder%60)
+> * [frameSequenceOrder](#framesequenceorder)
 >
 >
 ></details>
@@ -142,10 +142,10 @@ The following option is available on all Arithmetic steps.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -172,7 +172,7 @@ Adds the input operands.
 > 
 > The following option is available on all Arithmetic steps.
 >
-> * [frameSequenceOrder](#%60framesequenceorder%60)
+> * [frameSequenceOrder](#framesequenceorder)
 >
 >
 ></details>
@@ -181,10 +181,10 @@ Adds the input operands.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -211,7 +211,7 @@ Divides the input operands.
 > 
 > The following option is available on all Arithmetic steps.
 >
-> * [frameSequenceOrder](#%60framesequenceorder%60)
+> * [frameSequenceOrder](#framesequenceorder)
 >
 >
 ></details>
@@ -220,10 +220,10 @@ Divides the input operands.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -250,7 +250,7 @@ Multiplies the input operands.
 > 
 > The following option is available on all Arithmetic steps.
 >
-> * [frameSequenceOrder](#%60framesequenceorder%60)
+> * [frameSequenceOrder](#framesequenceorder)
 >
 >
 ></details>
@@ -259,10 +259,10 @@ Multiplies the input operands.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

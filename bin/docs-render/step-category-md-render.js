@@ -63,7 +63,7 @@ const renderStepCategoryPage = (category, steps, globalProps) => {
 				aliases = ` / ${ step.alias }`;
 			}
 		}
-		output += `- [${ step.name }${ aliases }](#${ adoSlug('`' + step.name + '`') })\n`;
+		output += `- [${ step.name }${ aliases }](#${ adoSlug(step.name) })\n`;
 	}
 	
 	if (category.description) {
@@ -143,7 +143,7 @@ const renderStepCategoryPage = (category, steps, globalProps) => {
 				output += `> The following option${ (category.options.length === 1) ? ' is' : 's are' } available on all ${ category.name } steps.\n>\n`;
 		
 				for (const option of category.options) {
-					output += `> * [${ option.name }](#${ adoSlug('`' + option.name + '`') })\n`;
+					output += `> * [${ option.name }](#${ adoSlug(option.name) })\n`;
 				}
 				
 				output += `>\n>\n></details>\n>\n`;
@@ -154,7 +154,7 @@ const renderStepCategoryPage = (category, steps, globalProps) => {
 				output += `> The following option${ (globalProps.options.length === 1) ? ' is' : 's are' } available globally on all steps.\n>\n`;
 		
 				for (const option of globalProps.options) {
-					output += `> * [${ option.name }](./index.md#${ adoSlug('`' + option.name + '`') })\n`;
+					output += `> * [${ option.name }](./index.md#${ adoSlug(option.name) })\n`;
 				}
 				
 				output += `>\n>\n></details>\n>\n`;

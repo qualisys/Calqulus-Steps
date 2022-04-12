@@ -1,6 +1,6 @@
 # Logic steps
 
-- [if](#%60if%60)
+- [if](#if)
 
 These are steps that run logical expressions.
 
@@ -35,10 +35,10 @@ These are steps that run logical expressions.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

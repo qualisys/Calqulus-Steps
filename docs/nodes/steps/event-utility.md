@@ -1,8 +1,8 @@
 # Event utility steps
 
-- [eventDuration](#%60eventduration%60)
-- [eventMask](#%60eventmask%60)
-- [eventTime](#%60eventtime%60)
+- [eventDuration](#eventduration)
+- [eventMask](#eventmask)
+- [eventTime](#eventtime)
 
 These are steps that uses events as inputs to affect the output 
 in various ways.
@@ -28,10 +28,10 @@ in various ways.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -92,10 +92,10 @@ the "from", or "to" input event.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -147,10 +147,10 @@ that the event cycles are annotated on the signal.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

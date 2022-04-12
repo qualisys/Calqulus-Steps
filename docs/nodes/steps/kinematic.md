@@ -1,8 +1,8 @@
 # Kinematic steps
 
-- [acceleration](#%60acceleration%60)
-- [derivative](#%60derivative%60)
-- [velocity](#%60velocity%60)
+- [acceleration](#acceleration)
+- [derivative](#derivative)
+- [velocity](#velocity)
 
 These are steps that takes a series input and runs a derivative 
 function over them and outputs a resulting signal of the same 
@@ -28,10 +28,10 @@ type as the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -61,10 +61,10 @@ the resulting first and last frames will be null._
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -96,10 +96,10 @@ the resulting first and last frames will be null._
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

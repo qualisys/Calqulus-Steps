@@ -1,14 +1,14 @@
 # Aggregation steps
 
-- [count](#%60count%60)
-- [max](#%60max%60)
-- [mean](#%60mean%60)
-- [median](#%60median%60)
-- [min](#%60min%60)
-- [range](#%60range%60)
-- [rms](#%60rms%60)
-- [standardDeviation / stdDev](#%60standarddeviation%60)
-- [sum](#%60sum%60)
+- [count](#count)
+- [max](#max)
+- [mean](#mean)
+- [median](#median)
+- [min](#min)
+- [range](#range)
+- [rms](#rms)
+- [standardDeviation / stdDev](#standarddeviation)
+- [sum](#sum)
 
 These are steps that take any kind of input (scalar / series / events) 
 and outputs a scalar result value, usually some form of summary value.
@@ -58,7 +58,7 @@ The following option is available on all Aggregation steps.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -67,10 +67,10 @@ The following option is available on all Aggregation steps.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -111,7 +111,7 @@ event input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -120,10 +120,10 @@ event input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -149,7 +149,7 @@ Outputs the max value of the input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -158,10 +158,10 @@ Outputs the max value of the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -200,7 +200,7 @@ Outputs the mean value of the input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -209,10 +209,10 @@ Outputs the mean value of the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -238,7 +238,7 @@ Outputs the minimum value of the input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -247,10 +247,10 @@ Outputs the minimum value of the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -276,7 +276,7 @@ Outputs the median value of the input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -285,10 +285,10 @@ Outputs the median value of the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -316,7 +316,7 @@ value of the input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -325,10 +325,10 @@ value of the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -356,7 +356,7 @@ Outputs the Root Mean Square (root of the average squared deviations) between tw
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -365,10 +365,10 @@ Outputs the Root Mean Square (root of the average squared deviations) between tw
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -394,7 +394,7 @@ Outputs the standard deviation value of the input.
 > 
 > The following option is available on all Aggregation steps.
 >
-> * [useCycles](#%60usecycles%60)
+> * [useCycles](#usecycles)
 >
 >
 ></details>
@@ -403,10 +403,10 @@ Outputs the standard deviation value of the input.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

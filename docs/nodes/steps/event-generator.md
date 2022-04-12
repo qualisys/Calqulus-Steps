@@ -1,7 +1,7 @@
 # Event generator steps
 
-- [peakFinder](#%60peakfinder%60)
-- [threshold](#%60threshold%60)
+- [peakFinder](#peakfinder)
+- [threshold](#threshold)
 
 These are steps that accepts a series (numeric array or single 
 component) input and outputs an event result.
@@ -114,10 +114,10 @@ component) input and outputs an event result.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -234,10 +234,10 @@ The `sequence` option expects the following sub-options:
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>

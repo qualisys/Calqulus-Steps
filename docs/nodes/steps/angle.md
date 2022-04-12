@@ -1,9 +1,9 @@
 # Angle steps
 
-- [angle](#%60angle%60)
-- [angularVelocity](#%60angularvelocity%60)
-- [jointAngle](#%60jointangle%60)
-- [jointAngleVelocity](#%60jointanglevelocity%60)
+- [angle](#angle)
+- [angularVelocity](#angularvelocity)
+- [jointAngle](#jointangle)
+- [jointAngleVelocity](#jointanglevelocity)
 
 The steps `jointAngle` and `jointAngleVelocity` exist for the 
 sake of backwards compatibility and offer the same functionality 
@@ -78,8 +78,8 @@ The following options are available on all Angle steps.
 > 
 > The following options are available on all Angle steps.
 >
-> * [project](#%60project%60)
-> * [rotationOrder](#%60rotationorder%60)
+> * [project](#project)
+> * [rotationOrder](#rotationorder)
 >
 >
 ></details>
@@ -88,10 +88,10 @@ The following options are available on all Angle steps.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -170,8 +170,8 @@ specified as arrays or with named vector signals (ie markers).
 > 
 > The following options are available on all Angle steps.
 >
-> * [project](#%60project%60)
-> * [rotationOrder](#%60rotationorder%60)
+> * [project](#project)
+> * [rotationOrder](#rotationorder)
 >
 >
 ></details>
@@ -180,10 +180,10 @@ specified as arrays or with named vector signals (ie markers).
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -221,8 +221,8 @@ in your instance**.
 > 
 > The following options are available on all Angle steps.
 >
-> * [project](#%60project%60)
-> * [rotationOrder](#%60rotationorder%60)
+> * [project](#project)
+> * [rotationOrder](#rotationorder)
 >
 >
 ></details>
@@ -231,10 +231,10 @@ in your instance**.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
@@ -281,8 +281,8 @@ three or four inputs.
 > 
 > The following options are available on all Angle steps.
 >
-> * [project](#%60project%60)
-> * [rotationOrder](#%60rotationorder%60)
+> * [project](#project)
+> * [rotationOrder](#rotationorder)
 >
 >
 ></details>
@@ -291,10 +291,10 @@ three or four inputs.
 > 
 > The following options are available globally on all steps.
 >
-> * [export](./index.md#%60export%60)
-> * [output](./index.md#%60output%60)
-> * [set](./index.md#%60set%60)
-> * [space](./index.md#%60space%60)
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
 >
 >
 ></details>
