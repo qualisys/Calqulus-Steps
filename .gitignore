@@ -1,0 +1,11 @@
+.idea/*
+.nyc_output
+build
+node_modules
+test
+test-results
+src/**.js
+coverage
+*.log
+yarn.lock
+test_data
