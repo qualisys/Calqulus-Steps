@@ -25,10 +25,10 @@ import { BaseStep } from '../base-step';
 
 		'''yaml
 		- parameter: test
-		  steps:
-		    - threshold: Hips.z
-		      value: 1000
-		      direction: down
+          steps:
+            - threshold: Hips.z
+              value: 1000
+              direction: down
 		'''
 `,
 	inputs: [

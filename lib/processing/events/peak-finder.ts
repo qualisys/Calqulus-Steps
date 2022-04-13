@@ -97,9 +97,9 @@ import { BaseStep } from '../base-step';
 
 		'''yaml
 		- peakFinder: norm_ltb_acc
-		  width: 3
-		  distance: [20, 60]
-		  height: 0.20
+          width: 3
+          distance: [20, 60]
+          height: 0.20
 		'''
 		
 		The next example will find sequences of a low, then another low, 
@@ -108,13 +108,13 @@ import { BaseStep } from '../base-step';
 		
 		'''yaml
 		- peakFinder: norm_ltb_acc
-		  width: 3
-		  distance: 20
-		  height: 0.20
-		  sequence:
-		    ranges: L 50 H
-		    pattern: LLH
-		    keep: [0]
+          width: 3
+          distance: 20
+          height: 0.20
+          sequence:
+            ranges: L 50 H
+            pattern: LLH
+            keep: [0]
 		'''
 	`,
 	inputs: [

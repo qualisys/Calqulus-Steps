@@ -32,7 +32,7 @@ export class PlaneSequence implements ISequence {
 	 * 
 	 * @remark The frame index is 1-based.
 	 */
-	 getPlaneAtFrame(frame: number, ref?: Plane): Plane {
+	getPlaneAtFrame(frame: number, ref?: Plane): Plane {
 		const frameIndex = Math.min(frame, this.a.length) - 1;
 
 		if (ref) {
@@ -52,7 +52,7 @@ export class PlaneSequence implements ISequence {
 	 * `a`, `b`, `c`, and `d` are included.
 	 * @param param0 
 	 */
-	 static fromArray([a, b, c, d]: TypedArray[]) {
+	static fromArray([a, b, c, d]: TypedArray[]) {
 		return new PlaneSequence(a, b, c, d);
 	}
 

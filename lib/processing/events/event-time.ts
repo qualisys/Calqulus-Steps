@@ -16,8 +16,8 @@ import { BaseStep } from '../base-step';
 	examples: markdownFmt`
 		'''yaml
 		- parameter: RFS_times
-		  steps:
-		    - eventTime: RFS
+          steps:
+            - eventTime: RFS
 		'''
 	`,
 	inputs: [

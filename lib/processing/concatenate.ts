@@ -28,10 +28,10 @@ import { BaseStep } from './base-step';
 
 		'''yaml
 		- parameter: Step_Length_Mean_MEAN
-		  steps:
-		    - concatenate: [Right_Step_Length, Left_Step_Length]
-		      output: step_length
-		    - mean: step_length
+          steps:
+            - concatenate: [Right_Step_Length, Left_Step_Length]
+              output: step_length
+            - mean: step_length
 		'''`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },

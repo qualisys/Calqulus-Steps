@@ -106,7 +106,7 @@ export enum FrameSequenceOperandOrder {
 
 			''' yaml
 			- subtract: [LeftFoot.y@LFS, RightFoot.y@RFS]
-			  frameSequenceOrder: reverse
+              frameSequenceOrder: reverse
 			'''
 
 			_Creates an event sequence from the inputs, starting from the 

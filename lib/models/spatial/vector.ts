@@ -152,7 +152,7 @@ export class Vector implements IVector {
 	 * @param {Vector} out the receiving vector
 	 * @returns {number} the Euclidian norm
 	 */
-	 static norm(out: Vector): number {
+	static norm(out: Vector): number {
 		return Math.hypot(out.x, out.y, out.z);
 	}
 }

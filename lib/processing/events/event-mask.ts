@@ -81,10 +81,10 @@ import { BaseStep } from '../base-step';
 		required: false,
 		default: 'False',
 		description: markdownFmt`
-		Whether or not the signal should be truncated, i.e., if values 
-		that were not within an "event pair" should be removed or not. 
-		
-		This will only apply if ''replacement'' does not have a value.
+			Whether or not the signal should be truncated, i.e., if values 
+			that were not within an "event pair" should be removed or not. 
+			
+			This will only apply if ''replacement'' does not have a value.
 		`,
 	}],
 	output: ['Scalar', 'Series', 'Event', 'Number'],
