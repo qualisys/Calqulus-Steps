@@ -32,8 +32,8 @@
 
     "doc": "run-s doc:html && open-cli build/docs/index.html",
     "doc:steps": "node bin/build-step-docs",
-    "doc:html": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode modules --out build/docs",
-    "doc:json": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --json build/docs/typedoc.json",
+    "doc:html": "typedoc src/ --exclude **/*.spec.ts --out build/docs",
+    "doc:json": "typedoc src/ --exclude **/*.spec.ts --json build/docs/typedoc.json",
     
     "ci-test": "run-s ci-test:*",
     "ci-test:lint": "eslint src --ext .ts --format junit --output-file test-results/eslint.xml",
@@ -71,7 +71,6 @@
     "tap-xunit": "^2.4.1",
     "ts-node": "^9.0.0",
     "typedoc": "^0.22.15",
-    "typedoc-plugin-external-module-name": "^4.0.6",
     "typescript": "^4.0.2"
   },
   "files": [
