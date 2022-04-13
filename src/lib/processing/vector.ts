@@ -21,8 +21,8 @@ import { BaseStep } from './base-step';
 	examples: markdownFmt`
 		'''yaml
 		- parameter: MyVector
-		  steps:
-		    - vector: [Hips.x, 0, [1, 2, 3]]
+          steps:
+            - vector: [Hips.x, 0, [1, 2, 3]]
 		'''
 
 		_This example shows how to export a vector with the x component 

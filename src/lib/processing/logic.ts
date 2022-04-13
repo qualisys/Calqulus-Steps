@@ -33,18 +33,18 @@ import { BaseStep } from './base-step';
 	examples: markdownFmt`
 		''' yaml
 		- parameter: myCondition
-		  steps:
-		    - segment: RightFoot => rfoot
-		    - segment: LeftFoot => lfoot
-		    - if: 10 > 5
-		      then: rfoot
-		      else: lfoot
+          steps:
+            - segment: RightFoot => rfoot
+            - segment: LeftFoot => lfoot
+            - if: 10 > 5
+              then: rfoot
+              else: lfoot
 		'''
 		
 		''' yaml
 		- if: (posY > 10 || posY < 5) && posX != 0
-		  then: posY
-		  else: posX
+          then: posY
+          else: posX
 		'''
 	`,
 	inputs: [
