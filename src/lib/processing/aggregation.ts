@@ -100,14 +100,17 @@ class BaseAggregationStep extends BaseStep {
 				break;
 		}
 
-		if (returnSignal) {
-			// Reset cycles before returning the resulting signal.
-			returnSignal.cycles = undefined;
-
-			return returnSignal;
+		if (!returnSignal) {
+			returnSignal = sourceInput.clone(res[0]);
 		}
 
-		return sourceInput.clone(res[0]);
+		// Reset cycles before returning the resulting signal.
+		returnSignal.cycles = undefined;
+
+		// Set event status.
+		returnSignal.isEvent = returnSignal.isEvent || (this.returnFrames && !!this.indexAggregation);
+
+		return returnSignal;
 	}
 }
 
