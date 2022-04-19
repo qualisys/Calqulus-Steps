@@ -1,4 +1,4 @@
-import { Signal, SignalType } from '../../models/signal';
+import { ResultType, Signal } from '../../models/signal';
 import { StepClass } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
@@ -36,10 +36,8 @@ export class EventTimeStep extends BaseStep {
 			throw new ProcessingError(`No valid inputs.`);
 		}
 
-		const validEventTypes = [SignalType.Uint32Array, SignalType.Float32Array, SignalType.Float32];
-
-		if (!validEventTypes.includes(this.inputs[0].type)) {
-			throw new ProcessingError(`This step expects a single array as input.`);
+		if (!this.inputs[0].isEventLike) {
+			throw new ProcessingError(`The input does not appear to be an event.`);
 		}
 
 		// Get the frame rate from the input.
