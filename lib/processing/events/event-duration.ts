@@ -79,6 +79,8 @@ export class EventDurationStep extends BaseStep {
 
 		const returnSignal = from.clone(Float32Array.from(durations));
 		returnSignal.frameRate = frameRate;
+		returnSignal.isEvent = false;
+		returnSignal.resultType = ResultType.Scalar;
 
 		return returnSignal;
 	}

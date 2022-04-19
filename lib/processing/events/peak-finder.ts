@@ -1,5 +1,5 @@
 import { PropertyType } from '../../models/property';
-import { Signal, SignalType } from '../../models/signal';
+import { ResultType, Signal, SignalType } from '../../models/signal';
 import { StepCategory, StepClass } from '../../step-registry';
 import { ISequenceOptions, IValueRange, PeakFinder } from '../../utils/math/peak-finder';
 import { ProcessingError } from '../../utils/processing-error';
@@ -255,6 +255,9 @@ export class PeakFinderStep extends BaseStep {
 
 		const peaks = PeakFinder.findPeaks(this.inputs[0].getFloat32ArrayValue(), config);
 		result.setValue(Uint32Array.from(peaks.map(p => p.mid)));
+		
+		result.isEvent = true;
+		result.resultType = ResultType.Scalar;
 
 		return result;
 	}
