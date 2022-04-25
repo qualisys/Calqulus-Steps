@@ -1,4 +1,4 @@
-import { Signal, SignalType } from '../../models/signal';
+import { ResultType, Signal } from '../../models/signal';
 import { StepCategory, StepClass } from '../../step-registry';
 import { EventUtil } from '../../utils/events';
 import { ProcessingError } from '../../utils/processing-error';
@@ -54,9 +54,8 @@ export class EventDurationStep extends BaseStep {
 
 		const from = this.inputs[0];
 		const to = this.inputs[1];
-		const validEventTypes = [SignalType.Uint32Array, SignalType.Float32Array, SignalType.Float32];
 
-		if (!validEventTypes.includes(from.type) || !validEventTypes.includes(to.type)) {
+		if (!from.isEventLike || !to.isEventLike) {
 			throw new ProcessingError(`Inputs are expected to be events.`);
 		}
 
@@ -79,6 +78,8 @@ export class EventDurationStep extends BaseStep {
 
 		const returnSignal = from.clone(Float32Array.from(durations));
 		returnSignal.frameRate = frameRate;
+		returnSignal.isEvent = false;
+		returnSignal.resultType = ResultType.Scalar;
 
 		return returnSignal;
 	}

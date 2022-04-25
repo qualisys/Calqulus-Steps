@@ -1,5 +1,5 @@
 import { PropertyType } from '../../models/property';
-import { Signal, SignalType } from '../../models/signal';
+import { ResultType, Signal, SignalType } from '../../models/signal';
 import { StepClass } from '../../step-registry';
 import { CrossDirection, Threshold } from '../../utils/math/threshold';
 import { ProcessingError } from '../../utils/processing-error';
@@ -99,6 +99,9 @@ export class ThresholdStep extends BaseStep {
 
 		// TODO: Events currently need to be integers, so it's rounded to the nearest frame.
 		result.setValue(Uint32Array.from(intersections.map(p => Math.round(p))));
+
+		result.isEvent = true;
+		result.resultType = ResultType.Scalar;
 
 		return result;
 	}

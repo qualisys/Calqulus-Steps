@@ -120,9 +120,7 @@ export class EventMaskStep extends BaseStep {
 			throw new ProcessingError(`Unexpected type in input 1, got ${ source.typeToString }.`);
 		}
 
-		const validEventTypes = [SignalType.Uint32Array, SignalType.Float32Array, SignalType.Float32];
-
-		if (!validEventTypes.includes(from.type) || !validEventTypes.includes(to.type)) {
+		if (!from.isEventLike || !to.isEventLike) {
 			throw new ProcessingError(`Input 2 and 3 are expected to be events.`);
 		}
 
@@ -133,49 +131,50 @@ export class EventMaskStep extends BaseStep {
 		// Generate event frame pairs
 		const pairs = EventUtil.eventSequence(fromFrames, toFrames);
 
+		/**
+		 * If the signal input is an event, only event frames that is 
+		 * within the span of one of the event pairs will be returned.
+		 */
+		if (source.isEvent) {
+			const sourceFrames = (source.type === SignalType.Float32Array) ? source.getFloat32ArrayValue() : source.getUint32ArrayValue();
+			const filteredFrames = sourceFrames.filter(f => pairs.find(p => f >= p.start && f <= p.end));
+
+			const returnSignal = source.clone(filteredFrames);
+			returnSignal.resultType = ResultType.Scalar;
+
+			return returnSignal;
+		}
+
+		const returnSignal = source.clone(false);
+
+		if (!this.truncate && this.replacementValue === undefined) {
+			// Apply the event pairs as the signal cycles.
+			returnSignal.cycles = pairs;
+
+			return returnSignal.setValue(source.getValue());
+		}
+
+		const sourceFrames = [...source.array];
+		const filteredFrames = sourceFrames.map(a => SeriesUtil.mask(a, pairs, (!this.truncate) ? this.replacementValue : undefined));
+
+		if (this.truncate) {
+			// Since we are removing frames, the resulting Signal must be marked as 
+			// "scalar" since the sequence is no longer intact.
+			returnSignal.resultType = ResultType.Scalar;
+		}
+
+		if (filteredFrames.length) {
+			// Apply the mask as the signal cycles.
+			returnSignal.cycles = filteredFrames[0].mask;
+		}
+
 		switch (source.type) {
-			case SignalType.Float32Array:
-			case SignalType.Uint32Array: {
-				const sourceFrames = (source.type === SignalType.Float32Array) ? source.getFloat32ArrayValue() : source.getUint32ArrayValue();
-				const filteredFrames = sourceFrames.filter(f => pairs.find(p => f >= p.start && f <= p.end));
-
-				const returnSignal = source.clone(filteredFrames);
-				returnSignal.resultType = ResultType.Scalar;
-				return returnSignal;
-			}
-			default: {
-				const returnSignal = source.clone(false);
-
-				if (!this.truncate && this.replacementValue === undefined) {
-					// Apply the event pairs as the signal cycles.
-					returnSignal.cycles = pairs;
-
-					return returnSignal.setValue(source.getValue());
-				}
-
-				const sourceFrames = [...source.array];
-				const filteredFrames = sourceFrames.map(a => SeriesUtil.mask(a, pairs, (!this.truncate) ? this.replacementValue : undefined));
-
-				if (this.truncate) {
-					// Since we are removing frames, the resulting Signal must be marked as 
-					// "scalar" since the sequence is no longer intact.
-					returnSignal.resultType = ResultType.Scalar;
-				}
-
-				if (filteredFrames.length) {
-					// Apply the mask as the signal cycles.
-					returnSignal.cycles = filteredFrames[0].mask;
-				}
-
-				switch (source.type) {
-					case SignalType.Segment:
-						return returnSignal.setValue(Segment.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
-					case SignalType.VectorSequence:
-						return returnSignal.setValue(Marker.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
-					default:
-						return returnSignal.setValue(filteredFrames.map(f => f.series as TypedArray));
-				}
-			}
+			case SignalType.Segment:
+				return returnSignal.setValue(Segment.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
+			case SignalType.VectorSequence:
+				return returnSignal.setValue(Marker.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
+			default:
+				return returnSignal.setValue(filteredFrames.map(f => f.series as TypedArray));
 		}
 	}
 }

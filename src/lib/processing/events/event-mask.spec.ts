@@ -22,8 +22,12 @@ const frameRate = 300;
 
 const e1 = new Signal(eventFrames1, frameRate);
 const e2 = new Signal(eventFrames2, frameRate);
+e1.isEvent = e2.isEvent = true;
+
 const s1 = new Signal(vs);
 const s2 = new Signal(comp);
+const s2Event = new Signal(comp);
+s2Event.isEvent = true;
 const s3 = new Signal(0.1); // Wrong type
 
 const seg1 = new Signal(
@@ -46,6 +50,14 @@ test('EventMaskStep - Wrong input signals', async (t) => {
 
 test('EventMaskStep - simple array', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2, e1, e2]).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, cycles);
+	t.deepEqual(res.getValue(), comp);
+});
+
+test('EventMaskStep - event array', async (t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(0, 1, 2, 5, 6, 7, 8));

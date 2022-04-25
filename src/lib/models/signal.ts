@@ -209,6 +209,17 @@ export class Signal implements IDataSequence {
 	}
 
 	/**
+	 * Returns true if the signal has the property isEvent set to `true`
+	 * or if the contained data is compliant with the constraints of being an event.
+	 */
+	get isEventLike(): boolean {
+		if (this.isEvent) return true;
+
+		const validEventTypes = [SignalType.Uint32Array, SignalType.Float32Array, SignalType.Float32];
+		return this.resultType === ResultType.Scalar && validEventTypes.includes(this.type);
+	}
+
+	/**
 	 * Instantiate a [[SignalType]] data structure from an array.
 	 * @param type The intended data type.
 	 * @param array A multi-dimensional array of signal data.
