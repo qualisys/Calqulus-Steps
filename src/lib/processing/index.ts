@@ -94,6 +94,7 @@ export * from './algorithms/gap-fill';
 export * from './algorithms/negate';
 export * from './algorithms/round';
 export * from './algorithms/trigonometry';
+export * from './dot-product';
 
 // Logic
 export * from './logic';
