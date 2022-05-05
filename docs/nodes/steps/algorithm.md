@@ -138,7 +138,7 @@ signal will be shorter by one item.
 > #### `type`
 >
 > **Type:** `String`  
-> **Required:** `True`  
+> **Required:** `False`  
 > **Allowed values:** `linear | spline`  
 > **Default value:** `spline`  
 > #### `maxGapLength`
