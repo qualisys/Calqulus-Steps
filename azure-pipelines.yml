@@ -4,6 +4,9 @@ trigger:
     include:
       - '*'
 
+pool:
+  vmImage: 'ubuntu-latest'
+
 resources:
   repositories:
     - repository: calqulus-ci
