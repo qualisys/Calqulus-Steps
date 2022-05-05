@@ -3,6 +3,7 @@
 - [abs](#abs)
 - [convert](#convert)
 - [diff](#diff)
+- [dotProduct / dot](#dotproduct)
 - [gapFill](#gapfill)
 - [negate](#negate)
 - [round](#round)
@@ -122,6 +123,45 @@ the units defined in the `from` and `to` options.
 Outputs the difference between each value in the input. 
 Since this compares value `n` with `n+1`, the output 
 signal will be shorter by one item.
+
+---
+
+### `dotProduct`
+
+**Alias:**  dot
+
+> **Inputs**
+>
+> 1. `Series | Scalar`
+> 2. `Series | Scalar`
+>
+> **Output:** `Series`
+
+
+> **Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+	Calculates the dot product between two vectors. 
+
+	The ouput length will be equal to the length of the first vector sequence. 
+
+	The second vector sequence needs to be singular or equal to the first vector sequence in length.
+
+	A lone vector in the second input will be used to calculate the dot product between itself 
+	and all vectors contained in the first vector sequence. 
 
 ---
 

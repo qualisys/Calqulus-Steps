@@ -16,6 +16,19 @@ export class VectorSequence implements ISequence {
 	get length() { return this.x.length; };
 
 	/** 
+	 * Computes the dot product of two vector sequences.
+	 */
+	static dot(a: VectorSequence, b: VectorSequence): TypedArray[] {
+		const res = [];
+
+		for (let i = 0; i < a.length; i++) {
+			res.push(Vector.dot(a.getVectorAtFrame(i+1), b.getVectorAtFrame(i+1)));
+		}
+
+		return res;
+	}
+
+	/** 
 	 * Computes the cross product from each vector in this and the specified vector sequence.
 	 * 
 	 * If a Vector is passed as `ref`, the function will 
