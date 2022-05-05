@@ -156,7 +156,7 @@ signal will be shorter by one item.
 
 	Calculates the dot product between two vectors. 
 
-	The ouput length will be equal to the length of the first vector sequence. 
+	The output length will be equal to the length of the first vector sequence. 
 
 	The second vector sequence needs to be singular or equal to the first vector sequence in length.
 
