@@ -1,4 +1,3 @@
-
 import { Marker } from '../../models/marker';
 import { IStepNode } from '../../models/node-interface';
 import { Signal, SignalType } from '../../models/signal';
@@ -25,7 +24,7 @@ import { BaseImportStep } from './base-import';
 		Create a new marker signal using the x-component of an existing marker and fixed y- and z- coordinates.
 		''' yaml
 		- marker:
-		  origin: [RFoot.x, 0, 0]
+          origin: [RFoot.x, 0, 0]
 		'''
 	`,
 	inputs: [

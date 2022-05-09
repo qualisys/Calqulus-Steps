@@ -28,7 +28,7 @@ export enum InterpolationType {
 		name: 'type',
 		type: 'String',
 		enum: ['linear', 'spline'],
-		required: true,
+		required: false,
 		default: 'spline',
 	}, {
 		name: 'maxGapLength',
