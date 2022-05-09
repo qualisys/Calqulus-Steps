@@ -654,6 +654,7 @@ export class Signal implements IDataSequence {
 		out.targetSpace = this.targetSpace;
 		out.frameRate = this.frameRate;
 		out.cycles = this.cycles;
+		out.isEvent = this.isEvent;
 
 		if (this._resultType) {
 			out.resultType = this._resultType;
