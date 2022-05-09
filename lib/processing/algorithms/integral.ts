@@ -22,6 +22,21 @@ import { BaseStep } from ".././base-step";
 		default: 'false',
 		description: markdownFmt`
 			Returns the integral as a single value scalar.`,
+	}, {
+		name: 'useCycles',
+		type: 'Boolean',
+		required: false,
+		default: 'True',
+		description: markdownFmt`
+			If the signal has cycles defined, the integral step will be run 
+			separately over each signal, and a list of values are returned, 
+			one for each cycle.
+
+			To avoid this behaviour, set ''useCycles'' to ''false''.
+			
+			For information on how to set event cycles on a signal, 
+			see the [eventMask](./event-utils.md) step.
+		`,
 	}],
 	output: ['Scalar', 'Series'],
 })
