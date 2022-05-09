@@ -4,6 +4,7 @@
 - [convert](#convert)
 - [diff](#diff)
 - [gapFill](#gapfill)
+- [integral](#integral)
 - [negate](#negate)
 - [round](#round)
 
@@ -169,6 +170,47 @@ where gaps are filled using interpolation.
 
 ***Note:*** *Gaps at the beginning or end of the signal will 
 not be interpolated.*
+
+---
+
+### `integral`
+
+> **Inputs**
+>
+> 1. `Series`
+>
+> **Output:** `Scalar | Series`
+
+> **Options**
+>
+> #### `scalar`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `false`  
+>
+> Returns the integral as a single value scalar.
+
+>
+
+> **Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Returns the cumulative integral between neighboring frames in a data series, using the trapezoidal rule. 
+It returns a series by default.
 
 ---
 
