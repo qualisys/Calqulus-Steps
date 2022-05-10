@@ -12,6 +12,7 @@ resources:
     - repository: calqulus-ci
       type: git
       name: Calqulus-CI-Templates
+      ref: refs/heads/feature/steps-regression-tests
 
 extends:
   template: calqulus-steps.yml@calqulus-ci
