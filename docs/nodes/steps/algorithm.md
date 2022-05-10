@@ -5,6 +5,7 @@
 - [diff](#diff)
 - [dotProduct / dot](#dotproduct)
 - [gapFill](#gapfill)
+- [integral](#integral)
 - [negate](#negate)
 - [round](#round)
 
@@ -209,6 +210,62 @@ where gaps are filled using interpolation.
 
 ***Note:*** *Gaps at the beginning or end of the signal will 
 not be interpolated.*
+
+---
+
+### `integral`
+
+> **Inputs**
+>
+> 1. `Series`
+>
+> **Output:** `Scalar | Series`
+
+> **Options**
+>
+> #### `scalar`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `false`  
+>
+> Returns the integral as a single value scalar.
+
+> #### `useCycles`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `True`  
+>
+> If the signal has cycles defined, the integral step will be run 
+> separately over each signal, and a list of values are returned, 
+> one for each cycle.
+>
+> To avoid this behaviour, set `useCycles` to `false`.
+>
+> For information on how to set event cycles on a signal, 
+> see the [eventMask](./event-utils.md) step.
+
+>
+
+> **Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Returns the cumulative integral between neighboring frames in a data series, using the trapezoidal rule. 
+It returns a series by default.
 
 ---
 
