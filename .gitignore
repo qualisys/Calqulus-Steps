@@ -5,6 +5,7 @@ node_modules
 test
 test-results
 src/**.js
+src/build-metadata.ts
 coverage
 *.log
 yarn.lock
