@@ -51,4 +51,6 @@ export * from './lib/step-registry';
 
 export * from './test-utils/mock-step';
 
+export * from './build-metadata';
+
 import './types/extras';
