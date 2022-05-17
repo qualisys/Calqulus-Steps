@@ -2,11 +2,13 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Segment } from '../models/segment';
+import { PlaneSequence } from '../models/sequence/plane-sequence';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
 
 import { AngleStep, AngularVelocityStep, JointAngleStep } from './angle';
+import { PlaneStep } from './plane';
 
 const s1 = new Signal(f32(1, 2, 3));
 const s2 = new Signal(f32(4, 5, 6));
@@ -15,6 +17,10 @@ const s4 = new Signal(f32(-4, -7, -9));
 
 const vs1 = new Signal(new VectorSequence(f32(1, 2, 3), f32(2, 3, 4), f32(3, 4, 5)));
 const vs2 = new Signal(new VectorSequence(f32(4, 5, 6), f32(6, 6, 7), f32(3, 7, 1)));
+
+const vs1x = new Signal(new VectorSequence(f32(1), f32(2), f32(3)));
+const vs2x = new Signal(new VectorSequence(f32(4), f32(5), f32(6)));
+const vs3x = new Signal(new VectorSequence(f32(-1), f32(-2), f32(-3)));
 
 const q1 = new QuaternionSequence(f32(-0.076565), f32(0.030934), f32(-0.720501), f32(0.688520));
 const q2 = new QuaternionSequence(f32(-0.134267), f32(0.126671), f32(-0.706593), f32(0.683120));
@@ -108,7 +114,6 @@ test('AngleStep - Input errors - Two inputs', async (t) => {
 	await t.throwsAsync(mockStep(AngleStep, [s1, sLong]).process()); // A long vector
 	await t.throwsAsync(mockStep(AngleStep, [s1, undefined]).process()); // A missing input
 	await t.throwsAsync(mockStep(AngleStep, [s1, sString]).process()); // A wrong input type
-	await t.throwsAsync(mockStep(AngleStep, [s1, vs1]).process()); // A wrong input type
 });
 
 test('AngleStep - Input errors - Three inputs', async (t) => {
@@ -126,6 +131,9 @@ test('AngleStep - Input errors - Too many inputs', async (t) => {
 
 test('AngleStep - Input errors - Invalid projection coordinate plane', async (t) => {
 	t.throws(() => { mockStep(AngleStep, [s1, s2], { project: 'hello' }) });
+});
+test('AngleStep - Input errors - Invalid projection input type ', async (t) => {
+	t.throws(() => {(mockStep(AngleStep, [s1, s2, s1], { project: [0,1] }).process())});
 });
 
 test('AngleStep - Input errors - Invalid rotation order', async (t) => {
@@ -182,6 +190,17 @@ test('AngleStep - Two vectors - proj YZ', async (t) => {
 	t.is(res.getValue(), 0.10673566907644272);
 });
 
+test('AngleStep - Two vectors - planar angle', async (t) => { 
+	const plane = await mockStep(PlaneStep, [vs1x, vs2x, vs3x]).process();
+	const res = await mockStep(AngleStep, [s1, s2], { project: [plane] }).process();
+
+	const s1ProjectionSignal = new Signal(PlaneSequence.project(vs1x.getVectorSequenceValue(), plane.getPlaneSequenceValue(), true ));
+	const s2ProjectionSignal = new Signal(PlaneSequence.project(vs2x.getVectorSequenceValue(), plane.getPlaneSequenceValue(), true ));
+	const comparisonRes = await mockStep(AngleStep, [s1ProjectionSignal, s2ProjectionSignal]).process();
+
+	t.deepEqual(res.getValue(), comparisonRes.getValue());
+});
+
 // Two segments
 test('AngleStep - Two segments (default XYZ)', async (t) => {
 	const res = await mockStep(AngleStep, [seg1, seg2]).process();
@@ -210,6 +229,18 @@ test('AngleStep - Three vectors', async (t) => {
 test('AngleStep - Three vectors - proj XY', async (t) => {
 	const res = await mockStep(AngleStep, [s1, s2, s3], { project: 'xy' }).process();
 	t.deepEqual(res.getValue(), f32(0.16514867544174194));
+});
+
+test('AngleStep - Three vectors - planar angle', async (t) => { 
+	const plane = await mockStep(PlaneStep, [vs1x, vs2x, vs3x]).process();
+	const res = await mockStep(AngleStep, [s1, s2, s3], { project: [plane] }).process();
+
+	const s1ProjectionSignal = new Signal(PlaneSequence.project(vs1x.getVectorSequenceValue(), plane.getPlaneSequenceValue(), true ));
+	const s2ProjectionSignal = new Signal(PlaneSequence.project(vs2x.getVectorSequenceValue(), plane.getPlaneSequenceValue(), true ));
+	const s3ProjectionSignal = new Signal(PlaneSequence.project(vs3x.getVectorSequenceValue(), plane.getPlaneSequenceValue(), true ));
+	const comparisonRes = await mockStep(AngleStep, [s1ProjectionSignal, s2ProjectionSignal, s3ProjectionSignal]).process();
+
+	t.deepEqual(res.getValue(), comparisonRes.getValue());
 });
 
 // Three segments
