@@ -3,6 +3,7 @@ import { isBoolean } from 'lodash';
 import { PropertyType } from '../models/property';
 import { Segment } from '../models/segment';
 import { MatrixSequence } from '../models/sequence/matrix-sequence';
+import { PlaneSequence } from '../models/sequence/plane-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal, SignalType } from '../models/signal';
 import { Matrix } from '../models/spatial/matrix';
@@ -32,13 +33,15 @@ export enum CoordinatePlane {
 	options: [{
 		name: 'project',
 		enum: ['xy', 'xz', 'yz'],
-		type: 'String',
+		type: ['String', '<PlaneSequence>'],
 		required: false,
 		default: 'null',
 		description: markdownFmt`
-			If set, the angle will be calculated in two dimensions on the 
+			If set to a string, the angle will be calculated in two dimensions on the 
 			specified coordinate plane by ignoring the component of the 
 			input signals which is not part of the plane.
+
+			Using a PlaneSequence, projects the input vectors on the provided plane. 
 
 			**_Note:_** _The projection is only applied for vector-based 
 			angles and is ignored when calculating joint angles._
@@ -128,6 +131,7 @@ export enum CoordinatePlane {
 })
 export class AngleStep extends BaseStep {
 	coordinatePlane: CoordinatePlane;
+	projectionPlane: PlaneSequence;
 	rotationOrder: RotationOrder;
 
 	init() {
@@ -148,26 +152,42 @@ export class AngleStep extends BaseStep {
 			this.rotationOrder = RotationOrder.XYZ;
 		}
 
-		// Handle 'project' input
-		const coordinatePlaneInput = this.getPropertyValue<string>('project', PropertyType.String, false);
-
-		if (coordinatePlaneInput && typeof coordinatePlaneInput === 'string') {
-			switch (coordinatePlaneInput.toLowerCase()) {
-				case CoordinatePlane.XY:
-					this.coordinatePlane = CoordinatePlane.XY;
-					break;
-				case CoordinatePlane.YZ:
-					this.coordinatePlane = CoordinatePlane.YZ;
-					break;
-				case CoordinatePlane.XZ:
-					this.coordinatePlane = CoordinatePlane.XZ;
-					break;
-				default:
-					throw new ProcessingError(`Unrecognized value for project option.`);
+		const projectionPlane = this.getPropertySignalValue('project', undefined, false);
+				
+		// Handle projection plane input (on project option)
+		if (projectionPlane && projectionPlane.length){
+			if (projectionPlane[0].type === SignalType.PlaneSequence) {
+				this.projectionPlane = projectionPlane[0].getPlaneSequenceValue();
+			}
+			else {
+				throw new ProcessingError(`Expected a planeSequence as input for project option.`)
 			}
 		}
 		else {
-			this.coordinatePlane = undefined;
+			const coordinatePlaneInput = this.getPropertyValue<string>('project', PropertyType.String, false);
+			// Handle wrong input type on project option
+			if (coordinatePlaneInput && typeof coordinatePlaneInput !== 'string') {
+				throw new ProcessingError(`Unexpected type for project option`);
+			}
+			// Handle coordinate plane input (on project option)
+			else if (coordinatePlaneInput && typeof coordinatePlaneInput === 'string') {
+				switch (coordinatePlaneInput.toLowerCase()) {
+					case CoordinatePlane.XY:
+						this.coordinatePlane = CoordinatePlane.XY;
+						break;
+					case CoordinatePlane.YZ:
+						this.coordinatePlane = CoordinatePlane.YZ;
+						break;
+					case CoordinatePlane.XZ:
+						this.coordinatePlane = CoordinatePlane.XZ;
+						break;
+					default:
+						throw new ProcessingError(`Unrecognized value for project option.`);
+				}
+			}			
+			else {
+				this.coordinatePlane = undefined;
+			}
 		}
 	}
 
@@ -223,6 +243,9 @@ export class AngleStep extends BaseStep {
 							else {
 								throw new ProcessingError(`Expected array of length 3, got array of length ${ a.length }.`);
 							}
+						}
+						else if (input.type === SignalType.VectorSequence) {
+							return input.getVectorSequenceValue()
 						}
 						else {
 							throw new ProcessingError(`Expected Segment or array of length 3, got ${ input.typeToString }.`);
@@ -283,12 +306,18 @@ export class AngleStep extends BaseStep {
 		else {
 			throw new ProcessingError(`Unexpected amount of inputs.`);
 		}
-
+		
 		return result;
 	}
 
 	applyProjection(vector: VectorSequence) {
-		if (!this.coordinatePlane) return vector;
+		if (!this.coordinatePlane && !this.projectionPlane) {		
+			return vector
+		};
+		
+		if (this.projectionPlane) {
+			return PlaneSequence.project(vector, this.projectionPlane, true)
+		} 
 
 		const replacement = new Float32Array(vector.length).fill(0);
 
