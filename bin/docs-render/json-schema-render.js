@@ -165,6 +165,18 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 			required.push(...requiredOptions);
 		}
 
+		/**
+		 * Hardcoded case for project step as it collides with
+		 * the project option on angle.
+		 * 
+		 * TODO: Add automatic detection of name collisions.
+		 */
+		if (stepName === 'project') {
+			props['angle'] = {
+				type: 'null',
+			};
+		}
+
 		return {
 			type: 'object',
 			title: 'Step: ' + step.name,
