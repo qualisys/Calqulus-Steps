@@ -49,6 +49,7 @@ const renderStepProperty = (option, title) => {
 				case 'range':
 				case '<vector>':
 				case '[<x>, <y>, <z>]':
+				case 'number array':
 					types.push('array');
 					break;
 				case 'any':
@@ -56,6 +57,10 @@ const renderStepProperty = (option, title) => {
 					types = [];
 					break;
 			}
+		}
+
+		if (option.children?.length) {
+			types.push('object');
 		}
 
 		if (types && types.length) {
@@ -69,6 +74,19 @@ const renderStepProperty = (option, title) => {
 	}
 
 	return output;
+};
+
+const renderRecursiveOptions = (options, levels = [], props = {}) => {
+	for (const option of options) {
+		const currLevels = [...levels, option];
+		props[option.name] = renderStepProperty(option, currLevels.map(l => l.name).join(' > '));
+
+		if (option.children) {
+			props[option.name].properties = renderRecursiveOptions(option.children, currLevels);
+		}
+	}
+
+	return props;
 };
 
 const renderJsonSchema = (globalProps, categories, steps) => {
@@ -86,7 +104,7 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 
 		for (const option of category.options) {
 			const key = 'categoryOption ' + category.name + ' ' + option.name;
-			categoryOptions[key] = renderStepProperty(option, option.name + ' (global option)');
+			categoryOptions[key] = renderStepProperty(option, option.name + ` (${ category.name } category option)`);
 			categoryOptions[key].name = option.name;
 			categoryOptions[key].category = category.name;
 		}
@@ -112,16 +130,15 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 
 	// Generate schema for steps.
 	const stepSchema = stepMappings.map(([stepName, step]) => {
-		const props = {};
+		let props = {};
 
 		// Add "main" step property.
 		props[stepName] = renderStepProperty(step, stepName + ' step');
 
 		// Add step options
 		if (step.options && step.options.length) {
-			for (const option of step.options) {
-				props[option.name] = renderStepProperty(option, stepName + ' > ' + option.name);
-			}
+			const optionProps = renderRecursiveOptions(step.options, [step]);
+			props = {...props, ...optionProps};
 		}
 
 		// Add global options
@@ -154,7 +171,7 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 			description: stripMarkdown(step.description),
 			properties: props,
 			required: required,
-		}
+		};
 	});
 
 	/**
