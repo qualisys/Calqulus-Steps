@@ -109,7 +109,7 @@ The following option is available on all Arithmetic steps.
 > _Using the `frameSequenceOrder` option ensures that the 
 > operands starts with the intended event and that both operands 
 > have the same length._
-
+>
 >
 
 
@@ -119,15 +119,16 @@ The following option is available on all Arithmetic steps.
 
 ### `add`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 > 2. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Arithmetic options</summary>
 > 
@@ -158,15 +159,16 @@ Adds the input operands.
 
 ### `divide`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 > 2. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Arithmetic options</summary>
 > 
@@ -197,15 +199,16 @@ Divides the input operands.
 
 ### `multiply`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 > 2. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Arithmetic options</summary>
 > 
@@ -236,15 +239,16 @@ Multiplies the input operands.
 
 ### `subtract`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 > 2. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Arithmetic options</summary>
 > 

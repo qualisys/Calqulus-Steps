@@ -26,7 +26,7 @@ The following options are available on all Angle steps.
 >
 > **_Note:_** _The projection is only applied for vector-based 
 > angles and is ignored when calculating joint angles._
-
+>
 > #### `rotationOrder`
 >
 > **Type:** `String`  
@@ -52,7 +52,7 @@ The following options are available on all Angle steps.
 > - YZY
 > - ZXZ
 > - ZYZ
-
+>
 >
 
 
@@ -62,17 +62,18 @@ The following options are available on all Angle steps.
 
 ### `angle`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series`
 > 2. `Scalar | Series` (optional)
 > 3. `Scalar | Series` (optional)
 > 4. `Scalar | Series` (optional)
 >
-> **Output:** `Scalar | Series`
+
+**Output:** `Scalar | Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Angle options</summary>
 > 
@@ -137,16 +138,17 @@ specified as arrays or with named vector signals (ie markers).
 
 ### `angularVelocity`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series` the parent segment
 > 2. `Scalar | Series` the segment
 > 3. `Scalar | Series` the reference segment
 > 4. `Scalar | Series` the resolution segment
 >
-> **Output:** `Scalar | Series`
 
-> **Options**
+**Output:** `Scalar | Series`
+
+**Options**
 >
 > #### `useRotationOrder`
 >
@@ -161,10 +163,9 @@ specified as arrays or with named vector signals (ie markers).
 > If set to true it means that angular velocity between the segment
 > and refernce segment is transformed to be expressed into the 
 > joint coordinate system using the Euler/Cardan sequence.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Angle options</summary>
 > 
@@ -207,15 +208,16 @@ in your instance**.
 
 ### `jointAngle`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series`
 > 2. `Scalar | Series` (optional)
 >
-> **Output:** `Scalar | Series`
+
+**Output:** `Scalar | Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Angle options</summary>
 > 
@@ -248,16 +250,17 @@ three or four inputs.
 
 ### `jointAngleVelocity`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series` the parent segment
 > 2. `Scalar | Series` the segment
 > 3. `Scalar | Series` the reference segment
 > 4. `Scalar | Series` the resolution segment
 >
-> **Output:** `Scalar | Series`
 
-> **Options**
+**Output:** `Scalar | Series`
+
+**Options**
 >
 > #### `useRotationOrder`
 >
@@ -272,10 +275,9 @@ three or four inputs.
 > If set to true it means that angular velocity between the segment
 > and refernce segment is transformed to be expressed into the 
 > joint coordinate system using the Euler/Cardan sequence.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Angle options</summary>
 > 

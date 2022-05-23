@@ -11,25 +11,29 @@ These are steps that run logical expressions.
 
 ### `if`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Logical expression`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `then`
 >
 > **Type:** `any`  
 > **Required:** `True`  
+
+>
 > #### `else`
 >
 > **Type:** `any`  
 > **Required:** `True`  
+
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

@@ -14,14 +14,15 @@ These are steps that imports a specific type of step by name.
 
 ### `event`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Event`
 >
-> **Output:** `Event`
+
+**Output:** `Event`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -43,14 +44,15 @@ Imports an event by name.
 
 ### `import`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -72,13 +74,14 @@ Generic import of any input by name.
 
 ### `marker`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series`
 >
-> **Output:** `Series`
 
-> **Options**
+**Output:** `Series`
+
+**Options**
 >
 > #### `origin`
 >
@@ -88,10 +91,9 @@ Generic import of any input by name.
 >
 > This option can be used to create a new marker signal, 
 > with a custom x, y and z coordinate.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -114,14 +116,15 @@ with a custom origin.
 
 ### `segment`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series`
 >
-> **Output:** `Series`
+
+**Output:** `Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

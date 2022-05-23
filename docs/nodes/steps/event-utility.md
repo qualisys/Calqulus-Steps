@@ -14,15 +14,16 @@ in various ways.
 
 ### `eventDuration`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Event`
 > 2. `Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -51,15 +52,16 @@ the "from", or "to" input event.
 
 ### `eventMask`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series | Event`
 > 2. `Event`
 > 3. `Event`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `replacement`
 >
@@ -72,7 +74,7 @@ the "from", or "to" input event.
 >
 > The `replacement` property has no effect when the signal 
 > input is an event.
-
+>
 > #### `truncate`
 >
 > **Type:** `Boolean`  
@@ -83,10 +85,9 @@ the "from", or "to" input event.
 > that were not within an "event pair" should be removed or not. 
 >
 > This will only apply if `replacement` does not have a value.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -134,14 +135,15 @@ that the event cycles are annotated on the signal.
 
 ### `eventTime`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

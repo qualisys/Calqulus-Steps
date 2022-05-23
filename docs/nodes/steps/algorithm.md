@@ -20,14 +20,15 @@ a resulting signal of the same type as the input.
 
 ### `abs`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -49,13 +50,14 @@ Outputs the absolute value for each value in the input signal.
 
 ### `convert`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `from`
 >
@@ -64,7 +66,7 @@ Outputs the absolute value for each value in the input signal.
 > **Default value:** `null`  
 >
 > Defines the unit to convert **from**.
-
+>
 > #### `to`
 >
 > **Type:** `String`  
@@ -72,10 +74,9 @@ Outputs the absolute value for each value in the input signal.
 > **Default value:** `null`  
 >
 > Defines the unit to convert **to**.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -98,14 +99,15 @@ the units defined in the `from` and `to` options.
 
 ### `diff`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar | Series | Event`
+
+**Output:** `Scalar | Series | Event`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -131,15 +133,16 @@ signal will be shorter by one item.
 
 **Alias:**  dot
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series | Scalar`
 > 2. `Series | Scalar`
 >
-> **Output:** `Series`
+
+**Output:** `Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -168,13 +171,14 @@ signal will be shorter by one item.
 
 ### `gapFill`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `type`
 >
@@ -182,14 +186,17 @@ signal will be shorter by one item.
 > **Required:** `False`  
 > **Allowed values:** `linear | spline`  
 > **Default value:** `spline`  
+
+>
 > #### `maxGapLength`
 >
 > **Type:** `String`  
 > **Required:** `False`  
 > **Default value:** `0.1s`  
+
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -215,13 +222,14 @@ not be interpolated.*
 
 ### `integral`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series`
 >
-> **Output:** `Scalar | Series`
 
-> **Options**
+**Output:** `Scalar | Series`
+
+**Options**
 >
 > #### `scalar`
 >
@@ -230,7 +238,7 @@ not be interpolated.*
 > **Default value:** `false`  
 >
 > Returns the integral as a single value scalar.
-
+>
 > #### `useCycles`
 >
 > **Type:** `Boolean`  
@@ -245,10 +253,9 @@ not be interpolated.*
 >
 > For information on how to set event cycles on a signal, 
 > see the [eventMask](./event-utils.md) step.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -271,14 +278,15 @@ It returns a series by default.
 
 ### `negate`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -300,22 +308,24 @@ Outputs the negated value for each value in the input signal.
 
 ### `round`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `precision`
 >
 > **Type:** `Number`  
 > **Required:** `False`  
 > **Default value:** `0`  
+
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

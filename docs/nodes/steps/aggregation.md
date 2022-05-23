@@ -35,7 +35,7 @@ The following option is available on all Aggregation steps.
 >
 > For information on how to set event cycles on a signal, 
 > see the [eventMask](./event-utils.md) step.
-
+>
 >
 
 
@@ -45,14 +45,15 @@ The following option is available on all Aggregation steps.
 
 ### `count`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -85,13 +86,14 @@ event input.
 
 ### `max`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
 
-> **Options**
+**Output:** `Scalar`
+
+**Options**
 >
 > #### `frames`
 >
@@ -102,10 +104,9 @@ event input.
 > If set to true, this step returns the *frame index* for the 
 > maximum value of the input. If using cycles, it will return 
 > a frame per cycle.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -136,14 +137,15 @@ Outputs the max value of the input.
 
 ### `mean`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -174,13 +176,14 @@ Outputs the mean value of the input.
 
 ### `median`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
 
-> **Options**
+**Output:** `Scalar`
+
+**Options**
 >
 > #### `frames`
 >
@@ -191,10 +194,9 @@ Outputs the mean value of the input.
 > If set to true, this step returns the *frame index* for the 
 > minimum value of the input. If using cycles, it will return 
 > a frame per cycle.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -225,14 +227,15 @@ Outputs the minimum value of the input.
 
 ### `min`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -263,14 +266,15 @@ Outputs the median value of the input.
 
 ### `range`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -302,15 +306,16 @@ value of the input.
 
 ### `rms`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series`
 > 2. `Series`
 >
-> **Output:** `Series`
+
+**Output:** `Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -343,14 +348,15 @@ Outputs the Root Mean Square (root of the average squared deviations) between tw
 
 **Alias:**  stdDev
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 
@@ -381,14 +387,15 @@ Outputs the standard deviation value of the input.
 
 ### `sum`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event`
 >
-> **Output:** `Scalar`
+
+**Output:** `Scalar`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details open><summary>Aggregation options</summary>
 > 

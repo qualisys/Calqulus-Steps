@@ -26,14 +26,15 @@ Note: `atan2` takes two inputs, `y` and `x`, respectively.
 
 ### `acos`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -56,14 +57,15 @@ the input signal.
 
 ### `asin`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -86,14 +88,15 @@ the input signal.
 
 ### `atan`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -116,15 +119,16 @@ the input signal.
 
 ### `atan2`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number` (y)
 > 2. `Scalar | Series | Event | Number` (x)
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -147,14 +151,15 @@ for each value in the input signal.
 
 ### `cos`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -176,14 +181,15 @@ Outputs the cosine for each value in the input signal.
 
 ### `cosh`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -205,14 +211,15 @@ Outputs the hyperbolic cosine for each value in the input signal.
 
 ### `cotan`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -234,14 +241,15 @@ Outputs the cotangent for each value in the input signal.
 
 ### `sin`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -263,14 +271,15 @@ Outputs the sine for each value in the input signal.
 
 ### `sinh`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -292,14 +301,15 @@ Outputs the hyperbolic sine for each value in the input signal.
 
 ### `tan`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -321,14 +331,15 @@ Outputs the tangent for each value in the input signal.
 
 ### `tanh`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

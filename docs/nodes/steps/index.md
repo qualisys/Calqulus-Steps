@@ -36,7 +36,7 @@ common tasks like data exports.
 >
 > The value of this option will be the name of the exported data 
 > and can be used to load the resulting data in other steps.
-
+>
 
 > #### `output`
 >
@@ -53,7 +53,7 @@ common tasks like data exports.
 >
 > You can also use the short-form "arrow syntax" to define 
 > an output.
-
+>
 
 > #### `set`
 >
@@ -70,7 +70,7 @@ common tasks like data exports.
 > there's no `set` defined on the parent output node.
 >
 > If this option is not set, the JSON output will use set: null.
-
+>
 
 > #### `space`
 >
@@ -84,5 +84,5 @@ common tasks like data exports.
 > All named inputs will automatically be converted.
 >
 > **_NOTE:_** _This is **not yet implemented** for segments._
-
+>
 
