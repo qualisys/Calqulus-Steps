@@ -325,8 +325,18 @@ zy - Primary axis: z, secondary axis: y`,
 				title: "Align with segment",
 				description: `Used to create a space that aligns with the specified segment. The resulting space will be rotated in 90 degree increments relative to the world space.
 
-The rotation is based on the average orientation of the segment during a mesurement.`,
-				type: ['string'],
+The rotation is based on the average orientation of the segment during a measurement.`,
+				type: ['object'],
+				properties: {
+					segment: {
+						title: "Segment to align to",
+						description: `Used to create a space that aligns with the specified segment. The resulting space will be rotated in 90 degree increments relative to the world space.
+
+The rotation is based on the average orientation of the segment during a measurement.`,
+						type: 'string',
+					}
+				},
+				required: ['segment'],
 			},
 			
 			/**
