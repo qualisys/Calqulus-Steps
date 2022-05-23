@@ -179,11 +179,12 @@ const renderInput = (input) => {
 	return `\`${ types }\`${ desc }${ optional }`
 }
 
-const renderOption = (option) => {
+const renderOption = (option, parentNames = [], isLast = false) => {
 	const types = (Array.isArray(option.type)) ? option.type.join(' | ') : option.type;
 
+	const path = [...parentNames, option.name];
 	let output = markdownFmt`
-		> #### ''${ option.name }''
+		> #### ''${ path.join('.') }''
 		>
 		> **Type:** ''${ types }''  
 		> **Required:** ''${ (option.required) ? 'True' : 'False' }''  
@@ -197,9 +198,36 @@ const renderOption = (option) => {
 	if (option.description) {
 		// Each line should start on a chevron.
 		output += `>\n${ option.description.split('\n\n').map(d => '> ' + d.split(/\n/g).join('\n> ')).join('\n>\n') }`;
-		output += '\n\n';
 	}
 
+	if (option.children?.length) {
+		output += '>\n>\n> **Child options:**\n>\n>';
+
+		for (const childOption of option.children) {
+			output += `\n> ${ renderOption(childOption, path, childOption === option.children[option.children.length - 1]).replace(/\n>/g, '\n> >') }`;
+		}
+
+		if (!isLast) {
+			if (parentNames?.length) {
+				output += `\n>\n>`;
+			}
+			else {
+				output += `\n>\n`;
+			}
+		}
+		else {
+			output += `\n>`;
+		}
+	} 
+	else if (isLast) {
+		output += `\n>`;
+	}
+	else if (parentNames?.length) {
+		output += `\n>\n>`;
+	}
+	else {
+		output += `\n>\n`;
+	}
 
 	return output;
 }

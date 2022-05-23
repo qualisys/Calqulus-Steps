@@ -42,6 +42,8 @@ export interface IStepPropOption {
 	default?: string;
 	description?: string;
 	shared?: SharedOptionScope;
+
+	children?: IStepPropOption[];
 }
 
 export enum SharedOptionScope {
