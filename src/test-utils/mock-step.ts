@@ -48,7 +48,7 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 	// These are used to mock the `Inputs` object for the step class.
 	const optionSignals = Object
 		.entries(options || {})
-		.filter((entry) => Array.isArray(entry[1]) && entry[1][0] instanceof Signal) as [string, Signal[]][]
+		.map(entry => (Array.isArray(entry[1]) && entry[1][0] instanceof Signal) ? entry : [entry[0], [new Signal(entry[1])]]) as [string, Signal[]][]
 	;
 	const optionSignalsMap = new Map(optionSignals);
 
