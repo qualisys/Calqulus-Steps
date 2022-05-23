@@ -108,35 +108,33 @@ const renderStepCategoryPage = (category, steps, globalProps) => {
 
 
 		if (step.inputs && step.inputs.length) {
-			output += `> **Inputs**\n>\n`;
+			output += `**Inputs**\n>\n`;
 
 			for (let i = 0; i < step.inputs.length; i++) {
 				output += `> ${ i + 1 }. ${ renderInput(step.inputs[i]) }\n`;
 			}
 
-			output += `>\n`;
+			output += `>\n\n`;
 		}
 
 		if (step.output) {
 			const out = (Array.isArray(step.output)) ? step.output.join(' | ') : step.output;
 
-			output += `> **Output:** \`${ out }\`\n`;
+			output += `**Output:** \`${ out }\`\n`;
 		}
 		
 		output += `\n`;
 
 		if (step.options && step.options.length) {
-			output += `> **Options**\n>\n`;
+			output += `**Options**\n>\n`;
 
 			for (const option of step.options) {
 				output += renderOption(option);
 			}
-
-			output += `>\n`;
 		}
 
 		if ((category.options && category.options.length) || (globalProps && globalProps.options && globalProps.options.length)) {
-			output += `\n> **Shared options**\n>\n`;
+			output += `\n**Shared options**\n>\n`;
 			
 			if (category.options && category.options.length) {
 				output += `> <details open><summary>${ category.name } options</summary>\n> \n`;
