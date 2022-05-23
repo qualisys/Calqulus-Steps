@@ -445,23 +445,12 @@ export class AngularVelocityStep extends AngleStep {
 		const sRes = this.inputs[3].getSegmentValue();
 
 		// Create rotation matrices
-		const rPar = new MatrixSequence(
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN));
-		const rSeg = new MatrixSequence(
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN));
-		const rRef = new MatrixSequence(
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN));
-		const rRes = new MatrixSequence(
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN),
-			new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN), new Float32Array(nFrames).fill(NaN));
+		const nan = new Float32Array(nFrames).fill(NaN);
 
+		const rPar = MatrixSequence.createEmpty(nFrames);
+		const rSeg = MatrixSequence.createEmpty(nFrames);
+		const rRef = MatrixSequence.createEmpty(nFrames);
+		const rRes = MatrixSequence.createEmpty(nFrames);
 		const rParTemp = Matrix.create();
 		const rSegTemp = Matrix.create();
 		const rRefTemp = Matrix.create();
@@ -479,28 +468,28 @@ export class AngularVelocityStep extends AngleStep {
 		}
 
 		// Calculate the rotation matrix derivatives
-		const rSegDiff = new MatrixSequence(
+		const rSegDiff = MatrixSequence.fromRotationMatrixValues(
+			Kinematics.finiteDifference(rSeg.m00, dt, 1),
+			Kinematics.finiteDifference(rSeg.m01, dt, 1),
+			Kinematics.finiteDifference(rSeg.m02, dt, 1),
+			Kinematics.finiteDifference(rSeg.m10, dt, 1),
 			Kinematics.finiteDifference(rSeg.m11, dt, 1),
-			Kinematics.finiteDifference(rSeg.m21, dt, 1),
-			Kinematics.finiteDifference(rSeg.m31, dt, 1),
 			Kinematics.finiteDifference(rSeg.m12, dt, 1),
-			Kinematics.finiteDifference(rSeg.m22, dt, 1),
-			Kinematics.finiteDifference(rSeg.m32, dt, 1),
-			Kinematics.finiteDifference(rSeg.m13, dt, 1),
-			Kinematics.finiteDifference(rSeg.m23, dt, 1),
-			Kinematics.finiteDifference(rSeg.m33, dt, 1)
+			Kinematics.finiteDifference(rSeg.m20, dt, 1),
+			Kinematics.finiteDifference(rSeg.m21, dt, 1),
+			Kinematics.finiteDifference(rSeg.m22, dt, 1)
 		);
 
-		const rRefDiff = new MatrixSequence(
+		const rRefDiff = MatrixSequence.fromRotationMatrixValues(
+			Kinematics.finiteDifference(rRef.m00, dt, 1),
+			Kinematics.finiteDifference(rRef.m01, dt, 1),
+			Kinematics.finiteDifference(rRef.m02, dt, 1),
+			Kinematics.finiteDifference(rRef.m10, dt, 1),
 			Kinematics.finiteDifference(rRef.m11, dt, 1),
-			Kinematics.finiteDifference(rRef.m21, dt, 1),
-			Kinematics.finiteDifference(rRef.m31, dt, 1),
 			Kinematics.finiteDifference(rRef.m12, dt, 1),
-			Kinematics.finiteDifference(rRef.m22, dt, 1),
-			Kinematics.finiteDifference(rRef.m32, dt, 1),
-			Kinematics.finiteDifference(rRef.m13, dt, 1),
-			Kinematics.finiteDifference(rRef.m23, dt, 1),
-			Kinematics.finiteDifference(rRef.m33, dt, 1)
+			Kinematics.finiteDifference(rRef.m20, dt, 1),
+			Kinematics.finiteDifference(rRef.m21, dt, 1),
+			Kinematics.finiteDifference(rRef.m22, dt, 1)
 		);
 
 		// Calculate joint velocity
@@ -510,10 +499,10 @@ export class AngularVelocityStep extends AngleStep {
 			new Float32Array(nFrames).fill(NaN), this.inputs[0].frameRate);
 
 		for (let frame = 0; frame < nFrames; frame++) {
-			const rSegFrameTrans = Matrix.create();
-			const rRefFrameTrans = Matrix.create();
-			const omegaRSegFrame = Matrix.create();
-			const omegaRRefFrame = Matrix.create();
+			const rSegFrameTrans = new Matrix();
+			const rRefFrameTrans = new Matrix();
+			const omegaRSegFrame = new Matrix();
+			const omegaRRefFrame = new Matrix();
 			const rParFrame = rPar.getMatrixAtFrame(frame + 1);
 			const rSegFrame = rSeg.getMatrixAtFrame(frame + 1);
 			const rRefFrame = rRef.getMatrixAtFrame(frame + 1);
@@ -522,8 +511,8 @@ export class AngularVelocityStep extends AngleStep {
 			Matrix.multiply(omegaRSegFrame, Matrix.transpose(rSegFrameTrans, rSegFrame), rSegDiff.getMatrixAtFrame(frame + 1));
 			Matrix.multiply(omegaRRefFrame, Matrix.transpose(rRefFrameTrans, rRefFrame), rRefDiff.getMatrixAtFrame(frame + 1));
 
-			const omegaSegFrame = new Vector(omegaRSegFrame.m23, omegaRSegFrame.m31, omegaRSegFrame.m12);
-			const omegaRefFrame = new Vector(omegaRRefFrame.m23, omegaRRefFrame.m31, omegaRRefFrame.m12);
+			const omegaSegFrame = new Vector(omegaRSegFrame._m[9], omegaRSegFrame._m[2], omegaRSegFrame._m[4]);
+			const omegaRefFrame = new Vector(omegaRRefFrame._m[9], omegaRRefFrame._m[2], omegaRRefFrame._m[4]);
 
 			const omegaSegRefFrame = new Vector(omegaSegFrame.x - omegaRefFrame.x, omegaSegFrame.y - omegaRefFrame.y, omegaSegFrame.z - omegaRefFrame.z);
 

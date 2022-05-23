@@ -237,7 +237,6 @@ test('Get points in space defined by running direction', async (t) => {
 	t.true(eqish(m4.z[0], 0));
 });
 
-
 // Test all order combinations
 test('Space - order input', async (t) => {
 	// Save cross product to use in comparison values.
@@ -245,12 +244,43 @@ test('Space - order input', async (t) => {
 
 	// Define orders and the expected output matrix.
 	const orders = {
-		xy: { m11: 0, m21: 1, m31: 0, m12: a, m22: -0, m32: a, m13: a, m23: 0, m33: -a },
-		yx: { m11: a, m21: -0, m31: a, m12: 0, m22: 1, m32: 0, m13: -a, m23: 0, m33: a },
-		zx: { m11: a, m21: -0, m31: a, m12: a, m22: 0, m32: -a, m13: 0, m23: 1, m33: 0 },
-		xz: { m11: 0, m21: 1, m31: -0, m12: -a, m22: 0, m32: a, m13: a, m23: 0, m33: a },
-		yz: { m11: a, m21: 0, m31: -a, m12: 0, m22: 1, m32: 0, m13: a, m23: -0, m33: a },
-		zy: { m11: -a, m21: 0, m31: a, m12: a, m22: -0, m32: a, m13: 0, m23: 1, m33: 0 },
+		xy: [
+			0, 1, 0, 0,
+			a, -0, a, 0,
+			a, 0, -a, 0,
+			0, 0, 0, 1
+		],
+		yx: [
+			a, -0, a, 0,
+			0, 1, 0, 0,
+			-a, 0, a, 0,
+			0, 0, 0, 1
+		],
+		zx: [
+			a, -0, a, 0,
+			a, 0, -a, 0,
+			0, 1, 0, 0,
+			0, 0, 0, 1
+		],
+		xz: [
+			0, 1, -0, 0,
+			-a, 0, a, 0,
+			a, 0, a, 0,
+			0, 0, 0, 1
+		],
+		yz: [
+			a, 0, -a, 0,
+			0, 1, 0, 0,
+			a, -0, a, 0,
+			0, 0, 0, 1
+
+		],
+		zy: [
+			-a, 0,  a, 0,
+			a, -0,  a, 0,
+			0, 1, 0, 0,
+			0, 0, 0, 1
+		],
 	};
 
 	for (const order in orders) {
@@ -264,6 +294,6 @@ test('Space - order input', async (t) => {
 		const rotMatrix = space.rotationMatrix.getMatrixAtFrame(1);
 
 		t.assert(rotMatrix);
-		t.like(rotMatrix, orders[order], 'Error in applying order "' + order + '" in space.');
+		t.deepEqual(Array.from(rotMatrix._m), orders[order], 'Error in applying order "' + order + '" in space.');
 	}
 });
