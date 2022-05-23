@@ -152,26 +152,22 @@ export class AngleStep extends BaseStep {
 			this.rotationOrder = RotationOrder.XYZ;
 		}
 
-		const projectionPlane = this.getPropertySignalValue('project', undefined, false);
-				
-		// Handle projection plane input (on project option)
-		if (projectionPlane && projectionPlane.length){
-			if (projectionPlane[0].type === SignalType.PlaneSequence) {
-				this.projectionPlane = projectionPlane[0].getPlaneSequenceValue();
+		const projectionOptionInput = this.getPropertySignalValue('project', undefined, false);		
+		
+		if (projectionOptionInput && projectionOptionInput.length) {
+			// Handle unknown project option input
+			if (projectionOptionInput[0].type !== SignalType.PlaneSequence && projectionOptionInput[0].type !== SignalType.String) {
+				throw new ProcessingError(`Unexpected type for project option.`);
 			}
-			else {
-				throw new ProcessingError(`Expected a planeSequence as input for project option.`)
+			
+			// Handle projection plane input
+			if (projectionOptionInput[0].type === SignalType.PlaneSequence) {
+				this.projectionPlane = projectionOptionInput[0].getPlaneSequenceValue();
 			}
-		}
-		else {
-			const coordinatePlaneInput = this.getPropertyValue<string>('project', PropertyType.String, false);
-			// Handle wrong input type on project option
-			if (coordinatePlaneInput && typeof coordinatePlaneInput !== 'string') {
-				throw new ProcessingError(`Unexpected type for project option`);
-			}
-			// Handle coordinate plane input (on project option)
-			else if (coordinatePlaneInput && typeof coordinatePlaneInput === 'string') {
-				switch (coordinatePlaneInput.toLowerCase()) {
+
+			// Handle coordinate plane input
+			else if (projectionOptionInput[0].type === SignalType.String) {
+				switch (projectionOptionInput[0].getStringValue().toLowerCase()) {
 					case CoordinatePlane.XY:
 						this.coordinatePlane = CoordinatePlane.XY;
 						break;
@@ -184,10 +180,7 @@ export class AngleStep extends BaseStep {
 					default:
 						throw new ProcessingError(`Unrecognized value for project option.`);
 				}
-			}			
-			else {
-				this.coordinatePlane = undefined;
-			}
+			} 	
 		}
 	}
 
