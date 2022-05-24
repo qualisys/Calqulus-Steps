@@ -468,18 +468,19 @@ export class Matrix {
 	toString() {
 		const m = this._m;
 		const d = this.fractionDigits;
+
 		const row0 = d === undefined
-			? m[0] + '\t' + m[1] + '\t' + m[2] + '\t' + m[3] + '\n'
-			: m[0].toFixed(d) + '\t' + m[1].toFixed(d) + '\t' + m[2].toFixed(d) + '\t' + m[3].toFixed(d) + '\n';
+			? m[0] + '\t' + m[4] + '\t' + m[8] + '\t' + m[12] + '\n'
+			: m[0].toFixed(d) + '\t' + m[4].toFixed(d) + '\t' + m[8].toFixed(d) + '\t' + m[12].toFixed(d) + '\n';
 		const row1 = d === undefined
-			? m[4] + '\t' + m[5] + '\t' + m[6] + '\t' + m[7] + '\n'
-			: m[4].toFixed(d) + '\t' + m[5].toFixed(d) + '\t' + m[6].toFixed(d) + '\t' + m[7].toFixed(d) + '\n';
+			? m[1] + '\t' + m[5] + '\t' + m[9] + '\t' + m[13] + '\n'
+			: m[1].toFixed(d) + '\t' + m[5].toFixed(d) + '\t' + m[9].toFixed(d) + '\t' + m[13].toFixed(d) + '\n';
 		const row2 = d === undefined
-			? m[8] + '\t' + m[9] + '\t' + m[10] + '\t' + m[11] + '\n'
-			: m[8].toFixed(d) + '\t' + m[9].toFixed(d) + '\t' + m[10].toFixed(d) + '\t' + m[11].toFixed(d) + '\n';
+			? m[2] + '\t' + m[6] + '\t' + m[10] + '\t' + m[14] + '\n'
+			: m[2].toFixed(d) + '\t' + m[6].toFixed(d) + '\t' + m[10].toFixed(d) + '\t' + m[14].toFixed(d) + '\n';
 		const row3 = d === undefined
-			? m[12] + '\t' + m[13] + '\t' + m[14] + '\t' + m[15] + '\n'
-			: m[12].toFixed(d) + '\t' + m[13].toFixed(d) + '\t' + m[14].toFixed(d) + '\t' + m[15].toFixed(d);
+			? m[3] + '\t' + m[7] + '\t' + m[11] + '\t' + m[15]
+			: m[3].toFixed(d) + '\t' + m[7].toFixed(d) + '\t' + m[11].toFixed(d) + '\t' + m[15].toFixed(d);
 
 		return row0 + row1 + row2 + row3;
 	}
