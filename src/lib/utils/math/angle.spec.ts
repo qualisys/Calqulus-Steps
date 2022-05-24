@@ -172,8 +172,8 @@ test('AngleUtil - computeRelativeEulerAngle - Euler solution #2 auto', (t) => {
 	const eulerAb = AngleUtil.computeRelativeEulerAngle(QuaternionSequence.fromQuaternion(qb), QuaternionSequence.fromQuaternion(qa), RotationOrder.ZYZ);
 
 	t.is(eulerAb.x[0], 4.915169715881348);
-	t.is(eulerAb.y[0], 9.709190368652344);
-	t.is(eulerAb.z[0], -18.875011444091797);
+	t.is(eulerAb.y[0], 9.709197998046875);
+	t.is(eulerAb.z[0], -18.87501335144043);
 });
 
 test('AngleUtil - computeAngleBetweenVectors', (t) => {
