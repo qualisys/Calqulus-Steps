@@ -217,6 +217,25 @@ export class Matrix {
 		return this._m[4 * column + row];
 	}
 	
+	/**
+	 * Create a 4x4 matrix from the elements of a 3x3 rotation matrix.
+	 * The remaining elements are assigned the corresponding elements in the
+	 * identity.
+	 * 
+	 * @param m00 Component in column 0, row 0 position (index 0)
+	 * @param m01 Component in column 0, row 1 position (index 1)
+	 * @param m02 Component in column 0, row 2 position (index 2)
+	 * @param m10 Component in column 1, row 0 position (index 4)
+	 * @param m11 Component in column 1, row 1 position (index 5)
+	 * @param m12 Component in column 1, row 2 position (index 6)
+	 * @param m20 Component in column 2, row 0 position (index 8)
+	 * @param m21 Component in column 2, row 1 position (index 9)
+	 * @param m22 Component in column 2, row 2 position (index 10)
+	 * @param m30 Component in column 3, row 0 position (index 12)
+	 * @param m31 Component in column 3, row 1 position (index 13)
+	 * @param m32 Component in column 3, row 2 position (index 14)
+	 * @returns A new matrix
+	 */
 	static fromRotationMatrix(
 		m00: number, m01: number, m02: number,
 		m10: number, m11: number, m12: number,
@@ -465,6 +484,12 @@ export class Matrix {
 		return out;
 	}
 
+	/**
+	 * Get a string representation of this matrix.
+	 * 
+	 * Use the `fractionDigits` property to control the number of decimals in
+	 * the output.
+	 */
 	toString() {
 		const m = this._m;
 		const d = this.fractionDigits;
