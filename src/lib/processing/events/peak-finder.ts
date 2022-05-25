@@ -4,6 +4,7 @@ import { StepCategory, StepClass } from '../../step-registry';
 import { ISequenceOptions, IValueRange, PeakFinder } from '../../utils/math/peak-finder';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
+import { TypeCheck } from '../../utils/type-check';
 import { BaseStep } from '../base-step';
 
 @StepCategory({
@@ -220,9 +221,9 @@ export class PeakFinderStep extends BaseStep {
 	init() {
 		super.init();
 
-		this.height = this.parseRangeArgument(this.getPropertyValue('height', [PropertyType.Number, PropertyType.Array]));
-		this.width = this.parseRangeArgument(this.getPropertyValue('width', [PropertyType.Number, PropertyType.Array]));
-		this.prominence = this.parseRangeArgument(this.getPropertyValue('prominence', [PropertyType.Number, PropertyType.Array]));
+		this.height = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('height', [PropertyType.Number, PropertyType.Array])?.shift());
+		this.width = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('width', [PropertyType.Number, PropertyType.Array])?.shift());
+		this.prominence = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('prominence', [PropertyType.Number, PropertyType.Array])?.shift());
 
 		this.distance = this.getPropertyValue('distance', PropertyType.Number);
 		this.relHeight = this.getPropertyValue('relHeight', PropertyType.Number);
@@ -263,7 +264,7 @@ export class PeakFinderStep extends BaseStep {
 	}
 
 	protected parseRangeArgument(span: number | number[]): number | IValueRange {
-		if (span && Array.isArray(span)) {
+		if (span && TypeCheck.isArrayLike(span)) {
 			return {
 				min: span[0],
 				max: (span.length >= 2) ? span[1] : undefined,
