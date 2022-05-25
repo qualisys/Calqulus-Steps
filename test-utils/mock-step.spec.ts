@@ -45,7 +45,7 @@ test('mockStep - options', async (t) => {
 	// getPropertySignalValue
 	t.is(step.getPropertySignalValue('input1')[0], s1);
 	t.is(step.getPropertySignalValue('input2')[0], s2);
-	t.throws(() => step.getPropertySignalValue('number'), undefined);
+	t.is(step.getPropertySignalValue('number')[0].getValue(), 123);
 
 	// getPropertyValue
 	t.is(step.getPropertyValue('number'), options.number);
@@ -68,11 +68,11 @@ test('mockStep - options', async (t) => {
 	t.assert(step.node.hasProperty('string'));
 	t.assert(step.node.hasProperty('input1'));
 	t.assert(step.node.hasProperty('input2'));
-	t.assert(step.node.hasProperty('multi.level'));
-	t.false(step.node.hasProperty('multi'));
-	t.assert(step.node.hasProperty('signal'));
+	t.false(step.node.hasProperty('multi.level')); 
+	t.assert(step.node.hasProperty('multi'));
 	t.false(step.node.hasProperty('signal.multi-level'));
-});
+	t.assert(step.node.hasProperty('signal'));
+}); 
 
 test('mockStep - options - duration', async (t) => {
 	const options = { 
