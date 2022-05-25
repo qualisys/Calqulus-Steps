@@ -21,3 +21,16 @@ test('NumberUtil - toPrecision', (t) => {
 	t.is(NumberUtil.toPrecision(123.12345678, undefined), 123.12345678);
 	t.is(NumberUtil.toPrecision(123.12345678, -1), 123.12345678);
 });
+
+test('NumberUtil - formatOrdinal', (t) => {
+	t.is(NumberUtil.formatOrdinal(0), '0th');
+	t.is(NumberUtil.formatOrdinal(1), '1st');
+	t.is(NumberUtil.formatOrdinal(2), '2nd');
+	t.is(NumberUtil.formatOrdinal(3), '3rd');
+	t.is(NumberUtil.formatOrdinal(4), '4th');
+	t.is(NumberUtil.formatOrdinal(5), '5th');
+	t.is(NumberUtil.formatOrdinal(15), '15th');
+	t.is(NumberUtil.formatOrdinal(21), '21st');
+	t.is(NumberUtil.formatOrdinal(121), '121st');
+	t.is(NumberUtil.formatOrdinal(1022), '1022nd');
+});
