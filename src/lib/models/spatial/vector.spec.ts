@@ -57,7 +57,7 @@ test('Vector - normalize', (t) => {
 
 test('Vector - transformMatrix', (t) => {
 	const vec = new Vector(1, 2, 3);
-	const mat = new Matrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const mat = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
 	const vecRef = new Vector(0, 0, 0);
 
 	t.like(Vector.transformMatrix(vecRef, vec, mat), {
