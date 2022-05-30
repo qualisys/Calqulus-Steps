@@ -66,10 +66,23 @@ export class Quaternion {
 	 * @returns {Quaternion} out
 	 * @function
 	 */
-	static fromRotationMatrix(out: Quaternion, m: Matrix): Quaternion {
+	static fromRotationMatrix(out: Quaternion, matrix: Matrix): Quaternion {
+		const m = new Float32Array(9);
+		const m4 = matrix._m;
+
+		m[0] = m4[0];
+		m[1] = m4[1];
+		m[2] = m4[2];
+		m[3] = m4[4];
+		m[4] = m4[5];
+		m[5] = m4[6];
+		m[6] = m4[8];
+		m[7] = m4[9];
+		m[8] = m4[10];
+
 		// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
 		// article "Quaternion Calculus and Fast Animation".
-		const fTrace: number = m.m11 + m.m22 + m.m33;
+		const fTrace: number = m[0] + m[4] + m[8];
 		let fRoot: number;
 
 		if (fTrace > 0.0) {
@@ -77,24 +90,24 @@ export class Quaternion {
 			fRoot = Math.sqrt(fTrace + 1.0); // 2w
 			out.w = 0.5 * fRoot;
 			fRoot = 0.5 / fRoot; // 1/(4w)
-			out.x = (m.m32 - m.m23) * fRoot;
-			out.y = (m.m13 - m.m31) * fRoot;
-			out.z = (m.m21 - m.m12) * fRoot;
+			out.x = (m[5] - m[7]) * fRoot;
+			out.y = (m[6] - m[2]) * fRoot;
+			out.z = (m[1] - m[3]) * fRoot;
 		}
 		else {
 			// |w| <= 1/2
 			let i = 0;
-			if (m.m22 > m.m11) i = 1;
-			if (m.m33 > m.getIndex(i * 3 + i)) i = 2;
+			if (m[4] > m[0]) i = 1;
+			if (m[8] > m[i * 3 + i]) i = 2;
 			const j = (i + 1) % 3;
 			const k = (i + 2) % 3;
 
-			fRoot = Math.sqrt(m.getIndex(i * 3 + i) - m.getIndex(j * 3 + j) - m.getIndex(k * 3 + k) + 1.0);
+			fRoot = Math.sqrt(m[i * 3 + i] - m[j * 3 + j] - m[k * 3 + k] + 1.0);
 			out.setIndex(i, 0.5 * fRoot);
 			fRoot = 0.5 / fRoot;
-			out.w = (m.getIndex(j * 3 + k) - m.getIndex(k * 3 + j)) * fRoot;
-			out.setIndex(j, (m.getIndex(j * 3 + i) + m.getIndex(i * 3 + j)) * fRoot);
-			out.setIndex(k, (m.getIndex(k * 3 + i) + m.getIndex(i * 3 + k)) * fRoot);
+			out.w = (m[j * 3 + k] - m[k * 3 + j]) * fRoot;
+			out.setIndex(j, (m[j * 3 + i] + m[i * 3 + j]) * fRoot);
+			out.setIndex(k, (m[k * 3 + i] + m[i * 3 + k]) * fRoot);
 		}
 
 		return out;

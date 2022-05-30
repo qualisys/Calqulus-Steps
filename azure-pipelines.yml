@@ -18,6 +18,10 @@ parameters:
   displayName: Use this Calqulus version
   type: string
   default: '<enter ref>'
+- name: pipelineVersionOverride
+  displayName: Use this Calqulus-Pipelines version
+  type: string
+  default: '<enter ref>'
 - name: skipLastSuccessfulBuild
   displayName: Skip checking regressions against last successful build
   type: boolean
@@ -27,4 +31,5 @@ extends:
   template: calqulus-steps.yml@calqulus-ci
   parameters:
     calqulusVersionOverride: ${{ parameters.calqulusVersionOverride }}
+    pipelineVersionOverride: ${{ parameters.pipelineVersionOverride }}
     skipLastSuccessfulBuild: ${{ parameters.skipLastSuccessfulBuild }}
