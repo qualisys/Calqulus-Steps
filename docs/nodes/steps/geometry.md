@@ -13,15 +13,16 @@
 
 ### `distance`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series (<vector> | <segment>)`
 > 2. `Scalar | Series (<vector> | <segment>)`
 >
-> **Output:** `Scalar | Series`
+
+**Output:** `Scalar | Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -48,14 +49,15 @@ length of the input sequences.
 
 ### `magnitude`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series (<vector> | <segment>)`
 >
-> **Output:** `Scalar | Series`
+
+**Output:** `Scalar | Series`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -78,16 +80,17 @@ the magnitude of it (Euclidian norm).
 
 ### `plane`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series (<vector> | <segment>)`
 > 2. `Scalar | Series (<vector> | <segment>)`
 > 3. `Scalar | Series (<vector> | <segment>)`
 >
-> **Output:** `Plane`
+
+**Output:** `Plane`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -114,15 +117,16 @@ length of the input sequences.
 
 ### `project`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series (<vector> | <segment>)`
 > 2. `Plane`
 >
-> **Output:** `Scalar | Series (<vector> | <segment>)`
+
+**Output:** `Scalar | Series (<vector> | <segment>)`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -150,14 +154,15 @@ be left untouched.*
 
 ### `unitVector`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Series (<vector> | <segment>)`
 >
-> **Output:** `Series (<vector> | <segment>)`
+
+**Output:** `Series (<vector> | <segment>)`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

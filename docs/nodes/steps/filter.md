@@ -20,13 +20,14 @@ NaN values are re-inserted in their original places in the output.
 
 ### `highpass`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `extrapolate`
 >
@@ -41,7 +42,7 @@ NaN values are re-inserted in their original places in the output.
 > i.e., extrapolation begins from the first and last real value. 
 > NaN values are then re-inserted in the original places for 
 > the output.
-
+>
 > #### `iterations`
 >
 > **Type:** `Number`  
@@ -49,7 +50,7 @@ NaN values are re-inserted in their original places in the output.
 > **Default value:** `1`  
 >
 > Defines how many times to apply the filter.
-
+>
 > #### `cutoff`
 >
 > **Type:** `Number`  
@@ -57,7 +58,7 @@ NaN values are re-inserted in their original places in the output.
 > **Default value:** `20`  
 >
 > Defines around what frequency to limit the filter.
-
+>
 > #### `order`
 >
 > **Type:** `Number`  
@@ -65,10 +66,9 @@ NaN values are re-inserted in their original places in the output.
 > **Default value:** `2`  
 >
 > Defines the filter order.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -90,13 +90,14 @@ Runs a Butterworth high-pass filter over the input data.
 
 ### `lowpass`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
 
-> **Options**
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
 >
 > #### `extrapolate`
 >
@@ -111,7 +112,7 @@ Runs a Butterworth high-pass filter over the input data.
 > i.e., extrapolation begins from the first and last real value. 
 > NaN values are then re-inserted in the original places for 
 > the output.
-
+>
 > #### `iterations`
 >
 > **Type:** `Number`  
@@ -119,7 +120,7 @@ Runs a Butterworth high-pass filter over the input data.
 > **Default value:** `1`  
 >
 > Defines how many times to apply the filter.
-
+>
 > #### `cutoff`
 >
 > **Type:** `Number`  
@@ -127,7 +128,7 @@ Runs a Butterworth high-pass filter over the input data.
 > **Default value:** `20`  
 >
 > Defines around what frequency to limit the filter.
-
+>
 > #### `order`
 >
 > **Type:** `Number`  
@@ -135,10 +136,9 @@ Runs a Butterworth high-pass filter over the input data.
 > **Default value:** `2`  
 >
 > Defines the filter order.
-
 >
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 

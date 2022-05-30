@@ -13,15 +13,16 @@ in various ways.
 
 ### `concatenate`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Event | Number`
 > 2. `Scalar | Series | Event | Number`
 >
-> **Output:** `Scalar | Series | Event | Number`
+
+**Output:** `Scalar | Series | Event | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
@@ -45,16 +46,17 @@ output. This will be done on each component, if they exist.
 
 ### `vector`
 
-> **Inputs**
+**Inputs**
 >
 > 1. `Scalar | Series | Number | Series (<vector> | <segment> | <plane>)`
 > 2. `Scalar | Series | Number` (optional)
 > 3. `Scalar | Series | Number` (optional)
 >
-> **Output:** `Scalar | Series | Number`
+
+**Output:** `Scalar | Series | Number`
 
 
-> **Shared options**
+**Shared options**
 >
 > <details><summary>Global options</summary>
 > 
