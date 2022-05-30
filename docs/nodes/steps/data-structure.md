@@ -48,8 +48,9 @@ output. This will be done on each component, if they exist.
 
 **Inputs**
 >
-> 1. `Scalar | Series | Number`
-> 2. `Scalar | Series | Number`
+> 1. `Scalar | Series | Number | Series (<vector> | <segment> | <plane>)`
+> 2. `Scalar | Series | Number` (optional)
+> 3. `Scalar | Series | Number` (optional)
 >
 
 **Output:** `Scalar | Series | Number`
@@ -71,9 +72,16 @@ output. This will be done on each component, if they exist.
 >
 
 
-The `vector` step takes three inputs and outputs a vector 
-sequence signal, where the three inputs will be assigned to 
-the `x`, `y`, and `z` components, respectively.
+The `vector` step takes one or three inputs and outputs a 
+vector sequence signal. 
+
+If given three numeric or 1-dimensional series inputs, each 
+input will be assigned to the `x`, `y`, and `z` components, 
+respectively.
+
+Alternatively, if only one input is given and it contains at
+least three components, the first three components will be 
+used to construct the vector sequence.
 
 If the inputs have different lengths, the output signal will 
 be the length of the longest input and shorter inputs will be 

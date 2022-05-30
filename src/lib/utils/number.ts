@@ -36,4 +36,26 @@ export class NumberUtil {
 	static isNumeric(n) {
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
+
+	/**
+	 * Returns a string with the ordinal suffix, i.e., 
+	 * 1 => 1st
+	 * 2 => 2nd
+	 * 3 => 3rd
+	 * @param value
+	 * @returns 
+	 */
+	static formatOrdinal(value: number) {
+		const pluralRulesEn = new Intl.PluralRules("en", {type: "ordinal"});
+		const suffixes = {
+			one: 'st',
+			two: 'nd',
+			few: 'rd',
+			other: 'th',
+		};
+
+		const category = pluralRulesEn.select(value);
+		const suffix = suffixes[category];
+		return (value + suffix);
+	}
 }

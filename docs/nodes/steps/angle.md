@@ -15,14 +15,16 @@ The following options are available on all Angle steps.
 
 > #### `project`
 >
-> **Type:** `String`  
+> **Type:** `String | <PlaneSequence>`  
 > **Required:** `False`  
 > **Allowed values:** `xy | xz | yz`  
 > **Default value:** `null`  
 >
-> If set, the angle will be calculated in two dimensions on the 
+> If set to a string, the angle will be calculated in two dimensions on the 
 > specified coordinate plane by ignoring the component of the 
 > input signals which is not part of the plane.
+>
+> Using a PlaneSequence, projects the input vectors on the provided plane. 
 >
 > **_Note:_** _The projection is only applied for vector-based 
 > angles and is ignored when calculating joint angles._
