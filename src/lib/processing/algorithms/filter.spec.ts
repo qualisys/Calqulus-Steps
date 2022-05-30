@@ -111,5 +111,10 @@ test('LowPassFilterStep - all NaNs', async (t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, undefined, undefined, undefined), 300);
 	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
 
-	await t.throwsAsync(step.process());
+	const res = await step.process();
+
+	t.deepEqual(res.getValue(), series.getValue());
+
+	// Expect a warning.
+	t.is(step.processingWarnings.length, 1);
 });

@@ -2,7 +2,7 @@ import * as Fili from 'fili/dist/fili.min.js';
 
 import { PropertyType } from '../../models/property';
 import { StepCategory, StepClass } from '../../step-registry';
-import { ProcessingError } from '../../utils/processing-error';
+import { NumberUtil } from '../../utils/number';
 import { SeriesBufferMethod, SeriesUtil } from '../../utils/series';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
@@ -88,8 +88,12 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 
 		this.filter = new Fili.IirFilter(filterCoeffs);
 	}
-	function(a: TypedArray): TypedArray {
-		if (a.every(v => isNaN(v))) throw new ProcessingError('The input signal is all NaN.');
+
+	function(a: TypedArray, index: number): TypedArray {
+		if (a.every(v => isNaN(v))) {
+			this.processingWarnings.push(`All values are NaN (on ${ NumberUtil.formatOrdinal(index + 1) } component).`);
+			return a;
+		};
 
 		// Replace NaNs with 0
 		let fixedSeries = SeriesUtil.filterNaN(a, 0);
