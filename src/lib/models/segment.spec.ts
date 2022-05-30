@@ -52,6 +52,27 @@ test('Segment - fromArray', (t) => {
 	});
 });
 
+test('Segment - array', (t) => {
+	const segment = new Segment(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+		300
+	);
+
+	t.deepEqual(segment.array, [
+		fakeArray,
+		fakeArray,
+		fakeArray,
+		fakeArray,
+		fakeArray,
+		fakeArray,
+		fakeArray,
+	]);
+
+	t.is(segment.array.length, 7);
+});
+
 test('Segment - getComponent', (t) => {
 	const segment = new Segment(
 		'test',
