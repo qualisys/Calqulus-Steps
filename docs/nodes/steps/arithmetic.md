@@ -12,6 +12,14 @@ arithmetic function over them and outputs the result.
 The type of the result is of the same type as the first operand, 
 or a vector sequence if the result is an array with three elements.
 
+If one of the operands is a single number, the operand will be used
+for applying the operation for each component or array value of the 
+other input. 
+
+If both operands are arrays or component-based (marker/vector/segment)
+but with different length or with different number of components, an 
+error will be thrown as there is no defined way to apply the operation.	
+
 ## Examples
 
 ``` yaml
@@ -51,11 +59,18 @@ _Divides every component of the `Hips` segment, for all
 frames with 2._
 
 ``` yaml
+- multiply: [Hips, [1, 0, 1, 1, 1, 1, 1]]
+```
+_Multiplies the components of the `Hips` segment (`x`, `y`, 
+`z`, `rx`, `ry`, `rz`, `rw`) for all frames with the 
+corresponding item from the second operand._
+
+``` yaml
 - multiply: [Hips, [1, 0, 1]]
 ```
-_Multiplies the `x`, `y`, and `z` components of the `Hips` 
-segment, for all frames with the corresponding item from the 
-second operand._
+_Throws an error since the second operand does not cover all components
+of the first input (the first input is a segment and has 7 components;
+`x`, `y`, `z`, `rx`, `ry`, `rz`, `rw`)._
 
 ## Shared options
 
