@@ -48,7 +48,7 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 	// These are used to mock the `Inputs` object for the step class.
 	const optionSignals = Object
 		.entries(options || {})
-		.filter((entry) => Array.isArray(entry[1]) && entry[1][0] instanceof Signal) as [string, Signal[]][]
+		.map(entry => (Array.isArray(entry[1]) && entry[1][0] instanceof Signal) ? entry : [entry[0], [new Signal(entry[1])]]) as [string, Signal[]][]
 	;
 	const optionSignalsMap = new Map(optionSignals);
 
@@ -70,6 +70,14 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 		.filter(entry => !(Array.isArray(entry[1]) && entry[1][0] instanceof Signal)) as [string, unknown][]
 	;
 	const optionValuesMap = new Map(optionValues)
+
+	const optionValuesMapFiltered = new Map(
+		optionValues.map(entry => { 
+			// For multi-level accessors, only store the first level.
+			entry[0] = entry[0].split('.')[0];
+			return entry;
+		})
+	);
 	
 	// Prepare the Inputs class.
 	const inpSignals = new Inputs(
@@ -126,7 +134,7 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 			return value as unknown as T;
 		},
 		hasProperty: (name: string) => {
-			return optionSignalsMapFiltered.has(name) || optionValuesMap.has(name);
+			return optionSignalsMapFiltered.has(name) || optionValuesMapFiltered.has(name);
 		},
 	};
 
