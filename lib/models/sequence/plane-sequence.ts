@@ -88,6 +88,7 @@ export class PlaneSequence implements ISequence {
 	 * and returns the location of the projected points.
 	 * @param point Point sequence to project
 	 * @param plane Plane sequence on which the point is projected
+	 * @param allowSinglePlane If true and the plane sequence is of length 1, the same plane is applied for all frames of the vector sequence.
 	 */
 	static project(point: VectorSequence, plane: PlaneSequence, allowSinglePlane = false): VectorSequence {
 		let length = Math.min(point.length, plane.length);
@@ -100,7 +101,6 @@ export class PlaneSequence implements ISequence {
 			Plane.tmpPlane1.c = plane.c[0];
 			Plane.tmpPlane1.d = plane.d[0];
 		}
-		
 
 		const x = new Float32Array(length);
 		const y = new Float32Array(length);
