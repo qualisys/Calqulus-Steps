@@ -55,7 +55,7 @@ test('Quaternion - multiply', (t) => {
 });
 
 test('Quaternion - fromRotationMatrix', (t) => {
-	const mat = new Matrix(-1, 0, 0, 0, -1, 0, 0, 0, -1);
+	const mat = Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, -1);
 	const quatRef = new Quaternion(0, 0, 0, 0);
 
 	t.like(Quaternion.fromRotationMatrix(quatRef, mat), {
@@ -65,7 +65,7 @@ test('Quaternion - fromRotationMatrix', (t) => {
 		w: 0,
 	});
 
-	const mat2 = new Matrix(1, 0, 0, 0, 1, 0, 0, 0, 1);
+	const mat2 = Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1);
 	const quatRef2 = new Quaternion(0, 0, 0, 0);
 
 	t.like(Quaternion.fromRotationMatrix(quatRef2, mat2), {
@@ -75,7 +75,7 @@ test('Quaternion - fromRotationMatrix', (t) => {
 		w: 1,
 	});
 
-	const mat3 = new Matrix(-1, 0, 0, 0, -0.5, 0, 0, 0, -1);
+	const mat3 = Matrix.fromRotationMatrix(-1, 0, 0, 0, -0.5, 0, 0, 0, -1);
 	const quatRef3 = new Quaternion(0, 0, 0, 0);
 
 	t.like(Quaternion.fromRotationMatrix(quatRef3, mat3), {
@@ -85,7 +85,7 @@ test('Quaternion - fromRotationMatrix', (t) => {
 		w: 0,
 	});
 
-	const mat4 = new Matrix(0, 0, -1, 0, 1, 0, 1, 0, 0);
+	const mat4 = Matrix.fromRotationMatrix(0, 0, -1, 0, 1, 0, 1, 0, 0);
 	const q4 = Quaternion.fromRotationMatrix(Quaternion.tmpQuat1, mat4);
 
 	t.like(Quaternion.fromRotationMatrix(q4, mat4), {

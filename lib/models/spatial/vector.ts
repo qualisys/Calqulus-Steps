@@ -105,10 +105,10 @@ export class Vector implements IVector {
 	 * @returns {Vector} out
 	 */
 	static transformMatrix(out: Vector, a: Vector, m: Matrix): Vector {
-		out.x = a.x * m.m11 + a.y * m.m12 + a.z * m.m13;
-		out.y = a.x * m.m21 + a.y * m.m22 + a.z * m.m23;
-		out.z = a.x * m.m31 + a.y * m.m32 + a.z * m.m33;
-
+		out.x = a.x * m._m[0] + a.y * m._m[4] + a.z * m._m[8];
+		out.y = a.x * m._m[1] + a.y * m._m[5] + a.z * m._m[9];
+		out.z = a.x * m._m[2] + a.y * m._m[6] + a.z * m._m[10];
+		
 		return out;
 	}
 
