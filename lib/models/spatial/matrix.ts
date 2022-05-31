@@ -45,13 +45,12 @@ export class Matrix {
 	 * Creates a matrix from a quaternion rotation, vector translation and
 	 * vector scale.
 	 *
-	 * @param out the receiving operation result
 	 * @param rotation Rotation quaternion
 	 * @param translation Translation vector
 	 * @param scale Scaling vector
 	 * @returns the resulting matrix
 	 */
-	static compose(out: Matrix, rotation: Quaternion, translation, scale: Vector) {
+	static compose(rotation: Quaternion, translation, scale?: Vector) {
 		const result = new Matrix();
 
 		Matrix.composeToRef(result, rotation, translation, scale);
@@ -69,7 +68,7 @@ export class Matrix {
 	 * @param scale Scaling vector
 	 * @returns the resulting matrix
 	 */
-	static composeToRef(out: Matrix, rotation: Quaternion, translation: Vector, scale: Vector) {
+	static composeToRef(out: Matrix, rotation: Quaternion, translation: Vector, scale?: Vector) {
 		const m = out._m;
 
 		const x = rotation.x,
@@ -89,9 +88,9 @@ export class Matrix {
 		const wx = w * x2;
 		const wy = w * y2;
 		const wz = w * z2;
-		const sx = scale.x;
-		const sy = scale.y;
-		const sz = scale.z;
+		const sx = scale ? scale.x : 1;
+		const sy = scale ? scale.y : 1;
+		const sz = scale ? scale.z : 1;
 	
 		m[0] = (1 - (yy + zz)) * sx;
 		m[1] = (xy + wz) * sx;
