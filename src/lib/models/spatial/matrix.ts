@@ -156,9 +156,9 @@ export class Matrix {
 		scale.y = Math.hypot(m21, m22, m23);
 		scale.z = Math.hypot(m31, m32, m33);
 	
-		const is1 = 1 / scale[0];
-		const is2 = 1 / scale[1];
-		const is3 = 1 / scale[2];
+		const is1 = 1 / scale.x;
+		const is2 = 1 / scale.y;
+		const is3 = 1 / scale.z;
 	
 		const sm11 = m11 * is1;
 		const sm12 = m12 * is2;
