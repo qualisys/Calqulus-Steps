@@ -112,4 +112,11 @@ export class Quaternion {
 
 		return out;
 	}
+
+	/**
+	 * Creates an identity quaternion.
+	 */
+	static identity() {
+		return new Quaternion(0, 0, 0, 1);
+	}
 }

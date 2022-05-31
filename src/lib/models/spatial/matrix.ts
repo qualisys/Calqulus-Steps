@@ -3,17 +3,17 @@ import { Vector } from './vector';
 
 export class Matrix {
 	/** Matrix instance used for performance reasons. */
-	static tmpMat1: Matrix = Matrix.create();
+	static tmpMat1: Matrix = new Matrix();
 	/** Matrix instance used for performance reasons. */
-	static tmpMat2: Matrix = Matrix.create();
+	static tmpMat2: Matrix = new Matrix();
 	/** Matrix instance used for performance reasons. */
-	static tmpMat3: Matrix = Matrix.create();
+	static tmpMat3: Matrix = new Matrix();
 
 	_m: Float32Array;
 	fractionDigits: number;
 
 	/**
-	 * Creates a new identity Matrix
+	 * Creates an empty matrix (filled with zeros).
 	 *
 	 * Format: column-major, when typed out it looks like row-major
 	 * The matrices are being post multiplied.
@@ -23,22 +23,11 @@ export class Matrix {
 
 	constructor() {
 		this._m = Float32Array.from([
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0
 		]);
-	}
-
-	/**
-	 * Creates a new identity Matrix
-	 *
-	 * @returns a new 4x4 matrix
-	 */
-	// TODO:
-	// XXX: Remove!!
-	static create(): Matrix {
-		return new Matrix();
 	}
 
 	/**
@@ -112,7 +101,6 @@ export class Matrix {
 		return out;
 	}
 	
-
 	/**
 	 * Decomposes a transformation matrix into its rotation, translation
 	 * and scale components. Returns only the rotation component
@@ -368,6 +356,34 @@ export class Matrix {
 		m[13] = m31;
 		m[14] = m32;
 		m[15] = m33;
+
+		return matrix;
+	}
+
+  
+	/**
+	 * Returns a matrix cell at the specified row and column.
+	 * @param row
+	 * @param column
+	 * 
+	 * @returns the value on the specified matrix cell
+ 	 */
+	get(row: number, column: number): number {
+		return this._m[4 * column + row];
+	}
+
+	/**
+	 * Creates an identity matrix.
+	 */
+	static identity() {
+		const matrix = new Matrix();
+		
+		matrix._m = Float32Array.from([
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		]);
 
 		return matrix;
 	}

@@ -7,7 +7,7 @@ import { Vector } from '../../models/spatial/vector';
 import { Euler, RotationOrder } from './euler';
 
 test('Euler - getEuler - Cardan', (t) => {
-	const mat = Matrix.create();
+	const mat = Matrix.identity();
 	const quat = new Quaternion(-0.076565, 0.030934, -0.720501, 0.688520);
 
 	Matrix.fromQuaternion(mat, quat);
@@ -38,7 +38,7 @@ test('Euler - getEuler - Cardan', (t) => {
 });
 
 test('Euler - getEuler - Euler', (t) => {
-	const mat = Matrix.create();
+	const mat = Matrix.identity();
 	const quat = new Quaternion(-0.076565, 0.030934, -0.720501, 0.688520);
 
 	Matrix.fromQuaternion(mat, quat);
