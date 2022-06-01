@@ -119,4 +119,37 @@ export class Quaternion {
 	static identity() {
 		return new Quaternion(0, 0, 0, 1);
 	}
+
+	/**
+	 * Normalize this quaternion
+	 */
+	normalize() {
+		return Quaternion.normalizeToRef(this, this)
+	}
+
+	/**
+	 * Normalize a quaternion
+	 *
+	 * @param out the receiving vector
+	 * @param a quaternion to normalize
+	 * @returns out
+	 */
+	static normalizeToRef(out: Quaternion, a: Quaternion) {
+		const x = a.x;
+		const y = a.y;
+		const z = a.z;
+		const w = a.w;
+		let len = x * x + y * y + z * z + w * w;
+
+		if (len > 0) {
+			len = 1 / Math.sqrt(len);
+		}
+
+		out.x = x * len;
+		out.y = y * len;
+		out.z = z * len;
+		out.w = w * len;
+
+		return out;
+	}
 }
