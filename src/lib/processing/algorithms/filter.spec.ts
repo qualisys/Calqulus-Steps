@@ -8,7 +8,7 @@ import { BaseFilterStep, FilterType, HighPassFilterStep, LowPassFilterStep } fro
 const f1 = new Signal(32);
 const s1 = new Signal(f32(2, 1, 1, 1, 2, 1, 1, 1, 2), 300);
 
-test('BaseFilterStep - "extrapolate" option', async (t) => {
+test('BaseFilterStep - "extrapolate" option', async(t) => {
 	t.is(mockStep(BaseFilterStep, [f1]).extrapolate, 0); // Default value
 	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 500 }).extrapolate, 500);
 	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 5000 }).extrapolate, 1000); // Beyond max value
@@ -16,7 +16,7 @@ test('BaseFilterStep - "extrapolate" option', async (t) => {
 	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 10.5 }).extrapolate, 10); // should be integer
 });
 
-test('BaseFilterStep - "iterations" option', async (t) => {
+test('BaseFilterStep - "iterations" option', async(t) => {
 	t.is(mockStep(BaseFilterStep, [f1]).iterations, 1); // Default value
 	t.is(mockStep(BaseFilterStep, [f1], { iterations: 5 }).iterations, 5);
 	t.is(mockStep(BaseFilterStep, [f1], { iterations: 5000 }).iterations, 10); // Beyond max value
@@ -24,7 +24,7 @@ test('BaseFilterStep - "iterations" option', async (t) => {
 	t.is(mockStep(BaseFilterStep, [f1], { iterations: 5.5 }).iterations, 5); // should be integer
 });
 
-test('BaseFilterStep - "cutoff" option', async (t) => {
+test('BaseFilterStep - "cutoff" option', async(t) => {
 	t.is(mockStep(BaseFilterStep, [f1], {}).cutoffFreq, 20); // Default value
 	t.is(mockStep(BaseFilterStep, [f1], { cutoff: 5 }).cutoffFreq, 5);
 	t.is(mockStep(BaseFilterStep, [f1], { cutoff: 5000 }).cutoffFreq, 5000);
@@ -32,7 +32,7 @@ test('BaseFilterStep - "cutoff" option', async (t) => {
 	t.is(mockStep(BaseFilterStep, [f1], { cutoff: 5.5 }).cutoffFreq, 5.5); // supports floating values
 });
 
-test('BaseFilterStep - "order" option', async (t) => {
+test('BaseFilterStep - "order" option', async(t) => {
 	t.is(mockStep(BaseFilterStep, [f1], {}).order, 2); // Default value
 	t.is(mockStep(BaseFilterStep, [f1], { order: 5 }).order, 5);
 	t.is(mockStep(BaseFilterStep, [f1], { order: 5000 }).order, 10); // Beyond max value
@@ -40,7 +40,7 @@ test('BaseFilterStep - "order" option', async (t) => {
 	t.is(mockStep(BaseFilterStep, [f1], { order: 5.5 }).order, 5); // should be integer
 });
 
-test('LowPassFilterStep - basic test', async (t) => {
+test('LowPassFilterStep - basic test', async(t) => {
 	const step = mockStep(LowPassFilterStep, [s1], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
 
 	t.is(step.filterType, FilterType.LowPass);
@@ -61,7 +61,7 @@ test('LowPassFilterStep - basic test', async (t) => {
 });
 
 
-test('HighPassFilterStep - basic test', async (t) => {
+test('HighPassFilterStep - basic test', async(t) => {
 	const step = mockStep(HighPassFilterStep, [s1], { extrapolate: 100, cutoff: 40, iterations: 5, order: 3 });
 
 	t.is(step.filterType, FilterType.HighPass);
@@ -71,7 +71,7 @@ test('HighPassFilterStep - basic test', async (t) => {
 	t.deepEqual(res.getValue(), f32(
 		1.9003331661224365,
 		1.3595967292785645,
-		1.1606826782226562,
+		1.160682678222656,
 		1.162358283996582,
 		1.1890636682510376,
 		1.1623682975769043,
@@ -81,7 +81,7 @@ test('HighPassFilterStep - basic test', async (t) => {
 	));
 });
 
-test('LowPassFilterStep - handle NaNs', async (t) => {
+test('LowPassFilterStep - handle NaNs', async(t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, 2, 1, 1, 1, 2, 1, 1, 1, 2, undefined, undefined, undefined), 300);
 	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
 
@@ -107,7 +107,7 @@ test('LowPassFilterStep - handle NaNs', async (t) => {
 	));
 });
 
-test('LowPassFilterStep - all NaNs', async (t) => {
+test('LowPassFilterStep - all NaNs', async(t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, undefined, undefined, undefined), 300);
 	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
 

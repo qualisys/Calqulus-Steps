@@ -66,7 +66,7 @@ StepRegistry.globalStepDocs = {
 			**_NOTE:_** _This is **not yet implemented** for segments._
 		`,
 	}]
-}
+};
 
 // Angle
 export * from './angle';

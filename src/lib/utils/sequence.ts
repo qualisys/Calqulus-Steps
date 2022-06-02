@@ -1,4 +1,4 @@
-import { Signal } from "../models/signal";
+import { Signal } from '../models/signal';
 
 export class SequenceUtil {
 
@@ -15,13 +15,14 @@ export class SequenceUtil {
 		if (!signals.every(s => s.frameMap)) return signals;
 
 		const maps = signals.map(s => s.frameMap);
-		const maxFrame = Math.max(...maps.map(m => Math.max(...m)))
+		const maxFrame = Math.max(...maps.map(m => Math.max(...m)));
 
 		// Collect rows of indices for each input, where each index
 		// represents a frame that's equal to or greater than the previous value.
 		const indexRows = [];
 		
 		// Keep track of the current index of each column.
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const colRowIndex = maps.map(_ => 0);
 		
 		// The current frame number.

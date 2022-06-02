@@ -1,4 +1,4 @@
-import { Quaternion } from "./quaternion";
+import { Quaternion } from './quaternion';
 import { Vector } from './vector';
 
 export class Matrix {

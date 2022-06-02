@@ -111,6 +111,7 @@ export class BaseStep {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	static prepareNode(node: IStepNode) {
 		return;
 	}

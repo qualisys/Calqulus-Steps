@@ -52,4 +52,4 @@ test('SeriesUtil.createNumericArrayOfSameType', t => {
 	t.deepEqual(SeriesUtil.createNumericArrayOfSameType(float32, arr), float32);
 	t.deepEqual(SeriesUtil.createNumericArrayOfSameType(int32, arr), int32);
 	t.deepEqual(SeriesUtil.createNumericArrayOfSameType(num as unknown as number[], [num]), [num]);
-})
+});

@@ -1,7 +1,7 @@
 import { Marker } from '../../models/marker';
 import { IStepNode } from '../../models/node-interface';
 import { Signal, SignalType } from '../../models/signal';
-import { StepClass } from "../../step-registry";
+import { StepClass } from '../../step-registry';
 import { getReferenceSignal } from '../../utils/reference-signal';
 import { markdownFmt } from '../../utils/template-literal-tags';
 import { VectorInputParser } from '../../utils/vector-input-parser';

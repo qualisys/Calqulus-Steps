@@ -11,12 +11,12 @@ import { f32, mockStep } from './mock-step';
 const s1 = new Signal(f32(1, 2, 3));
 const s2 = new Signal(f32(4, 5, 6));
 
-test('mockStep - instancing', async (t) => {
+test('mockStep - instancing', async(t) => {
 	t.assert(mockStep(BaseStep) instanceof BaseStep);
 	t.assert(mockStep(RoundStep) instanceof RoundStep);
 });
 
-test('mockStep - inputs (array)', async (t) => {
+test('mockStep - inputs (array)', async(t) => {
 	t.deepEqual(mockStep(BaseStep).inputs, []);
 	t.deepEqual(mockStep(BaseStep, []).inputs, []);
 	t.deepEqual(mockStep(BaseStep, [s1]).inputs, [s1]);
@@ -24,13 +24,13 @@ test('mockStep - inputs (array)', async (t) => {
 	t.deepEqual(mockStep(BaseStep, [s1, s2]).node.in, ['Input 1', 'Input 2']);
 });
 
-test('mockStep - inputs (object)', async (t) => {
+test('mockStep - inputs (object)', async(t) => {
 	t.deepEqual(mockStep(BaseStep, {}).inputs, []);
 	t.deepEqual(mockStep(BaseStep, { inp1: s1, inp2: s2 }).inputs, [s1, s2]);
 	t.deepEqual(mockStep(BaseStep, { inp1: s1, inp2: s2 }).node.in, ['inp1', 'inp2']);
 });
 
-test('mockStep - options', async (t) => {
+test('mockStep - options', async(t) => {
 	const options = { 
 		number: 123, 
 		string: 'Hello world!',
@@ -74,7 +74,7 @@ test('mockStep - options', async (t) => {
 	t.assert(step.node.hasProperty('signal'));
 }); 
 
-test('mockStep - options - duration', async (t) => {
+test('mockStep - options - duration', async(t) => {
 	const options = { 
 		frames: 123, 
 		sec: '10s',
@@ -97,7 +97,7 @@ test('mockStep - options - duration', async (t) => {
 	t.is(invalidDur, undefined);
 });
 
-test('mockStep - originalInputString', async (t) => {
+test('mockStep - originalInputString', async(t) => {
 	t.is(mockStep(BaseStep).node.originalInputString, undefined);
 	t.is(mockStep(BaseStep, [], {}, 'hello').node.originalInputString, 'hello');
 });

@@ -255,11 +255,11 @@ export class PeakFinderStep extends BaseStep {
 	async process(): Promise<Signal> {
 
 		if (!this.inputs || !this.inputs.length) {
-			throw new ProcessingError(`No valid inputs.`);
+			throw new ProcessingError('No valid inputs.');
 		}
 
 		if (this.inputs[0].type !== SignalType.Float32Array) {
-			throw new ProcessingError(`The PeakFinder step expects a single array as input.`);
+			throw new ProcessingError('The PeakFinder step expects a single array as input.');
 		}
 
 		const result: Signal = this.inputs[0].clone(false);

@@ -18,6 +18,7 @@ import { BaseStep } from '../base-step';
 })
 export class BaseAlgorithmStep extends BaseStep {
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	function(values: TypedArray, index: number): TypedArray {
 		return values;
 	}
@@ -39,7 +40,7 @@ export class BaseAlgorithmStep extends BaseStep {
 		}
 
 		const res = set.map((v, index) => {
-			return this.function(v, index)
+			return this.function(v, index);
 		});
 		const out = this.inputs[0].clone(false);
 		const originalType = this.inputs[0].type;

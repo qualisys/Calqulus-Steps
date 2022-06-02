@@ -43,7 +43,7 @@ const createBuildMeta = (dest) => {
 				+ `\n	ref: '${ ref }',`
 				+ `\n	branch: '${ branch }',`
 				+ `\n	built: '${ dateTimeFormat.format(new Date()) }'`
-				+ '\n}';
+				+ '\n};';
 			;
 
 			fs.writeFileSync(dest, content, { encoding: 'utf8' });

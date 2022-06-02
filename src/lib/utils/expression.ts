@@ -15,7 +15,7 @@ export const parseExpressionOperands = (exp: string) => {
 	}
 
 	const regexpStr = regexOperators.join('|');
-	const regexp = new RegExp(regexpStr)
+	const regexp = new RegExp(regexpStr);
 
 	if (exp.match(regexp)) {
 		const result = exp.replace(/[()]/g, '').split(regexp).map(v => NumberUtil.isNumeric(v) ? parseFloat(v) : v);
@@ -25,4 +25,4 @@ export const parseExpressionOperands = (exp: string) => {
 	else {
 		return [];
 	}
-}
+};

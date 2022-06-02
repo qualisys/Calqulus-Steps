@@ -4,4 +4,4 @@ export class ProcessingError extends Error {
 		
 		this.name = 'ProcessingError';
 	}
-  }
+}

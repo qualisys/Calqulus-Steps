@@ -169,7 +169,7 @@ export class PeakFinder {
 	 * @param sequence Allows to classify peaks using a pattern and select peaks from the pattern to use as the output. See [[ISequenceOptions]] for further information.
 	 */
 	static findPeaks(values: TypedArray, { height, width, distance, prominence, relHeight = 0.5, window, sequence }: { height?: number | IValueRange, width?: number | IValueRange, distance?: number, prominence?: number | IValueRange, relHeight?: number, window?: number, sequence?: ISequenceOptions }) {
-		if (distance !== undefined && distance < 1) throw new Error(`'distance' must be greater or equal to 1.`);
+		if (distance !== undefined && distance < 1) throw new Error('\'distance\' must be greater or equal to 1.');
 
 		let peaks = this.findLocalMaxima(values);
 
@@ -215,7 +215,7 @@ export class PeakFinder {
 			if (window >= 2) {
 				// Adjust window around the evaluated peak (within bounds);
 				// if window is even the resulting window length is is implicitly
-                // rounded to next odd integer
+				// rounded to next odd integer
 				iMin = Math.max(peak.mid - Math.round(window / 2), iMin);
 				iMax = Math.min(peak.mid + Math.round(window / 2), iMax);
 			}
@@ -273,7 +273,7 @@ export class PeakFinder {
 		const minWidth = (typeof width === 'number') ? width as number : width.min;
 		const maxWidth = (typeof width === 'number') ? undefined       : width.max;
 
-		if (relHeight < 0) throw new Error(`'relHeight' must be greater or equal to 0.0`);
+		if (relHeight < 0) throw new Error('\'relHeight\' must be greater or equal to 0.0');
 
 		for (let p = 0; p < peaks.length; p++) {
 			const peak = peaks[p];
@@ -325,14 +325,14 @@ export class PeakFinder {
 		// with `j` by order of `priority` while still maintaining the ability to
 		// step to neighbouring peaks with (`j` + 1) or (`j` - 1).
 		const orderedPriority = peaks
-			.map((p, i) => { return {val: p.value, index: i}})
+			.map((p, i) => { return {val: p.value, index: i};})
 			.sort((a, b) => a.val - b.val)
 			.map(p => p.index)
 		;
 
 		for (let i = peaks.length - 1; i >= 0; i--) {
 			// "Translate" `i` to `j` which points to current peak whose
-            // neighbours are to be evaluated
+			// neighbours are to be evaluated
 			const j = orderedPriority[i];
 
 			// Skip evaluation for peak already marked as "don't keep"
@@ -383,7 +383,8 @@ export class PeakFinder {
 							key: value[0],
 							value: 100,
 						});
-					} else if (typeof array[index + 1] === 'number') {
+					}
+					else if (typeof array[index + 1] === 'number') {
 						// Associate the following number with the current string.
 						list.push({
 							key: value[0],
@@ -433,7 +434,8 @@ export class PeakFinder {
 				const patternIndex = options.pattern.length - i;
 				if (peakSequence[seqIndex] === options.pattern[options.pattern.length - i]) {
 					peaks[seqIndex].index = patternIndex;
-				} else {
+				}
+				else {
 					break;
 				}
 			}
@@ -446,7 +448,8 @@ export class PeakFinder {
 				const seqIndex = lastIndex + i;
 				if (peakSequence[seqIndex] === options.pattern[i]) {
 					peaks[seqIndex].index = i;
-				} else {
+				}
+				else {
 					break;
 				}
 			}

@@ -28,7 +28,7 @@ const ps = new Signal(new PlaneSequence(
 	f32(-2, -2, -2, -2, -2),
 ));
 
-test('ProjectStep - Input errors', async (t) => {
+test('ProjectStep - Input errors', async(t) => {
 	// No input
 	const step1 = mockStep(ProjectStep);
 	await t.throwsAsync(step1.process());
@@ -70,7 +70,7 @@ test('ProjectStep - Input errors', async (t) => {
 	await t.throwsAsync(step10.process());
 });
 
-test('DistanceStep - VectorSequence and Plane', async (t) => {
+test('DistanceStep - VectorSequence and Plane', async(t) => {
 	const step = mockStep(ProjectStep, [vs, ps]);
 
 	const res = await step.process();
@@ -80,7 +80,7 @@ test('DistanceStep - VectorSequence and Plane', async (t) => {
 });
 
 
-test('DistanceStep - Segment and Plane', async (t) => {
+test('DistanceStep - Segment and Plane', async(t) => {
 	const step = mockStep(ProjectStep, [segment1, ps]);
 
 	const res = await step.process();
