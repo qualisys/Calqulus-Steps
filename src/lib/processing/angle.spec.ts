@@ -137,8 +137,8 @@ test('AngleStep - One segment (default XYZ)', async (t) => {
 	const res = await mockStep(AngleStep, [seg1]).process();
 	const vs = res.getVectorSequenceValue();
 
-	t.deepEqual(Array.from(vs.x), [-3.5305919647216797]);
-	t.deepEqual(Array.from(vs.y), [8.796627044677734])
+	t.deepEqual(Array.from(vs.x), [-3.530592203140259]);
+	t.deepEqual(Array.from(vs.y), [8.79662799835205])
 	t.deepEqual(Array.from(vs.z), [-92.32886505126953])
 });
 
@@ -198,7 +198,7 @@ test('AngleStep - Two segments (ZYX)', async (t) => {
 
 	t.deepEqual(Array.from(vs.x), [-12.558980941772461]);
 	t.deepEqual(Array.from(vs.y), [2.8115885257720947])
-	t.deepEqual(Array.from(vs.z), [0.9856448173522949])
+	t.deepEqual(Array.from(vs.z), [0.9856447577476501])
 });
 
 // Three vectors
@@ -280,7 +280,7 @@ test('JointAngleStep - Two segments (ZYX)', async (t) => {
 
 	t.deepEqual(Array.from(vs.x), [-12.558980941772461]);
 	t.deepEqual(Array.from(vs.y), [2.8115885257720947])
-	t.deepEqual(Array.from(vs.z), [0.9856448173522949])
+	t.deepEqual(Array.from(vs.z), [0.9856447577476501])
 });
 
 // Two vectors
@@ -339,8 +339,8 @@ test('AngularVelocityStep - No option', async (t) => {
 	}).process();
 	const vs = res.getVectorSequenceValue();
 
-	t.deepEqual(Array.from(vs.x), [NaN, 252.96937561035156, NaN]);
-	t.deepEqual(Array.from(vs.y), [NaN, 344.2754821777344, NaN]);
+	t.deepEqual(Array.from(vs.x), [NaN, 252.9694061279297, NaN]);
+	t.deepEqual(Array.from(vs.y), [NaN, 344.2755432128906, NaN]);
 	t.deepEqual(Array.from(vs.z), [NaN, -1434.84765625, NaN]);
 });
 
@@ -352,9 +352,9 @@ test('AngularVelocityStep - useRotationOrder: true, rotationOrder: xyz', async (
 	}).process();
 	const vs = res.getVectorSequenceValue();
 
-	t.deepEqual(Array.from(vs.x), [NaN, 252.96937561035156, NaN]);
+	t.deepEqual(Array.from(vs.x), [NaN, 252.9694061279297, NaN]);
 	t.deepEqual(Array.from(vs.y), [NaN, 1468.3487548828125, NaN]);
-	t.deepEqual(Array.from(vs.z), [NaN, 57.72679901123047, NaN]);
+	t.deepEqual(Array.from(vs.z), [NaN, 57.72683334350586, NaN]);
 });
 
 test('AngularVelocityStep - useRotationOrder: true', async (t) => {
@@ -364,9 +364,9 @@ test('AngularVelocityStep - useRotationOrder: true', async (t) => {
 	}).process();
 	const vs = res.getVectorSequenceValue();
 
-	t.deepEqual(Array.from(vs.x), [NaN, 252.96937561035156, NaN]);
+	t.deepEqual(Array.from(vs.x), [NaN, 252.9694061279297, NaN]);
 	t.deepEqual(Array.from(vs.y), [NaN, 1468.3487548828125, NaN]);
-	t.deepEqual(Array.from(vs.z), [NaN, 57.72679901123047, NaN]);
+	t.deepEqual(Array.from(vs.z), [NaN, 57.72683334350586, NaN]);
 });
 
 test('AngularVelocityStep - useRotationOrder: true, rotationOrder: zyz', async (t) => {
@@ -378,6 +378,6 @@ test('AngularVelocityStep - useRotationOrder: true, rotationOrder: zyz', async (
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [NaN, -1434.84765625, NaN]);
-	t.deepEqual(Array.from(vs.y), [NaN, -49.70024871826172, NaN]);
-	t.deepEqual(Array.from(vs.z), [NaN, 57.72679901123047, NaN]);
+	t.deepEqual(Array.from(vs.y), [NaN, -49.700252532958984, NaN]);
+	t.deepEqual(Array.from(vs.z), [NaN, 57.72683334350586, NaN]);
 });
