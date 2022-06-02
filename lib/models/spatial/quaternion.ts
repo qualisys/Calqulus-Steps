@@ -9,6 +9,14 @@ export class Quaternion {
 	constructor(public x: number, public y: number, public z: number, public w: number) {}
 
 	/**
+	 * Get the components of this quaternion as an array.
+	 * The order used: [x, y, z, w].
+	 */
+	get array() {
+		return [this.x, this.y, this.z, this.w];
+	}
+
+	/**
 	 * Assigns a value to a component referenced by an index.
 	 * [x, y, z, w]
 	 * @param i 
@@ -109,6 +117,55 @@ export class Quaternion {
 			out.setIndex(j, (m[j * 3 + i] + m[i * 3 + j]) * fRoot);
 			out.setIndex(k, (m[k * 3 + i] + m[i * 3 + k]) * fRoot);
 		}
+
+		return out;
+	}
+
+	/**
+	 * Creates an identity quaternion.
+	 */
+	static identity() {
+		return new Quaternion(0, 0, 0, 1);
+	}
+
+	/**
+	 * Calculates the length of a quaternion.
+	 *
+	 * @returns length of the quaternion
+	 */
+	get length() {
+		return Math.hypot(this.x, this.y, this.z, this.w);
+	}
+
+	/**
+	 * Normalize this quaternion
+	 */
+	normalize() {
+		return Quaternion.normalizeToRef(this, this)
+	}
+
+	/**
+	 * Normalize a quaternion
+	 *
+	 * @param out the receiving vector
+	 * @param a quaternion to normalize
+	 * @returns out
+	 */
+	static normalizeToRef(out: Quaternion, a: Quaternion) {
+		const x = a.x;
+		const y = a.y;
+		const z = a.z;
+		const w = a.w;
+		let len = x * x + y * y + z * z + w * w;
+
+		if (len > 0) {
+			len = 1 / Math.sqrt(len);
+		}
+
+		out.x = x * len;
+		out.y = y * len;
+		out.z = z * len;
+		out.w = w * len;
 
 		return out;
 	}
