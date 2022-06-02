@@ -1,4 +1,4 @@
-import { EventCollection } from './event';
+import { IEvent } from './event';
 import { Marker } from './marker';
 import { Segment } from './segment';
 import { Skeleton } from './skeleton';
@@ -6,7 +6,7 @@ import { Skeleton } from './skeleton';
 export interface IMeasurement {
 	analogFrameRate: number;
 	endFrame: number;
-	events: EventCollection;
+	events: IEvent[];
 	filename: string;
 	frameRate: number;
 	frameCount: number;
