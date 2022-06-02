@@ -31,6 +31,32 @@ export class Matrix {
 	}
 
 	/**
+	 * Copy all components from the specified matrix.
+	 * 
+	 * @param m The matrix to copy values from
+	 */
+	copyFrom(matrix: Matrix) {
+		const m = this._m;
+
+		m[0] = matrix._m[0];
+		m[1] = matrix._m[1];
+		m[2] = matrix._m[2];
+		m[3] = matrix._m[3];
+		m[4] = matrix._m[4];
+		m[5] = matrix._m[5];
+		m[6] = matrix._m[6];
+		m[7] = matrix._m[7];
+		m[8] = matrix._m[8];
+		m[9] = matrix._m[9];
+		m[10] = matrix._m[10];
+		m[11] = matrix._m[11];
+		m[12] = matrix._m[12];
+		m[13] = matrix._m[13];
+		m[14] = matrix._m[14];
+		m[15] = matrix._m[15];
+	}
+
+	/**
 	 * Creates a matrix from a quaternion rotation, vector translation and
 	 * vector scale.
 	 *
@@ -194,32 +220,6 @@ export class Matrix {
 	}
 
 	/**
-	 * Copy all components from the specified matrix.
-	 * 
-	 * @param m The matrix to copy values from
-	 */
-	copyFrom(matrix: Matrix) {
-		const m = this._m;
-
-		m[0] = matrix._m[0];
-		m[1] = matrix._m[1];
-		m[2] = matrix._m[2];
-		m[3] = matrix._m[3];
-		m[4] = matrix._m[4];
-		m[5] = matrix._m[5];
-		m[6] = matrix._m[6];
-		m[7] = matrix._m[7];
-		m[8] = matrix._m[8];
-		m[9] = matrix._m[9];
-		m[10] = matrix._m[10];
-		m[11] = matrix._m[11];
-		m[12] = matrix._m[12];
-		m[13] = matrix._m[13];
-		m[14] = matrix._m[14];
-		m[15] = matrix._m[15];
-	}
-
-	/**
 	 * Create a 4x4 matrix from the elements of a 3x3 rotation matrix.
 	 * The remaining elements are assigned the corresponding elements in the
 	 * identity.
@@ -308,6 +308,16 @@ export class Matrix {
 		m[15] = 1;
 		
 		return out;
+	}
+
+	/**
+	 * Create a new Matrix with the given values
+	 *
+	 * @param values Array of 16 numbers to create matrix from
+	 * @returns A new matrix
+	 */
+	static fromArray(values: number[]): Matrix {
+		return Matrix.fromValues.apply(null, values);
 	}
 
 	/**
