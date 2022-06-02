@@ -129,6 +129,15 @@ export class Quaternion {
 	}
 
 	/**
+	 * Calculates the length of a quaternion.
+	 *
+	 * @returns length of the quaternion
+	 */
+	get length() {
+		return Math.hypot(this.x, this.y, this.z, this.w);
+	}
+
+	/**
 	 * Normalize this quaternion
 	 */
 	normalize() {
