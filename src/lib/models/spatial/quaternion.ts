@@ -9,6 +9,14 @@ export class Quaternion {
 	constructor(public x: number, public y: number, public z: number, public w: number) {}
 
 	/**
+	 * Get the components of this quaternion as an array.
+	 * The order used: [x, y, z, w].
+	 */
+	get array() {
+		return [this.x, this.y, this.z, this.w];
+	}
+
+	/**
 	 * Assigns a value to a component referenced by an index.
 	 * [x, y, z, w]
 	 * @param i 
