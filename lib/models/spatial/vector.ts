@@ -18,6 +18,14 @@ export class Vector implements IVector {
 	constructor(public x: number, public y: number, public z: number) {}
 
 	/**
+	 * Get the components of this vector as an array.
+	 * The order used: [x, y, z].
+	 */
+	get array() {
+		return [this.x, this.y, this.z];
+	}
+
+	/**
 	 * Get the angle between two 3D vectors
 	 * @param {Vector} a The first operand
 	 * @param {Vector} b The second operand
