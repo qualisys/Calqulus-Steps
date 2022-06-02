@@ -473,10 +473,10 @@ export class AngularVelocityStep extends AngleStep {
 		const rSeg = MatrixSequence.createEmpty(nFrames);
 		const rRef = MatrixSequence.createEmpty(nFrames);
 		const rRes = MatrixSequence.createEmpty(nFrames);
-		const rParTemp = Matrix.create();
-		const rSegTemp = Matrix.create();
-		const rRefTemp = Matrix.create();
-		const rResTemp = Matrix.create();
+		const rParTemp = Matrix.identity();
+		const rSegTemp = Matrix.identity();
+		const rRefTemp = Matrix.identity();
+		const rResTemp = Matrix.identity();
 
 		for (let frame = 0; frame < nFrames; frame++) {
 			Matrix.fromQuaternion(rParTemp, sPar.rotations.getQuaternionAtFrame(frame + 1));

@@ -14,6 +14,18 @@ test('Quaternion - constructor', (t) => {
 	});
 });
 
+test('Quaternion - identity', (t) => {
+	const q = Quaternion.identity();
+
+	t.deepEqual(q.array, [0, 0, 0, 1]);
+});
+
+test('Quaternion - get array', (t) => {
+	const quat = new Quaternion(1, 2, 3, 4);
+
+	t.deepEqual(quat.array, [1, 2, 3, 4]);
+});
+
 test('Quaternion - setIndex', (t) => {
 	const quat = new Quaternion(0, 0, 0, 0);
 
@@ -52,6 +64,17 @@ test('Quaternion - multiply', (t) => {
 		z: 6,
 		w: -12,
 	})
+});
+
+test('Quaternion - normalize', (t) => {
+	const q0 = new Quaternion(0, 0, 0, 1);
+	const q1 = new Quaternion(1, 2, 3, 4);
+
+	q0.normalize();
+	q1.normalize();
+
+	t.is(q0.length, 1);
+	t.is(q1.length, 0.9999999999999999);
 });
 
 test('Quaternion - fromRotationMatrix', (t) => {
