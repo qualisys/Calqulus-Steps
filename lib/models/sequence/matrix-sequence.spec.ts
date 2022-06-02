@@ -16,7 +16,6 @@ const mSeq = new MatrixSequence(
 );
 
 test('MatrixSequence - constructor', (t) => {
-	console.log(mSeq);
 	t.is(mSeq.m00, fakeArray);
 	t.is(mSeq.m01, fakeArray);
 	t.is(mSeq.m02, fakeArray);

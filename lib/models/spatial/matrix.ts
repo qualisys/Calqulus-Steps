@@ -9,7 +9,7 @@ export class Matrix {
 	/** Matrix instance used for performance reasons. */
 	static tmpMat3: Matrix = new Matrix();
 
-	_m: Float32Array;
+	_m: Float64Array;
 	fractionDigits: number;
 
 	/**
@@ -22,7 +22,7 @@ export class Matrix {
 	 */
 
 	constructor() {
-		this._m = Float32Array.from([
+		this._m = Float64Array.from([
 			0, 0, 0, 0,
 			0, 0, 0, 0,
 			0, 0, 0, 0,
@@ -388,7 +388,7 @@ export class Matrix {
 	static identity() {
 		const matrix = new Matrix();
 		
-		matrix._m = Float32Array.from([
+		matrix._m = Float64Array.from([
 			1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
