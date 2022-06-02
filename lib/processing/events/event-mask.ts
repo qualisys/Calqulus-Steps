@@ -121,7 +121,7 @@ export class EventMaskStep extends BaseStep {
 		}
 
 		if (!from.isEventLike || !to.isEventLike) {
-			throw new ProcessingError(`Input 2 and 3 are expected to be events.`);
+			throw new ProcessingError('Input 2 and 3 are expected to be events.');
 		}
 
 		// Expect a one-dimensional array, round all values and cast into a Uint array.

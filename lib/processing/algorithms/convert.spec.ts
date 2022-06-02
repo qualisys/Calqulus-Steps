@@ -25,11 +25,11 @@ test('ConvertStep - missing required options', async (t) => {
 });
 */
 
-test('ConvertStep - unrecognized units', async (t) => {
+test('ConvertStep - unrecognized units', async(t) => {
 	t.throws(() => mockStep(ConvertStep, [f1], stepOptions('hello', 'world')));
 });
 
-test('ConvertStep - Simple conversion', async (t) => {
+test('ConvertStep - Simple conversion', async(t) => {
 	const res = await mockStep(ConvertStep, [f1], stepOptions('m', 'mm')).process();
 
 	t.is(res.getValue(), 32000);

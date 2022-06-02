@@ -8,8 +8,6 @@ const f32 = (...arr: number[]) => Float32Array.from(arr);
 const i32 = (...arr: number[]) => Uint32Array.from(arr);
 
 const s1 = new Signal(f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-const s2 = new Signal(f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-const s3 = new Signal(f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
 test('SequenceUtil - sequenceByFrameMap - 2 inputs', (t) => {
 	const res = SequenceUtil.sequenceByFrameMap(

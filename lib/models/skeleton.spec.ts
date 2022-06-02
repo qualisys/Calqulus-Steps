@@ -40,6 +40,6 @@ test('Skeleton - getSegment', (t) => {
 	t.is(skeleton.getSegment('foot'), segmentFoot);
 	
 	t.throws(() => {
-		skeleton.getSegment('toe')
+		skeleton.getSegment('toe');
 	}, { message: 'Skeleton: No segment named \'toe\'' });
 });

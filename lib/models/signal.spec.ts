@@ -188,7 +188,7 @@ test('Signal - typeToString', (t) => {
 	];
 
 	for (const type of types) {
-		t.is(Signal.typeToString(type[0] as SignalType), type[1] as string)
+		t.is(Signal.typeToString(type[0] as SignalType), type[1] as string);
 	}
 });
 
@@ -206,7 +206,7 @@ test('Signal - typeToResultType', (t) => {
 	];
 
 	for (const type of types) {
-		t.is(Signal.typeToResultType(type[0] as SignalType), type[1] as ResultType)
+		t.is(Signal.typeToResultType(type[0] as SignalType), type[1] as ResultType);
 	}
 });
 

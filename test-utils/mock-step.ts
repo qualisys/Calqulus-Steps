@@ -69,7 +69,7 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 		.entries(options || {})
 		.filter(entry => !(Array.isArray(entry[1]) && entry[1][0] instanceof Signal)) as [string, unknown][]
 	;
-	const optionValuesMap = new Map(optionValues)
+	const optionValuesMap = new Map(optionValues);
 
 	const optionValuesMapFiltered = new Map(
 		optionValues.map(entry => { 
@@ -101,10 +101,11 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 		space: undefined,
 		originalInputString,
 		
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		getProperty: (name: string) => undefined,
 		getPropertyValue: <T>(key: string, expectedTypes: PropertyType | PropertyType[], required?: boolean, defaultValue?: T): T => {
 			if (!optionValuesMap.has(key) && required) {
-				//TODO: Throw error, required parameter missing
+				// TODO: Throw error, required parameter missing
 			}
 			
 			if (!optionValuesMap.has(key)) return defaultValue || undefined;
@@ -141,7 +142,7 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 	(stepClass as unknown as typeof BaseStep).prepareNode(node);
 
 	return new stepClass(node, inpSignals);
-}
+};
 
 /**
  * Performs similar type checking as when reading YAML properties, 
@@ -159,4 +160,4 @@ const propertyTypeFromPrimitive = (value): PropertyType => {
 	}
 
 	return undefined;
-}
+};

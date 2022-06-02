@@ -37,7 +37,7 @@ export class ProjectStep extends BaseStep {
 			throw new ProcessingError('Expected one Plane and one Vector/Segment input.');
 		}
 
-		const res = PlaneSequence.project(point.getVectorSequenceValue(), plane.getPlaneSequenceValue())
+		const res = PlaneSequence.project(point.getVectorSequenceValue(), plane.getPlaneSequenceValue());
 
 		// Handle Segment input => return translated Segment.
 		if (point.type === SignalType.Segment) {

@@ -3,9 +3,9 @@ import test from 'ava';
 import { Kinematics } from './kinematics';
 
 test('Kinematics - Derivative (first order)', (t) => {
-	t.throws(() => { Kinematics.finiteDifference([1], 0) },           { message: `Invalid value given for xStep (0).`});
-	t.throws(() => { Kinematics.finiteDifference([1, 2, 3], 1, 0) },  { message: `Invalid value given for order (0).`});
-	t.throws(() => { Kinematics.finiteDifference([1, 2, 3], 1, 3) },  { message: `Invalid value given for order (3).`});
+	t.throws(() => { Kinematics.finiteDifference([1], 0); },           { message: 'Invalid value given for xStep (0).'});
+	t.throws(() => { Kinematics.finiteDifference([1, 2, 3], 1, 0); },  { message: 'Invalid value given for order (0).'});
+	t.throws(() => { Kinematics.finiteDifference([1, 2, 3], 1, 3); },  { message: 'Invalid value given for order (3).'});
 	
 	t.deepEqual(Kinematics.finiteDifference([1], 1), Float32Array.from([0]));
 

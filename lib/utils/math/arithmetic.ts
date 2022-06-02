@@ -43,13 +43,13 @@ export class Arithmetic {
 			}
 			else {
 				for (const v of aArr) {
-					res.push(Arithmetic.applyOp(v, TypeCheck.isArrayLike(b) ? bArr[0] : bNum, operation))
+					res.push(Arithmetic.applyOp(v, TypeCheck.isArrayLike(b) ? bArr[0] : bNum, operation));
 				}
 			}
 		} 
 		else if (bIsArr) {
 			for (const v of bArr) {
-				res.push(Arithmetic.applyOp(TypeCheck.isArrayLike(a) ? aArr[0] : aNum, v, operation))
+				res.push(Arithmetic.applyOp(TypeCheck.isArrayLike(a) ? aArr[0] : aNum, v, operation));
 			}
 		}
 		else {

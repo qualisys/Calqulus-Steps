@@ -1,10 +1,10 @@
-import { Signal } from "../../..";
-import { PropertyType } from "../../models/property";
-import { ResultType } from "../../models/signal";
-import { StepClass } from "../../step-registry";
-import { ProcessingError } from "../../utils/processing-error";
-import { markdownFmt } from "../../utils/template-literal-tags";
-import { BaseStep } from ".././base-step";
+import { Signal } from '../../..';
+import { PropertyType } from '../../models/property';
+import { ResultType } from '../../models/signal';
+import { StepClass } from '../../step-registry';
+import { ProcessingError } from '../../utils/processing-error';
+import { markdownFmt } from '../../utils/template-literal-tags';
+import { BaseStep } from '.././base-step';
 
 @StepClass({
 	name: 'integral',
@@ -61,9 +61,9 @@ export class IntegralStep extends BaseStep {
 			throw new ProcessingError('Expected 1 input signal.');
 		}
 		
-		if (!this.inputs[0].array) throw new ProcessingError(`Unexpected type. Expects an input array.`);
+		if (!this.inputs[0].array) throw new ProcessingError('Unexpected type. Expects an input array.');
 
-		if (!this.inputs[0].frameRate) throw new ProcessingError(`Frame rate attached to the input is undefined.`);
+		if (!this.inputs[0].frameRate) throw new ProcessingError('Frame rate attached to the input is undefined.');
 		
 		const signal = this.inputs[0];
 		const dt = 1 / this.inputs[0].frameRate;		
@@ -72,8 +72,8 @@ export class IntegralStep extends BaseStep {
 		const perCycleResults: number[][][] = [];
 
 		// Pad frames between integral series with 0. This avoids cropping issues. 
-		for(const component of signal.array){
-			cycleResults.push(new Float32Array(component.length).fill(null)) 
+		for (const component of signal.array) {
+			cycleResults.push(new Float32Array(component.length).fill(null)); 
 		}
 
 		// Handle useCycles set to false
@@ -102,14 +102,14 @@ export class IntegralStep extends BaseStep {
 			// Unpack cycles per component, summarize each cycle.
 			const scalarValues = perCycleResults.map(comp => Float32Array.from(comp.map(c => c.pop())));
 
-			const returnData = Signal.typeFromArray(this.inputs[0].type, scalarValues as TypedArray[])
+			const returnData = Signal.typeFromArray(this.inputs[0].type, scalarValues as TypedArray[]);
 			const returnSignal = this.inputs[0].clone(returnData);
 			returnSignal.resultType = ResultType.Scalar;
 
 			return returnSignal;
 		}
 		
-		const returnData = Signal.typeFromArray(this.inputs[0].type, cycleResults as TypedArray[])
+		const returnData = Signal.typeFromArray(this.inputs[0].type, cycleResults as TypedArray[]);
 		return this.inputs[0].clone(returnData);
 	}
 }

@@ -11,7 +11,7 @@ import { BaseImportStep } from './base-import';
 const s1 = new Signal(f32(1, 2, 3));
 const segment1 = new Signal(new Segment('test 1', new VectorSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3)), new QuaternionSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3))));
 
-test('BaseImportStep - Simple test', async (t) => {
+test('BaseImportStep - Simple test', async(t) => {
 	// Simply test that it returns the first signal input
 	const step1 = mockStep(BaseImportStep, [segment1]);
 	t.is((await step1.process()).getValue(), segment1.getValue());

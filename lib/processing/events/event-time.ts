@@ -33,11 +33,11 @@ export class EventTimeStep extends BaseStep {
 
 	async process(): Promise<Signal> {
 		if (!this.inputs || !this.inputs.length) {
-			throw new ProcessingError(`No valid inputs.`);
+			throw new ProcessingError('No valid inputs.');
 		}
 
 		if (!this.inputs[0].isEventLike) {
-			throw new ProcessingError(`The input does not appear to be an event.`);
+			throw new ProcessingError('The input does not appear to be an event.');
 		}
 
 		// Get the frame rate from the input.

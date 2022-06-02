@@ -71,7 +71,7 @@ const stepConfig2 = {
 	...stepConfig,
 	name: 'testStep2',
 	alias: 'testStep2Alias',
-}
+};
 
 const stepContainerConfig: IStepProps = {
 	name: 'testStepContainer',
@@ -85,15 +85,19 @@ const stepContainer2Config: IStepProps = {
 
 @StepCategory(categoryConfig)
 @StepClass(stepConfig)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class TestStep1 {}
 
 @StepClass(stepConfig2)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class TestStep2 {}
 
 @StepContainerClass(stepContainerConfig)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class TestStepContainer1 {}
 
 @StepContainerClass(stepContainer2Config)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class TestStepContainer2 {}
 
 test('StepRegistry - category', (t) => {

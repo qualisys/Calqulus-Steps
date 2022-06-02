@@ -59,5 +59,5 @@ test('Space - VectorInputParser - invalid inputs', async t => {
 	// Unsupported types
 	t.throws(() => VectorInputParser.parse('', [new Signal([f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3)])]));
 	t.throws(() => VectorInputParser.parse('', [new Signal(Uint32Array.from([1, 2, 3]))]));
-	t.throws(() => VectorInputParser.parse('', [new Signal("String value")]));
+	t.throws(() => VectorInputParser.parse('', [new Signal('String value')]));
 });

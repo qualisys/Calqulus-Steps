@@ -230,6 +230,7 @@ export class Space extends BaseStep {
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getPointsInWorldSpace(localPoints: VectorSequence): VectorSequence {
 		// Todo
 		return undefined;

@@ -1,6 +1,6 @@
-import { StepClass } from "../../step-registry";
+import { StepClass } from '../../step-registry';
 import { Kinematics } from '../../utils/math/kinematics';
-import { markdownFmt } from "../../utils/template-literal-tags";
+import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';
 

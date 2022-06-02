@@ -1,6 +1,6 @@
-import { Quaternion } from "../spatial/quaternion";
+import { Quaternion } from '../spatial/quaternion';
 
-import { ISequence } from "./sequence";
+import { ISequence } from './sequence';
 
 export class QuaternionSequence implements ISequence {
 	array = [this.x, this.y, this.z, this.w];
@@ -14,7 +14,7 @@ export class QuaternionSequence implements ISequence {
 		public frameRate?: number
 	) {}
 
-	get length() { return this.x.length };
+	get length() { return this.x.length; };
 
 	getComponent(component: string): TypedArray {
 		const index = this.components.indexOf(component);

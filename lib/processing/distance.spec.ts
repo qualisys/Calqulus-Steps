@@ -19,7 +19,7 @@ const vs1 = new Signal(new VectorSequence(f32(1, 2, 3), f32(2, 2, 2), f32(6, 5, 
 const vs2 = new Signal(new VectorSequence(f32(2, 3, 4), f32(2, 2, 3), f32(4, 5, 6)));
 const vs3 = new Signal(new VectorSequence(f32(1), f32(1), f32(2)));
 
-test('DistanceStep - Input errors', async (t) => {
+test('DistanceStep - Input errors', async(t) => {
 	const step1 = mockStep(DistanceStep);
 	await t.throwsAsync(step1.process());
 
@@ -30,35 +30,35 @@ test('DistanceStep - Input errors', async (t) => {
 	await t.throwsAsync(step3.process());
 });
 
-test('DistanceStep - Segment and Segment', async (t) => {
+test('DistanceStep - Segment and Segment', async(t) => {
 	const step = mockStep(DistanceStep, [segment1, segment2]);
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2.2360680103302, 1, 2.4494898319244385));
 });
 
-test('DistanceStep - VectorSequence and VectorSequence', async (t) => {
+test('DistanceStep - VectorSequence and VectorSequence', async(t) => {
 	const step = mockStep(DistanceStep, [vs1, vs2]);
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2.2360680103302, 1, 2.4494898319244385));
 });
 
-test('DistanceStep - Segment and VectorSequence', async (t) => {
+test('DistanceStep - Segment and VectorSequence', async(t) => {
 	const step = mockStep(DistanceStep, [segment1, vs2]);
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2.2360680103302, 1, 2.4494898319244385));
 });
 
-test('DistanceStep - Segment and short Segment', async (t) => {
+test('DistanceStep - Segment and short Segment', async(t) => {
 	const step = mockStep(DistanceStep, [segment1, segment3]);
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2.2360680103302, 1));
 });
 
-test('MagnitudeStep - Input errors', async (t) => {
+test('MagnitudeStep - Input errors', async(t) => {
 	t.throws(() => mockStep(MagnitudeStep));
 
 	t.throws(() => mockStep(MagnitudeStep, [vs1, vs2]));
@@ -67,7 +67,7 @@ test('MagnitudeStep - Input errors', async (t) => {
 	await t.throwsAsync(step3.process());
 });
 
-test('MagnitudeStep - VectorSequence', async (t) => {
+test('MagnitudeStep - VectorSequence', async(t) => {
 	const step = mockStep(MagnitudeStep, [vs3]);
 
 	const res = await step.process();

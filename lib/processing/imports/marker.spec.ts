@@ -17,29 +17,29 @@ const s1 = new Signal(m1, undefined, 'MyMarker');
 
 const originSignals = [ new Signal(1), new Signal(2), new Signal(3) ];
 
-test('MarkerStep (mock) - prepare node (single input)', async (t) => {
+test('MarkerStep (mock) - prepare node (single input)', async(t) => {
 	const node = mockStep(MarkerStep, { myMarker1: s1 }).node;
 	t.deepEqual(node.in, ['marker://myMarker1']);
 });
 
-test('MarkerStep (mock) - prepare node (multiple inputs)', async (t) => {
+test('MarkerStep (mock) - prepare node (multiple inputs)', async(t) => {
 	const node = mockStep(MarkerStep, { myMarker1: s1, myMarker2: s1 }).node;
 	t.deepEqual(node.in, ['marker://myMarker1', 'marker://myMarker2']);
 });
 
-test('MarkerStep (mock) - prepare node (already prepared input)', async (t) => {
+test('MarkerStep (mock) - prepare node (already prepared input)', async(t) => {
 	const node = mockStep(MarkerStep, { 'marker://myMarker1': s1 }).node;
 	t.deepEqual(node.in, ['marker://myMarker1']);
 });
 
-test('MarkerStep (mock) - process', async (t) => {
+test('MarkerStep (mock) - process', async(t) => {
 	const res = await mockStep(MarkerStep, { myMarker1: s1 }).process();
 
 	t.is(res.name, 'MyMarker');
 	t.deepEqual(res.getVectorSequenceValue(), s1.getVectorSequenceValue());
 });
 
-test('MarkerStep (mock) - virtual marker - no main input)', async (t) => {
+test('MarkerStep (mock) - virtual marker - no main input)', async(t) => {
 	const res = await mockStep(MarkerStep, [], { origin: originSignals }).process();
 	const resVector = res.getVectorSequenceValue();
 
@@ -48,7 +48,7 @@ test('MarkerStep (mock) - virtual marker - no main input)', async (t) => {
 	t.deepEqual(Array.from(resVector.z), [3]);
 });
 
-test('MarkerStep (mock) - virtual marker - with main input)', async (t) => {
+test('MarkerStep (mock) - virtual marker - with main input)', async(t) => {
 	const res = await mockStep(MarkerStep, { 
 		'marker://myMarker': s1
 	}, {

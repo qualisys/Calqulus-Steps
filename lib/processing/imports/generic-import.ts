@@ -1,5 +1,5 @@
-import { StepClass } from "../../step-registry";
-import { markdownFmt } from "../../utils/template-literal-tags";
+import { StepClass } from '../../step-registry';
+import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseImportStep } from './base-import';
 

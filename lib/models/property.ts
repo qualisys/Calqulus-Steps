@@ -52,7 +52,7 @@ export class Property {
 			return true;
 		}
 
-		const signalTypeToPropertyType = {}
+		const signalTypeToPropertyType = {};
 
 		signalTypeToPropertyType[SignalType.Float32] = PropertyType.Number;
 		signalTypeToPropertyType[SignalType.Float32Array] = PropertyType.Array;

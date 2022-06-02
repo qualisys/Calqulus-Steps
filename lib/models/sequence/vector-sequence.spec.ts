@@ -99,7 +99,7 @@ test('VectorSequence - normalize', (t) => {
 
 	const eqish = (a, b, threshold = 1 / 100000000000000) => {
 		return Math.abs(a - b) < threshold;
-	}
+	};
 
 	t.true(eqish(Math.sqrt(
 		normalized.x[0] * normalized.x[0]

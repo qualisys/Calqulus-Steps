@@ -13,7 +13,7 @@ const s2 = new Signal(a1); // No frameRate
 const s3 = new Signal(new VectorSequence(a1, a1, a1)); // Wrong type
 const s4 = new Signal(0.1); // Wrong type
 
-test('EventTimeStep - Wrong input signals', async (t) => {
+test('EventTimeStep - Wrong input signals', async(t) => {
 	const step1 = mockStep(EventTimeStep, [s2]);
 	await t.throwsAsync(step1.process()); // No frameRate
 
@@ -27,9 +27,9 @@ test('EventTimeStep - Wrong input signals', async (t) => {
 	await t.throwsAsync(step4.process()); // No inputs
 });
 
-test('EventTimeStep', async (t) => {
+test('EventTimeStep', async(t) => {
 	const step = mockStep(EventTimeStep, [s1]);
 	const res = await step.process();
 
-	t.deepEqual(res.getValue(), f32(...a1).map(f => f / frameRate))
+	t.deepEqual(res.getValue(), f32(...a1).map(f => f / frameRate));
 });

@@ -17,7 +17,7 @@ const ef2 = new Signal(eventFrames1); // No frame rate
 const s1 = new Signal(new VectorSequence(eventFrames1, eventFrames1, eventFrames1)); // Wrong type
 const s2 = new Signal(0.1); // Wrong type
 
-test('EventDurationStep - Wrong input signals', async (t) => {
+test('EventDurationStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventDurationStep, [ef1, ef2, ef2]).process()); // Too many inputs
 	await t.throwsAsync(mockStep(EventDurationStep, [ef1, ef2]).process()); // No frame rate
 	await t.throwsAsync(mockStep(EventDurationStep, [s1, s2]).process()); // Wrong type
@@ -25,9 +25,9 @@ test('EventDurationStep - Wrong input signals', async (t) => {
 	await t.throwsAsync(mockStep(EventDurationStep).process()); // No inputs
 });
 
-test('EventDurationStep', async (t) => {
+test('EventDurationStep', async(t) => {
 	const step = mockStep(EventDurationStep, [e1, e2]);
 	const res = await step.process();
 
-	t.deepEqual(res.getValue(), f32(...eventFrames1).map((f, i) => (eventFrames2[i] - f) / frameRate))
+	t.deepEqual(res.getValue(), f32(...eventFrames1).map((f, i) => (eventFrames2[i] - f) / frameRate));
 });

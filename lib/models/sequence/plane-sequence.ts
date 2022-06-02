@@ -1,8 +1,8 @@
-import { Plane } from "../spatial/plane";
-import { Vector } from "../spatial/vector";
+import { Plane } from '../spatial/plane';
+import { Vector } from '../spatial/vector';
 
-import { ISequence } from "./sequence";
-import { VectorSequence } from "./vector-sequence";
+import { ISequence } from './sequence';
+import { VectorSequence } from './vector-sequence';
 
 export class PlaneSequence implements ISequence {
 	
@@ -16,7 +16,7 @@ export class PlaneSequence implements ISequence {
 		public d: TypedArray,
 	) {}
 
-	get length() { return this.a.length };
+	get length() { return this.a.length; };
 
 	getComponent(component: string): TypedArray {
 		const index = this.components.indexOf(component);

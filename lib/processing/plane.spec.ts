@@ -20,7 +20,7 @@ const segment2 = new Signal(new Segment('test 2', vs2.getVectorSequenceValue(), 
 const segment3 = new Signal(new Segment('test 3', vs3.getVectorSequenceValue(), new QuaternionSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3))));
 
 
-test('PlaneStep - Input errors', async (t) => {
+test('PlaneStep - Input errors', async(t) => {
 	// No input
 	await t.throwsAsync(mockStep(PlaneStep).process());
 
@@ -47,14 +47,14 @@ test('PlaneStep - Input errors', async (t) => {
 	await t.throwsAsync(mockStep(PlaneStep, [vs1, vs2]).process());
 });
 
-test('PlaneStep - Segments', async (t) => {
+test('PlaneStep - Segments', async(t) => {
 	const step = mockStep(PlaneStep, [segment1, segment2, segment3]);
 
 	const res = await step.process();
 	t.like(res.getPlaneSequenceValue().getPlaneAtFrame(1), { a: 9, b: -18, c: 9, d: -54 });
 });
 
-test('PlaneStep - VectorSequence', async (t) => {
+test('PlaneStep - VectorSequence', async(t) => {
 	const step = mockStep(PlaneStep, [vs1, vs2, vs3]);
 
 	const res = await step.process();

@@ -1,4 +1,4 @@
-import Qty from "js-quantities";
+import Qty from 'js-quantities';
 
 /**
  * Parses a duration and provides methods to retrieve the
@@ -96,7 +96,8 @@ export class InputDuration {
 				if (converted.scalar !== undefined) {
 					this.seconds = converted.scalar;
 				}
-			} catch (e) {
+			}
+			catch (e) {
 				// Could not convert input to seconds
 			}
 		}

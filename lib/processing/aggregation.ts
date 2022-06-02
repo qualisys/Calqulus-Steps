@@ -61,12 +61,12 @@ class BaseAggregationStep extends BaseStep {
 	}
 
 	async process(): Promise<Signal> {
-		if (!this.aggregation) throw new ProcessingError(`No aggregation method defined.`);
-		if (!this.inputs.length) throw new ProcessingError(`No inputs provided for aggregate function.`);
+		if (!this.aggregation) throw new ProcessingError('No aggregation method defined.');
+		if (!this.inputs.length) throw new ProcessingError('No inputs provided for aggregate function.');
 
 		const sourceInput = this.inputs[0];
 
-		if (!sourceInput.length) throw new ProcessingError(`No values in signal for aggregate function.`);
+		if (!sourceInput.length) throw new ProcessingError('No values in signal for aggregate function.');
 
 		const originalType = sourceInput.type;
 
@@ -83,7 +83,7 @@ class BaseAggregationStep extends BaseStep {
 					return (cycle.frameMap) ? cycle.frameMap[indices[0]] : indices[0];
 				}
 
-				return this.aggregation(SeriesUtil.filterNaN(v, null))
+				return this.aggregation(SeriesUtil.filterNaN(v, null));
 			}));
 		}
 

@@ -1,13 +1,13 @@
-import { zip } from "lodash";
+import { zip } from 'lodash';
 
-import { PropertyType } from "../models/property";
-import { Signal } from "../models/signal";
-import { StepClass } from "../step-registry";
-import { ProcessingError } from "../utils/processing-error";
-import { SeriesUtil } from "../utils/series";
-import { markdownFmt } from "../utils/template-literal-tags";
+import { PropertyType } from '../models/property';
+import { Signal } from '../models/signal';
+import { StepClass } from '../step-registry';
+import { ProcessingError } from '../utils/processing-error';
+import { SeriesUtil } from '../utils/series';
+import { markdownFmt } from '../utils/template-literal-tags';
 
-import { BaseStep } from "./base-step";
+import { BaseStep } from './base-step';
 
 @StepClass({
 	name: 'rms',
@@ -43,7 +43,7 @@ export class RmsStep extends BaseStep {
 		}
 		
 		for (const input of this.inputs.slice(0, 2)) {
-			if (!input.array) throw new ProcessingError(`Unexpected type. Expects input arrays.`);
+			if (!input.array) throw new ProcessingError('Unexpected type. Expects input arrays.');
 		}
 		
 		const a = this.inputs[0];
@@ -54,7 +54,7 @@ export class RmsStep extends BaseStep {
 		const cycleRes: number[][] = [];
 
 		if (!(cyclesA.length === cyclesB.length)) {
-			throw new ProcessingError('Expected the same amount of events from the input.')
+			throw new ProcessingError('Expected the same amount of events from the input.');
 		}
 		
 		for (let cycle = 0; cycle < cyclesA.length; cycle++) {
@@ -66,13 +66,13 @@ export class RmsStep extends BaseStep {
 				let squaredResiduals = 0;
 				for (let j = 0; j < aArray[i].length; j++) {
 					if (!(aArray[i].length === bArray[i].length)) {
-						throw new ProcessingError('Expected the same length of signals.')
+						throw new ProcessingError('Expected the same length of signals.');
 					}
 
-					squaredResiduals += (aArray[i][j] - bArray[i][j])**2;
+					squaredResiduals += (aArray[i][j] - bArray[i][j]) ** 2;
 				}
 	
-				rms.push(Math.sqrt(squaredResiduals / aArray[i].length))
+				rms.push(Math.sqrt(squaredResiduals / aArray[i].length));
 			}
 
 			cycleRes.push(rms);
@@ -81,7 +81,7 @@ export class RmsStep extends BaseStep {
 		const res = zip(...cycleRes).map(comp => SeriesUtil.createNumericArrayOfSameType(cyclesA[0].array[0], comp));
 		
 		// Create a new instance of the same type as the input.
-		const returnData = Signal.typeFromArray(this.inputs[0].type, res as TypedArray[])
+		const returnData = Signal.typeFromArray(this.inputs[0].type, res as TypedArray[]);
 		
 		return this.inputs[0].clone(returnData);
 	}

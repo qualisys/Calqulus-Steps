@@ -1,10 +1,10 @@
-import { QuaternionSequence } from "../../models/sequence/quaternion-sequence";
-import { VectorSequence } from "../../models/sequence/vector-sequence";
-import { Matrix } from "../../models/spatial/matrix";
-import { Quaternion } from "../../models/spatial/quaternion";
-import { Vector } from "../../models/spatial/vector";
+import { QuaternionSequence } from '../../models/sequence/quaternion-sequence';
+import { VectorSequence } from '../../models/sequence/vector-sequence';
+import { Matrix } from '../../models/spatial/matrix';
+import { Quaternion } from '../../models/spatial/quaternion';
+import { Vector } from '../../models/spatial/vector';
 
-import { Euler, RotationOrder } from "./euler";
+import { Euler, RotationOrder } from './euler';
 
 export class AngleUtil {
 	static tmpQuat1: Quaternion = new Quaternion(0, 0, 0, 1);
@@ -85,7 +85,7 @@ export class AngleUtil {
 
 		for (let i = 0; i < len; i++) {
 			const relativeRotation = AngleUtil.computeRelativeAngleFrame(q1, q2, i + 1);
-			const euler = AngleUtil.computeEulerAnglesFromQuaternion(relativeRotation, rotationOrder, solutionNumber)
+			const euler = AngleUtil.computeEulerAnglesFromQuaternion(relativeRotation, rotationOrder, solutionNumber);
 
 			result.x[i] = euler.x;
 			result.y[i] = euler.y;

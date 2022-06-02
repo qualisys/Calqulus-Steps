@@ -40,7 +40,7 @@ const seg1 = new Signal(
 
 const multiDim = new Signal(seg1.array);
 
-test('EventMaskStep - Wrong input signals', async (t) => {
+test('EventMaskStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventMaskStep).process()); // No inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, e1, e2, e2]).process()); // Too many inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [e1, e2]).process()); // Too few inputs
@@ -48,7 +48,7 @@ test('EventMaskStep - Wrong input signals', async (t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, s1, s1]).process()); // Wrong type for events
 });
 
-test('EventMaskStep - simple array', async (t) => {
+test('EventMaskStep - simple array', async(t) => {
 	const res = await mockStep(EventMaskStep, [s2, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -56,14 +56,14 @@ test('EventMaskStep - simple array', async (t) => {
 	t.deepEqual(res.getValue(), comp);
 });
 
-test('EventMaskStep - event array', async (t) => {
+test('EventMaskStep - event array', async(t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(0, 1, 2, 5, 6, 7, 8));
 });
 
-test('EventMaskStep - VectorSequence', async (t) => {
+test('EventMaskStep - VectorSequence', async(t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -71,7 +71,7 @@ test('EventMaskStep - VectorSequence', async (t) => {
 	t.deepEqual(res.getValue(), vs);
 });
 
-test('EventMaskStep - Segment', async (t) => {
+test('EventMaskStep - Segment', async(t) => {
 	const res = await mockStep(EventMaskStep, [seg1, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -79,7 +79,7 @@ test('EventMaskStep - Segment', async (t) => {
 	t.deepEqual(res.array, [comp, comp, comp, comp, comp, comp, comp]);
 });
 
-test('EventMaskStep - Multidimensional array', async (t) => {
+test('EventMaskStep - Multidimensional array', async(t) => {
 	const res = await mockStep(EventMaskStep, [multiDim, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -87,7 +87,7 @@ test('EventMaskStep - Multidimensional array', async (t) => {
 	t.deepEqual(res.array, [comp, comp, comp, comp, comp, comp, comp]);
 });
 
-test('EventMaskStep - VectorSequence - truncate', async (t) => {
+test('EventMaskStep - VectorSequence - truncate', async(t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { truncate: true }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -95,7 +95,7 @@ test('EventMaskStep - VectorSequence - truncate', async (t) => {
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated]);
 });
 
-test('EventMaskStep - VectorSequence - replacement value 0', async (t) => {
+test('EventMaskStep - VectorSequence - replacement value 0', async(t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { replacement: 0 }).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -103,7 +103,7 @@ test('EventMaskStep - VectorSequence - replacement value 0', async (t) => {
 	t.deepEqual(res.array, [compReplacement1, compReplacement1, compReplacement1]);
 });
 
-test('EventMaskStep - VectorSequence - replacement value NaN', async (t) => {
+test('EventMaskStep - VectorSequence - replacement value NaN', async(t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { replacement: NaN }).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -111,7 +111,7 @@ test('EventMaskStep - VectorSequence - replacement value NaN', async (t) => {
 	t.deepEqual(res.array, [compReplacement2, compReplacement2, compReplacement2]);
 });
 
-test('EventMaskStep - VectorSequence - replacement value null', async (t) => {
+test('EventMaskStep - VectorSequence - replacement value null', async(t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { replacement: null }).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -119,7 +119,7 @@ test('EventMaskStep - VectorSequence - replacement value null', async (t) => {
 	t.deepEqual(res.array, [compReplacement2, compReplacement2, compReplacement2]);
 });
 
-test('EventMaskStep - VectorSequence - truncate and replacement value NaN', async (t) => {
+test('EventMaskStep - VectorSequence - truncate and replacement value NaN', async(t) => {
 	// Replacement value should not have any effect.
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], {
 		replacement: NaN,
@@ -131,7 +131,7 @@ test('EventMaskStep - VectorSequence - truncate and replacement value NaN', asyn
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated]);
 });
 
-test('EventMaskStep - Segment - truncate', async (t) => {
+test('EventMaskStep - Segment - truncate', async(t) => {
 	const res = await mockStep(EventMaskStep, [seg1, e1, e2], {
 		truncate: true,
 	}).process();
@@ -141,7 +141,7 @@ test('EventMaskStep - Segment - truncate', async (t) => {
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated]);
 });
 
-test('EventMaskStep - Multidimensional array - truncate', async (t) => {
+test('EventMaskStep - Multidimensional array - truncate', async(t) => {
 	const res = await mockStep(EventMaskStep, [multiDim, e1, e2], {
 		truncate: true,
 	}).process();

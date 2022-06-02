@@ -15,15 +15,11 @@ const values: [
 	13, 14, 15, 16
 ];
 
-const eqish = (a, b, threshold = 1 / 100000000000000) => {
-	return Math.abs(a - b) < threshold;
-}
-
 test('Matrix - compose & composeToRef', (t) => {
 	const r0 = new Quaternion(0, 0, 0, 1);
 	const r2 = new Quaternion(-0.1668, -0.0409, 0.0353, 0.9845);
-	const t0 = new Vector(1, 2, 3)
-	const t2 = new Vector(4, 5, 6)
+	const t0 = new Vector(1, 2, 3);
+	const t2 = new Vector(4, 5, 6);
 
 	const m0 = Matrix.compose(r0, t0);
 	const m1 = Matrix.compose(r0, t0, new Vector(2, 2, 2));
@@ -108,7 +104,7 @@ test('Matrix - decompose && decomposeToRef', (t) => {
 	const t1b = new Vector(0, 0, 0);
 	const s1b = new Vector(0, 0, 0);
 
-	m1.decompose(r1, t1, s1)
+	m1.decompose(r1, t1, s1);
 	Matrix.decomposeToRef(r1b, t1b, s1b, m1);
 
 	const o1 = new Quaternion(-0.16679853071283998, -0.04089961805903044, 0.03529967474766631, 0.9845097262848617);
@@ -145,7 +141,7 @@ test('Matrix - copyFrom', (t) => {
 
 	t.deepEqual(Array.from(matSrc._m), values);
 
-	matDest.copyFrom(matSrc)
+	matDest.copyFrom(matSrc);
 
 	t.deepEqual(Array.from(matDest._m), values);
 });

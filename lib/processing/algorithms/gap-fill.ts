@@ -10,7 +10,7 @@ import { BaseAlgorithmStep } from './base-algorithm';
 export enum InterpolationType {
 	Linear = 'linear',
 	Spline = 'spline',
-}
+};
 
 @StepClass({
 	name: 'gapFill',
@@ -37,12 +37,12 @@ export enum InterpolationType {
 		required: false,
 		default: '0.1s',
 	}],
-	output: ['Scalar', 'Series', 'Event', 'Number'],
+	output: ['Scalar', 'Series', 'Event', 'Number']
 })
 export class GapFillStep extends BaseAlgorithmStep {
-	maxGapLength: InputDuration
-	interpolationType: InterpolationType
-	maxGapLengthFrames: number
+	maxGapLength: InputDuration;
+	interpolationType: InterpolationType;
+	maxGapLengthFrames: number;
 
 	// Function to decide which interpolation to perform
 	function(a: TypedArray): TypedArray {
@@ -88,7 +88,7 @@ export class GapFillStep extends BaseAlgorithmStep {
 					this.interpolationType = InterpolationType.Spline;
 					break;
 				default:
-					throw new ProcessingError(`Unrecognized value for type, expected "linear" or "spline".`);
+					throw new ProcessingError('Unrecognized value for type, expected "linear" or "spline".');
 			}
 		}
 

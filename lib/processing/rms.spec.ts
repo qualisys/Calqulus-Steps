@@ -25,7 +25,7 @@ s5Cycles.cycles = [{ start: 1, end: 3 }];
 const s5Cycles2 = new Signal(i32(6, 3, 4, 4, 6, 1, 1, 5, 2));
 s5Cycles2.cycles = [{ start: 1, end: 3 }];
 
-test('RmsStep - Input errors ', async (t) => {
+test('RmsStep - Input errors ', async(t) => {
 	// Only one input.
 	const step1 = mockStep(RmsStep, [s1]);
 	await t.throwsAsync(step1.process());
@@ -43,21 +43,21 @@ test('RmsStep - Input errors ', async (t) => {
 	await t.throwsAsync(step4.process());
 });
 
-test('RmsStep - RMS with cycles ', async (t) => {
+test('RmsStep - RMS with cycles ', async(t) => {
 	const step = mockStep(RmsStep, [s3Cycles, s4Cycles]);
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(2, 2));
 });
 
-test('RmsStep - RMS without cycles ', async (t) => {
+test('RmsStep - RMS without cycles ', async(t) => {
 	const step = mockStep(RmsStep, [s3Cycles, s4Cycles], { useCycles: false });
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2));
 });
 
-test('RmsStep - RMS using vectors', async (t) => {
+test('RmsStep - RMS using vectors', async(t) => {
 	const step = mockStep(RmsStep, [vs1, vs2]);
 	const res = await step.process();
 

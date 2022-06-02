@@ -1,4 +1,4 @@
-import { IFrameSpan } from "../models/signal";
+import { IFrameSpan } from '../models/signal';
 
 /**
  * The different supported methods to extrapolate a signal.
@@ -33,7 +33,8 @@ export class SeriesUtil {
 		if (method === SeriesBufferMethod.Extrapolate && series.length > 1) {
 			startBuffer = SeriesUtil.extrapolate(length, series[0], series[0] - series[1], true);
 			endBuffer = SeriesUtil.extrapolate(length, series[series.length - 1], series[series.length - 1] - series[series.length - 2]);
-		} else {
+		}
+		else {
 			startBuffer = SeriesUtil.extrapolate(length, series[0], 0);
 			endBuffer = SeriesUtil.extrapolate(length, series[series.length - 1], 0);
 		}

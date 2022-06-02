@@ -33,7 +33,7 @@ export interface INode {
 	* @param expectedTypes 
 	* @param required 
 	*/
-   getPropertyValue<T>(key: string, expectedTypes: PropertyType | PropertyType[], required?: boolean, defaultValue?: T): T;
+	getPropertyValue<T>(key: string, expectedTypes: PropertyType | PropertyType[], required?: boolean, defaultValue?: T): T;
 }
 
 export interface IStepNode extends INode {

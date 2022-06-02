@@ -1,5 +1,5 @@
-import { BaseStep } from "./processing/base-step";
-import { StepContainer } from "./processing/step-container";
+import { BaseStep } from './processing/base-step';
+import { StepContainer } from './processing/step-container';
 
 export interface IGlobalStepProps {
 	description?: string;
