@@ -186,7 +186,7 @@ export class Matrix {
 			S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
 			rotation.w = (sm12 - sm21) / S;
 			rotation.x = (sm31 + sm13) / S;
-			rotation.x = (sm23 + sm32) / S;
+			rotation.y = (sm23 + sm32) / S;
 			rotation.z = 0.25 * S;
 		}
 	
