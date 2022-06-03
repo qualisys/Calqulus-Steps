@@ -46,7 +46,7 @@ export class NumberUtil {
 	 * @returns 
 	 */
 	static formatOrdinal(value: number) {
-		const pluralRulesEn = new Intl.PluralRules("en", {type: "ordinal"});
+		const pluralRulesEn = new Intl.PluralRules('en', {type: 'ordinal'});
 		const suffixes = {
 			one: 'st',
 			two: 'nd',

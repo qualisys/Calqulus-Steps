@@ -1,4 +1,4 @@
-import { SeriesUtil } from "../series";
+import { SeriesUtil } from '../series';
 
 export class Kinematics {
 	/**

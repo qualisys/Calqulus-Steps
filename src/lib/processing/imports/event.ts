@@ -1,6 +1,6 @@
 import { IStepNode } from '../../models/node-interface';
 import { ResultType } from '../../models/signal';
-import { StepClass } from "../../step-registry";
+import { StepClass } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
 

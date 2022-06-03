@@ -1,10 +1,10 @@
-import { Signal, SignalType } from "../..";
-import { VectorSequence } from "../models/sequence/vector-sequence";
-import { StepClass } from "../step-registry";
-import { ProcessingError } from "../utils/processing-error";
-import { markdownFmt } from "../utils/template-literal-tags";
+import { Signal, SignalType } from '../..';
+import { VectorSequence } from '../models/sequence/vector-sequence';
+import { StepClass } from '../step-registry';
+import { ProcessingError } from '../utils/processing-error';
+import { markdownFmt } from '../utils/template-literal-tags';
 
-import { BaseStep } from "./base-step";
+import { BaseStep } from './base-step';
 
 @StepClass({
 	name: 'dotProduct',
@@ -43,11 +43,11 @@ export class DotProductStep extends BaseStep {
 		}
 
 		if ( a.length !== b.length && b.length !== 1 ) {
-			throw new ProcessingError(`Expects the second vector to be singular or equal to the first vector sequnce in length.`);
+			throw new ProcessingError('Expects the second vector to be singular or equal to the first vector sequnce in length.');
 		}
 		
-		const va = a.getVectorSequenceValue()
-		const vb = b.getVectorSequenceValue()
+		const va = a.getVectorSequenceValue();
+		const vb = b.getVectorSequenceValue();
 
 		const dotProduct = VectorSequence.dot(va, vb);
 		

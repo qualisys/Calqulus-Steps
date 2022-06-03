@@ -45,7 +45,7 @@ export class ConcatenateStep extends BaseStep {
 
 		const arrays = this.inputs.map(i => i.array);
 
-		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError(`Expected all inputs to be of equivalent types.`);
+		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError('Expected all inputs to be of equivalent types.');
 
 		const baseArray = arrays.shift();
 		const concatArrays = baseArray.map((arr, index) =>

@@ -1,6 +1,5 @@
-import { Matrix } from "../spatial/matrix";
+import { Matrix } from '../spatial/matrix';
 
-import { ISequence } from "./sequence";
 import { VectorSequence } from './vector-sequence';
 
 export class MatrixSequence {
@@ -144,7 +143,7 @@ export class MatrixSequence {
 		);
 	}
 
-	get length() { return this.m11.length };
+	get length() { return this.m11.length; };
 
 	/** 
 	 * Returns a [[Matrix]] for a specified frame.

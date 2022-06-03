@@ -157,7 +157,7 @@ export class AngleStep extends BaseStep {
 		if (projectionOptionInput && projectionOptionInput.length) {
 			// Handle unknown project option input
 			if (projectionOptionInput[0].type !== SignalType.PlaneSequence && projectionOptionInput[0].type !== SignalType.String) {
-				throw new ProcessingError(`Unexpected type for project option.`);
+				throw new ProcessingError('Unexpected type for project option.');
 			}
 			
 			// Handle projection plane input
@@ -178,7 +178,7 @@ export class AngleStep extends BaseStep {
 						this.coordinatePlane = CoordinatePlane.XZ;
 						break;
 					default:
-						throw new ProcessingError(`Unrecognized value for project option.`);
+						throw new ProcessingError('Unrecognized value for project option.');
 				}
 			} 	
 		}
@@ -196,7 +196,7 @@ export class AngleStep extends BaseStep {
 		if (this.inputs.includes(undefined)) throw new ProcessingError('Undefined parameter.');
 
 		if (!this.inputs || !this.inputs.length) {
-			throw new ProcessingError(`No valid inputs.`);
+			throw new ProcessingError('No valid inputs.');
 		}
 
 		const result: Signal = this.inputs[0].clone(false);
@@ -238,7 +238,7 @@ export class AngleStep extends BaseStep {
 							}
 						}
 						else if (input.type === SignalType.VectorSequence) {
-							return input.getVectorSequenceValue()
+							return input.getVectorSequenceValue();
 						}
 						else {
 							throw new ProcessingError(`Expected Segment or array of length 3, got ${ input.typeToString }.`);
@@ -297,7 +297,7 @@ export class AngleStep extends BaseStep {
 			}
 		}
 		else {
-			throw new ProcessingError(`Unexpected amount of inputs.`);
+			throw new ProcessingError('Unexpected amount of inputs.');
 		}
 		
 		return result;
@@ -305,11 +305,11 @@ export class AngleStep extends BaseStep {
 
 	applyProjection(vector: VectorSequence) {
 		if (!this.coordinatePlane && !this.projectionPlane) {		
-			return vector
+			return vector;
 		};
 		
 		if (this.projectionPlane) {
-			return PlaneSequence.project(vector, this.projectionPlane, true)
+			return PlaneSequence.project(vector, this.projectionPlane, true);
 		} 
 
 		const replacement = new Float32Array(vector.length).fill(0);
@@ -408,11 +408,11 @@ export class JointAngleStep extends AngleStep {
 			joint coordinate system using the Euler/Cardan sequence.
 		`,
 	}],
-	output: ['Scalar', 'Series'],
+	output: ['Scalar', 'Series']
 })
 export class AngularVelocityStep extends AngleStep {
-	useRotationOrder: boolean
-	rotationOrder: RotationOrder
+	useRotationOrder: boolean;
+	rotationOrder: RotationOrder;
 
 	init() {
 		super.init();
@@ -425,12 +425,12 @@ export class AngularVelocityStep extends AngleStep {
 			this.useRotationOrder = false;
 		}
 		else if (!isBoolean(this.useRotationOrder)) {
-			throw new ProcessingError(`Unrecognized value for useRotationOrder option: should be true or false.`);
+			throw new ProcessingError('Unrecognized value for useRotationOrder option: should be true or false.');
 		}
 
 		if (!this.useRotationOrder) {
 			if (rotationOrderInput != undefined && rotationOrderInput.toUpperCase() in RotationOrder) {
-				throw new ProcessingError(`Cannot specify rotationOrder if useRotationOrder is false or missing.`);
+				throw new ProcessingError('Cannot specify rotationOrder if useRotationOrder is false or missing.');
 			}
 		}
 
@@ -452,7 +452,7 @@ export class AngularVelocityStep extends AngleStep {
 				throw new ProcessingError(`Expected segment input, got ${ this.inputs[index].typeToString }.`);
 			}
 			else if (this.inputs[index].frameRate == undefined) {
-				throw new ProcessingError(`Frame rate attached to the input is undefined.`);
+				throw new ProcessingError('Frame rate attached to the input is undefined.');
 			}
 		}
 
@@ -467,8 +467,6 @@ export class AngularVelocityStep extends AngleStep {
 		const sRes = this.inputs[3].getSegmentValue();
 
 		// Create rotation matrices
-		const nan = new Float32Array(nFrames).fill(NaN);
-
 		const rPar = MatrixSequence.createEmpty(nFrames);
 		const rSeg = MatrixSequence.createEmpty(nFrames);
 		const rRef = MatrixSequence.createEmpty(nFrames);

@@ -1,4 +1,4 @@
-import { Vector } from "./vector";
+import { Vector } from './vector';
 
 export class Plane {
 	static tmpPlane1 = new Plane(0, 0, 0, 0);

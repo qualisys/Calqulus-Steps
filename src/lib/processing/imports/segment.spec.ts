@@ -20,7 +20,7 @@ const originSignals        = [ new Signal(1), new Signal(2), new Signal(3) ];
 const primaryAxisSignals   = [ new Signal(0), new Signal(1), new Signal(0) ];
 const secondaryAxisSignals = [ new Signal(1), new Signal(0), new Signal(0) ];
 
-test('SegmentStep (mock) - Input errors', async (t) => {
+test('SegmentStep (mock) - Input errors', async(t) => {
 	// Origin, but no primaryAxis
 	await t.throwsAsync(mockStep(SegmentStep, [], { origin: s1 }).process());
 
@@ -31,29 +31,29 @@ test('SegmentStep (mock) - Input errors', async (t) => {
 	await t.throwsAsync(mockStep(SegmentStep, [], { secondaryAxis: s1 }).process());
 });
 
-test('SegmentStep (mock) - simple input', async (t) => {
+test('SegmentStep (mock) - simple input', async(t) => {
 	const node = mockStep(SegmentStep, [s1]);
 	const res = await node.process();
 
 	t.is(res.getValue(), s1.getValue());
 });
 
-test('SegmentStep (mock) - prepare node (single input)', async (t) => {
+test('SegmentStep (mock) - prepare node (single input)', async(t) => {
 	const node = mockStep(SegmentStep, { mySegment1: s1 }).node;
 	t.deepEqual(node.in, ['segment://mySegment1']);
 });
 
-test('SegmentStep (mock) - prepare node (multiple inputs)', async (t) => {
+test('SegmentStep (mock) - prepare node (multiple inputs)', async(t) => {
 	const node = mockStep(SegmentStep, { mySegment1: s1, mySegment2: s1 }).node;
 	t.deepEqual(node.in, ['segment://mySegment1', 'segment://mySegment2']);
 });
 
-test('SegmentStep (mock) - prepare node (already prepared input)', async (t) => {
+test('SegmentStep (mock) - prepare node (already prepared input)', async(t) => {
 	const node = mockStep(SegmentStep, { 'segment://mySegment1': s1 }).node;
 	t.deepEqual(node.in, ['segment://mySegment1']);
 });
 
-test('SegmentStep (mock) - virtual segment (missing options)', async (t) => {
+test('SegmentStep (mock) - virtual segment (missing options)', async(t) => {
 	await t.throwsAsync(mockStep(SegmentStep, { 
 		'segment://mySegment1': s1 
 	}, { 
@@ -62,7 +62,7 @@ test('SegmentStep (mock) - virtual segment (missing options)', async (t) => {
 	}).process());
 });
 
-test('SegmentStep (mock) - virtual segment - default order (xy)', async (t) => {
+test('SegmentStep (mock) - virtual segment - default order (xy)', async(t) => {
 	const res = await mockStep(SegmentStep, { 
 		'segment://mySegment1': s1 
 	}, { 
@@ -82,7 +82,7 @@ test('SegmentStep (mock) - virtual segment - default order (xy)', async (t) => {
 	t.deepEqual(Array.from(segment.rw), [0]);
 });
 
-test('SegmentStep (mock) - virtual segment - explicit order (yz)', async (t) => {
+test('SegmentStep (mock) - virtual segment - explicit order (yz)', async(t) => {
 	const res = await mockStep(SegmentStep, { 
 		'segment://mySegment1': s1 
 	}, { 

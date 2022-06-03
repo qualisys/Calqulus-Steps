@@ -5,14 +5,14 @@ import { Signal } from '../../models/signal';
 
 import { AccelerationStep, DerivativeStep, VelocityStep } from './derivative';
 
-test('DerivativeStep - signal with missing frame rate', async (t) => {
+test('DerivativeStep - signal with missing frame rate', async(t) => {
 	const inputSignal = new Signal(7, undefined);
 
 	const step = mockStep(DerivativeStep, [inputSignal]);
 	await t.throwsAsync(step.process());
 });
 
-test('DerivativeStep with single number', async (t) => {
+test('DerivativeStep with single number', async(t) => {
 	const inputSignal = new Signal(7, 1);
 
 	const step = mockStep(DerivativeStep, [inputSignal]);
@@ -21,7 +21,7 @@ test('DerivativeStep with single number', async (t) => {
 	t.is(result.getNumberValue(), 0);
 });
 
-test('DerivativeStep with Float32Array, order = 1', async (t) => {
+test('DerivativeStep with Float32Array, order = 1', async(t) => {
 	const inputSignal = new Signal(f32(1, 2, 3, 4, 5, 6, 8, 10, 14, 18, 22, 30), 1);
 
 	const step = mockStep(DerivativeStep, [inputSignal]);
@@ -31,7 +31,7 @@ test('DerivativeStep with Float32Array, order = 1', async (t) => {
 	t.deepEqual(Array.from(derivative), [NaN, 1, 1, 1, 1, 1.5, 2, 3, 4, 4, 6, NaN]);
 });
 
-test('DerivativeStep with Float32Array, order = 2', async (t) => {
+test('DerivativeStep with Float32Array, order = 2', async(t) => {
 	const inputSignal = new Signal(f32(1, 2, 3, 4, 5, 6, 8, 10, 14, 18, 22, 30), 1);
 	const inputSignal2 = new Signal(2);
 
@@ -42,7 +42,7 @@ test('DerivativeStep with Float32Array, order = 2', async (t) => {
 	t.deepEqual(derivative, Float32Array.from([NaN, 0, 0, 0, 0, 1, 0, 2, 0, 0, 4, NaN]));
 });
 
-test('DerivativeStep with empty array', async (t) => {
+test('DerivativeStep with empty array', async(t) => {
 	const inputSignal = new Signal(new Float32Array(0), 1);
 
 	const step = mockStep(DerivativeStep, [inputSignal]);
@@ -51,7 +51,7 @@ test('DerivativeStep with empty array', async (t) => {
 	t.is(result.getFloat32ArrayValue().length, 0);
 });
 
-test('VelocityStep (order = 1)', async (t) => {
+test('VelocityStep (order = 1)', async(t) => {
 	const inputSignal = new Signal(f32(1, 2, 3, 4, 5, 6, 8, 10, 14, 18, 22, 30), 1);
 
 	const step = mockStep(VelocityStep, [inputSignal]);
@@ -63,7 +63,7 @@ test('VelocityStep (order = 1)', async (t) => {
 	t.deepEqual(Array.from(derivative), [NaN, 1, 1, 1, 1, 1.5, 2, 3, 4, 4, 6, NaN]);
 });
 
-test('AccelerationStep (order = 2)', async (t) => {
+test('AccelerationStep (order = 2)', async(t) => {
 	const inputSignal = new Signal(f32(1, 2, 3, 4, 5, 6, 8, 10, 14, 18, 22, 30), 1);
 
 	const step = mockStep(AccelerationStep, [inputSignal]);

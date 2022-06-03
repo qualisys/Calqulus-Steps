@@ -5,7 +5,7 @@ import { Signal } from '../../models/signal';
 
 import { NegateStep } from './negate';
 
-test('NegateStep with single number', async (t) => {
+test('NegateStep with single number', async(t) => {
 	const step = mockStep(NegateStep, [new Signal(7)]);
 	const result = await step.process();
 	const negated = result.getNumberValue();
@@ -13,7 +13,7 @@ test('NegateStep with single number', async (t) => {
 	t.is(negated, -7);
 });
 
-test('NegateStep with Float32Array', async (t) => {
+test('NegateStep with Float32Array', async(t) => {
 	const step = mockStep(NegateStep, [new Signal(f32(-5, 5, -5.0))]);
 	const result = await step.process();
 	const negated = result.getFloat32ArrayValue();
@@ -21,7 +21,7 @@ test('NegateStep with Float32Array', async (t) => {
 	t.deepEqual(Array.from(negated), [5, -5, 5]);
 });
 
-test('NegateStep with multiple Float32Arrays', async (t) => {
+test('NegateStep with multiple Float32Arrays', async(t) => {
 	const inputSignal1 = new Signal(f32(-3, 5, -9.0));
 	const inputSignal2 = new Signal([f32(-1, 2, -3.0), f32(-6)]);
 
@@ -32,7 +32,7 @@ test('NegateStep with multiple Float32Arrays', async (t) => {
 	t.deepEqual(Array.from(negated), [3, -5, 9]);
 });
 
-test('NegateStep with empty array', async (t) => {
+test('NegateStep with empty array', async(t) => {
 	const step = mockStep(NegateStep, [new Signal(new Float32Array(0))]);
 	const result = await step.process();
 

@@ -1,6 +1,6 @@
-import { Vector } from "../spatial/vector";
+import { Vector } from '../spatial/vector';
 
-import { ISequence } from "./sequence";
+import { ISequence } from './sequence';
 
 export class VectorSequence implements ISequence {
 	array = [this.x, this.y, this.z];
@@ -22,7 +22,7 @@ export class VectorSequence implements ISequence {
 		const res = [];
 
 		for (let i = 0; i < a.length; i++) {
-			res.push(Vector.dot(a.getVectorAtFrame(i+1), b.getVectorAtFrame(i+1)));
+			res.push(Vector.dot(a.getVectorAtFrame(i + 1), b.getVectorAtFrame(i + 1)));
 		}
 
 		return res;
@@ -41,8 +41,8 @@ export class VectorSequence implements ISequence {
 		const z = ref ? ref.z : new Float32Array(len);
 
 		for (let i = 0; i < len; i++) {
-			const i0 = Math.min(i, this.length - 1)
-			const i1 = Math.min(i, v.length - 1)
+			const i0 = Math.min(i, this.length - 1);
+			const i1 = Math.min(i, v.length - 1);
 			const result = Vector.tmpVec1;
 
 			Vector.cross(result, this.getVectorAtFrame(i0 + 1), v.getVectorAtFrame(i1 + 1));

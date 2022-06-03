@@ -1,4 +1,4 @@
-import { IFrameSpan } from "../models/signal";
+import { IFrameSpan } from '../models/signal';
 
 export class EventUtil {
 	/**

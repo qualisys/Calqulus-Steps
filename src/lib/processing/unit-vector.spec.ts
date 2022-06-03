@@ -16,7 +16,7 @@ const vs1unit = new VectorSequence(f32(0.40824830532073975, 0.5773502588272095, 
 const segment1 = new Signal(new Segment('test 1', new VectorSequence(f32(1, 1, 0), f32(1, 1, 0), f32(2, 1, 0.5)), new QuaternionSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3))));
 const segment1unit = new VectorSequence(f32(0.40824830532073975, 0.5773502588272095, 0), f32(0.40824830532073975, 0.5773502588272095, 0), f32(0.8164966106414795, 0.5773502588272095, 1));
 
-test('UnitVectorStep - Input errors', async (t) => {
+test('UnitVectorStep - Input errors', async(t) => {
 	const step1 = mockStep(UnitVectorStep);
 	await t.throwsAsync(step1.process());
 
@@ -27,13 +27,13 @@ test('UnitVectorStep - Input errors', async (t) => {
 	await t.throwsAsync(step3.process());
 });
 
-test('UnitvectorStep - VectorSequence', async (t) => {
+test('UnitvectorStep - VectorSequence', async(t) => {
 	const step = mockStep(UnitVectorStep, [vs1]);
 	const res = await step.process();
 	t.deepEqual(res.getValue(), vs1unit);
 });
 
-test('UnitvectorStep - Segment', async (t) => {
+test('UnitvectorStep - Segment', async(t) => {
 	const step = mockStep(UnitVectorStep, [segment1]);
 	const res = await step.process();
 	t.deepEqual(res.getValue(), segment1unit);

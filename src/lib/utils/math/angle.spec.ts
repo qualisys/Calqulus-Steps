@@ -14,7 +14,7 @@ const q2 = new QuaternionSequence(f32(-0.134267), f32(0.126671), f32(-0.706593),
 // Check if numbers are almost equal, ie within a certain threshold.
 const eqish = (a, b, threshold = 1 / 100) => {
 	return Math.abs(a - b) < threshold;
-}
+};
 
 test('AngleUtil - computeRelativeAngle - Default', (t) => {
 	// This test also implicitly covers:
@@ -100,6 +100,10 @@ test('AngleUtil - computeRelativeEulerAngle - Cardan solution', (t) => {
 	const qc = new Quaternion(0, 0, 0, 1);
 	const qd = new Quaternion(-0.7071, 0, 0, 0.7071);
 	const eulerCd = AngleUtil.computeRelativeEulerAngle(QuaternionSequence.fromQuaternion(qc), QuaternionSequence.fromQuaternion(qd), RotationOrder.XYZ);
+
+	t.true(eqish(eulerCd.x[0], -90));
+	t.is(Math.abs(eulerCd.z[0]), 0);
+	t.is(Math.abs(eulerCd.y[0]), 0);
 
 	// Case 3: Shank is rotated flexed 90 degrees: Quaternions are giving Euler
 	// angles using ZYX sequence of 0, 0, 45. Create a rotation matrix for the

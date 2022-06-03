@@ -1,4 +1,4 @@
-import { Matrix } from "./matrix";
+import { Matrix } from './matrix';
 
 export class Quaternion {
 	/** Quaternion instance used for performance reasons. */
@@ -141,7 +141,7 @@ export class Quaternion {
 	 * Normalize this quaternion
 	 */
 	normalize() {
-		return Quaternion.normalizeToRef(this, this)
+		return Quaternion.normalizeToRef(this, this);
 	}
 
 	/**

@@ -9,7 +9,7 @@ const a1 = f32(1, 2, 3, 1, 7);
 const s1 = new Signal(a1);
 
 // The calculation is mainly tested by the Kinematics utility.
-test('DiffStep', async (t) => {
+test('DiffStep', async(t) => {
 	const step = mockStep(DiffStep, [s1]);
 
 	const res = await step.process();

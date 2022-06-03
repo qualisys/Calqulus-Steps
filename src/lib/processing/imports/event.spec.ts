@@ -13,17 +13,17 @@ import { EventStep } from './event';
 const a1 = i32(1, 10, 100);
 const s1 = new Signal(a1);
 
-test('EventStep (mock) - prepare node (single input)', async (t) => {
+test('EventStep (mock) - prepare node (single input)', async(t) => {
 	const node = mockStep(EventStep, { myEvent1: s1 }).node;
 	t.deepEqual(node.in, ['event://myEvent1']);
 });
 
-test('EventStep (mock) - prepare node (multiple inputs)', async (t) => {
+test('EventStep (mock) - prepare node (multiple inputs)', async(t) => {
 	const node = mockStep(EventStep, { myEvent1: s1, myEvent2: s1 }).node;
 	t.deepEqual(node.in, ['event://myEvent1', 'event://myEvent2']);
 });
 
-test('EventStep (mock) - prepare node (already prepared input)', async (t) => {
+test('EventStep (mock) - prepare node (already prepared input)', async(t) => {
 	const node = mockStep(EventStep, { 'event://myEvent1': s1 }).node;
 	t.deepEqual(node.in, ['event://myEvent1']);
 });
