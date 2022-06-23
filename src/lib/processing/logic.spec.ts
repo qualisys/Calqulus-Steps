@@ -18,7 +18,7 @@ const sArray = new Signal(f32(3, 4, 5));
 const sArray2 = new Signal(f32(3));
 const sArray3 = new Signal(i32(1));
 
-test('IfStep (mock) - Missing then ', async(t) => {
+test('IfStep (mock) - Missing "then"', async(t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		else: [s10],
 	}, '1 > 2');
@@ -26,9 +26,36 @@ test('IfStep (mock) - Missing then ', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Missing else ', async(t) => {
+test('IfStep (mock) - Missing "else"', async(t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s10],
+	}, '1 > 2');
+
+	await t.throwsAsync(step.process());
+});
+
+test('IfStep (mock) - More than one input to "then" option', async(t) => {
+	const step = mockStep(IfStep, [s1, s2], {
+		then: [s1, s2],
+		else: [s10],
+	}, '1 > 2');
+
+	await t.throwsAsync(step.process());
+});
+
+test('IfStep (mock) - More than one input to "else" option', async(t) => {
+	const step = mockStep(IfStep, [s1, s2], {
+		then: [s0, s1],
+		else: [s1, s2],
+	}, '1 > 2');
+
+	await t.throwsAsync(step.process());
+});
+
+test('IfStep (mock) - More than one input to both "then" and "else" options', async(t) => {
+	const step = mockStep(IfStep, [s1, s2], {
+		then: [s1, s2],
+		else: [s1, s2],
 	}, '1 > 2');
 
 	await t.throwsAsync(step.process());

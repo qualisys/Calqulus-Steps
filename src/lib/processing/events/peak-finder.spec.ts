@@ -23,18 +23,18 @@ test('PeakFinderStep - Wrong input signals', async(t) => {
 });
 
 test('PeakFinderStep - Options - height', async(t) => {
-	t.is(mockStep(PeakFinderStep, [], { height: 10 }).height, 10);
+	t.like(mockStep(PeakFinderStep, [], { height: 10 }).height, { min: 10, max: undefined });
 	t.like(mockStep(PeakFinderStep, [], { height: [10, 20] }).height, { min: 10, max: 20 });
 	t.like(mockStep(PeakFinderStep, [], { height: [10] }).height, { min: 10, max: undefined });
 });
 
 test('PeakFinderStep - Options - width', async(t) => {
-	t.is(mockStep(PeakFinderStep, [], { width: 10 }).width, 10);
+	t.like(mockStep(PeakFinderStep, [], { width: 10 }).width, { min: 10, max: undefined });
 	t.like(mockStep(PeakFinderStep, [], { width: [10, 20] }).width, { min: 10, max: 20 });
 });
 
 test('PeakFinderStep - Options - prominence', async(t) => {
-	t.is(mockStep(PeakFinderStep, [], { prominence: 10 }).prominence, 10);
+	t.like(mockStep(PeakFinderStep, [], { prominence: 10 }).prominence, { min: 10, max: undefined });
 	t.like(mockStep(PeakFinderStep, [], { prominence: [10, 20] }).prominence, { min: 10, max: 20 });
 });
 

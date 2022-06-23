@@ -240,10 +240,10 @@ export class PeakFinderStep extends BaseStep {
 
 	init() {
 		super.init();
-
-		this.height = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('height', [PropertyType.Number, PropertyType.Array])?.shift());
-		this.width = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('width', [PropertyType.Number, PropertyType.Array])?.shift());
-		this.prominence = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('prominence', [PropertyType.Number, PropertyType.Array])?.shift());
+	
+		this.height = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('height', [PropertyType.Number, PropertyType.Array]));
+		this.width = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('width', [PropertyType.Number, PropertyType.Array]));
+		this.prominence = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('prominence', [PropertyType.Number, PropertyType.Array]));
 
 		this.distance = this.getPropertyValue('distance', PropertyType.Number);
 		this.relHeight = this.getPropertyValue('relHeight', PropertyType.Number);
@@ -283,7 +283,12 @@ export class PeakFinderStep extends BaseStep {
 		return result;
 	}
 
-	protected parseRangeArgument(span: number | number[]): number | IValueRange {
+	protected parseRangeArgument(span: number | number[] | number[][]): IValueRange {
+		// Handle double-wrapped arrays
+		if (TypeCheck.isArrayLike(span) && TypeCheck.isArrayLike(span[0])) {
+			span = span.shift();
+		}
+
 		if (span && TypeCheck.isArrayLike(span)) {
 			return {
 				min: span[0],
@@ -291,6 +296,9 @@ export class PeakFinderStep extends BaseStep {
 			};
 		}
 
-		return span as number;
+		return {
+			min: span as number,
+			max: undefined,
+		};
 	}
 }
