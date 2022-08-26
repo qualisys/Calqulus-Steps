@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { f32, mockStep } from '../../test-utils/mock-step';
+import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { Segment } from '../models/segment';
 import { PlaneSequence } from '../models/sequence/plane-sequence';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
@@ -9,6 +9,11 @@ import { Signal } from '../models/signal';
 
 import { AngleStep, AngularVelocityStep, JointAngleStep } from './angle';
 import { PlaneStep } from './plane';
+
+// Check if numbers are almost equal, ie within a certain threshold.
+const eqish = (a, b, threshold = 1 / 100) => {
+	return Math.abs(a - b) < threshold;
+};
 
 const s1 = new Signal(f32(1, 2, 3));
 const s2 = new Signal(f32(4, 5, 6));
@@ -46,6 +51,47 @@ const seg3 = new Signal(
 		'test3',
 		new VectorSequence(f32(8, 9, 2), f32(3, 6, 2), f32(4, 0, 9)),
 		q2
+	)
+);
+
+// Segment rotating on the x axis at 0, 54, 108, 162, 216, 270, 324, 378, 432, 486 degrees.
+const segWrapXAngles = f32(0, 54, 108, 162, 216, 270, 324, 378, 432, 486);
+const segWrap1 = new Signal(
+	new Segment(
+		'testwrap1',
+		new VectorSequence(f32(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), f32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0), f32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		new QuaternionSequence(
+			f32(
+				0,
+				0.4539905,
+				0.809017,
+				0.9876883,
+				0.9510565,
+				0.7071068,
+				0.309017,
+				-0.1564345,
+				-0.5877853,
+				-0.8910065
+			),
+			f32(
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			),
+			f32(
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			),
+			f32(
+				1,
+				0.8910065,
+				0.5877853,
+				0.1564345,
+				-0.309017,
+				-0.7071068,
+				-0.9510565,
+				-0.9876883,
+				-0.809017,
+				-0.4539905,
+			)
+		)
 	)
 );
 
@@ -411,4 +457,83 @@ test('AngularVelocityStep - useRotationOrder: true, rotationOrder: zyz', async(t
 	t.deepEqual(Array.from(vs.x), [NaN, -1434.84765625, NaN]);
 	t.deepEqual(Array.from(vs.y), [NaN, -49.700252532958984, NaN]);
 	t.deepEqual(Array.from(vs.z), [NaN, 57.72683334350586, NaN]);
+});
+
+
+// *************************************************
+// * Unwrap tests                                  *
+// * (The unwrapping itself is tested in TestUtil, *
+// * this tests that unwrap is applied.)           *
+// *************************************************
+
+test('AngleStep - unwrap - true', async(t) => {
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: true }).process();
+
+	const anglesX = res.getVectorSequenceValue().x;
+	t.is(anglesX.length, segWrapXAngles.length);
+
+	for (let i = 0; i < anglesX.length; i++) {
+		t.assert(eqish(anglesX[i], segWrapXAngles[i], 1 / 10000));
+	}
+});
+
+test('AngleStep - unwrap - 0', async(t) => {
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: 0 }).process();
+
+	const anglesX = res.getVectorSequenceValue().x;
+	t.is(anglesX.length, segWrapXAngles.length);
+
+	for (let i = 0; i < anglesX.length; i++) {
+		t.assert(eqish(anglesX[i], segWrapXAngles[i], 1 / 10000));
+	}
+});
+
+test('AngleStep - unwrap - 4', async(t) => {
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: 4 }).process();
+
+	const anglesX = res.getVectorSequenceValue().x;
+	t.is(anglesX.length, segWrapXAngles.length);
+
+	const offsetValues = f32(-360, -306, -252, -198, -144, -90, -36, 18, 72, 126);
+
+	for (let i = 0; i < anglesX.length; i++) {
+		t.assert(eqish(anglesX[i], offsetValues[i], 1 / 10000));
+	}
+});
+
+test('AngleStep - unwrap - event', async(t) => {
+	const event = new Signal(i32(4));
+	event.isEvent = true;
+
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: [event] }).process();
+
+	const anglesX = res.getVectorSequenceValue().x;
+	t.is(anglesX.length, segWrapXAngles.length);
+
+	const offsetValues = f32(-360, -306, -252, -198, -144, -90, -36, 18, 72, 126);
+
+	for (let i = 0; i < anglesX.length; i++) {
+		t.assert(eqish(anglesX[i], offsetValues[i], 1 / 10000));
+	}
+});
+
+test('AngleStep - unwrap - event with multiple instances', async(t) => {
+	// Should pick the first event = frame 4
+	const event = new Signal(i32(4, 6, 8));
+	event.isEvent = true;
+
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: [event] }).process();
+
+	const anglesX = res.getVectorSequenceValue().x;
+	t.is(anglesX.length, segWrapXAngles.length);
+
+	const offsetValues = f32(-360, -306, -252, -198, -144, -90, -36, 18, 72, 126);
+
+	for (let i = 0; i < anglesX.length; i++) {
+		t.assert(eqish(anglesX[i], offsetValues[i], 1 / 10000));
+	}
+});
+
+test('AngleStep - unwrap - invalid input', async(t) => {
+	t.throws(() => { mockStep(AngleStep, [segWrap1], { unwrap: 'test' }); });
 });
