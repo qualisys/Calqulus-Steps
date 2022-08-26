@@ -55,6 +55,45 @@ The following options are available on all Angle steps.
 > - ZXZ
 > - ZYZ
 >
+> #### `unwrap`
+>
+> **Type:** `Boolean | Event | Number`  
+> **Required:** `False`  
+> **Default value:** `XYZ`  
+>
+> When set to `true`, an event, or a numeric value, the unwrap option 
+> shifts the angle phases in order to achieve a continuous curve, i.e., 
+> it tries to detect when an angle crosses over its available range 
+> (-PI to PI for radians, -180 to 180 degrees).
+>
+> This allows for tracking angles on movements that goes outside of the
+> typical angle range.
+>
+> To do this, it looks for jumps between consecutive angles. If the jump
+> is greater than a threshold of half the range (PI for radians, 180 for 
+> degrees), the angle is shifted by adding multiples of of the range until 
+> the jump no longer crosses the threshold.
+>
+> The unwrap algorithm is run over all available components.
+>
+> If set to `true` or `0`, the algorithm aligns the unwrap to the start 
+> of the sequence. I.e., it assumes the first frame is correct in being 
+> within the original range and the following angles are moved to follow 
+> suit.
+>
+> If set to an `Event` or a `Number`, the algorithm will assume that
+> the corresponding frame is correct in being within the original range. 
+> All other angles will be shifted to follow suit. This enables tracking 
+> a rotational movement where the angle for a specific event is intended
+> to be within the standard range (-PI to PI for radians, -180 to 180 
+> degrees).
+>
+> IF a supplied event has more than one instance, the first instance is used.
+>
+> **_Note:_** _The unwrap algorithm is sensitive to noise, which may 
+> introduce unexpected artifacts. Please consider filtering the signal(s) 
+> before calculating its angle using unwrap._
+>
 >
 
 
@@ -83,6 +122,7 @@ The following options are available on all Angle steps.
 >
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
+> * [unwrap](#unwrap)
 >
 >
 ></details>
@@ -175,6 +215,7 @@ specified as arrays or with named vector signals (ie markers).
 >
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
+> * [unwrap](#unwrap)
 >
 >
 ></details>
@@ -227,6 +268,7 @@ in your instance**.
 >
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
+> * [unwrap](#unwrap)
 >
 >
 ></details>
@@ -287,6 +329,7 @@ three or four inputs.
 >
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
+> * [unwrap](#unwrap)
 >
 >
 ></details>
