@@ -103,7 +103,9 @@ export class BaseStep {
 			const optionSignals = this.getPropertySignalValue(key, expectedType, false);
 			const unpackedSignals = optionSignals.map(s => s.getValue());
 			const result = expectedTypes.includes(PropertyType.Array) || unpackedSignals.length > 1 ? unpackedSignals : unpackedSignals[0];
-
+			
+			if (result === undefined) throw 'Try property value';
+			
 			return result as unknown as T;
 		}
 		catch (e) {
