@@ -194,3 +194,141 @@ test('AngleUtil - computeAngleBetweenVectors', (t) => {
 	// Different length
 	t.deepEqual(AngleUtil.computeAngleBetweenVectors(v1, v3), f32(targetAngle, 0));
 });
+
+test('AngleUtil - unwrapAngles invalid input', (t) => {	
+	t.throws(() => { AngleUtil.unwrapAngles(undefined); });
+	t.throws(() => { AngleUtil.unwrapAngles(f32()); });
+});
+
+test('AngleUtil - unwrapAngles single value', (t) => {
+	const angles = f32(1);
+	
+	t.deepEqual(AngleUtil.unwrapAngles(angles), angles);
+});
+
+test('AngleUtil - unwrapAngles (growing)', (t) => {
+	const range = { min: -5, max: 5 };
+	const fullRange = range.max - range.min;
+	const angles = new Float32Array(50).map((_, i) => i);
+	const anglesWrapped = angles.map(v => (v - range.min) % fullRange + range.min);
+	
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 0, fullRange, fullRange / 2), angles);
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 24, fullRange, fullRange / 2), f32(
+		-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10,
+		 -9,  -8,  -7,  -6,  -5,  -4,  -3,  -2,  -1,   0,   1,
+		  2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,
+		 13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,
+		 24,  25,  26,  27,  28,  29
+	));
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 49, fullRange, fullRange / 2), f32(
+		-50, -49, -48, -47, -46, -45, -44, -43, -42,
+		-41, -40, -39, -38, -37, -36, -35, -34, -33,
+		-32, -31, -30, -29, -28, -27, -26, -25, -24,
+		-23, -22, -21, -20, -19, -18, -17, -16, -15,
+		-14, -13, -12, -11, -10,  -9,  -8,  -7,  -6,
+		 -5,  -4,  -3,  -2,  -1
+	));
+});
+
+test('AngleUtil - unwrapAngles (falling, from zero into negative)', (t) => {
+	const range = { min: -5, max: 5 };
+	const fullRange = range.max - range.min;
+	const angles = new Float32Array(50).map((_, i) => i > 0 ? -i : i);
+	const anglesWrapped = angles.map(v => (v + range.min) % fullRange - range.min);
+	
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 0, fullRange, fullRange / 2), angles);
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 24, fullRange, fullRange / 2), f32(
+		20,  19,  18,  17,  16,  15,  14,  13,  12,  11,  10,
+		 9,   8,   7,   6,   5,   4,   3,   2,   1,   0,  -1,
+	    -2,  -3,  -4,  -5,  -6,  -7,  -8,  -9, -10, -11, -12,
+	   -13, -14, -15, -16, -17, -18, -19, -20, -21, -22, -23,
+	   -24, -25, -26, -27, -28, -29
+	));
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 49, fullRange, fullRange / 2), new Float32Array(50).map((_, i) => 50 - i));
+});
+
+test('AngleUtil - unwrapAngles (upwards pointing arrow)', (t) => {
+	const range = { min: -5, max: 5 };
+	const fullRange = range.max - range.min;
+	const angles = new Float32Array(50).map((_, i) => (i < 25) ? i : 50 - i);
+	const anglesWrapped = angles.map(v => (v - range.min) % fullRange + range.min);
+	
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 0, fullRange, fullRange / 2), angles);
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 24, fullRange, fullRange / 2), f32(
+		-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10,
+		 -9,  -8,  -7,  -6,  -5,  -4,  -3,  -2,  -1,   0,   1,
+		  2,   3,   4,   5,   4,   3,   2,   1,   0,  -1,  -2,
+		 -3,  -4,  -5,  -6,  -7,  -8,  -9, -10, -11, -12, -13,
+	    -14, -15, -16, -17, -18, -19
+	));
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 49, fullRange, fullRange / 2), angles);
+
+	// Test alignment index out-of-bounds
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 50, fullRange, fullRange / 2), angles);
+});
+
+test('AngleUtil - unwrapAngles (downwards pointing arrow, from positive offset into negative)', (t) => {
+	const range = { min: -5, max: 5 };
+	const fullRange = range.max - range.min;
+	const offsetY = 10;
+	const angles = new Float32Array(50).map((_, i) => offsetY - ((i < 25) ? i : 50 - i));
+	const anglesWrapped = angles.map(v => {
+		if (v > range.max) return (v - range.min) % fullRange + range.min;
+		if (v < range.min) return (v + range.min) % fullRange - range.min;
+
+		return v;
+	});
+	
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 0, fullRange, fullRange / 2), angles.map(v => v - offsetY));
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 24, fullRange, fullRange / 2), f32(
+		20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10,
+		 9,  8,  7,  6,  5,  4,  3,  2,  1,  0, -1,
+	    -2, -3, -4, -5, -4, -3, -2, -1,  0,  1,  2,
+		 3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13,
+	    14, 15, 16, 17, 18, 19
+	));
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 49, fullRange, fullRange / 2), angles.map(v => v - offsetY));
+});
+
+test('AngleUtil - unwrapAngles (sine wave) (default thresholds and range)', (t) => {
+	const range = { min: -Math.PI, max: Math.PI };
+	const fullRange = range.max - range.min;
+
+	// Sine wave with amplitude of 2pi
+	const amplitude = Math.PI * 2;
+	const angles = new Float32Array(50).map((_, i) => Math.sin(i / 50 * 2 * Math.PI) * amplitude);
+	const anglesWrapped = angles.map(v => {
+		if (v > range.max) return (v - range.min) % fullRange + range.min;
+		if (v < range.min) return (v + range.min) % fullRange - range.min;
+
+		return v;
+	});
+	
+	// All the following points are within the original range and 
+	// should return the original signal.
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped), angles);
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 25), angles);
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 49), angles);
+	
+	// The following point is outside of the original range, and 
+	// the curve should be re-aligned.
+	t.deepEqual(AngleUtil.unwrapAngles(anglesWrapped, 12), f32(
+		-6.2831854820251465,    -5.495693206787109,   -4.720620632171631,
+		-3.9701905250549316,    -3.256237745285034,  -2.5900216102600098,
+		-1.9820488691329956,   -1.4419077634811401,  -0.9781163334846497,
+		-0.5979893803596497,  -0.30752116441726685, -0.11129266023635864,
+	  -0.012398544698953629, -0.012398544698953629, -0.11129266023635864,
+	   -0.30752116441726685,   -0.5979893803596497,  -0.9781163334846497,
+		-1.4419077634811401,   -1.9820488691329956,  -2.5900216102600098,
+		 -3.256237745285034,   -3.9701905250549316,   -4.720620632171631,
+		 -5.495693206787109,   -6.2831854820251465,   -7.070677280426025,
+		 -7.845749855041504,    -8.596179962158203,    -9.31013298034668,
+		 -9.976348876953125,   -10.584321975708008,  -11.124463081359863,
+		 -11.58825397491455,    -11.96838092803955,  -12.258849143981934,
+			  -12.455078125,   -12.553972244262695,  -12.553972244262695,
+			  -12.455078125,   -12.258849143981934,   -11.96838092803955,
+		 -11.58825397491455,   -11.124463081359863,  -10.584321975708008,
+		 -9.976348876953125,     -9.31013298034668,   -8.596179962158203,
+		 -7.845749855041504,    -7.070677280426025
+	));
+});
