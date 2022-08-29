@@ -14,6 +14,7 @@ import { Euler, RotationOrder } from '../utils/math/euler';
 import { Kinematics } from '../utils/math/kinematics';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
+import { TypeCheck } from '../utils/type-check';
 
 import { BaseStep } from './base-step';
 
@@ -21,6 +22,11 @@ export enum CoordinatePlane {
 	XY = 'xy',
 	YZ = 'yz',
 	XZ = 'xz'
+}
+
+export enum ExportUnit {
+	Radians,
+	Degrees,
 }
 
 @StepCategory({
@@ -71,6 +77,45 @@ export enum CoordinatePlane {
 			- YZY
 			- ZXZ
 			- ZYZ
+		`,
+	}, {
+		name: 'unwrap',
+		type: ['Boolean', 'Event', 'Number'],
+		required: false,
+		default: 'XYZ',
+		description: markdownFmt`
+			When set to ''true'', an event, or a numeric value, the unwrap option 
+			shifts the angle phases in order to achieve a continuous curve, i.e., 
+			it tries to detect when an angle crosses over its available range 
+			(-PI to PI for radians, -180 to 180 degrees).
+
+			This allows for tracking angles on movements that goes outside of the
+			typical angle range.
+
+			To do this, it looks for jumps between consecutive angles. If the jump
+			is greater than a threshold of half the range (PI for radians, 180 for 
+			degrees), the angle is shifted by adding multiples of of the range until 
+			the jump no longer crosses the threshold.
+
+			The unwrap algorithm is run over all available components.
+
+			If set to ''true'' or ''0'', the algorithm aligns the unwrap to the start 
+			of the sequence. I.e., it assumes the first frame is correct in being 
+			within the original range and the following angles are moved to follow 
+			suit.
+			
+			If set to an ''Event'' or a ''Number'', the algorithm will assume that
+			the corresponding frame is correct in being within the original range. 
+			All other angles will be shifted to follow suit. This enables tracking 
+			a rotational movement where the angle for a specific event is intended
+			to be within the standard range (-PI to PI for radians, -180 to 180 
+			degrees).
+
+			IF a supplied event has more than one instance, the first instance is used.
+
+			**_Note:_** _The unwrap algorithm is sensitive to noise, which may 
+			introduce unexpected artifacts. Please consider filtering the signal(s) 
+			before calculating its angle using unwrap._
 		`,
 	}],
 })
@@ -133,6 +178,9 @@ export class AngleStep extends BaseStep {
 	coordinatePlane: CoordinatePlane;
 	projectionPlane: PlaneSequence;
 	rotationOrder: RotationOrder;
+	unwrapIndex: number;
+
+	exportUnit: ExportUnit = ExportUnit.Degrees;
 
 	init() {
 		super.init();
@@ -182,6 +230,26 @@ export class AngleStep extends BaseStep {
 				}
 			} 	
 		}
+
+		// Handle unwrap option. If set to anything but false, unwrap should be applied.
+		const unwrapInput = this.getPropertyValue('unwrap', undefined, false);
+
+		if (unwrapInput !== undefined) {
+			if (unwrapInput === true) {
+				this.unwrapIndex = 0;
+			} 
+			else if (TypeCheck.isArrayLike(unwrapInput)) {
+				if (unwrapInput.length) {
+					this.unwrapIndex = unwrapInput[0];
+				}
+			}
+			else if (typeof unwrapInput === 'number' && !Number.isNaN(unwrapInput)) {
+				this.unwrapIndex = unwrapInput as number;
+			}
+			else {
+				throw new ProcessingError('Unrecognized value for unwrap option.');
+			}
+		}
 	}
 
 	// Override BaseStep's implementation. This is an optimization that avoids
@@ -205,7 +273,8 @@ export class AngleStep extends BaseStep {
 			if (this.inputs[0].type === SignalType.Segment) {
 				const segment: Segment = this.inputs[0].getSegmentValue();
 				const angles: VectorSequence = AngleUtil.computeEulerAngle(segment.rotations, this.rotationOrder);
-
+				
+				this.exportUnit = ExportUnit.Degrees;
 				result.setValue<VectorSequence>(angles);
 			}
 			else {
@@ -221,6 +290,7 @@ export class AngleStep extends BaseStep {
 				const segment2: Segment = this.inputs[1].getSegmentValue();
 				const angles: VectorSequence = AngleUtil.computeRelativeEulerAngle(segment1.rotations, segment2.rotations, this.rotationOrder);
 
+				this.exportUnit = ExportUnit.Degrees;
 				result.setValue<VectorSequence>(angles);
 			}
 			// Compute relative angle between two vectors.
@@ -245,9 +315,10 @@ export class AngleStep extends BaseStep {
 						}
 					})
 					.map(vs => this.applyProjection(vs))
-					;
+				;
 
 				const angle = AngleUtil.computeAngleBetweenVectors(inputs[0], inputs[1])[0];
+				this.exportUnit = ExportUnit.Radians;
 
 				result.setValue<number>(angle);
 			}
@@ -278,7 +349,9 @@ export class AngleStep extends BaseStep {
 					}
 				})
 				.map(vs => this.applyProjection(vs))
-				;
+			;
+
+			this.exportUnit = ExportUnit.Radians;
 
 			if (this.inputs.length === 3) {
 				const v1 = inputs[1].subtract(inputs[0]);
@@ -298,6 +371,16 @@ export class AngleStep extends BaseStep {
 		}
 		else {
 			throw new ProcessingError('Unexpected amount of inputs.');
+		}
+
+		if (this.unwrapIndex !== undefined) {
+			// Apply unwrap to the resulting signal
+			const range = (this.exportUnit === ExportUnit.Degrees) ? 360 : 2 * Math.PI;
+
+			let signalArray = result.array;
+			signalArray = signalArray.map(comp => AngleUtil.unwrapAngles(comp, this.unwrapIndex, range, range / 2));
+
+			result.setValue(Signal.typeFromArray(result.type, signalArray));
 		}
 		
 		return result;
