@@ -36,11 +36,17 @@ test('RefineEventStep - Wrong input signals', async t => {
 	await t.throwsAsync(mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC], exclude: [sB] }).process()); // Sequence signal found in exclude
 });
 
-test('RefineEventStep - Options - sequence & exclude', async t => {
-	const step = mockStep(RefineEventStep, [sA], { sequence: [sA, sVS, sC], exclude: [sX] });
+test('RefineEventStep - Options - sequence, exclude & cyclic', async t => {
+	const step1 = mockStep(RefineEventStep, [sA], { sequence: [sA, sVS, sC], exclude: [sX] });
 
-	t.deepEqual(step.sequence, [sA, sVS, sC]);
-	t.deepEqual(step.exclude, [sX]);
+	t.deepEqual(step1.sequence, [sA, sVS, sC]);
+	t.deepEqual(step1.exclude, [sX]);
+	// Cyclic is true by default
+	t.is(step1.cyclic, true);
+
+	const step2 = mockStep(RefineEventStep, [sA], { sequence: [sA, sVS, sC], cyclic: false });
+
+	t.is(step2.cyclic, false);
 });
 
 test('RefineEventStep - Result - sequence only', async t => {
@@ -51,6 +57,18 @@ test('RefineEventStep - Result - sequence only', async t => {
 
 test('RefineEventStep - Result - sequence & exclude', async t => {
 	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC], exclude: [sX] }).process();
+
+	t.deepEqual(res.getValue(), f32(5, 10));
+});
+
+test('RefineEventStep - Result - cyclic true', async t => {
+	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC, sA], exclude: [sX], cyclic: true }).process();
+
+	t.deepEqual(res.getValue(), f32(5, 10, 15));
+});
+
+test('RefineEventStep - Result - cyclic false', async t => {
+	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC, sA], exclude: [sX], cyclic: false }).process();
 
 	t.deepEqual(res.getValue(), f32(5, 10));
 });

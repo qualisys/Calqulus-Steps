@@ -29,6 +29,15 @@ import { BaseStep } from '../base-step';
 
 		The ''exclude'' option cannot contain any signals defined in the 
 		''sequence'' option.
+
+		The optional option ''cyclic'' defines whether or not the sequence should 
+		be treated as cyclic, i.e., if the sequence starts and ends with the same 
+		events, those events are included in the next "match-finding" iteration 
+		of the sequence. This is useful for refining event cycles where the end 
+		event is the start event of the next cycle.
+
+		The ''cyclic'' option is ''true'' by default and has to be explicitly set 
+		to ''false'' to disable.
 	`,
 	examples: markdownFmt`
 		This example picks the frames of event ''A'' only when it's followed 
@@ -83,18 +92,28 @@ import { BaseStep } from '../base-step';
 		description: markdownFmt`
 			Event(s) that will invalidate an event sequence if found within it.
 		`,
+	}, {
+		name: 'cyclic',
+		type: 'Boolean',
+		required: false,
+		default: 'True',
+		description: markdownFmt`
+			Whether or not to treat sequences as cyclic (''true'' as default).
+		`,
 	}],
 	output: ['Event'],
 })
 export class RefineEventStep extends BaseStep {
 	sequence: Signal[];
 	exclude: Signal[];
+	cyclic: boolean;
 
 	init() {
 		super.init();
 
 		this.sequence = this.getPropertySignalValue('sequence', PropertyType.Any, true);
 		this.exclude = this.getPropertySignalValue('exclude', PropertyType.Any, false);
+		this.cyclic = this.getPropertyValue<boolean>('cyclic', PropertyType.Boolean, false, true);
 	}
 
 	async process(): Promise<Signal> {
@@ -133,6 +152,7 @@ export class RefineEventStep extends BaseStep {
 			referenceSignal.getValue() as NumericArray, 
 			seqValues as NumericArray[],
 			excludeValues as NumericArray[],
+			this.cyclic,
 		);
 
 		const result: Signal = referenceSignal.clone(refinedEvent);

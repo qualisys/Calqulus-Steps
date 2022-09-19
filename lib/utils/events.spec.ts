@@ -61,3 +61,31 @@ test('EventUtil - pickFromSequence', (t) => {
 	const evt9 = EventUtil.pickFromSequence(framesB1, [framesA, framesB1, framesC, framesA, framesB1], [framesX1]);
 	t.deepEqual(evt9, f32(6, 11));
 });
+
+test('EventUtil - pickFromSequence (cyclic)', (t) => {
+	const framesA  = f32(1, 5, 10, 15, 20);
+	const framesB1 = f32(2, 6, 11, 16);
+	const framesB2 = f32(2, 6,     16);
+	const framesC  = f32(3, 7, 12, 17, 22);
+
+	const framesX1 = f32(1.5, 16.5);
+	const framesX2 = f32(6.5);
+
+	const evt1 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], undefined, true);
+	t.deepEqual(evt1, f32(1, 5, 10, 15, 20));
+
+	const evt2 = EventUtil.pickFromSequence(framesA, [framesA, framesB2, framesC, framesA], undefined, true);
+	t.deepEqual(evt2, f32(1, 5, 10, 15, 20));
+
+	const evt3 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], [framesX1], true);
+	t.deepEqual(evt3, f32(5, 10, 15));
+
+	const evt4 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], [framesX2], true);
+	t.deepEqual(evt4, f32(1, 5, 10, 15, 20));
+
+	const evt5 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], [framesX1, framesX2]);
+	t.deepEqual(evt5, f32(10, 15));
+
+	const evt9 = EventUtil.pickFromSequence(framesB1, [framesA, framesB1, framesC, framesA, framesB1], [framesX1], true);
+	t.deepEqual(evt9, f32(6, 11, 16));
+});
