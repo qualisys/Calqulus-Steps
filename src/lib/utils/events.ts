@@ -77,7 +77,7 @@ export class EventUtil {
 	 * @param exclude Array of event frames that, if present in a sequence, disqualifies the sequence.
 	 * @returns 
 	 */
-	static pickFromSequence(pick: NumericArray, sequence: NumericArray[], exclude: NumericArray[] = []): NumericArray {
+	static pickFromSequence(pick: NumericArray, sequence: NumericArray[], exclude: NumericArray[] = [], cyclicPattern = false): NumericArray {
 		const usedInstances = [];
 
 		// Construct a sequence using all the events in the sequence and exclude arrays.
@@ -101,27 +101,33 @@ export class EventUtil {
 		// Order the full sequence by value.
 		fullSequence.sort((a, b) => a.value - b.value);
 
-		const matches = [];
+		const matchIndices = [];
 
 		// Find pattern in sequence (finite-state machine)
 		for (let i = 0; i <= fullSequence.length - sequence.length; i++) {
 			const currPicks = [];
 
 			for (let p = 0; p < sequence.length; p++) {
-				const currItem = fullSequence[i + p];
+				const currIndex = i + p;
+				const currItem = fullSequence[currIndex];
 
 				if (currItem.from !== sequence[p]) break;
 
 				if (currItem.from === pick) {
-					currPicks.push(currItem.value);
+					currPicks.push(currIndex);
 				}
 
 				if (p === sequence.length - 1) {
-					matches.push(...currPicks);
-					i += p;
+					for (const pickIndex of currPicks) {
+						if (!matchIndices.includes(pickIndex)) matchIndices.push(pickIndex);
+					}
+
+					i += (cyclicPattern) ? 1 : p;
 				}
 			}
 		}
+
+		const matches = matchIndices.map(i => fullSequence[i].value);
 
 		return SeriesUtil.createNumericArrayOfSameType(pick, matches);
 	}

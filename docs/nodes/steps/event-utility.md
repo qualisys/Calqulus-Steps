@@ -192,6 +192,14 @@ The time is calculated using the frame rate from the signal.
 >
 > Event(s) that will invalidate an event sequence if found within it.
 >
+> #### `cyclic`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `True`  
+>
+> Whether or not to treat sequences as cyclic (`true` as default).
+>
 
 **Shared options**
 >
@@ -227,6 +235,15 @@ be picked from this sequence.
 
 The `exclude` option cannot contain any signals defined in the 
 `sequence` option.
+
+The optional option `cyclic` defines whether or not the sequence should 
+be treated as cyclic, i.e., if the sequence starts and ends with the same 
+events, those events are included in the next "match-finding" iteration 
+of the sequence. This is useful for refining event cycles where the end 
+event is the start event of the next cycle.
+
+The `cyclic` option is `true` by default and has to be explicitly set 
+to `false` to disable.
 
 ---
 
