@@ -160,7 +160,7 @@ export enum ExportUnit {
 	examples: markdownFmt`
 		''' yaml
 		- angle: [EdgeMarker1, OriginMarker, EdgeMarker2]
-          project: xy
+		  project: xy
 		'''
 		
 		_Calculates the angle for the three markers, projected 
@@ -453,21 +453,21 @@ export class JointAngleStep extends AngleStep {
 		A first example when using the segment coordinate system
 		'''
 		- parameter: Pitching_Elbow_Ang_Vel
-          where: 
-            name: Pitching*
-          steps:
-            - angularVelocity: [RightArm, RightForeArm, RightArm, RightForeArm]
+		  where: 
+		    name: Pitching*
+		  steps:
+		    - angularVelocity: [RightArm, RightForeArm, RightArm, RightForeArm]
 		'''
 		
 		A second example when using the Euler/Cardan sequence
 		'''
 		- parameter: Pitching_Shoulder_Ang_Vel
-          where: 
-            name: Pitching*
-          steps:
-            - angularVelocity: [RightShoulder, RightArm, Spine2, RightArm]
-              useRotationOrder: true
-              rotationOrder: zyz
+		  where: 
+		    name: Pitching*
+		  steps:
+		    - angularVelocity: [RightShoulder, RightArm, Spine2, RightArm]
+		      useRotationOrder: true
+		      rotationOrder: zyz
 		'''
 	`,
 	inputs: [
@@ -673,21 +673,21 @@ export class AngularVelocityStep extends AngleStep {
 		A first example when using the segment coordinate system
 		'''
 		- parameter: Pitching_Elbow_Ang_Vel
-          where: 
-            name: Pitching*
-          steps:
-            - angularVelocity: [RightArm, RightForeArm, RightArm, RightForeArm]
+		  where: 
+		    name: Pitching*
+		  steps:
+		    - angularVelocity: [RightArm, RightForeArm, RightArm, RightForeArm]
 		'''
 		
 		A second example when using the Euler/Cardan sequence
 		'''
 		- parameter: Pitching_Shoulder_Ang_Vel
-          where: 
-            name: Pitching*
-          steps:
-            - angularVelocity: [RightShoulder, RightArm, Spine2, RightArm]
-              useRotationOrder: true
-              rotationOrder: zyz
+		  where: 
+		    name: Pitching*
+		  steps:
+		    - angularVelocity: [RightShoulder, RightArm, Spine2, RightArm]
+		      useRotationOrder: true
+		      rotationOrder: zyz
 		'''
 	`,
 	inputs: [
