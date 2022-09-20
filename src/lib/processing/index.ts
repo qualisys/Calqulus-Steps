@@ -111,6 +111,7 @@ export * from './events/event-duration';
 export * from './events/event-mask';
 export * from './events/event-time';
 export * from './events/peak-finder';
+export * from './events/refine-event';
 export * from './events/threshold';
 
 // Data structures
