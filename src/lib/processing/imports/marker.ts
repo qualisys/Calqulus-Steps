@@ -24,7 +24,7 @@ import { BaseImportStep } from './base-import';
 		Create a new marker signal using the x-component of an existing marker and fixed y- and z- coordinates.
 		''' yaml
 		- marker:
-          origin: [RFoot.x, 0, 0]
+		  origin: [RFoot.x, 0, 0]
 		'''
 	`,
 	inputs: [

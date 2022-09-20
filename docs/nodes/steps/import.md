@@ -112,6 +112,20 @@ Generic import of any input by name.
 Imports a marker series by name or creates a new signal 
 with a custom origin.
 
+## Examples
+
+Import existing marker as-is.
+``` yaml
+- marker: RFoot
+```
+
+Create a new marker signal using the x-component of an existing marker and fixed y- and z- coordinates.
+``` yaml
+- marker:
+  origin: [RFoot.x, 0, 0]
+```
+
+
 ---
 
 ### `segment`

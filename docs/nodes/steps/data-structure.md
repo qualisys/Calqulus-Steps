@@ -42,6 +42,22 @@ The `concatenate` step takes any number of inputs (at least 2)
 of the same (or equivalent) types and appends the values into one 
 output. This will be done on each component, if they exist.
 
+## Examples
+
+The following example calculates the average "step length" 
+by concatenating the (already calculated) `Right_Step_Length` 
+and `Left_Step_Length`, then running the `mean` step on 
+the output.
+
+```yaml
+- parameter: Step_Length_Mean_MEAN
+  steps:
+    - concatenate: [Right_Step_Length, Left_Step_Length]
+      output: step_length
+    - mean: step_length
+```
+
+
 ---
 
 ### `vector`
@@ -86,6 +102,19 @@ used to construct the vector sequence.
 If the inputs have different lengths, the output signal will 
 be the length of the longest input and shorter inputs will be 
 padded with `NaN` values.
+
+## Examples
+
+```yaml
+- parameter: MyVector
+  steps:
+    - vector: [Hips.x, 0, [1, 2, 3]]
+```
+
+_This example shows how to export a vector with the x component 
+coming from the Hips segment, the y component set as one zero, 
+and the z component set as a static numeric array._
+
 
 ---
 
