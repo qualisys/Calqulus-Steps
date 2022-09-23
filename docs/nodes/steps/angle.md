@@ -176,6 +176,18 @@ Computes the angle between the two lines formed by
 (`v0 -> v1`, `v2 -> v3`), in radians. The points can be 
 specified as arrays or with named vector signals (ie markers).
 
+## Examples
+
+``` yaml
+- angle: [EdgeMarker1, OriginMarker, EdgeMarker2]
+  project: xy
+```
+
+_Calculates the angle for the three markers, projected 
+on the XY coordinate plane by ignoring the z components 
+of the input signals._
+
+
 ---
 
 ### `angularVelocity`
@@ -246,6 +258,29 @@ different from the axes of the segment coordinate systems.
 
 **Please consider which implementation would be correct to use 
 in your instance**.
+
+## Examples
+
+A first example when using the segment coordinate system
+```
+- parameter: Pitching_Elbow_Ang_Vel
+  where: 
+    name: Pitching*
+  steps:
+    - angularVelocity: [RightArm, RightForeArm, RightArm, RightForeArm]
+```
+
+A second example when using the Euler/Cardan sequence
+```
+- parameter: Pitching_Shoulder_Ang_Vel
+  where: 
+    name: Pitching*
+  steps:
+    - angularVelocity: [RightShoulder, RightArm, Spine2, RightArm]
+      useRotationOrder: true
+      rotationOrder: zyz
+```
+
 
 ---
 
@@ -349,6 +384,29 @@ three or four inputs.
 
 
 Performs the same computation as `angularVelocity`.
+
+## Examples
+
+A first example when using the segment coordinate system
+```
+- parameter: Pitching_Elbow_Ang_Vel
+  where: 
+    name: Pitching*
+  steps:
+    - angularVelocity: [RightArm, RightForeArm, RightArm, RightForeArm]
+```
+
+A second example when using the Euler/Cardan sequence
+```
+- parameter: Pitching_Shoulder_Ang_Vel
+  where: 
+    name: Pitching*
+  steps:
+    - angularVelocity: [RightShoulder, RightArm, Spine2, RightArm]
+      useRotationOrder: true
+      rotationOrder: zyz
+```
+
 
 ---
 

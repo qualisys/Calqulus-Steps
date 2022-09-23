@@ -222,6 +222,35 @@ through a [low-pass filter](./filters).
 
 Based on the SciPy [find_peaks](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html) function.
 
+## Examples
+
+This example will find all peaks with a width of at least 
+3 samples, a distance of between 20 and 60 samples, 
+and a height of at least 0.2.
+
+```yaml
+- peakFinder: norm_ltb_acc
+  width: 3
+  distance: [20, 60]
+  height: 0.20
+```
+
+The next example will find sequences of a low, then another low, 
+followed by a high peak, and return only the first peak in those 
+sequences.
+
+```yaml
+- peakFinder: norm_ltb_acc
+  width: 3
+  distance: 20
+  height: 0.20
+  sequence:
+    ranges: L 50 H
+    pattern: LLH
+    keep: [0]
+```
+
+
 ---
 
 ### `threshold`
@@ -278,6 +307,19 @@ threshold in either an ascending or descending direction.
 By configuring the `direction` option, you can specify a 
 certain direction that will trigger the event; 
 `up` (ascending) or `down` (descending).
+
+## Examples
+
+This following example registers an event every time the x component of the Hips segment crosses the threshold 1000 in a descending direction.
+
+```yaml
+- parameter: test
+  steps:
+    - threshold: Hips.z
+      value: 1000
+      direction: down
+```
+
 
 ---
 

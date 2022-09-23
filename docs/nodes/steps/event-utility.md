@@ -165,6 +165,15 @@ to a time value (in seconds).
 
 The time is calculated using the frame rate from the signal.
 
+## Examples
+
+```yaml
+- parameter: RFS_times
+  steps:
+    - eventTime: RFS
+```
+
+
 ---
 
 ### `refineEvent`
@@ -244,6 +253,44 @@ event is the start event of the next cycle.
 
 The `cyclic` option is `true` by default and has to be explicitly set 
 to `false` to disable.
+
+## Examples
+
+This example picks the frames of event `A` only when it's followed 
+by an event frame from the events `B` and `C`, respectively.
+
+```yaml
+- event: RefinedEvent
+  steps:
+    - refineEvent: A
+      sequence: [A, B, C]
+```
+
+The next example does the same as above but also excludes sequences where 
+an error named `ERR` occurs within.
+
+```yaml
+- event: RefinedEvent
+  steps:
+    - refineEvent: A
+      sequence: [A, B, C]
+      exclude: [ERR]
+```
+
+This example has a more intricate event pattern and picks the frames of 
+event `A` only when it's followed by an event frame from the events 
+`B` and `C`, then another instance of `A` followed by an event 
+frame from the events `D` and `E`, respectively.
+
+This will return two frames from `A` for each complete sequence found.
+
+```yaml
+- event: RefinedEvent
+  steps:
+    - refineEvent: A
+      sequence: [A, B, C, A, D, E]
+```
+
 
 ---
 
