@@ -21,7 +21,7 @@ s3Cycles2.cycles = [{ start: 1, end: 4 }, { start: 5, end: 8 }];
 const segment1 = new Signal(new Segment('test 1', new VectorSequence(f32(1, 2), f32(1, 2), f32(1, 2)), new QuaternionSequence(f32(1, 2), f32(1, 2), f32(1, 2), f32(1, 2))));
 const vs1 = new Signal(new VectorSequence(f32(3, 4), f32(3, 4), f32(3, 4)));
 
-test('Aggregation - Input errors', async (t) => {
+test('Aggregation - Input errors', async(t) => {
 	const step1 = mockStep(CountStep);
 	await t.throwsAsync(step1.process());
 
@@ -36,7 +36,7 @@ test('Aggregation - Input errors', async (t) => {
 	await t.throwsAsync(step3.process());
 });
 
-test('Aggregation - CountStep', async (t) => {
+test('Aggregation - CountStep', async(t) => {
 	const step = mockStep(CountStep, [s1]);
 
 	t.is(step.name, 'CountStep');
@@ -47,7 +47,7 @@ test('Aggregation - CountStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(3));
 });
 
-test('Aggregation - MaxStep', async (t) => {
+test('Aggregation - MaxStep', async(t) => {
 	const step = mockStep(MaxStep, [s2]);
 
 	t.is(step.name, 'MaxStep');
@@ -58,7 +58,7 @@ test('Aggregation - MaxStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(6));
 });
 
-test('Aggregation - MeanStep', async (t) => {
+test('Aggregation - MeanStep', async(t) => {
 	const step = mockStep(MeanStep, [s2]);
 
 	t.is(step.name, 'MeanStep');
@@ -69,7 +69,7 @@ test('Aggregation - MeanStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(5));
 });
 
-test('Aggregation - MedianStep', async (t) => {
+test('Aggregation - MedianStep', async(t) => {
 	const step = mockStep(MedianStep, [s2]);
 
 	t.is(step.name, 'MedianStep');
@@ -80,7 +80,7 @@ test('Aggregation - MedianStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(5));
 });
 
-test('Aggregation - MinStep', async (t) => {
+test('Aggregation - MinStep', async(t) => {
 	const step = mockStep(MinStep, [s2]);
 
 	t.is(step.name, 'MinStep');
@@ -91,7 +91,7 @@ test('Aggregation - MinStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(4));
 });
 
-test('Aggregation - RangeStep', async (t) => {
+test('Aggregation - RangeStep', async(t) => {
 	const step = mockStep(RangeStep, [s2]);
 
 	t.is(step.name, 'RangeStep');
@@ -102,7 +102,7 @@ test('Aggregation - RangeStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(2));
 });
 
-test('Aggregation - StandardDeviationStep', async (t) => {
+test('Aggregation - StandardDeviationStep', async(t) => {
 	const step = mockStep(StandardDeviationStep, [s2]);
 
 	t.is(step.name, 'StandardDeviationStep');
@@ -113,7 +113,7 @@ test('Aggregation - StandardDeviationStep', async (t) => {
 	t.deepEqual(res.getValue(), f32(1));
 });
 
-test('Aggregation - SumStep', async (t) => {
+test('Aggregation - SumStep', async(t) => {
 	const step = mockStep(SumStep, [s2]);
 
 	t.is(step.name, 'SumStep');
@@ -126,7 +126,7 @@ test('Aggregation - SumStep', async (t) => {
 
 // Test alternative types
 
-test('Aggregation - CountStep (Segment)', async (t) => {
+test('Aggregation - CountStep (Segment)', async(t) => {
 	const step = mockStep(CountStep, [segment1]);
 	const res = await step.process();
 
@@ -137,7 +137,7 @@ test('Aggregation - CountStep (Segment)', async (t) => {
 	}
 });
 
-test('Aggregation - CountStep (VectorSequence)', async (t) => {
+test('Aggregation - CountStep (VectorSequence)', async(t) => {
 	const step = mockStep(CountStep, [vs1]);
 	const res = await step.process();
 
@@ -150,14 +150,14 @@ test('Aggregation - CountStep (VectorSequence)', async (t) => {
 
 // Test cycles
 
-test('Aggregation - MeanStep (with cycles)', async (t) => {
+test('Aggregation - MeanStep (with cycles)', async(t) => {
 	const step = mockStep(MeanStep, [s3Cycles]);
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(4, 8));
 });
 
-test('Aggregation - MeanStep (disabled cycles)', async (t) => {
+test('Aggregation - MeanStep (disabled cycles)', async(t) => {
 	const step = mockStep(MeanStep, [s3Cycles], { useCycles: false });
 	const res = await step.process();
 
@@ -166,7 +166,7 @@ test('Aggregation - MeanStep (disabled cycles)', async (t) => {
 
 // Test aggregation frames
 
-test('Aggregation - MaxStep (frames, no cycles)', async (t) => {
+test('Aggregation - MaxStep (frames, no cycles)', async(t) => {
 	const step = mockStep(MaxStep, [s3Cycles2], {
 		useCycles: false,
 		frames: true,
@@ -178,7 +178,7 @@ test('Aggregation - MaxStep (frames, no cycles)', async (t) => {
 	t.deepEqual(res.getValue(), f32(4));
 });
 
-test('Aggregation - MaxStep (frames, with cycles)', async (t) => {
+test('Aggregation - MaxStep (frames, with cycles)', async(t) => {
 	const step = mockStep(MaxStep, [s3Cycles2], {
 		useCycles: true,
 		frames: true,

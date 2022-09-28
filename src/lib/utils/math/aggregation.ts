@@ -50,7 +50,8 @@ export class Aggregation {
 	
 		if (values.length % 2) {
 			return values[half];
-		} else {
+		}
+		else {
 			return Aggregation.mean([values[half], values[half - 1]]);
 		}
 	}

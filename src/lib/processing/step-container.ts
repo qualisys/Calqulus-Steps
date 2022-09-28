@@ -23,6 +23,7 @@ export class StepContainer {
 	 * @param signal the result signal to post process.
 	 * @returns 
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	postProcessResult(signal: Signal) {
 		return;
 	}
@@ -32,6 +33,7 @@ export class StepContainer {
 	 * @param signal the signal to validate.
 	 * @returns 
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	validateResult(signal: Signal) {
 		return true;
 	}

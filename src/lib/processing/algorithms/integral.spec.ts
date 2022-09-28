@@ -18,7 +18,7 @@ const signalRes = f32(0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.00
 // Helper for asserting the 'signal' data example
 const veryNear = (valueA, valueB) => Math.abs(valueA - valueB) < 0.0001;
 
-test('IntegralStep - Input errors ', async (t) => {
+test('IntegralStep - Input errors ', async(t) => {
 	// No input
 	const step1 = mockStep(IntegralStep, []);
 	await t.throwsAsync(step1.process());
@@ -30,45 +30,45 @@ test('IntegralStep - Input errors ', async (t) => {
 	// Missing frameRate
 	const step3 = mockStep(IntegralStep, [s2]);
 	await t.throwsAsync(step3.process());
-})
+});
 
-test('IntegralStep - metric integral, without cycles ', async (t) => {
+test('IntegralStep - metric integral, without cycles ', async(t) => {
 	const step = mockStep(IntegralStep, [s1], { scalar: true, useCycles: false });
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(24));
-})
+});
 
-test('IntegralStep - metric integral, with cycles ', async (t) => {
+test('IntegralStep - metric integral, with cycles ', async(t) => {
 	const step = mockStep(IntegralStep, [sCycles], { scalar: true });
 	
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(4, 4));
-})
+});
 
-test('IntegralStep - metric integral, ignoring cycles ', async (t) => {
+test('IntegralStep - metric integral, ignoring cycles ', async(t) => {
 	const step = mockStep(IntegralStep, [sCycles], { scalar: true, useCycles: false });
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(16));
-})
+});
 
-test('IntegralStep - integral series, ignoring cycles', async (t) => {
+test('IntegralStep - integral series, ignoring cycles', async(t) => {
 	const step = mockStep(IntegralStep, [sCycles], { useCycles: false });
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(0, 2, 4, 6, 8, 10, 12, 14, 16));
-})
+});
 
-test('IntegralStep - integral series with cycles', async (t) => {
+test('IntegralStep - integral series with cycles', async(t) => {
 	const step = mockStep(IntegralStep, [sCycles]);
 	const res = await step.process();
 
 	t.deepEqual(res.array, [f32(0, 0, 2, 4, 0, 0, 2, 4, 0)]);
-})
+});
 
-test('IntegralStep - integral series, without cycles', async (t) => {
+test('IntegralStep - integral series, without cycles', async(t) => {
 	const step = mockStep(IntegralStep, [signal], { useCycles: false });
 	const res = await step.process();
 
-	t.assert(res.getFloat32ArrayValue().every((r, i) => veryNear(r, signalRes[i])))
-})
+	t.assert(res.getFloat32ArrayValue().every((r, i) => veryNear(r, signalRes[i])));
+});

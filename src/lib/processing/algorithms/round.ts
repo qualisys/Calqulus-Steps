@@ -1,5 +1,5 @@
 import { PropertyType } from '../../models/property';
-import { StepClass } from "../../step-registry";
+import { StepClass } from '../../step-registry';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';

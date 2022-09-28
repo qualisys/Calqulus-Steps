@@ -3,6 +3,7 @@
 - [eventDuration](#eventduration)
 - [eventMask](#eventmask)
 - [eventTime](#eventtime)
+- [refineEvent](#refineevent)
 
 These are steps that uses events as inputs to affect the output 
 in various ways.
@@ -163,6 +164,133 @@ This step takes an event input and converts each frame value
 to a time value (in seconds).
 
 The time is calculated using the frame rate from the signal.
+
+## Examples
+
+```yaml
+- parameter: RFS_times
+  steps:
+    - eventTime: RFS
+```
+
+
+---
+
+### `refineEvent`
+
+**Inputs**
+>
+> 1. `Event`
+>
+
+**Output:** `Event`
+
+**Options**
+>
+> #### `sequence`
+>
+> **Type:** `Event[]`  
+> **Required:** `True`  
+>
+> A sequence of events. This must include at least one instance of the main input event.
+>
+> #### `exclude`
+>
+> **Type:** `Event[]`  
+> **Required:** `False`  
+>
+> Event(s) that will invalidate an event sequence if found within it.
+>
+> #### `cyclic`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `True`  
+>
+> Whether or not to treat sequences as cyclic (`true` as default).
+>
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+This step allows you to easily pick out frames from an event only when 
+they appear in a specific sequence of other events.
+
+The main input of this step is the event you want to select frames from.
+
+The required option `sequence` defines a sequence of events to happen 
+in order. This option requires at least one instance of the main input 
+event (otherwise, no event would be able to be picked from the sequence).
+
+Multiple instances of the main input event can be supplied to the sequence
+to enable more complex patterns of events.
+
+The optional option `exclude` defines events that cannot occur in a 
+sequence. If it does, the sequence is invalidated, meaning no events will 
+be picked from this sequence.
+
+The `exclude` option cannot contain any signals defined in the 
+`sequence` option.
+
+The optional option `cyclic` defines whether or not the sequence should 
+be treated as cyclic, i.e., if the sequence starts and ends with the same 
+events, those events are included in the next "match-finding" iteration 
+of the sequence. This is useful for refining event cycles where the end 
+event is the start event of the next cycle.
+
+The `cyclic` option is `true` by default and has to be explicitly set 
+to `false` to disable.
+
+## Examples
+
+This example picks the frames of event `A` only when it's followed 
+by an event frame from the events `B` and `C`, respectively.
+
+```yaml
+- event: RefinedEvent
+  steps:
+    - refineEvent: A
+      sequence: [A, B, C]
+```
+
+The next example does the same as above but also excludes sequences where 
+an error named `ERR` occurs within.
+
+```yaml
+- event: RefinedEvent
+  steps:
+    - refineEvent: A
+      sequence: [A, B, C]
+      exclude: [ERR]
+```
+
+This example has a more intricate event pattern and picks the frames of 
+event `A` only when it's followed by an event frame from the events 
+`B` and `C`, then another instance of `A` followed by an event 
+frame from the events `D` and `E`, respectively.
+
+This will return two frames from `A` for each complete sequence found.
+
+```yaml
+- event: RefinedEvent
+  steps:
+    - refineEvent: A
+      sequence: [A, B, C, A, D, E]
+```
+
 
 ---
 

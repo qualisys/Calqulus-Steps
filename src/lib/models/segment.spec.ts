@@ -104,7 +104,7 @@ test('Segment - getTransformationAtFrame', (t) => {
 	const segmentComp: ISegment = {
 		position: new Vector(1, 2, 3),
 		rotation: new Quaternion(1, 2, 3, 4),
-	}
+	};
 
 	t.like(segment.getTransformationAtFrame(2, segmentComp), {
 		position: { x: 2, y: 2, z: 2, },
@@ -117,5 +117,5 @@ test('Segment - getTransformationAtFrame', (t) => {
 	});
 
 	segment.rotations = undefined;
-	t.is(segment.getTransformationAtFrame(2), undefined)
+	t.is(segment.getTransformationAtFrame(2), undefined);
 });

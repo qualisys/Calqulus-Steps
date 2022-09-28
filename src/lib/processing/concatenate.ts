@@ -28,10 +28,10 @@ import { BaseStep } from './base-step';
 
 		'''yaml
 		- parameter: Step_Length_Mean_MEAN
-          steps:
-            - concatenate: [Right_Step_Length, Left_Step_Length]
-              output: step_length
-            - mean: step_length
+		  steps:
+		    - concatenate: [Right_Step_Length, Left_Step_Length]
+		      output: step_length
+		    - mean: step_length
 		'''`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -45,7 +45,7 @@ export class ConcatenateStep extends BaseStep {
 
 		const arrays = this.inputs.map(i => i.array);
 
-		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError(`Expected all inputs to be of equivalent types.`);
+		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError('Expected all inputs to be of equivalent types.');
 
 		const baseArray = arrays.shift();
 		const concatArrays = baseArray.map((arr, index) =>

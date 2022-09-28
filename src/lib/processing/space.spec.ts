@@ -29,45 +29,45 @@ const hipsTowardsNegY = new Segment('Hips',
 );
 
 // Test input failures
-test('Space - input failures', async (t) => {
+test('Space - input failures', async(t) => {
 	t.throws(() => {
 		mockStep(Space, [], { 
 			origin: '[0, 1, 0]', 
 			secondaryAxis: '[0, 1, 0]' 
-		})
+		});
 	}, undefined, 'Origin defined but no primaryAxis - should produce error.');
 
 	t.throws(() => {
 		mockStep(Space, [], { 
 			origin: '[0, 1, 0]', 
 			primaryAxis: '[0, 1, 0]' 
-		})
+		});
 	}, undefined, 'Origin defined but no secondaryAxis - should produce error.');
 
 	t.throws(() => {
-		mockStep(Space, [], { primaryAxis: '[0, 1, 0]' })
+		mockStep(Space, [], { primaryAxis: '[0, 1, 0]' });
 	}, undefined, 'primaryAxis defined but no secondaryAxis - should produce error.');
 
 	t.throws(() => {
-		mockStep(Space, [], { secondaryAxis: '[0, 1, 0]' })
+		mockStep(Space, [], { secondaryAxis: '[0, 1, 0]' });
 	}, undefined, 'secondaryAxis defined but no primaryAxis - should produce error.');
 
 	t.throws(() => {
 		mockStep(Space, [], {
 			primaryAxis: [new Signal()],
 			secondaryAxis: [new Signal(f32(0, 1, 0))],
-		})
+		});
 	}, undefined, 'primaryAxis & secondaryAxis defined, primaryAxis has no value - should produce error.');
 
 	t.throws(() => {
 		mockStep(Space, [], {
 			primaryAxis: [new Signal(f32(0, 1, 0))],
 			secondaryAxis: [new Signal()],
-		})
+		});
 	}, undefined, 'primaryAxis & secondaryAxis defined, secondaryAxis has no value - should produce error.');
 });
 
-test('Get points in space defined by vectors', async (t) => {
+test('Get points in space defined by vectors', async(t) => {
 	const origin = new Signal(f32(0, 1, 0));
 	const primaryAxis = new Signal(f32(0, 1, 0));
 	const secondaryAxis = new Signal(f32(-1, 0, 0));
@@ -87,7 +87,7 @@ test('Get points in space defined by vectors', async (t) => {
 	t.is(m0Result.z[0], 0.5);
 });
 
-test('Get points in space defined by two vectors per axis', async (t) => {
+test('Get points in space defined by two vectors per axis', async(t) => {
 	const origin = new Signal(f32(0, 1, 0));
 	const primaryAxisFrom = new Signal(f32(1, 2, 2));
 	const primaryAxisTo = new Signal(f32(1, 3, 2));
@@ -118,7 +118,7 @@ test('Get points in space defined by two vectors per axis', async (t) => {
 	t.is(m0Result.z[0], 0.5);
 });
 
-test('Get points in space defined by a vector and a vector sequence', async (t) => {
+test('Get points in space defined by a vector and a vector sequence', async(t) => {
 	const origin = new Signal(f32(0, 1, 0));
 	const primaryAxis = new Signal();
 	const secondaryAxis = new Signal(f32(-1, 0, 0));
@@ -158,7 +158,7 @@ test('Get points in space defined by a vector and a vector sequence', async (t) 
 	t.not(m0Result.z[2], 0.5);
 });
 
-test('Custom space has transformation matrix', async (t) => {
+test('Custom space has transformation matrix', async(t) => {
 	const origin = new Signal(f32(0, 1, 0));
 	const primaryAxis = new Signal(f32(0, 1, 0));
 	const secondaryAxis = new Signal(f32(-1, 0, 0));
@@ -173,7 +173,7 @@ test('Custom space has transformation matrix', async (t) => {
 	t.assert(space.rotationMatrix);
 });
 
-test('Space aligned with segment has transformation matrix', async (t) => {
+test('Space aligned with segment has transformation matrix', async(t) => {
 	const signalNegX = new Signal(hipsTowardsY);
 	const optionsNegX = { 'alignWithSegment.segment': [signalNegX] };
 
@@ -181,13 +181,13 @@ test('Space aligned with segment has transformation matrix', async (t) => {
 	t.assert(space.rotationMatrix);
 });
 
-test('Get points in space defined by running direction', async (t) => {
+test('Get points in space defined by running direction', async(t) => {
 	const m0 = new VectorSequence(new Float32Array([1]), new Float32Array([0]), new Float32Array([0]));
 
 	// Check if numbers are almost equal, ie within a certain threshold.
 	const eqish = (a, b, threshold = 1 / 100000000000000) => {
 		return Math.abs(a - b) < threshold;
-	}
+	};
 
 	// Runner runs towards X.
 	const signalX = new Signal(hipsTowardsX);
@@ -238,7 +238,7 @@ test('Get points in space defined by running direction', async (t) => {
 });
 
 // Test all order combinations
-test('Space - order input', async (t) => {
+test('Space - order input', async(t) => {
 	// Save cross product to use in comparison values.
 	const a = 0.7071067690849304;
 

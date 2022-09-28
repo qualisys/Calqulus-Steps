@@ -1,4 +1,4 @@
-import { Signal, SignalType } from "../models/signal";
+import { Signal, SignalType } from '../models/signal';
 
 export const getReferenceSignal = (sourceSignals: Signal[], types: SignalType[], requireType = false): Signal => {
 	let referenceSignal = sourceSignals.find(i => types.includes(i.type));

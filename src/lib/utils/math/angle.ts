@@ -1,10 +1,10 @@
-import { QuaternionSequence } from "../../models/sequence/quaternion-sequence";
-import { VectorSequence } from "../../models/sequence/vector-sequence";
-import { Matrix } from "../../models/spatial/matrix";
-import { Quaternion } from "../../models/spatial/quaternion";
-import { Vector } from "../../models/spatial/vector";
+import { QuaternionSequence } from '../../models/sequence/quaternion-sequence';
+import { VectorSequence } from '../../models/sequence/vector-sequence';
+import { Matrix } from '../../models/spatial/matrix';
+import { Quaternion } from '../../models/spatial/quaternion';
+import { Vector } from '../../models/spatial/vector';
 
-import { Euler, RotationOrder } from "./euler";
+import { Euler, RotationOrder } from './euler';
 
 export class AngleUtil {
 	static tmpQuat1: Quaternion = new Quaternion(0, 0, 0, 1);
@@ -85,7 +85,7 @@ export class AngleUtil {
 
 		for (let i = 0; i < len; i++) {
 			const relativeRotation = AngleUtil.computeRelativeAngleFrame(q1, q2, i + 1);
-			const euler = AngleUtil.computeEulerAnglesFromQuaternion(relativeRotation, rotationOrder, solutionNumber)
+			const euler = AngleUtil.computeEulerAnglesFromQuaternion(relativeRotation, rotationOrder, solutionNumber);
 
 			result.x[i] = euler.x;
 			result.y[i] = euler.y;
@@ -156,5 +156,58 @@ export class AngleUtil {
 		}
 
 		return result;
+	}
+
+	static unwrapAngles(angles: TypedArray, alignIndex = 0, range = 2 * Math.PI, threshold = Math.PI) {
+		if (!angles || !angles.length) {
+			throw new Error('No angles provided to unwrap.');
+		}
+
+		// Clamp alignment index to be within the angle index bounds.
+		alignIndex = Math.min(angles.length - 1, Math.max(0, alignIndex));
+		alignIndex = Math.floor(alignIndex);
+
+		// Make clone of input array.
+		const wrappedAngles = angles.slice(0);
+
+		if (angles.length === 1) return wrappedAngles;
+
+		let pm1 = angles[0];
+		let offset = 0;
+
+		for (let i = 1; i < wrappedAngles.length; i++) {
+			let currentValue = angles[i] + offset;
+			let delta = currentValue - pm1;
+			pm1 = currentValue;
+
+			if (delta > threshold) {
+				while (delta > threshold) {
+					offset = offset - range;
+					delta = delta - range;
+				}
+			}
+
+			if (delta < -threshold) {
+				while (delta < -threshold) {
+					offset = offset + range;
+					delta = delta + range;
+				}
+			}
+
+			currentValue = angles[i] + offset;
+			pm1 = currentValue;
+			wrappedAngles[i] = currentValue;
+		}
+
+		if (alignIndex === 0) return wrappedAngles;
+
+		/**
+		 * Find the difference between the original angle and
+		 * the unwrapped angle at the alignment index. 
+		 * Apply the difference to the entire signal.
+		 */
+		const diff = wrappedAngles[alignIndex] - angles[alignIndex];
+		return wrappedAngles.map(v => v - diff);
+
 	}
 }

@@ -56,13 +56,13 @@ export class EventDurationStep extends BaseStep {
 		const to = this.inputs[1];
 
 		if (!from.isEventLike || !to.isEventLike) {
-			throw new ProcessingError(`Inputs are expected to be events.`);
+			throw new ProcessingError('Inputs are expected to be events.');
 		}
 
 		const frameRate = from.frameRate || to.frameRate;
 
 		if (!frameRate) {
-			throw new ProcessingError(`Could not extract frame rate data from the inputs.`);
+			throw new ProcessingError('Could not extract frame rate data from the inputs.');
 		}
 
 		const fromFrames = from.getEventArrayValue();

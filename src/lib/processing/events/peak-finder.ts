@@ -42,9 +42,9 @@ import { BaseStep } from '../base-step';
 
 		'''yaml
 		- peakFinder: norm_ltb_acc
-          width: 3
-          distance: [20, 60]
-          height: 0.20
+		  width: 3
+		  distance: [20, 60]
+		  height: 0.20
 		'''
 		
 		The next example will find sequences of a low, then another low, 
@@ -53,13 +53,13 @@ import { BaseStep } from '../base-step';
 		
 		'''yaml
 		- peakFinder: norm_ltb_acc
-          width: 3
-          distance: 20
-          height: 0.20
-          sequence:
-            ranges: L 50 H
-            pattern: LLH
-            keep: [0]
+		  width: 3
+		  distance: 20
+		  height: 0.20
+		  sequence:
+		    ranges: L 50 H
+		    pattern: LLH
+		    keep: [0]
 		'''
 	`,
 	inputs: [
@@ -240,10 +240,10 @@ export class PeakFinderStep extends BaseStep {
 
 	init() {
 		super.init();
-
-		this.height = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('height', [PropertyType.Number, PropertyType.Array])?.shift());
-		this.width = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('width', [PropertyType.Number, PropertyType.Array])?.shift());
-		this.prominence = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('prominence', [PropertyType.Number, PropertyType.Array])?.shift());
+	
+		this.height = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('height', [PropertyType.Number, PropertyType.Array]));
+		this.width = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('width', [PropertyType.Number, PropertyType.Array]));
+		this.prominence = this.parseRangeArgument(this.getPropertyValue<number[] | number[][]>('prominence', [PropertyType.Number, PropertyType.Array]));
 
 		this.distance = this.getPropertyValue('distance', PropertyType.Number);
 		this.relHeight = this.getPropertyValue('relHeight', PropertyType.Number);
@@ -255,11 +255,11 @@ export class PeakFinderStep extends BaseStep {
 	async process(): Promise<Signal> {
 
 		if (!this.inputs || !this.inputs.length) {
-			throw new ProcessingError(`No valid inputs.`);
+			throw new ProcessingError('No valid inputs.');
 		}
 
 		if (this.inputs[0].type !== SignalType.Float32Array) {
-			throw new ProcessingError(`The PeakFinder step expects a single array as input.`);
+			throw new ProcessingError('The PeakFinder step expects a single array as input.');
 		}
 
 		const result: Signal = this.inputs[0].clone(false);
@@ -283,7 +283,12 @@ export class PeakFinderStep extends BaseStep {
 		return result;
 	}
 
-	protected parseRangeArgument(span: number | number[]): number | IValueRange {
+	protected parseRangeArgument(span: number | number[] | number[][]): IValueRange {
+		// Handle double-wrapped arrays
+		if (TypeCheck.isArrayLike(span) && TypeCheck.isArrayLike(span[0])) {
+			span = span.shift();
+		}
+
 		if (span && TypeCheck.isArrayLike(span)) {
 			return {
 				min: span[0],
@@ -291,6 +296,9 @@ export class PeakFinderStep extends BaseStep {
 			};
 		}
 
-		return span as number;
+		return {
+			min: span as number,
+			max: undefined,
+		};
 	}
 }

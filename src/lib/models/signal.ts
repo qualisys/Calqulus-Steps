@@ -325,8 +325,6 @@ export class Signal implements IDataSequence {
 	 * @param value 
 	 */
 	setValue<T>(value: T, frameMap?: Uint32Array): Signal {
-		const previousLength = this.length;
-
 		if (value === undefined) {
 			this._type = undefined;
 		}

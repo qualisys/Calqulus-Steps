@@ -60,5 +60,24 @@ Parentheses can be used to influence the order of evaluation.
 
 Only numbers and single-element arrays can be part of the expression.
 
+## Examples
+
+``` yaml
+- parameter: myCondition
+  steps:
+    - segment: RightFoot => rfoot
+    - segment: LeftFoot => lfoot
+    - if: 10 > 5
+      then: rfoot
+      else: lfoot
+```
+
+``` yaml
+- if: (posY > 10 || posY < 5) && posX != 0
+  then: posY
+  else: posX
+```
+
+
 ---
 

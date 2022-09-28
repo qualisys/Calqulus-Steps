@@ -292,7 +292,7 @@ test('PeakFinder - Invalid relHHeight', (t) => {
 
 	t.throws(() => {
 		PeakFinder.findPeaks(Float32Array.from(hipsX), config);
-	}, { message: `'relHeight' must be greater or equal to 0.0`});
+	}, { message: '\'relHeight\' must be greater or equal to 0.0'});
 }); 
 
 
@@ -303,5 +303,5 @@ test('PeakFinder - Invalid distance', (t) => {
 
 	t.throws(() => {
 		PeakFinder.findPeaks(Float32Array.from(hipsX), config);
-	}, { message: `'distance' must be greater or equal to 1.`});
+	}, { message: '\'distance\' must be greater or equal to 1.'});
 }); 

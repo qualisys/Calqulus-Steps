@@ -17,40 +17,40 @@ const s2 = new Signal(vs);
  * is tested in lib/utils/math/peak-finder.spec.ts
  */
 
-test('PeakFinderStep - Wrong input signals', async (t) => {
+test('PeakFinderStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(PeakFinderStep).process()); // No inputs
 	await t.throwsAsync(mockStep(PeakFinderStep, [s2]).process()); // Wrong input type
 });
 
-test('PeakFinderStep - Options - height', async (t) => {
-	t.is(mockStep(PeakFinderStep, [], { height: 10 }).height, 10);
+test('PeakFinderStep - Options - height', async(t) => {
+	t.like(mockStep(PeakFinderStep, [], { height: 10 }).height, { min: 10, max: undefined });
 	t.like(mockStep(PeakFinderStep, [], { height: [10, 20] }).height, { min: 10, max: 20 });
 	t.like(mockStep(PeakFinderStep, [], { height: [10] }).height, { min: 10, max: undefined });
 });
 
-test('PeakFinderStep - Options - width', async (t) => {
-	t.is(mockStep(PeakFinderStep, [], { width: 10 }).width, 10);
+test('PeakFinderStep - Options - width', async(t) => {
+	t.like(mockStep(PeakFinderStep, [], { width: 10 }).width, { min: 10, max: undefined });
 	t.like(mockStep(PeakFinderStep, [], { width: [10, 20] }).width, { min: 10, max: 20 });
 });
 
-test('PeakFinderStep - Options - prominence', async (t) => {
-	t.is(mockStep(PeakFinderStep, [], { prominence: 10 }).prominence, 10);
+test('PeakFinderStep - Options - prominence', async(t) => {
+	t.like(mockStep(PeakFinderStep, [], { prominence: 10 }).prominence, { min: 10, max: undefined });
 	t.like(mockStep(PeakFinderStep, [], { prominence: [10, 20] }).prominence, { min: 10, max: 20 });
 });
 
-test('PeakFinderStep - Options - distance', async (t) => {
+test('PeakFinderStep - Options - distance', async(t) => {
 	t.is(mockStep(PeakFinderStep, [], { distance: 10 }).distance, 10);
 });
 
-test('PeakFinderStep - Options - relHeight', async (t) => {
+test('PeakFinderStep - Options - relHeight', async(t) => {
 	t.is(mockStep(PeakFinderStep, [], { relHeight: 10 }).relHeight, 10);
 });
 
-test('PeakFinderStep - Options - window', async (t) => {
+test('PeakFinderStep - Options - window', async(t) => {
 	t.is(mockStep(PeakFinderStep, [], { window: 10 }).window, 10);
 });
 
-test('PeakFinderStep - Options - sequence', async (t) => {
+test('PeakFinderStep - Options - sequence', async(t) => {
 	t.like(mockStep(PeakFinderStep, [], {
 		sequence: {
 			sequence: 'L 50 H',
@@ -64,7 +64,7 @@ test('PeakFinderStep - Options - sequence', async (t) => {
 	});
 });
 
-test('PeakFinderStep - simple test', async (t) => {
+test('PeakFinderStep - simple test', async(t) => {
 	const res = await mockStep(PeakFinderStep, [s1]).process();
 	t.deepEqual(res.getValue(), i32(9));
 });

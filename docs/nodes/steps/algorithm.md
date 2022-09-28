@@ -158,14 +158,14 @@ signal will be shorter by one item.
 >
 
 
-	Calculates the dot product between two vectors. 
+Calculates the dot product between two vectors. 
 
-	The output length will be equal to the length of the first vector sequence. 
+The output length will be equal to the length of the first vector sequence. 
 
-	The second vector sequence needs to be singular or equal to the first vector sequence in length.
+The second vector sequence needs to be singular or equal to the first vector sequence in length.
 
-	A lone vector in the second input will be used to calculate the dot product between itself 
-	and all vectors contained in the first vector sequence. 
+A lone vector in the second input will be used to calculate the dot product between itself 
+and all vectors contained in the first vector sequence. 
 
 ---
 
@@ -346,6 +346,17 @@ where every value is rounded to the specific precision.
 
 The precision is specified as the number of decimal places to 
 include in the result.
+
+## Examples
+
+The value `1234.567` will be rounded to the following values 
+given a certain precision:
+
+* Precision `0`: `1235` *(This is the default precision).*
+* Precision `1`: `1234.6`
+* Precision `2`: `1234.57`
+* Precision `3`: `1234.567`
+
 
 ---
 

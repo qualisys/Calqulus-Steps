@@ -33,18 +33,18 @@ import { BaseStep } from './base-step';
 	examples: markdownFmt`
 		''' yaml
 		- parameter: myCondition
-          steps:
-            - segment: RightFoot => rfoot
-            - segment: LeftFoot => lfoot
-            - if: 10 > 5
-              then: rfoot
-              else: lfoot
+		  steps:
+		    - segment: RightFoot => rfoot
+		    - segment: LeftFoot => lfoot
+		    - if: 10 > 5
+		      then: rfoot
+		      else: lfoot
 		'''
 		
 		''' yaml
 		- if: (posY > 10 || posY < 5) && posX != 0
-          then: posY
-          else: posX
+		  then: posY
+		  else: posX
 		'''
 	`,
 	inputs: [
@@ -79,11 +79,19 @@ export class IfStep extends BaseStep {
 		const operands = parseExpressionOperands(exp);
 		const expressionValues = {};
 
-		const thenInput = this.getPropertySignalValue('then')[0];
-		const elseInput = this.getPropertySignalValue('else')[0];
+		const thenInput = this.getPropertySignalValue('then');
+		const elseInput = this.getPropertySignalValue('else');
 
 		if (!thenInput || !elseInput) {
 			throw new ProcessingError('Missing \'then\' and/or \'else\' options.');
+		}
+
+		if (thenInput.length > 1) {
+			throw new ProcessingError(`Unexpected input length for 'then' option. Expected 1 input, got ${ thenInput.length }.`);
+		}
+
+		if (elseInput.length > 1) {
+			throw new ProcessingError(`Unexpected input length for 'else' option. Expected 1 input, got ${ elseInput.length }.`);
 		}
 
 		for (let i = 0; i < operands.length; i++) {
@@ -108,12 +116,13 @@ export class IfStep extends BaseStep {
 		try {
 			const tokens = tokenizeExpression(exp);
 			const ast = parseExpression(tokens);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const expression = printExpression(ast);
 			const result = evaluateExpression(ast, expressionValues);
 
 			this.processingLogs.push('Evaluated to: ' + result);
 
-			return result ? thenInput : elseInput;
+			return result ? thenInput[0] : elseInput[0];
 		}
 		catch (err) {
 			throw new ProcessingError('Evaluating expression failed: ' + err.message);

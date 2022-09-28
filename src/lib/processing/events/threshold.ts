@@ -25,10 +25,10 @@ import { BaseStep } from '../base-step';
 
 		'''yaml
 		- parameter: test
-          steps:
-            - threshold: Hips.z
-              value: 1000
-              direction: down
+		  steps:
+		    - threshold: Hips.z
+		      value: 1000
+		      direction: down
 		'''
 `,
 	inputs: [
@@ -74,7 +74,7 @@ export class ThresholdStep extends BaseStep {
 					this.direction = CrossDirection.Down;
 					break;
 				default:
-					throw new ProcessingError(`Unrecognized value for direction, expected "both", "up", or "down".`);
+					throw new ProcessingError('Unrecognized value for direction, expected "both", "up", or "down".');
 			}
 		}
 
@@ -86,11 +86,11 @@ export class ThresholdStep extends BaseStep {
 
 	async process(): Promise<Signal> {
 		if (!this.inputs || !this.inputs.length) {
-			throw new ProcessingError(`No valid inputs.`);
+			throw new ProcessingError('No valid inputs.');
 		}
 
 		if (this.inputs[0].type !== SignalType.Float32Array) {
-			throw new ProcessingError(`The Threshold step expects a single array as input.`);
+			throw new ProcessingError('The Threshold step expects a single array as input.');
 		}
 
 		const result: Signal = this.inputs[0].clone(false);

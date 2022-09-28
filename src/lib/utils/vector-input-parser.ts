@@ -67,7 +67,7 @@ export class VectorInputParser {
 				else {
 					throw new ProcessingError('Unknown input type for \'' + name + '\'. Expected one or more vectors.');
 				}
-			}))
+			}));
 		}
 	}
 }

@@ -66,7 +66,7 @@ StepRegistry.globalStepDocs = {
 			**_NOTE:_** _This is **not yet implemented** for segments._
 		`,
 	}]
-}
+};
 
 // Angle
 export * from './angle';
@@ -111,6 +111,7 @@ export * from './events/event-duration';
 export * from './events/event-mask';
 export * from './events/event-time';
 export * from './events/peak-finder';
+export * from './events/refine-event';
 export * from './events/threshold';
 
 // Data structures

@@ -31,7 +31,7 @@ export class Euler {
 	 */
 	static getEuler(out: Vector, mat: Matrix, rotationOrder: RotationOrder, solutionNumber?: number) {
 		const { i, j, k } = Euler.getNumericRotationOrder(rotationOrder);
-		const sign = Euler.isRotationOrderCyclic(i, j, k) ? 1 : -1;
+		const sign = Euler.isRotationOrderCyclic(i, j) ? 1 : -1;
 		const components = ['x', 'y', 'z'];
 
 		if (i === k) {
@@ -63,15 +63,15 @@ export class Euler {
 	 * @param rotationOrder The rotation order to use.
 	 */
 	static getNumericRotationOrder(rotationOrder: RotationOrder): { i: number, j: number, k: number } {
-		const orderMapping = { X: 0, Y: 1, Z: 2 }
-		return { i: orderMapping[rotationOrder[0]], j: orderMapping[rotationOrder[1]], k: orderMapping[rotationOrder[2]] }
+		const orderMapping = { X: 0, Y: 1, Z: 2 };
+		return { i: orderMapping[rotationOrder[0]], j: orderMapping[rotationOrder[1]], k: orderMapping[rotationOrder[2]] };
 	}
 
 	/**
 	 * Determine if a rotation order is cyclic.
 	 * @param rotationOrder The rotation order to use, in numerical representation.
 	 */
-	static isRotationOrderCyclic(i: number, j: number, k: number): boolean {
+	static isRotationOrderCyclic(i: number, j: number): boolean {
 		return (j - i + 3 % 3) === 1;
 	}
 }

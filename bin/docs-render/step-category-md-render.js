@@ -163,6 +163,10 @@ const renderStepCategoryPage = (category, steps, globalProps) => {
 			output += '\n\n' + step.description;
 		}
 
+		if (step.examples) {
+			output += `\n\n## Examples\n\n${ step.examples }\n`;
+		}
+
 		output += `\n\n---\n\n`;
 	}
 

@@ -1,19 +1,19 @@
-import { Quaternion } from "./quaternion";
+import { Quaternion } from './quaternion';
 import { Vector } from './vector';
 
 export class Matrix {
 	/** Matrix instance used for performance reasons. */
-	static tmpMat1: Matrix = Matrix.create();
+	static tmpMat1: Matrix = new Matrix();
 	/** Matrix instance used for performance reasons. */
-	static tmpMat2: Matrix = Matrix.create();
+	static tmpMat2: Matrix = new Matrix();
 	/** Matrix instance used for performance reasons. */
-	static tmpMat3: Matrix = Matrix.create();
+	static tmpMat3: Matrix = new Matrix();
 
-	_m: Float32Array;
+	_m: Float64Array;
 	fractionDigits: number;
 
 	/**
-	 * Creates a new identity Matrix
+	 * Creates an empty matrix (filled with zeros).
 	 *
 	 * Format: column-major, when typed out it looks like row-major
 	 * The matrices are being post multiplied.
@@ -22,36 +22,50 @@ export class Matrix {
 	 */
 
 	constructor() {
-		this._m = Float32Array.from([
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
+		this._m = Float64Array.from([
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0
 		]);
 	}
 
 	/**
-	 * Creates a new identity Matrix
-	 *
-	 * @returns a new 4x4 matrix
+	 * Copy all components from the specified matrix.
+	 * 
+	 * @param m The matrix to copy values from
 	 */
-	// TODO:
-	// XXX: Remove!!
-	static create(): Matrix {
-		return new Matrix();
+	copyFrom(matrix: Matrix) {
+		const m = this._m;
+
+		m[0] = matrix._m[0];
+		m[1] = matrix._m[1];
+		m[2] = matrix._m[2];
+		m[3] = matrix._m[3];
+		m[4] = matrix._m[4];
+		m[5] = matrix._m[5];
+		m[6] = matrix._m[6];
+		m[7] = matrix._m[7];
+		m[8] = matrix._m[8];
+		m[9] = matrix._m[9];
+		m[10] = matrix._m[10];
+		m[11] = matrix._m[11];
+		m[12] = matrix._m[12];
+		m[13] = matrix._m[13];
+		m[14] = matrix._m[14];
+		m[15] = matrix._m[15];
 	}
 
 	/**
 	 * Creates a matrix from a quaternion rotation, vector translation and
 	 * vector scale.
 	 *
-	 * @param out the receiving operation result
 	 * @param rotation Rotation quaternion
 	 * @param translation Translation vector
 	 * @param scale Scaling vector
 	 * @returns the resulting matrix
 	 */
-	static compose(out: Matrix, rotation: Quaternion, translation, scale: Vector) {
+	static compose(rotation: Quaternion, translation, scale?: Vector) {
 		const result = new Matrix();
 
 		Matrix.composeToRef(result, rotation, translation, scale);
@@ -69,7 +83,7 @@ export class Matrix {
 	 * @param scale Scaling vector
 	 * @returns the resulting matrix
 	 */
-	static composeToRef(out: Matrix, rotation: Quaternion, translation: Vector, scale: Vector) {
+	static composeToRef(out: Matrix, rotation: Quaternion, translation: Vector, scale?: Vector) {
 		const m = out._m;
 
 		const x = rotation.x,
@@ -89,9 +103,9 @@ export class Matrix {
 		const wx = w * x2;
 		const wy = w * y2;
 		const wz = w * z2;
-		const sx = scale.x;
-		const sy = scale.y;
-		const sz = scale.z;
+		const sx = scale ? scale.x : 1;
+		const sy = scale ? scale.y : 1;
+		const sz = scale ? scale.z : 1;
 	
 		m[0] = (1 - (yy + zz)) * sx;
 		m[1] = (xy + wz) * sx;
@@ -113,7 +127,6 @@ export class Matrix {
 		return out;
 	}
 	
-
 	/**
 	 * Decomposes a transformation matrix into its rotation, translation
 	 * and scale components. Returns only the rotation component
@@ -157,9 +170,9 @@ export class Matrix {
 		scale.y = Math.hypot(m21, m22, m23);
 		scale.z = Math.hypot(m31, m32, m33);
 	
-		const is1 = 1 / scale[0];
-		const is2 = 1 / scale[1];
-		const is3 = 1 / scale[2];
+		const is1 = 1 / scale.x;
+		const is2 = 1 / scale.y;
+		const is3 = 1 / scale.z;
 	
 		const sm11 = m11 * is1;
 		const sm12 = m12 * is2;
@@ -199,24 +212,13 @@ export class Matrix {
 			S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
 			rotation.w = (sm12 - sm21) / S;
 			rotation.x = (sm31 + sm13) / S;
-			rotation.x = (sm23 + sm32) / S;
+			rotation.y = (sm23 + sm32) / S;
 			rotation.z = 0.25 * S;
 		}
 	
 		return rotation;
 	}
-  
-	/**
-	 * Returns a matrix cell at the specified row and column.
-	 * @param row
-	 * @param column
-	 * 
-	 * @returns the value on the specified matrix cell
- 	 */
-	get(row: number, column: number): number {
-		return this._m[4 * column + row];
-	}
-	
+
 	/**
 	 * Create a 4x4 matrix from the elements of a 3x3 rotation matrix.
 	 * The remaining elements are assigned the corresponding elements in the
@@ -311,6 +313,16 @@ export class Matrix {
 	/**
 	 * Create a new Matrix with the given values
 	 *
+	 * @param values Array of 16 numbers to create matrix from
+	 * @returns A new matrix
+	 */
+	static fromArray(values: number[]): Matrix {
+		return Matrix.fromValues.apply(null, values);
+	}
+
+	/**
+	 * Create a new Matrix with the given values
+	 *
 	 * @param m00 Component in column 0, row 0 position (index 0)
 	 * @param m01 Component in column 0, row 1 position (index 1)
 	 * @param m02 Component in column 0, row 2 position (index 2)
@@ -354,6 +366,34 @@ export class Matrix {
 		m[13] = m31;
 		m[14] = m32;
 		m[15] = m33;
+
+		return matrix;
+	}
+
+  
+	/**
+	 * Returns a matrix cell at the specified row and column.
+	 * @param row
+	 * @param column
+	 * 
+	 * @returns the value on the specified matrix cell
+ 	 */
+	get(row: number, column: number): number {
+		return this._m[4 * column + row];
+	}
+
+	/**
+	 * Creates an identity matrix.
+	 */
+	static identity() {
+		const matrix = new Matrix();
+		
+		matrix._m = Float64Array.from([
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		]);
 
 		return matrix;
 	}

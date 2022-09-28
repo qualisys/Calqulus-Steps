@@ -158,7 +158,7 @@ export class BaseArithmeticStep extends BaseStep {
 					this.frameSequenceOrder = FrameSequenceOperandOrder.None;
 					break;
 				default:
-					throw new ProcessingError(`Unrecognized value for frameSequenceOrder option.`);
+					throw new ProcessingError('Unrecognized value for frameSequenceOrder option.');
 			}
 		}
 		else {
