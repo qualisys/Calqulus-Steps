@@ -125,7 +125,7 @@ test('Arithmetic - Sequence order: forward', async(t) => {
 	t.deepEqual(res.getValue(), f32(3, 9, 15));
 });
 
-test('Arithmetic - Sequence order: none, differing lengths', async (t) => {
+test('Arithmetic - Sequence order: none, differing lengths', async(t) => {
 	const step = mockStep(AdditionStep, [frameSignal1, frameSignal2], {
 		frameSequenceOrder: FrameSequenceOperandOrder.None
 	});
@@ -133,7 +133,7 @@ test('Arithmetic - Sequence order: none, differing lengths', async (t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('Arithmetic - Sequence order: none, same length', async (t) => {
+test('Arithmetic - Sequence order: none, same length', async(t) => {
 	const step = mockStep(AdditionStep, [frameSignal2, frameSignal3], {
 		frameSequenceOrder: FrameSequenceOperandOrder.None
 	});
