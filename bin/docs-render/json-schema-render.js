@@ -36,6 +36,10 @@ const renderStepProperty = (option, title) => {
 		let optionTypes = (Array.isArray(option.type)) ? option.type : [option.type];
 
 		for (const type of optionTypes) {
+			if (type.endsWith('[]')) {
+				types.push('array')
+			}
+
 			switch (type.toLowerCase()) {
 				case 'space': 
 				case 'string': // We already expect strings
