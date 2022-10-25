@@ -443,7 +443,7 @@ _Example of an output node which will output `MyParam` for measurements where th
 ```yaml
 - parameter: MyParam
   where:
-    name: !Static*
+    name: '!Static*'
   steps:
     - add: [2, 3]
 ```
