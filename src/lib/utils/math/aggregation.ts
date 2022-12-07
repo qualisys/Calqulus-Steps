@@ -128,6 +128,10 @@ export class Aggregation {
 		// Find first non-NaN number to use as a basis for comparison.
 		let currLeader = values.find(v => !isNaN(v) && v !== null);
 
+		if (currLeader !== values[0]) {
+			indices.length = 0;
+		}
+
 		for (let i = 1; i < values.length; i++) {
 			const currVal = values[i];
 
