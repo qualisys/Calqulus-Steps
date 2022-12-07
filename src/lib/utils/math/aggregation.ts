@@ -124,12 +124,16 @@ export class Aggregation {
 		if (!values || !values.length) return undefined;
 
 		const indices = [0];
-		let currLeader = values[0];
+
+		// Find first non-NaN number to use as a basis for comparison.
+		let currLeader = values.find(v => !isNaN(v) && v !== null);
 
 		for (let i = 1; i < values.length; i++) {
 			const currVal = values[i];
 
-			if ((direction >= 0 && values[i] > currLeader) || (direction < 0 && values[i] < currLeader)) {
+			if (isNaN(currVal) || currVal === null) continue;
+			
+			if ((direction >= 0 && currVal > currLeader) || (direction < 0 && currVal < currLeader)) {
 				currLeader = currVal;
 
 				indices.length = 0;
