@@ -16,6 +16,10 @@ test('Aggregation - Max indices', (t) => {
 	t.deepEqual(Aggregation.maxIndices([1, 2, 3, 4, 5, 1, 2, 5, 4]), [4, 7]);
 });
 
+test('Aggregation - Max indices (leading NaN values)', (t) => {
+	t.deepEqual(Aggregation.maxIndices([NaN, NaN, NaN, 1, 2, 3, 4, 5, NaN, 1, 2, 5, 4, NaN, NaN]), [7, 11]);
+});
+
 test('Aggregation - Max indices (input error)', (t) => {
 	t.deepEqual(Aggregation.maxIndices([]), undefined);
 	t.deepEqual(Aggregation.maxIndices(undefined), undefined);
@@ -52,6 +56,10 @@ test('Aggregation - Min indices', (t) => {
 test('Aggregation - Min indices (input error)', (t) => {
 	t.deepEqual(Aggregation.minIndices([]), undefined);
 	t.deepEqual(Aggregation.minIndices(undefined), undefined);
+});
+
+test('Aggregation - Min indices (leading NaN values)', (t) => {
+	t.deepEqual(Aggregation.minIndices([NaN, NaN, NaN, 1, 2, 3, 4, 5, NaN, 1, 2, 5, 4, NaN, NaN]), [3, 9]);
 });
 
 test('Aggregation - Range', (t) => {
