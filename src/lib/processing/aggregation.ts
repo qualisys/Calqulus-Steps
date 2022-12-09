@@ -173,6 +173,20 @@ export class MeanStep extends BaseAggregationStep {
 	name: 'median',
 	category: 'Aggregation',
 	description: markdownFmt`
+		Outputs the median value of the input.`,
+	inputs: [
+		{ type: ['Scalar', 'Series', 'Event'] },
+	],
+	output: ['Scalar'],
+})
+export class MedianStep extends BaseAggregationStep {
+	aggregation = Aggregation.median;
+}
+
+@StepClass({
+	name: 'min',
+	category: 'Aggregation',
+	description: markdownFmt`
 		Outputs the minimum value of the input.`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event'] },
@@ -187,20 +201,6 @@ export class MeanStep extends BaseAggregationStep {
 			minimum value of the input. If using cycles, it will return 
 			a frame per cycle.`,
 	}],
-	output: ['Scalar'],
-})
-export class MedianStep extends BaseAggregationStep {
-	aggregation = Aggregation.median;
-}
-
-@StepClass({
-	name: 'min',
-	category: 'Aggregation',
-	description: markdownFmt`
-		Outputs the median value of the input.`,
-	inputs: [
-		{ type: ['Scalar', 'Series', 'Event'] },
-	],
 	output: ['Scalar'],
 })
 export class MinStep extends BaseAggregationStep {

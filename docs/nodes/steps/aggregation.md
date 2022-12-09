@@ -183,6 +183,45 @@ Outputs the mean value of the input.
 
 **Output:** `Scalar`
 
+
+**Shared options**
+>
+> <details open><summary>Aggregation options</summary>
+> 
+> The following option is available on all Aggregation steps.
+>
+> * [useCycles](#usecycles)
+>
+>
+></details>
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Outputs the median value of the input.
+
+---
+
+### `min`
+
+**Inputs**
+>
+> 1. `Scalar | Series | Event`
+>
+
+**Output:** `Scalar`
+
 **Options**
 >
 > #### `frames`
@@ -222,45 +261,6 @@ Outputs the mean value of the input.
 
 
 Outputs the minimum value of the input.
-
----
-
-### `min`
-
-**Inputs**
->
-> 1. `Scalar | Series | Event`
->
-
-**Output:** `Scalar`
-
-
-**Shared options**
->
-> <details open><summary>Aggregation options</summary>
-> 
-> The following option is available on all Aggregation steps.
->
-> * [useCycles](#usecycles)
->
->
-></details>
->
-> <details><summary>Global options</summary>
-> 
-> The following options are available globally on all steps.
->
-> * [export](./index.md#export)
-> * [output](./index.md#output)
-> * [set](./index.md#set)
-> * [space](./index.md#space)
->
->
-></details>
->
-
-
-Outputs the median value of the input.
 
 ---
 
