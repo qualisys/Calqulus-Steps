@@ -58,13 +58,21 @@ export class Arithmetic {
 
 			switch (operation) {
 				case ArithmeticOp.Add:
-					return sideA + sideB;
+					res[0] = sideA + sideB; 
+					break;
 				case ArithmeticOp.Subtract:
-					return sideA - sideB;
+					res[0] = sideA - sideB;
+					break;
 				case ArithmeticOp.Multiply:
-					return sideA * sideB;
+					res[0] = sideA * sideB;
+					break;
 				case ArithmeticOp.Divide:
-					return sideA / sideB;
+					res[0] = sideA / sideB;
+					break;
+			}
+
+			if (!TypeCheck.isArrayLike(a)) {
+				return res[0];
 			}
 		}
 
@@ -73,7 +81,7 @@ export class Arithmetic {
 
 		// If the current res is an array of arrays, skip the type conversion.
 		if (res.length && !TypeCheck.isArrayLike(res[0])) {
-			if (aIsArr && !TypeCheck.isArrayLike(a[0])) {
+			if (TypeCheck.isArrayLike(a) && !TypeCheck.isArrayLike(a[0])) {
 				// "a" is an array, use it as the array prototype.
 				arrayProto = a as NumericArray;
 			}

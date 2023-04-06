@@ -183,6 +183,7 @@ export class BaseArithmeticStep extends BaseStep {
 			const referenceInput = getReferenceSignal(this.inputs, [SignalType.Segment, SignalType.VectorSequence]);
 			const out = referenceInput.clone(false);
 			const originalType = referenceInput.type;
+
 			switch (originalType) {
 				case SignalType.VectorSequence:
 					out.setValue(Marker.fromArray(referenceInput.name, res as TypedArray[]));
