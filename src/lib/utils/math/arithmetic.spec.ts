@@ -26,8 +26,10 @@ test('Arithmetic - Single value and array', (t) => {
 
 test('Arithmetic - Single value and array of length 1', (t) => {
 	// An array of length 1 should be treated the same way as a single number
+	// unless the first operand is an array.
 	t.deepEqual(Arithmetic.applyOp(2, f32(3), ArithmeticOp.Add), 5);
-	t.deepEqual(Arithmetic.applyOp(f32(3), 2, ArithmeticOp.Add), 5);
+	t.deepEqual(Arithmetic.applyOp(f32(3), 2, ArithmeticOp.Add), f32(5));
+	t.deepEqual(Arithmetic.applyOp(f32(3), f32(2), ArithmeticOp.Add), f32(5));
 });
 
 test('Arithmetic - Array and array of length 1', (t) => {
