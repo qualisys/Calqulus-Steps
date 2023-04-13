@@ -2,6 +2,7 @@ import { SignalType } from '../../models/signal';
 import { StepCategory, StepClass } from '../../step-registry';
 import { Kinematics } from '../../utils/math/kinematics';
 import { ProcessingError } from '../../utils/processing-error';
+import { SeriesSplitUtil } from '../../utils/series-split';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';
@@ -53,7 +54,13 @@ export class DerivativeStep extends BaseAlgorithmStep {
 			order = Number.isInteger(orderArg) ? orderArg : 1;
 		}
 
-		return Kinematics.finiteDifference(dataSet, 1 / this.frameRate, order);
+		const splitCollection = SeriesSplitUtil.splitOnNaN(dataSet);
+
+		for (const split of splitCollection.splits) {
+			split.values = Kinematics.finiteDifference(split.values, 1 / this.frameRate, order);
+		}
+
+		return SeriesSplitUtil.merge(splitCollection) as TypedArray;
 	}
 
 	init() {

@@ -31,6 +31,36 @@ test('DerivativeStep with Float32Array, order = 1', async(t) => {
 	t.deepEqual(Array.from(derivative), [NaN, 1, 1, 1, 1, 1.5, 2, 3, 4, 4, 6, NaN]);
 });
 
+test('DerivativeStep with initial and trailing NaNs, order = 1', async(t) => {
+	const inputSignal = new Signal(f32(NaN, NaN, NaN, 1, 2, 3, 4, 5, 6, 8, 10, 14, 18, 22, 30, NaN, NaN, NaN), 1);
+
+	const step = mockStep(DerivativeStep, [inputSignal]);
+	const result = await step.process();
+	const derivative = result.getFloat32ArrayValue();
+
+	t.deepEqual(Array.from(derivative), [NaN, NaN, NaN, NaN, 1, 1, 1, 1, 1.5, 2, 3, 4, 4, 6, NaN, NaN, NaN, NaN]);
+});
+
+test('DerivativeStep with gaps, order = 1', async(t) => {
+	const inputSignal = new Signal(f32(1, 2, NaN, NaN, NaN, 3, 4, 5, 6, 8, 10, 14, NaN, NaN, NaN, 18, 22, 30), 1);
+
+	const step = mockStep(DerivativeStep, [inputSignal]);
+	const result = await step.process();
+	const derivative = result.getFloat32ArrayValue();
+
+	t.deepEqual(Array.from(derivative), [NaN, NaN, NaN, NaN, NaN, NaN, 1, 1, 1.5, 2, 3, NaN, NaN, NaN, NaN, NaN, 6, NaN]);
+});
+
+test('DerivativeStep with initial and trailing NaNs and gaps, order = 1', async(t) => {
+	const inputSignal = new Signal(f32(NaN, NaN, NaN, 1, 2, NaN, NaN, NaN, 3, 4, 5, 6, 8, 10, 14, NaN, NaN, NaN, 18, 22, 30, NaN, NaN, NaN), 1);
+
+	const step = mockStep(DerivativeStep, [inputSignal]);
+	const result = await step.process();
+	const derivative = result.getFloat32ArrayValue();
+
+	t.deepEqual(Array.from(derivative), [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 1, 1, 1.5, 2, 3, NaN, NaN, NaN, NaN, NaN, 6, NaN, NaN, NaN, NaN]);
+});
+
 test('DerivativeStep with Float32Array, order = 2', async(t) => {
 	const inputSignal = new Signal(f32(1, 2, 3, 4, 5, 6, 8, 10, 14, 18, 22, 30), 1);
 	const inputSignal2 = new Signal(2);
