@@ -26,6 +26,10 @@ import { BaseAlgorithmStep } from './base-algorithm';
 		
 		**_Note:_** _Due to the temporal nature of this operation, 
 		the resulting first and last frames will be null._
+
+		**_Note:_** _This operation will split the series on gaps and 
+		derive each "slice" individually. The first and last frame on 
+		each "slice" will be null._
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -81,6 +85,10 @@ export class DerivativeStep extends BaseAlgorithmStep {
 
 		**_Note:_** _Due to the temporal nature of this operation, 
 		the resulting first and last frame will be null._
+
+		**_Note:_** _This operation will split the series on gaps and 
+		derive each "slice" individually. The first and last frame on 
+		each "slice" will be null._
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -105,6 +113,10 @@ export class VelocityStep extends DerivativeStep {
 
 		**_Note:_** _Due to the temporal nature of this operation, 
 		the resulting first and last frames will be null._
+
+		**_Note:_** _This operation will split the series on gaps and 
+		derive each "slice" individually. The first and last frame on 
+		each "slice" will be null._
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
