@@ -64,6 +64,21 @@ import { BaseStep } from '../base-step';
 		{ type: ['Event'] },
 	],
 	options: [{
+		name: 'keep',
+		type: ['Number', 'Number array'],
+		required: false,
+		default: 'null',
+		description: markdownFmt`
+			An index or an array of indices of events in each cycle to 
+			keep. This allows you to keep only a subset of event instances 
+			in each cycle.
+
+			Negative numbers can be used to count from the end of the cycle, 
+			e.g. -1 is the last event in the cycle.
+
+			**_Note:_** _This only applies to event inputs._
+		`,
+	}, {
 		name: 'replacement',
 		type: 'Number',
 		required: false,
@@ -91,6 +106,7 @@ import { BaseStep } from '../base-step';
 })
 export class EventMaskStep extends BaseStep {
 	replacementValue: number;
+	keep: number[];
 	truncate: boolean;
 
 	init() {
@@ -98,6 +114,18 @@ export class EventMaskStep extends BaseStep {
 
 		this.replacementValue = this.getPropertyValue<number>('replacement', PropertyType.Number, false);
 		if (this.replacementValue === null) this.replacementValue = NaN;
+
+		let keepValue = this.getPropertyValue<number[] | TypedArray[]>('keep', [PropertyType.Number, PropertyType.Array], false);
+
+		// Handle single number entry, convert to typed array for consistency.
+		if (keepValue && Array.isArray(keepValue) && keepValue.length === 1 && typeof keepValue[0] === 'number') {
+			keepValue = [ Int32Array.from(keepValue as number[]) ];
+		}
+
+		// Ensure that the keep values are integers.
+		if (keepValue?.length) {
+			this.keep = [...keepValue[0] as TypedArray].map(k => parseInt(k as unknown as string));
+		}
 
 		this.truncate = this.getPropertyValue<boolean>('truncate', PropertyType.Boolean, false);
 	}
@@ -137,7 +165,67 @@ export class EventMaskStep extends BaseStep {
 		 */
 		if (source.isEvent) {
 			const sourceFrames = (source.type === SignalType.Float32Array) ? source.getFloat32ArrayValue() : source.getUint32ArrayValue();
-			const filteredFrames = sourceFrames.filter(f => pairs.find(p => f >= p.start && f <= p.end));
+			let filteredFrames;
+
+			if (!this.keep) {
+				filteredFrames = sourceFrames.filter(f => pairs.find(p => f >= p.start && f <= p.end));
+			}
+			else {
+				/**
+				 * If the ''keep'' property is set, only the events at the
+				 * defined indices will be kept from each event cycle.
+				 * 
+				 * The events are grouped into cycles, and the indices
+				 * are mapped to each cycle (negative indicies are
+				 * mapped from the end).
+				 * 
+				 * The indices are sorted, and the values are extracted
+				 * from the cycles.
+				 * 
+				 * Indices that fall outside of the cycle event instance 
+				 * length are ignored.
+				 */
+				const cycles = [];
+				filteredFrames = [];
+
+				for (const f of sourceFrames) {
+					for (let i = 0; i < pairs.length; i++) {
+						if (f >= pairs[i].start && f <= pairs[i].end) {
+							let cycle = cycles.find(a => a.index === i);
+
+							if (!cycle) {
+								cycle = { index: i, frames: [] };
+								cycles.push(cycle);
+							}
+							
+							cycle.frames.push(f);
+
+							break;
+						}
+					}
+				}
+
+				for (const cycle of cycles) {
+					let indices = this.keep
+						// Map negative indices to positive indices from the end.
+						.map(a => (a < 0) ? cycle.frames.length + a : a)
+						// Sort the indices.
+						.sort((a, b) => a - b)
+					;
+					
+					indices = indices
+						// Remove duplicate indices.
+						.filter((a, i) => indices.indexOf(a) === i)
+						// Keep only valid indices.
+						.filter(a => a >= 0 && a < cycle.frames.length);
+					;
+
+					// Extract the frames that should be kept.
+					filteredFrames.push(...indices.map(a => cycle.frames[a]));
+				}
+
+				filteredFrames = SeriesUtil.createNumericArrayOfSameType(sourceFrames, filteredFrames);
+			}
 
 			const returnSignal = source.clone(filteredFrames);
 			returnSignal.resultType = ResultType.Scalar;

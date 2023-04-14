@@ -63,6 +63,62 @@ test('EventMaskStep - event array', async(t) => {
 	t.deepEqual(res.getValue(), f32(0, 1, 2, 5, 6, 7, 8));
 });
 
+test('EventMaskStep - event array - keep (array)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, 3] }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32(1, 6, 8));
+});
+
+test('EventMaskStep - event array - keep (array, unordered)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [3, 1] }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32(1, 6, 8));
+});
+
+test('EventMaskStep - event array - keep (array, negative)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, -1] }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32(1, 2, 6, 8));
+});
+
+test('EventMaskStep - event array - keep (array, negative, too large)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [10, -1] }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32(2, 8));
+});
+
+test('EventMaskStep - event array - keep (array, negative, too negative)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, -10] }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32(1, 6));
+});
+
+test('EventMaskStep - event array - keep (number)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: 1 }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32(1, 6));
+});
+
+test('EventMaskStep - event array - keep (number, too large)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: 10 }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32());
+});
+
+test('EventMaskStep - event array - keep (number, too negative)', async(t) => {
+	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: -10 }).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), f32());
+});
+
 test('EventMaskStep - VectorSequence', async(t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2]).process();
 	
