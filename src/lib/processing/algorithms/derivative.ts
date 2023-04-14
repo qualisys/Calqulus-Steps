@@ -2,6 +2,7 @@ import { SignalType } from '../../models/signal';
 import { StepCategory, StepClass } from '../../step-registry';
 import { Kinematics } from '../../utils/math/kinematics';
 import { ProcessingError } from '../../utils/processing-error';
+import { SeriesSplitUtil } from '../../utils/series-split';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';
@@ -25,6 +26,10 @@ import { BaseAlgorithmStep } from './base-algorithm';
 		
 		**_Note:_** _Due to the temporal nature of this operation, 
 		the resulting first and last frames will be null._
+
+		**_Note:_** _This operation will split the series on gaps and 
+		derive each "slice" individually. The first and last frame on 
+		each "slice" will be null._
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -53,7 +58,13 @@ export class DerivativeStep extends BaseAlgorithmStep {
 			order = Number.isInteger(orderArg) ? orderArg : 1;
 		}
 
-		return Kinematics.finiteDifference(dataSet, 1 / this.frameRate, order);
+		const splitCollection = SeriesSplitUtil.splitOnNaN(dataSet);
+
+		for (const split of splitCollection.splits) {
+			split.values = Kinematics.finiteDifference(split.values, 1 / this.frameRate, order);
+		}
+
+		return SeriesSplitUtil.merge(splitCollection) as TypedArray;
 	}
 
 	init() {
@@ -74,6 +85,10 @@ export class DerivativeStep extends BaseAlgorithmStep {
 
 		**_Note:_** _Due to the temporal nature of this operation, 
 		the resulting first and last frame will be null._
+
+		**_Note:_** _This operation will split the series on gaps and 
+		derive each "slice" individually. The first and last frame on 
+		each "slice" will be null._
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -98,6 +113,10 @@ export class VelocityStep extends DerivativeStep {
 
 		**_Note:_** _Due to the temporal nature of this operation, 
 		the resulting first and last frames will be null._
+
+		**_Note:_** _This operation will split the series on gaps and 
+		derive each "slice" individually. The first and last frame on 
+		each "slice" will be null._
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },

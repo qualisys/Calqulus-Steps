@@ -44,6 +44,10 @@ Derives the input signal to the second order.
 **_Note:_** _Due to the temporal nature of this operation, 
 the resulting first and last frames will be null._
 
+**_Note:_** _This operation will split the series on gaps and 
+derive each "slice" individually. The first and last frame on 
+each "slice" will be null._
+
 ---
 
 ### `derivative`
@@ -81,6 +85,10 @@ Only the first and second order is supported.
 **_Note:_** _Due to the temporal nature of this operation, 
 the resulting first and last frames will be null._
 
+**_Note:_** _This operation will split the series on gaps and 
+derive each "slice" individually. The first and last frame on 
+each "slice" will be null._
+
 ---
 
 ### `velocity`
@@ -113,6 +121,10 @@ Derives the input signal to the first order.
 
 **_Note:_** _Due to the temporal nature of this operation, 
 the resulting first and last frame will be null._
+
+**_Note:_** _This operation will split the series on gaps and 
+derive each "slice" individually. The first and last frame on 
+each "slice" will be null._
 
 ---
 
