@@ -64,6 +64,21 @@ the "from", or "to" input event.
 
 **Options**
 >
+> #### `keep`
+>
+> **Type:** `Number | Number array`  
+> **Required:** `False`  
+> **Default value:** `null`  
+>
+> An index or an array of indices of events in each cycle to 
+> keep. This allows you to keep only a subset of event instances 
+> in each cycle.
+>
+> Negative numbers can be used to count from the end of the cycle, 
+> e.g. -1 is the last event in the cycle.
+>
+> **_Note:_** _This only applies to event inputs._
+>
 > #### `replacement`
 >
 > **Type:** `Number`  
