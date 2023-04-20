@@ -15,7 +15,7 @@ defined in this repo.
 In simple terms:
 * You define a pipeline using YAML - See our [Calqulus Pipelines](https://github.com/qualisys/Calqulus-Pipelines).
 * You set everything up on [Report Center](https://report.qualisys.com).
-* You initiate the processing from QTM, using the *Core module*.
+* You initiate the processing from QTM, using the *Calqulus Module*.
 
 _**Note:** Calqulus is still under active development and not yet publicly released._
 
