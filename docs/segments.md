@@ -1,5 +1,5 @@
 # Segment names
-![skeleton names](images/skeleton.PNG)
+![skeleton names](images/skeleton.png)
 ## Upper body
 
 | Left         | Unilateral | Right         |
