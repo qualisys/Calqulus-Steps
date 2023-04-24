@@ -13,6 +13,7 @@ export interface IMeasurement {
 	markers: Marker[];
 	name: string;
 	path?: string;
+	primarySkeleton?: string;
 	segments: Segment[];
 	skeletons: Skeleton[];
 	startFrame: number;
