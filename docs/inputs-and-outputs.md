@@ -293,7 +293,7 @@ number, string, boolean or array.
   steps:
     - marker: myMarker.x
     - round: $prev
-	  precision: 3 # Hard coded option value.
+      precision: 3 # Hard coded option value.
 ```
 
 In other cases, what you pass to the option
@@ -304,13 +304,13 @@ named inputs just like the main input to a step.
 - parameter: MyCalculatedHeightParam
   steps:
     - step1: SomeInput
-	# ... 
+    # ... 
 
 - parameter: MyOtherParameter
   steps:
     - marker: myMarker.x
     - peakFinder: $prev
-	  height: MyCalculatedHeightParam # Using a named input.
+      height: MyCalculatedHeightParam # Using a named input.
 ```
 
 # Outputs
@@ -325,8 +325,8 @@ the one where it was declared within the same parent node.
 - parameter: test
   steps:
     - multiply: [Hips.x, 2]
-	  output: double_hips
-	- subtract: [double_hips, 4]
+      output: double_hips
+    - subtract: [double_hips, 4]
 ```
 
 _Example of a local output being used in another step in the same scope._
@@ -337,11 +337,11 @@ The `export` exposes the results on a **global scope**. Any step in the entire d
 - parameter: test
   steps:
     - multiply: [Hips.x, 2]
-	  export: double_hips
+      export: double_hips
 
 - parameter: test2
   steps:
-	- subtract: [double_hips, 4]
+    - subtract: [double_hips, 4]
 ```
 
 _Example of a globally scoped output being used in another step in a separate scope._
