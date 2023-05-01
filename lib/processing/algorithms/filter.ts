@@ -22,6 +22,11 @@ export enum FilterType {
 		Butterworth IIR filter function over them and outputs a resulting 
 		signal of the same type as the input.
 
+		The filter is applied first in a forward direction and then in a
+		backward direction, resulting in zero phase distortion. For multiple
+		iterations, the filter is applied repeatedly but always in a sequence
+		of forward and backward directions.
+
 		NaN values are replaced with zeroes for the calculation. Leading 
 		and trailing NaN values are removed before extrapolation, i.e., 
 		extrapolation begins from the first and last real value. 
@@ -147,7 +152,7 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 	name: 'lowpass',
 	category: 'Filter',
 	description: markdownFmt`
-		Runs a Butterworth low-pass filter over the input data.
+		Runs a Butterworth IIR low-pass filter over the input data.
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -159,13 +164,19 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		required: false,
 		default: '0',
 		description: markdownFmt`
-			Defines how much to add on either side of the series, 
-			useful if the filter handles the edges of the series strangely.
+			Extrapolation buffer. Defines how many frames to add on either side 
+			of the series, useful if the filter handles the edges of the series 
+			strangely.
 
 			Leading and trailing NaN values are removed before extrapolation, 
 			i.e., extrapolation begins from the first and last real value. 
 			NaN values are then re-inserted in the original places for 
 			the output.
+
+			Extrapolation is made by looking at the first and second values, 
+			and the last and second-to-last values, respectively. The buffer 
+			is then filled with values linearly extrapolated from these two 
+			points.
 		`,
 	}, {
 		name: 'iterations',
@@ -174,7 +185,10 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		required: false,
 		default: '1',
 		description: markdownFmt`
-			Defines how many times to apply the filter.
+			Defines how many times to apply the filter in sequence. If the
+			iterations is set to anything other than 1, the filter will be
+			applied multiple times, using the output of the previous iteration
+			as the input for the next.
 		`,
 	}, {
 		name: 'cutoff',
@@ -183,7 +197,8 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		required: false,
 		default: '20',
 		description: markdownFmt`
-			Defines around what frequency to limit the filter.
+			Defines around what frequency to limit the filter. The filter will
+			attenuate frequencies above this value.
 		`,
 	}, {
 		name: 'order',
@@ -192,7 +207,8 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		required: false,
 		default: '2',
 		description: markdownFmt`
-			Defines the filter order.
+			Defines the filter order. The higher the order, the steeper the
+			attenuation slope will be.
 		`,
 	}],
 	output: ['Scalar', 'Series', 'Event', 'Number'],
@@ -211,7 +227,7 @@ export class LowPassFilterStep extends BaseFilterStep {
 	name: 'highpass',
 	category: 'Filter',
 	description: markdownFmt`
-		Runs a Butterworth high-pass filter over the input data.
+		Runs a Butterworth IIR high-pass filter over the input data.
 	`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
@@ -223,13 +239,19 @@ export class LowPassFilterStep extends BaseFilterStep {
 		required: false,
 		default: '0',
 		description: markdownFmt`
-			Defines how much to add on either side of the series, 
-			useful if the filter handles the edges of the series strangely.
+			Extrapolation buffer. Defines how many frames to add on either side 
+			of the series, useful if the filter handles the edges of the series 
+			strangely.
 
 			Leading and trailing NaN values are removed before extrapolation, 
 			i.e., extrapolation begins from the first and last real value. 
 			NaN values are then re-inserted in the original places for 
 			the output.
+
+			Extrapolation is made by looking at the first and second values, 
+			and the last and second-to-last values, respectively. The buffer 
+			is then filled with values linearly extrapolated from these two 
+			points.
 		`,
 	}, {
 		name: 'iterations',
@@ -238,7 +260,10 @@ export class LowPassFilterStep extends BaseFilterStep {
 		required: false,
 		default: '1',
 		description: markdownFmt`
-			Defines how many times to apply the filter.
+			Defines how many times to apply the filter in sequence. If the
+			iterations is set to anything other than 1, the filter will be
+			applied multiple times, using the output of the previous iteration
+			as the input for the next.
 		`,
 	}, {
 		name: 'cutoff',
@@ -247,7 +272,8 @@ export class LowPassFilterStep extends BaseFilterStep {
 		required: false,
 		default: '20',
 		description: markdownFmt`
-			Defines around what frequency to limit the filter.
+			Defines around what frequency to limit the filter. The filter will
+			attenuate frequencies below this value.
 		`,
 	}, {
 		name: 'order',
@@ -256,7 +282,8 @@ export class LowPassFilterStep extends BaseFilterStep {
 		required: false,
 		default: '2',
 		description: markdownFmt`
-			Defines the filter order.
+			Defines the filter order. The higher the order, the steeper the
+			attenuation slope will be.
 		`,
 	}],
 	output: ['Scalar', 'Series', 'Event', 'Number'],
