@@ -32,5 +32,5 @@ Filter for measurements where this node should be calculated. Read more in the [
 - segment: MySegment
   steps:
     - segment: LeftLeg
-	- add: [[1, 0, 0], $prev]
+    - add: [[1, 0, 0], $prev]
 ```

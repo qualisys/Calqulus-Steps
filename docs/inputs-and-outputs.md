@@ -1,20 +1,28 @@
 # Inputs and outputs
 
 - [Inputs](#inputs)
-  - [Named inputs](#named-inputs)
-    - [Components](#components)
-    - [Frames](#frames)
-    - [Variable inputs](#variable-inputs)
-    - [From a specific measurement](#from-a-specific-measurement)
-  - [Value inputs](#value-inputs)
-  - [Addressing results from previous steps](#addressing-results-from-previous-steps)
+  * [Numeric inputs](#numeric-inputs)
+  * [Named inputs](#named-inputs)
+    + [Components](#components)
+  * [Mixed inputs](#mixed-inputs)
+  * [Variable inputs](#variable-inputs)
+    + [Static variables](#static-variables)
+    + [Measurement & session field values](#measurement--session-field-values)
+    + [Value casting](#value-casting)
+  * [Select value at specific event](#select-value-at-specific-event)
+  * [Select signal from a specific measurement](#select-signal-from-a-specific-measurement)
+  * [Value inputs](#value-inputs)
+  * [Addressing results from previous steps](#addressing-results-from-previous-steps)
+  * [Omitting inputs](#omitting-inputs)
 - [Options](#options)
 - [Outputs](#outputs)
-  - [Output shorthand, the arrow](#output-shorthand-the-arrow)
-  - [Output immutability](#output-immutability)
+  * [Output shorthand, the arrow](#output-shorthand-the-arrow)
+  * [Output immutability](#output-immutability)
+  * [Output naming for reports](#output-naming-for-reports)
 - [Measurement filtering](#measurement-filtering)
-  - [Filter options](#filter-options)
-  - [Output nodes for specific measurements](#output-nodes-for-specific-measurements)
+  * [Filter options](#filter-options)
+  * [Output nodes for specific measurements](#output-nodes-for-specific-measurements)
+
 
 # Inputs
 
@@ -293,7 +301,7 @@ number, string, boolean or array.
   steps:
     - marker: myMarker.x
     - round: $prev
-	  precision: 3 # Hard coded option value.
+      precision: 3 # Hard coded option value.
 ```
 
 In other cases, what you pass to the option
@@ -304,13 +312,13 @@ named inputs just like the main input to a step.
 - parameter: MyCalculatedHeightParam
   steps:
     - step1: SomeInput
-	# ... 
+    # ... 
 
 - parameter: MyOtherParameter
   steps:
     - marker: myMarker.x
     - peakFinder: $prev
-	  height: MyCalculatedHeightParam # Using a named input.
+      height: MyCalculatedHeightParam # Using a named input.
 ```
 
 # Outputs
@@ -325,8 +333,8 @@ the one where it was declared within the same parent node.
 - parameter: test
   steps:
     - multiply: [Hips.x, 2]
-	  output: double_hips
-	- subtract: [double_hips, 4]
+      output: double_hips
+    - subtract: [double_hips, 4]
 ```
 
 _Example of a local output being used in another step in the same scope._
@@ -337,11 +345,11 @@ The `export` exposes the results on a **global scope**. Any step in the entire d
 - parameter: test
   steps:
     - multiply: [Hips.x, 2]
-	  export: double_hips
+      export: double_hips
 
 - parameter: test2
   steps:
-	- subtract: [double_hips, 4]
+    - subtract: [double_hips, 4]
 ```
 
 _Example of a globally scoped output being used in another step in a separate scope._
@@ -378,6 +386,31 @@ Once an output has been generated, it will not be overwritten by subsequent step
 If all exports for an output node exists in the global scope, that output node will be skipped from processing. Similarly, if all outputs for a step node exists in the local or global scope, that step will be skipped.
 
 This feature is an integral part of the architecture of Calqulus and enables high performance for calculations which share dependencies on signals.
+
+## Output naming for reports
+
+When the signals are exported to be used in the Qualisys web reporting platform, the format only allows one named output per data series. This means that multi-component signals will have each component exported separately with its component name added as a suffix to the original name.
+
+For example, given a signal named `MySignal`, the output will be the following for various data types:
+
+* Scalars, events, 1-dimensional series: `MySignal`
+* Marker / vector arrays:
+  * `MySignal_X`
+  * `MySignal_Y`
+  * `MySignal_Z`
+* Segments:
+  * `MySignal_X`
+  * `MySignal_Y`
+  * `MySignal_Z`
+  * `MySignal_RX`
+  * `MySignal_RY`
+  * `MySignal_RZ`
+  * `MySignal_RW`
+* Planes:
+  * `MySignal_A`
+  * `MySignal_B`
+  * `MySignal_C`
+  * `MySignal_D`
 
 # Measurement filtering
 
