@@ -1,4 +1,4 @@
-# Calqulus (beta)
+# Calqulus
 This repository contains the code powering Calqulus pipelines – a powerful way
 to analyze and process motion capture data for use in reports without writing
 complex scripts.
@@ -17,13 +17,16 @@ In simple terms:
 * You set everything up on [Report Center](https://report.qualisys.com).
 * You initiate the processing from QTM, using the *Calqulus Module*.
 
-_**Note:** Calqulus is still under active development and not yet publicly released._
-
 If you're interested in trying out Calqulus to process your own data, please reach out to [sales@qualisys.com](mailto:sales@qualisys.com?subject=[GitHub]%20I%20want%20to%20try%20Calqulus)
 
 ## Documentation
 Read the [YAML documentation](./docs/index.md) to learn how the pipelines are
 constructed and how to use the different steps.
+
+## Issues
+If you spot any bugs, issues or if you experience any difficulties while using Calqulus, we'd appreciate it if you could let us know by creating an [issue](https://github.com/qualisys/Calqulus-Steps/issues). 
+
+Your feedback is valuable to us and will help us improve Calqulus, so please don't hesitate to create an issue if you come across anything that needs our attention.
 
 ## Development
 All steps are unit tested with a coverage of 99+%. We also automatically
