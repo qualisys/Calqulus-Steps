@@ -82,6 +82,16 @@ export class IfStep extends BaseStep {
 		const thenInput = this.getPropertySignalValue('then');
 		const elseInput = this.getPropertySignalValue('else');
 
+		if (operands.length === 0) {
+			// If there are no operands, we assume that we are checking for the
+			// existence of values. If no values exist, we should get undefined
+			// which will be evaluated to false.
+			const value = this.getValueForInput(0);
+
+			this.processingLogs.push('Evaluated to: ' + value);
+			return value !== undefined ? thenInput[0] : elseInput[0];
+		}
+
 		if (!thenInput || !elseInput) {
 			throw new ProcessingError('Missing \'then\' and/or \'else\' options.');
 		}
@@ -96,20 +106,7 @@ export class IfStep extends BaseStep {
 
 		for (let i = 0; i < operands.length; i++) {
 			if (!NumberUtil.isNumeric(operands[i])) {
-				const value = this.inputs[i];
-
-				if (value.type === SignalType.Float32) {
-					expressionValues[operands[i]] = value.getNumberValue();
-				}
-				else if (value.type === SignalType.Uint32Array && value.length === 1) {
-					expressionValues[operands[i]] = value.getUint32ArrayValue()[0];
-				}
-				else if (value.type === SignalType.Float32Array && value.length === 1) {
-					expressionValues[operands[i]] = value.getFloat32ArrayValue()[0];
-				}
-				else {
-					throw new ProcessingError('Unsupported type: ' + value.typeToString + '.');
-				}
+				expressionValues[operands[i]] = this.getValueForInput(i);
 			}
 		}
 
@@ -127,5 +124,28 @@ export class IfStep extends BaseStep {
 		catch (err) {
 			throw new ProcessingError('Evaluating expression failed: ' + err.message);
 		}
+	}
+
+	getValueForInput(inputIndex: number): number {
+		const value = this.inputs[inputIndex];
+		let result: number;
+
+		if (value.type === SignalType.Float32) {
+			result = value.getNumberValue();
+		}
+		else if (value.type === SignalType.Uint32Array && value.length === 1) {
+			result = value.getUint32ArrayValue()[0];
+		}
+		else if (value.type === SignalType.Float32Array && value.length === 1) {
+			result = value.getFloat32ArrayValue()[0];
+		}
+		else if (value.length === 0) {
+			result = undefined;
+		}
+		else {
+			throw new ProcessingError('Unsupported type: ' + value.typeToString + '.');
+		}
+
+		return result;
 	}
 }
