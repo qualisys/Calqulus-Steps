@@ -89,7 +89,7 @@ export class IfStep extends BaseStep {
 			const value = this.getValueForInput(0);
 
 			this.processingLogs.push('Evaluated to: ' + value);
-			return value !== undefined ? thenInput[0] : elseInput[0];
+			return isNaN(value) ? elseInput[0] : thenInput[0];
 		}
 
 		if (!thenInput || !elseInput) {
