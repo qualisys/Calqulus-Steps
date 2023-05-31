@@ -58,7 +58,9 @@ The following operators are supported:
 
 Parentheses can be used to influence the order of evaluation.
 
-Only numbers and single-element arrays can be part of the expression.
+Only numbers and single-element arrays can be part of operands in the
+expression. In addition, a single input can be used to check for existence 
+of values.
 
 ## Examples
 
@@ -76,6 +78,16 @@ Only numbers and single-element arrays can be part of the expression.
 - if: (posY > 10 || posY < 5) && posX != 0
   then: posY
   else: posX
+```
+
+The following example shows how you can check for the existence of values in a
+signal. If `mySignal` has values, the resulting signal would be `mySignal`, otherwise
+the result is `myDefault`.
+
+``` yaml
+- if: mySignal
+  then: mySignal
+  else: myDefault
 ```
 
 

@@ -14,9 +14,12 @@ const s0 = new Signal(0);
 const s1 = new Signal(1);
 const s2 = new Signal(2);
 const s10 = new Signal(10);
+const sNaN = new Signal(NaN);
 const sArray = new Signal(f32(3, 4, 5));
 const sArray2 = new Signal(f32(3));
 const sArray3 = new Signal(i32(1));
+const sArray4 = new Signal(i32());
+const sString = new Signal('test');
 
 test('IfStep (mock) - Missing "then"', async(t) => {
 	const step = mockStep(IfStep, [s1, s2], {
@@ -70,11 +73,20 @@ test('IfStep (mock) - Bad parentheses', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Unsupported type', async(t) => {
+test('IfStep (mock) - Unsupported type - array with length > 1', async(t) => {
 	const step = mockStep(IfStep, [sArray, s1], {
 		then: [s10],
 		else: [s0],
 	}, 'MyArray > 1');
+
+	await t.throwsAsync(step.process());
+});
+
+test('IfStep (mock) - Unsupported type - string', async(t) => {
+	const step = mockStep(IfStep, [sString, s1], {
+		then: [s10],
+		else: [s0],
+	}, 'MyString > 1');
 
 	await t.throwsAsync(step.process());
 });
@@ -154,4 +166,44 @@ test('IfStep (mock) - Mixed input, simple - then', async(t) => {
 
 	const res = await step.process();
 	t.is(res.getValue(), 10);
+});
+
+test('IfStep (mock) - One input, check existing values - else', async(t) => {
+	const step = mockStep(IfStep, [sArray4], {
+		then: [s2],
+		else: [s10],
+	}, 'MyValue');
+
+	const res = await step.process();
+	t.is(res.getValue(), 10);
+});
+
+test('IfStep (mock) - One input, check existing values - then', async(t) => {
+	const step = mockStep(IfStep, [sArray3], {
+		then: [s2],
+		else: [s10],
+	}, 'MyValue');
+
+	const res = await step.process();
+	t.is(res.getValue(), 2);
+});
+
+test('IfStep (mock) - One input, check for NaN - else', async(t) => {
+	const step = mockStep(IfStep, [sNaN], {
+		then: [s2],
+		else: [s10],
+	}, 'MyValue');
+
+	const res = await step.process();
+	t.is(res.getValue(), 10);
+});
+
+test('IfStep (mock) - One input, check for NaN - then', async(t) => {
+	const step = mockStep(IfStep, [s0], {
+		then: [s2],
+		else: [s10],
+	}, 'MyValue');
+
+	const res = await step.process();
+	t.is(res.getValue(), 2);
 });
