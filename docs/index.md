@@ -15,6 +15,7 @@ Pipeline base nodes:
 - [Marker](./nodes/marker.md)
 - [Segment](./nodes/segment.md)
 - [Space](./nodes/space.md)
+- [Template](./nodes/template.md)
 
 Step nodes:
 
