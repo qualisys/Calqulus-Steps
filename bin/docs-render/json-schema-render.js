@@ -211,6 +211,7 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 				{ "$ref": "#/$defs/Event Node" },
 				{ "$ref": "#/$defs/Marker Node" },
 				{ "$ref": "#/$defs/Segment Node" },
+				{ "$ref": "#/$defs/Template Node" },
 			],
 		},
 
@@ -246,9 +247,14 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 				description: "A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.",
 				type: "string",
 			},
+			template: {
+				title: "Template node",
+				description: "A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.",
+				type: "string",
+			},
 			steps: {
 				title: "Node steps",
-				description: "A step node takes an input and some options and outputs a value.					",
+				description: "A step node takes an input and some options and outputs a value.",
 				type: "array",
 				additionalItems: false,
 
@@ -421,6 +427,17 @@ The rotation is based on the average orientation of the segment during a measure
 					set: { "$ref": "#/$defs/set" },
 				},
 				required: ['segment', 'steps'],
+				additionalProperties: false,
+			},
+			"Template Node": {
+				title: "Template node",
+				description: `A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.`,
+				type: "object",
+				properties: {
+					template: { "$ref": "#/$defs/template" },
+					where: { "$ref": "#/$defs/where" },
+				},
+				required: ['template'],
 				additionalProperties: false,
 			},
 
