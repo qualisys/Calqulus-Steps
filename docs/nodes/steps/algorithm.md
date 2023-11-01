@@ -7,7 +7,11 @@
 - [gapFill](#gapfill)
 - [integral](#integral)
 - [negate](#negate)
+- [power / pow](#power)
+- [qbrt](#qbrt)
+- [root](#root)
 - [round](#round)
+- [sqrt](#sqrt)
 
 These are steps that takes a single input (scalar / series / events /
 numbers) and runs a defined algorithmic function over them and outputs 
@@ -306,6 +310,126 @@ Outputs the negated value for each value in the input signal.
 
 ---
 
+### `power`
+
+**Alias:** pow
+
+**Inputs**
+>
+> 1. `Scalar | Series | Event | Number`
+>
+
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
+>
+> #### `exponent`
+>
+> **Type:** `Number`  
+> **Required:** `False`  
+> **Default value:** `2`  
+>
+> Defines the exponent to raise the input to. If the exponent is
+> omitted, the default value of 2 will be used.
+>
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Computes the power of the input signal by raising it to the specified
+exponent. By default, the exponent is 2, which means that the input
+signal is squared.
+
+---
+
+### `qbrt`
+
+**Inputs**
+>
+> 1. `Scalar | Series | Event | Number`
+>
+
+**Output:** `Scalar | Series | Event | Number`
+
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Computes the cube root of the input signal.
+
+---
+
+### `root`
+
+**Inputs**
+>
+> 1. `Scalar | Series | Event | Number`
+>
+
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
+>
+> #### `index`
+>
+> **Type:** `Number`  
+> **Required:** `False`  
+> **Default value:** `2`  
+>
+> Defines the index of the root to take - the nth root of the input.
+> For example, if the index is 2, the square root of the input will
+> be taken. If the index is 3, the cube root of the input will be
+> taken.
+>
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Computes the root of the input signal by taking the nth root of the
+input. By default, the index is 2, which means that the square root
+of the input signal is taken.
+
+---
+
 ### `round`
 
 **Inputs**
@@ -357,6 +481,36 @@ given a certain precision:
 * Precision `2`: `1234.57`
 * Precision `3`: `1234.567`
 
+
+---
+
+### `sqrt`
+
+**Inputs**
+>
+> 1. `Scalar | Series | Event | Number`
+>
+
+**Output:** `Scalar | Series | Event | Number`
+
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Computes the square root of the input signal.
 
 ---
 
