@@ -92,6 +92,8 @@ export * from './algorithms/diff';
 export * from './algorithms/filter';
 export * from './algorithms/gap-fill';
 export * from './algorithms/negate';
+export * from './algorithms/power';
+export * from './algorithms/root';
 export * from './algorithms/round';
 export * from './algorithms/trigonometry';
 export * from './algorithms/integral';
