@@ -341,6 +341,8 @@ _Example of a local output being used in another step in the same scope._
 
 The `export` exposes the results on a **global scope**. Any step in the entire document can reference it. All exported results will also end up in the resulting JSON used in the report.
 
+Exported signals that qualify as events are automatically exported as events, even if the step is not defined in an event output node.
+
 ```yaml
 - parameter: test
   steps:
