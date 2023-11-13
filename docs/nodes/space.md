@@ -13,7 +13,7 @@ defined by the orientation of a segment, in this case the Hips segment.
     segment: Hips
 ```
 
-You can also use the [notation for selecting segment values at an event or a specific frame](../inputs-and-outputs.md#select-signal-from-a-specific-measurement). This is especially useful when a segment is rotating but will be in a known position at specific moments. 
+You can also use the [notation for selecting segment values at an event or a specific frame](../inputs-and-outputs.md#select-value-at-specific-event). This is especially useful when a segment is rotating but will be in a known position at specific moments. 
 
 ```yaml
 - space: VirtualLab
