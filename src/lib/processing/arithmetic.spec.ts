@@ -4,7 +4,7 @@ import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { Segment } from '../models/segment';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
-import { Signal } from '../models/signal';
+import { Signal, SignalType } from '../models/signal';
 
 import { AdditionStep, DivisionStep, FrameSequenceOperandOrder, MultiplyStep, SubtractionStep } from './arithmetic';
 
@@ -90,6 +90,16 @@ test('Arithmetic - AdditionStep (VectorSequence)', async(t) => {
 	for (const component of res.components) {
 		t.deepEqual(f32(...res.getComponent(component)), f32(2, 4, 6));
 	}
+});
+
+test('Arithmetic - AdditionStep (numbers)', async(t) => {
+	const n1 = new Signal(1);
+	const n2 = new Signal(2);
+	const step = mockStep(AdditionStep, [n1, n2]);
+	const res = await step.process();
+
+	t.is(res.type, SignalType.Float32);
+	t.is(res.getValue(), 3);
 });
 
 // Test operand sequence.

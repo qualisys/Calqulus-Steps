@@ -6,7 +6,7 @@ export class TypeCheck {
 	 * Returns true if the value is a JavaScript Array. 
 	 * @param value 
 	 */
-	static isArray(value) {
+	static isArray(value): value is number[] {
 		return Array.isArray(value);
 	}
 
@@ -14,7 +14,7 @@ export class TypeCheck {
 	 * Returns true if the value is a typed array.
 	 * @param value 
 	 */
-	static isTypedArray(value) {
+	static isTypedArray(value): value is TypedArray {
 		return isTypedArray(value);
 	}
 
