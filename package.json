@@ -17,6 +17,7 @@
     "build:main": "tsc -p tsconfig.json",
     "build:module": "tsc -p tsconfig.module.json",
     "watch:build": "node bin/build-metadata.js && tsc -p tsconfig.dev.json -w",
+    "watch:build:module": "node bin/build-metadata.js && tsc -p tsconfig.module.json -w",
     "watch:test": "nyc --silent ava --watch",
     "test": "run-s build test:*",
     "test:lint": "eslint src --ext .ts",
