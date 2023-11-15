@@ -9,6 +9,7 @@ import { ProcessingError } from '../utils/processing-error';
 import { getReferenceSignal } from '../utils/reference-signal';
 import { SequenceUtil } from '../utils/sequence';
 import { markdownFmt } from '../utils/template-literal-tags';
+import { TypeCheck } from '../utils/type-check';
 
 import { BaseStep } from './base-step';
 
@@ -185,6 +186,15 @@ export class BaseArithmeticStep extends BaseStep {
 			const originalType = referenceInput.type;
 
 			switch (originalType) {
+				case SignalType.Float32: {
+					if (TypeCheck.isArrayLike(res) && res.length === 1) {
+						out.setValue(res[0]);
+						break;
+					}
+
+					out.setValue(res);
+					break;
+				}
 				case SignalType.VectorSequence:
 					out.setValue(Marker.fromArray(referenceInput.name, res as TypedArray[]));
 					break;
