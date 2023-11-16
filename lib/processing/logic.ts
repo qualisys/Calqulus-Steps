@@ -1,4 +1,5 @@
 import { evaluateExpression, parseExpression, printExpression, tokenizeExpression } from 'expression-engine';
+import { set } from 'lodash';
 
 import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
@@ -119,7 +120,7 @@ export class IfStep extends BaseStep {
 
 		for (let i = 0; i < operands.length; i++) {
 			if (!NumberUtil.isNumeric(operands[i])) {
-				expressionValues[operands[i]] = this.getValueForInput(i);
+				set(expressionValues, operands[i], this.getValueForInput(i));
 			}
 		}
 
