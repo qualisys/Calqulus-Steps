@@ -1,7 +1,7 @@
 import { Inputs } from '../models/inputs';
 import { IStepNode } from '../models/node-interface';
 import { Property, PropertyType } from '../models/property';
-import { Signal } from '../models/signal';
+import { Signal, SignalType } from '../models/signal';
 import { ProcessingError } from '../utils/processing-error';
 
 import { Space } from './space';
@@ -65,7 +65,28 @@ export class BaseStep {
 				if (Property.validateSignalTypes(optionSignals, expectedTypes)) {
 					return optionSignals;
 				}
-				else if (required) {
+				else {
+					// If we're expecting a number, but the signals are a series with one value, we can convert them.
+					if (expectedTypes.length === 1 && expectedTypes[0] === PropertyType.Number) {
+						const convertedSignals = [];
+						for (const signal of optionSignals) {
+							if (signal.type === SignalType.Float32) {
+								convertedSignals.push(signal);
+							}
+							else if (signal.type === SignalType.Float32Array && signal.length === 1) {
+								const value = signal.clone(signal.getValue()[0]);
+								convertedSignals.push(value);
+							}
+						}
+
+						if (convertedSignals.length === optionSignals.length) {
+							// We could successfully convert all signals.
+							return convertedSignals;
+						}
+					}
+				}
+
+				if (required) {
 					throw new ProcessingError(`Error retrieving signals for property ${ key }. Expected all signals to match these types: [${ expectedTypes.map(t => Property.typeToString(t)).join(', ') }].`);
 				}
 			}

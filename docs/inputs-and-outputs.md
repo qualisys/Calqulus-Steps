@@ -10,6 +10,7 @@
     + [Measurement & session field values](#measurement--session-field-values)
     + [Value casting](#value-casting)
   * [Select value at specific event](#select-value-at-specific-event)
+    + [Selecting instances of an event](#selecting-instances-of-an-event)
   * [Select signal from a specific measurement](#select-signal-from-a-specific-measurement)
   * [Value inputs](#value-inputs)
   * [Addressing results from previous steps](#addressing-results-from-previous-steps)
@@ -175,6 +176,10 @@ _This example shows how to reference the value of the first frame of the data._
 _This example shows how to reference the value of the last frame of the data by specifying a negative value._
 
 ***Note:*** *Only integers are supported. Frame indices are 1-based, i.e. to get the first frame, enter the value 1.*
+
+### Selecting instances of an event
+
+In the same way as you can access values of a signal at a specific frame, you can also access instances of an event. For example, to access the *first*, *last*, or *10th* instance of an event, you can write `MyEvent@1`, `MyEvent@-1`, and `MyEvent@10`, respectively.
 
 ## Select signal from a specific measurement
 

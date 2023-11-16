@@ -13,6 +13,20 @@ defined by the orientation of a segment, in this case the Hips segment.
     segment: Hips
 ```
 
+You can also use the [notation for selecting segment values at an event or a specific frame](../inputs-and-outputs.md#select-value-at-specific-event). This is especially useful when a segment is rotating but will be in a known position at specific moments. 
+
+```yaml
+- space: VirtualLab
+  alignWithSegment:
+    segment: Hips@Contact # Uses the hip segment only during the Contact events 
+```
+
+```yaml
+- space: VirtualLab
+  alignWithSegment:
+    segment: Hips@1 # Uses only the first frame of the hip segment 
+```
+
 A space can also be defined using a primary and secondary axis. The third
 axis will constructed to always be perpendicular to the primary and secondary
 axes.
