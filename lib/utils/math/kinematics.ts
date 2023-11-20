@@ -1,6 +1,6 @@
 import { SeriesUtil } from '../series';
 
-export class Kinematics {
+export class KinematicsUtil {
 	/**
 	 * Calculates the finite difference (constant time step derivate) for
 	 * the input array.

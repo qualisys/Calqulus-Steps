@@ -11,7 +11,7 @@ import { Vector } from '../models/spatial/vector';
 import { StepCategory, StepClass } from '../step-registry';
 import { AngleUtil } from '../utils/math/angle';
 import { Euler, RotationOrder } from '../utils/math/euler';
-import { Kinematics } from '../utils/math/kinematics';
+import { KinematicsUtil } from '../utils/math/kinematics';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
 import { TypeCheck } from '../utils/type-check';
@@ -572,27 +572,27 @@ export class AngularVelocityStep extends AngleStep {
 
 		// Calculate the rotation matrix derivatives
 		const rSegDiff = MatrixSequence.fromRotationMatrixValues(
-			Kinematics.finiteDifference(rSeg.m00, dt, 1),
-			Kinematics.finiteDifference(rSeg.m01, dt, 1),
-			Kinematics.finiteDifference(rSeg.m02, dt, 1),
-			Kinematics.finiteDifference(rSeg.m10, dt, 1),
-			Kinematics.finiteDifference(rSeg.m11, dt, 1),
-			Kinematics.finiteDifference(rSeg.m12, dt, 1),
-			Kinematics.finiteDifference(rSeg.m20, dt, 1),
-			Kinematics.finiteDifference(rSeg.m21, dt, 1),
-			Kinematics.finiteDifference(rSeg.m22, dt, 1)
+			KinematicsUtil.finiteDifference(rSeg.m00, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m01, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m02, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m10, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m11, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m12, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m20, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m21, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m22, dt, 1)
 		);
 
 		const rRefDiff = MatrixSequence.fromRotationMatrixValues(
-			Kinematics.finiteDifference(rRef.m00, dt, 1),
-			Kinematics.finiteDifference(rRef.m01, dt, 1),
-			Kinematics.finiteDifference(rRef.m02, dt, 1),
-			Kinematics.finiteDifference(rRef.m10, dt, 1),
-			Kinematics.finiteDifference(rRef.m11, dt, 1),
-			Kinematics.finiteDifference(rRef.m12, dt, 1),
-			Kinematics.finiteDifference(rRef.m20, dt, 1),
-			Kinematics.finiteDifference(rRef.m21, dt, 1),
-			Kinematics.finiteDifference(rRef.m22, dt, 1)
+			KinematicsUtil.finiteDifference(rRef.m00, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m01, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m02, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m10, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m11, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m12, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m20, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m21, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m22, dt, 1)
 		);
 
 		// Calculate joint velocity

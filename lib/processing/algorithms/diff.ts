@@ -1,5 +1,5 @@
 import { StepClass } from '../../step-registry';
-import { Kinematics } from '../../utils/math/kinematics';
+import { KinematicsUtil } from '../../utils/math/kinematics';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';
@@ -18,7 +18,7 @@ import { BaseAlgorithmStep } from './base-algorithm';
 })
 export class DiffStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
-		return Kinematics.simpleDifference(a) as TypedArray;
+		return KinematicsUtil.simpleDifference(a) as TypedArray;
 	}
 
 	init() {
