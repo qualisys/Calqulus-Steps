@@ -10,34 +10,65 @@ export interface ISegment {
 }
 
 export class Segment implements ISequence, IDataSequence {
-	array = [...this.positions.array, ...this.rotations.array];
-	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw'];
+	array = [...this.position.array, ...this.rotation.array,
+		this.force?.array[0], this.force?.array[1], this.force?.array[2],
+		this.moment?.array[0], this.moment?.array[1], this.moment?.array[2],
+		this.power?.array[0], this.power?.array[1], this.power?.array[2]];
+	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
+	emptyValues = new Float32Array(0);
 
 	constructor(
 		public name: string,
-		public positions: VectorSequence,
-		public rotations: QuaternionSequence,
-		public frameRate?: number
-	) {}
+		public position: VectorSequence,
+		public rotation: QuaternionSequence,
+		public force?: VectorSequence,
+		public moment?: VectorSequence,
+		public power?: VectorSequence,
+		public frameRate?: number,
+	) {
+		this.emptyValues = new Float32Array(this.position.x.length).fill(NaN);
+	}
 
-	get x(): TypedArray { return this.positions.x; }
-	get y(): TypedArray { return this.positions.y; }
-	get z(): TypedArray { return this.positions.z; }
+	get x(): TypedArray { return this.position.x; }
+	get y(): TypedArray { return this.position.y; }
+	get z(): TypedArray { return this.position.z; }
 
-	get rx(): TypedArray { return this.rotations.x; }
-	get ry(): TypedArray { return this.rotations.y; }
-	get rz(): TypedArray { return this.rotations.z; }
-	get rw(): TypedArray { return this.rotations.w; }
+	get fx(): TypedArray { return this.force?.x; }
+	get fy(): TypedArray { return this.force?.y; }
+	get fz(): TypedArray { return this.force?.z; }
+
+	get mx(): TypedArray { return this.moment?.x; }
+	get my(): TypedArray { return this.moment?.y; }
+	get mz(): TypedArray { return this.moment?.z; }
+
+	get px(): TypedArray { return this.power?.x; }
+	get py(): TypedArray { return this.power?.y; }
+	get pz(): TypedArray { return this.power?.z; }
+
+	get rx(): TypedArray { return this.rotation.x; }
+	get ry(): TypedArray { return this.rotation.y; }
+	get rz(): TypedArray { return this.rotation.z; }
+	get rw(): TypedArray { return this.rotation.w; }
 
 	get length() {
-		if (!this.positions) return 0;
-		return this.positions.length;
+		if (!this.position) return 0;
+		return this.position.length;
 	};
 
 	getComponent(component: string): TypedArray {
 		const index = this.components.indexOf(component);
 
-		return this.array[index];
+		if (index === -1) {
+			return undefined;
+		}
+
+		if (this.array[index] === undefined) {
+			// Return array of NaNs.
+			return this.emptyValues;
+		}
+		else {
+			return this.array[index];
+		}
 	}
 
 	/** 
@@ -49,28 +80,34 @@ export class Segment implements ISequence, IDataSequence {
 	 * @remark The frame index is 1-based.
 	 */
 	getTransformationAtFrame(frame: number, ref?: ISegment): ISegment {
-		if (!this.positions || !this.rotations) return undefined;
+		if (!this.position || !this.rotation) return undefined;
 
 		if (ref && ref.position && ref.rotation) {
-			this.positions.getVectorAtFrame(frame, ref.position);
-			this.rotations.getQuaternionAtFrame(frame, ref.rotation);
+			this.position.getVectorAtFrame(frame, ref.position);
+			this.rotation.getQuaternionAtFrame(frame, ref.rotation);
 
 			return ref;
 		}
 
 		return {
-			position: this.positions.getVectorAtFrame(frame),
-			rotation: this.rotations.getQuaternionAtFrame(frame),
+			position: this.position.getVectorAtFrame(frame),
+			rotation: this.rotation.getQuaternionAtFrame(frame),
 		};
 	}
 
-
 	/**
 	 * Returns a [[Segment]] from an array, where 
-	 * `x`, `y`, `z`, `rx`, `ry`, `rz`, and `rw` are included.
+	 * `x`, `y`, `z`, `rx`, `ry`, `rz`, `rw`, `fx`, `fy`, `fz`, `mx`, `my`, `mz`, `px`, `py`, `pz` are included.
 	 * @param param0 
 	 */
-	static fromArray(name: string, [px, py, pz, rx, ry, rz, rw]: TypedArray[]) {
-		return new Segment(name, new VectorSequence(px, py, pz), new QuaternionSequence(rx, ry, rz, rw));
+	static fromArray(name: string, [x, y, z, rx, ry, rz, rw, fx, fy, fz, mx, my, mz, px, py, pz]: TypedArray[]) {
+		return new Segment(name,
+			new VectorSequence(x, y, z),
+			new QuaternionSequence(rx, ry, rz, rw),
+			fx !== undefined && fy !== undefined && fz !== undefined ? new VectorSequence(fx, fy, fz) : undefined,
+			mx !== undefined && my !== undefined && mz !== undefined ? new VectorSequence(mx, my, mz) : undefined,
+			px !== undefined && py !== undefined && pz !== undefined ? new VectorSequence(px, py, pz) : undefined,
+			undefined
+		);
 	}
 }
