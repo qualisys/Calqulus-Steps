@@ -1,3 +1,4 @@
+import { Joint } from './joint';
 import { QuaternionSequence } from './sequence/quaternion-sequence';
 import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
@@ -25,9 +26,11 @@ export class Segment implements ISequence, IDataSequence {
 		this.power?.array[0], this.power?.array[1], this.power?.array[2]];
 	centerOfMass: Vector;
 	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
+	distalJoint: Joint;
 	emptyValues = new Float32Array(0);
 	inertia: Vector;
 	mass: number;
+	proximalJoint: Joint;
 
 	constructor(
 		public name: string,
