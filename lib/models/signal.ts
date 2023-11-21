@@ -436,7 +436,7 @@ export class Signal implements IDataSequence {
 	 * Return vector from either VectorSequence or Segment.
 	 */
 	getVectorSequenceValue(): VectorSequence | null {
-		if (this.type === SignalType.Segment) return this._value.segment.positions;
+		if (this.type === SignalType.Segment) return this._value.segment.position;
 
 		return this._value.vectorSequence;
 	}
@@ -550,7 +550,7 @@ export class Signal implements IDataSequence {
 			case SignalType.Segment:
 			case SignalType.PlaneSequence:
 			case SignalType.VectorSequence: {
-				const values = this.array;
+				const values = this.array.filter(arr => arr !== undefined);
 				const pickedValues = values.map(arr => arr.filter((_, index) => frames.includes(index)));
 
 				if (this.type === SignalType.Segment) {
@@ -625,7 +625,7 @@ export class Signal implements IDataSequence {
 				this.targetSpace = undefined;
 			}
 			else if (this.type === SignalType.Float32Array && this.component && this.originalSignal?.type === SignalType.Segment) {
-				const converted = this.targetSpace.getPointsInLocalSpace(this.originalSignal.getSegmentValue().positions);
+				const converted = this.targetSpace.getPointsInLocalSpace(this.originalSignal.getSegmentValue().position);
 
 				this.setValue(converted.getComponent(this.component), this.frameMap);
 				this.space = this.targetSpace;

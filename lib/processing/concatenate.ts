@@ -48,8 +48,8 @@ export class ConcatenateStep extends BaseStep {
 		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError('Expected all inputs to be of equivalent types.');
 
 		const baseArray = arrays.shift();
-		const concatArrays = baseArray.map((arr, index) =>
-			SeriesUtil.createNumericArrayOfSameType(
+		const concatArrays = baseArray.map((arr, index) => 
+			arr === undefined ? undefined : SeriesUtil.createNumericArrayOfSameType(
 				arr,
 				[...arr].concat(...arrays.map(a => [...a[index]]))
 			)

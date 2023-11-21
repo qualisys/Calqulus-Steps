@@ -22,7 +22,7 @@ const testString = 'test';
 const vecSeq = new VectorSequence(fakeArray, fakeArray, fakeArray, frameRate);
 const markerSeq = new Marker('test', fakeArray, fakeArray, fakeArray, frameRate);
 const quatSeq = new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray);
-const segment = new Segment('head', vecSeq, quatSeq, frameRate);
+const segment = new Segment('head', vecSeq, quatSeq, undefined, undefined, undefined, frameRate);
 const plane = new PlaneSequence(fakeArray, fakeArray, fakeArray, fakeArray);
 
 // Signal variants
@@ -290,7 +290,7 @@ test('Signal - getting values', (t) => {
 	t.is(s1_string.getStringValue(), testString);
 	t.is(s1_vecseq.getVectorSequenceValue(), vecSeq);
 	t.is(s1_marker.getVectorSequenceValue(), markerSeq);
-	t.is(s1_segment.getVectorSequenceValue(), segment.positions);
+	t.is(s1_segment.getVectorSequenceValue(), segment.position);
 	t.is(s1_plane.getPlaneSequenceValue(), plane);
 
 	t.is(s1_undef.getVectorSequenceValue(), undefined);
@@ -335,7 +335,15 @@ test('Signal - getFrames', (t) => {
 
 	// Segment
 	const segmentFrames = s1_segment.getFrames(frames);
-	t.deepEqual(segmentFrames.array, [frameValueComp, frameValueComp, frameValueComp, frameValueComp, frameValueComp, frameValueComp, frameValueComp]);
+
+	// Position, rotation, force, moment, power.
+	t.deepEqual(segmentFrames.array.map((a => a === undefined ? undefined : Array.from(a))), [
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+		undefined, undefined, undefined,
+		undefined, undefined, undefined,
+		undefined, undefined, undefined
+	]);
 
 	// Vector
 	const vecFrames = s1_vecseq.getFrames(frames);
@@ -451,7 +459,7 @@ test('Signal - convertToTargetSpace - Float32Array from a VectorSequence', (t) =
 
 test('Signal - convertToTargetSpace - Float32Array from a Segment', (t) => {
 	// Test Float32Array (as a component from a segment)
-	const segment2 = new Segment('head', vecSeq, quatSeq, frameRate);
+	const segment2 = new Segment('head', vecSeq, quatSeq, undefined, undefined, undefined, frameRate);
 	const s1_segment2 = new Signal(segment2, frameRate);
 
 	// Get "y" component, like it's done by DataStore
