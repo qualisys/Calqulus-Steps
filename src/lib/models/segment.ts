@@ -9,13 +9,25 @@ export interface ISegment {
 	rotation: Quaternion,
 }
 
+export type Kinematics = {
+	alpha: VectorSequence,
+	angularAcceleration: VectorSequence,
+	angularVelocity: VectorSequence,
+	linearAcceleration: VectorSequence,
+	linearVelocity: VectorSequence,
+	omega: VectorSequence,
+}
+
 export class Segment implements ISequence, IDataSequence {
 	array = [...this.position.array, ...this.rotation.array,
 		this.force?.array[0], this.force?.array[1], this.force?.array[2],
 		this.moment?.array[0], this.moment?.array[1], this.moment?.array[2],
 		this.power?.array[0], this.power?.array[1], this.power?.array[2]];
+	centerOfMass: Vector;
 	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
 	emptyValues = new Float32Array(0);
+	inertia: Vector;
+	mass: number;
 
 	constructor(
 		public name: string,
@@ -110,4 +122,6 @@ export class Segment implements ISequence, IDataSequence {
 			undefined
 		);
 	}
+
+	public kinematics: Kinematics;
 }
