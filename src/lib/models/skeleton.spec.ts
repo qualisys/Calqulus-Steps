@@ -11,6 +11,7 @@ const segmentHead = new Segment(
 	'head', 
 	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 	new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+	undefined, undefined, undefined,
 	300
 );
 
@@ -18,6 +19,7 @@ const segmentHip = new Segment(
 	'hip', 
 	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 	new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+	undefined, undefined, undefined,
 	300
 );
 
@@ -25,6 +27,7 @@ const segmentFoot = new Segment(
 	'foot', 
 	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 	new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+	undefined, undefined, undefined,
 	300
 );
 

@@ -86,5 +86,5 @@ test('DistanceStep - Segment and Plane', async(t) => {
 	const res = await step.process();
 	t.assert(res);
 	t.is(res.type, SignalType.Segment);
-	t.like(res.getSegmentValue().positions.getVectorAtFrame(1), { x: -1, y: -2, z: 1 });
+	t.like(res.getSegmentValue().position.getVectorAtFrame(1), { x: -1, y: -2, z: 1 });
 });

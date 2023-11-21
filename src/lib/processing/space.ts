@@ -83,10 +83,10 @@ export class Space extends BaseStep {
 	// Expects segment to have Y - forward, X - to the right and Z - up.
 	createRotationMatrixAndQuaternionFromSegment(segment: Segment) {
 		const avgQuat = new Quaternion(
-			mean(segment.rotations.x),
-			mean(segment.rotations.y),
-			mean(segment.rotations.z),
-			mean(segment.rotations.w)
+			mean(segment.rotation.x),
+			mean(segment.rotation.y),
+			mean(segment.rotation.z),
+			mean(segment.rotation.w)
 		);
 
 		const y = new Vector(0, 1, 0);

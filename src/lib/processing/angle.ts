@@ -272,7 +272,7 @@ export class AngleStep extends BaseStep {
 		if (this.inputs.length === 1) {
 			if (this.inputs[0].type === SignalType.Segment) {
 				const segment: Segment = this.inputs[0].getSegmentValue();
-				const angles: VectorSequence = AngleUtil.computeEulerAngle(segment.rotations, this.rotationOrder);
+				const angles: VectorSequence = AngleUtil.computeEulerAngle(segment.rotation, this.rotationOrder);
 				
 				this.exportUnit = ExportUnit.Degrees;
 				result.setValue<VectorSequence>(angles);
@@ -288,7 +288,7 @@ export class AngleStep extends BaseStep {
 			if (this.inputs[0].type == SignalType.Segment && this.inputs[1].type == SignalType.Segment) {
 				const segment1: Segment = this.inputs[0].getSegmentValue();
 				const segment2: Segment = this.inputs[1].getSegmentValue();
-				const angles: VectorSequence = AngleUtil.computeRelativeEulerAngle(segment1.rotations, segment2.rotations, this.rotationOrder);
+				const angles: VectorSequence = AngleUtil.computeRelativeEulerAngle(segment1.rotation, segment2.rotation, this.rotationOrder);
 
 				this.exportUnit = ExportUnit.Degrees;
 				result.setValue<VectorSequence>(angles);
@@ -342,7 +342,7 @@ export class AngleStep extends BaseStep {
 						return input.getVectorSequenceValue();
 					}
 					else if (input.type === SignalType.Segment) {
-						return input.getSegmentValue().positions;
+						return input.getSegmentValue().position;
 					}
 					else {
 						throw new ProcessingError(`Expected array of length 3 or Marker or Segment. Got ${ input.typeToString }.`);
@@ -560,13 +560,13 @@ export class AngularVelocityStep extends AngleStep {
 		const rResTemp = Matrix.identity();
 
 		for (let frame = 0; frame < nFrames; frame++) {
-			Matrix.fromQuaternion(rParTemp, sPar.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(rParTemp, sPar.rotation.getQuaternionAtFrame(frame + 1));
 			rPar.setMatrixAtFrame(frame + 1, Matrix.transpose(rParTemp, rParTemp));
-			Matrix.fromQuaternion(rSegTemp, sSeg.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(rSegTemp, sSeg.rotation.getQuaternionAtFrame(frame + 1));
 			rSeg.setMatrixAtFrame(frame + 1, Matrix.transpose(rSegTemp, rSegTemp));
-			Matrix.fromQuaternion(rRefTemp, sRef.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(rRefTemp, sRef.rotation.getQuaternionAtFrame(frame + 1));
 			rRef.setMatrixAtFrame(frame + 1, Matrix.transpose(rRefTemp, rRefTemp));
-			Matrix.fromQuaternion(rResTemp, sRes.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(rResTemp, sRes.rotation.getQuaternionAtFrame(frame + 1));
 			rRes.setMatrixAtFrame(frame + 1, Matrix.transpose(rResTemp, rResTemp));
 		}
 
