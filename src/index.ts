@@ -12,6 +12,7 @@ export * from './lib/models/spatial/vector';
 export * from './lib/models/data-collection';
 export * from './lib/models/event';
 export * from './lib/models/inputs';
+export * from './lib/models/joint';
 export * from './lib/models/marker';
 export * from './lib/models/measurement';
 export * from './lib/models/node-interface';
