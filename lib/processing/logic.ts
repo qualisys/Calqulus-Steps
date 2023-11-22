@@ -77,6 +77,8 @@ import { BaseStep } from './base-step';
 	output: ['Scalar', 'Series', 'Event', 'Number'],
 })
 export class IfStep extends BaseStep {
+	static acceptsMissingInputs = true;
+
 	originalExpr;
 
 	async process(): Promise<Signal> {
