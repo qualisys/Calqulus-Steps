@@ -193,6 +193,16 @@ test('IfStep (mock) - Mixed input, simple - then', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
+test('IfStep (mock) - Operands with special characters - dot', async(t) => {
+	const step = mockStep(IfStep, [s1, s1], {
+		then: [s10],
+		else: [s0],
+	}, '2 > MyValue.x');
+
+	const res = await step.process();
+	t.is(res.getValue(), 10);
+});
+
 test('IfStep (mock) - One input, check existing values - else', async(t) => {
 	const step = mockStep(IfStep, [sArray4], {
 		then: [s2],

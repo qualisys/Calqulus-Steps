@@ -1,4 +1,5 @@
 import { evaluateExpression, parseExpression, printExpression, tokenizeExpression } from 'expression-engine';
+import { set } from 'lodash';
 
 import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
@@ -122,7 +123,7 @@ export class IfStep extends BaseStep {
 					value = !value;
 				}
 
-				expressionValues[operand.value] = value;
+				set(expressionValues, operand.value, value);
 			}
 		}
 
