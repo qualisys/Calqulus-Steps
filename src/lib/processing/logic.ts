@@ -126,8 +126,7 @@ export class IfStep extends BaseStep {
 		try {
 			const tokens = tokenizeExpression(exp);
 			const ast = parseExpression(tokens);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const expression = printExpression(ast);
+			const _expression = printExpression(ast);
 			const result = evaluateExpression(ast, expressionValues);
 
 			this.processingLogs.push('Evaluated to: ' + result);
