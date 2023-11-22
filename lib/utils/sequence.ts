@@ -22,7 +22,6 @@ export class SequenceUtil {
 		const indexRows = [];
 		
 		// Keep track of the current index of each column.
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const colRowIndex = maps.map(_ => 0);
 		
 		// The current frame number.
