@@ -10,6 +10,8 @@ import { Space } from './space';
  * Base class for running processing steps.
  */
 export class BaseStep {
+	static acceptsMissingInputs = false;
+
 	name: string;
 	space: Space;
 	inputs: Signal[];
