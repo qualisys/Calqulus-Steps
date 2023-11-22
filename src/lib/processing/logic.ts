@@ -90,22 +90,12 @@ export class IfStep extends BaseStep {
 			throw new ProcessingError('Found no expression in input.');
 		}
 
-		const exp = this.node.originalInputString;
-		const operands = parseExpressionOperands(exp);
+		const inputExp = this.node.originalInputString;
+		const { operands, expression: exp } = parseExpressionOperands(inputExp);
 		const expressionValues = {};
 
 		const thenInput = this.getPropertySignalValue('then');
 		const elseInput = this.getPropertySignalValue('else');
-
-		if (operands.length === 0) {
-			// If there are no operands, we assume that we are checking for the
-			// existence of values. If no values exist, we should get undefined
-			// which will be evaluated to false.
-			const value = this.getValueForInput(0);
-
-			this.processingLogs.push('Evaluated to: ' + value);
-			return isNaN(value) ? elseInput[0] : thenInput[0];
-		}
 
 		if (!thenInput || !elseInput) {
 			throw new ProcessingError('Missing \'then\' and/or \'else\' options.');
@@ -120,8 +110,19 @@ export class IfStep extends BaseStep {
 		}
 
 		for (let i = 0; i < operands.length; i++) {
-			if (!NumberUtil.isNumeric(operands[i])) {
-				expressionValues[operands[i]] = this.getValueForInput(i);
+			const operand = operands[i];
+			if (!NumberUtil.isNumeric(operand.value)) {
+				let value: string | number | boolean = this.getValueForInput(i);
+
+				if (operand.exists) {
+					value = value !== undefined;
+				}
+
+				if (operand.empty) {
+					value = !value;
+				}
+
+				expressionValues[operand.value] = value;
 			}
 		}
 
@@ -140,26 +141,33 @@ export class IfStep extends BaseStep {
 		}
 	}
 
-	getValueForInput(inputIndex: number): number {
+	getValueForInput(inputIndex: number): number | string | undefined {
 		const value = this.inputs[inputIndex];
-		let result: number;
+
+		if (!value) {
+			return undefined;
+		}
+
+		if (value.type === SignalType.String) {
+			return value.getStringValue();
+		}
 
 		if (value.type === SignalType.Float32) {
-			result = value.getNumberValue();
+			return value.getNumberValue();
 		}
-		else if (value.type === SignalType.Uint32Array && value.length === 1) {
-			result = value.getUint32ArrayValue()[0];
+
+		const valueArray = value.array;
+
+		if (!valueArray?.length || !valueArray[0]?.length) {
+			return undefined;
 		}
-		else if (value.type === SignalType.Float32Array && value.length === 1) {
-			result = value.getFloat32ArrayValue()[0];
-		}
-		else if (value.length === 0) {
-			result = undefined;
-		}
-		else {
+
+		// Check if the value is a multi-component array.
+		if (valueArray.length > 1) {
 			throw new ProcessingError('Unsupported type: ' + value.typeToString + '.');
 		}
 
-		return result;
+		// Return value of first frame.
+		return valueArray[0][0];
 	}
 }
