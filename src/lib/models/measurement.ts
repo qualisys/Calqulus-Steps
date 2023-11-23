@@ -1,4 +1,5 @@
 import { IEvent } from './event';
+import { ForcePlate } from './force-plate';
 import { Marker } from './marker';
 import { Segment } from './segment';
 import { Skeleton } from './skeleton';
@@ -8,6 +9,7 @@ export interface IMeasurement {
 	endFrame: number;
 	events: IEvent[];
 	filename: string;
+	forcePlates: ForcePlate[];
 	frameRate: number;
 	frameCount: number;
 	markers: Marker[];
