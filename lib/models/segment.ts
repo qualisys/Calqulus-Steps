@@ -30,6 +30,7 @@ export class Segment implements ISequence, IDataSequence {
 	emptyValues = new Float32Array(0);
 	inertia: Vector;
 	mass: number;
+	parent: Segment;
 	proximalJoint: Joint;
 
 	constructor(
