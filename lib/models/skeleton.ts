@@ -13,6 +13,23 @@ export class Skeleton {
 	}
 
 	/**
+	 * Get all extremities of this skeleton.
+	 * 
+	 * @returns all extremities of the skeleton.
+	 */
+	getExtremities(): Segment[] {
+		const parentNames = [];
+
+		for (const segment of this.segments.values()) {
+			if (segment.parent) {
+				parentNames.push(segment.parent.name);
+			}
+		}
+
+		return Array.from(this.segments.values()).filter(s => !parentNames.includes(s.name));
+	}
+
+	/**
 	 * Returns a segment by name.
 	 * @param segmentName 
 	 */

@@ -23,6 +23,14 @@ const segmentHip = new Segment(
 	300
 );
 
+const segmentSpine = new Segment(
+	'spine', 
+	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+	new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+	undefined, undefined, undefined,
+	300
+);
+
 const segmentFoot = new Segment(
 	'foot', 
 	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
@@ -31,10 +39,22 @@ const segmentFoot = new Segment(
 	300
 );
 
+segmentFoot.parent = segmentHip;
+segmentHead.parent = segmentSpine;
+segmentSpine.parent = segmentHip;
+
 const skeleton = new Skeleton('test', [segmentHead, segmentHip, segmentFoot]);
 
 test('Skeleton - constructor', (t) => {
 	t.is(skeleton.name, 'test');
+});
+
+test('Skeleton - getExtremities', (t) => {
+	const extremities = skeleton.getExtremities();
+
+	t.is(extremities.length, 2);
+	t.true(extremities.includes(segmentHead));
+	t.true(extremities.includes(segmentFoot));
 });
 
 test('Skeleton - getSegment', (t) => {
