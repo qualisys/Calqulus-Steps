@@ -17,7 +17,7 @@ export class Skeleton {
 	 * 
 	 * @returns all extremities of the skeleton.
 	 */
-	getExtremities(): Segment[] {
+	getExtremities(ignoreSegments: string[] = []): Segment[] {
 		const parentNames = [];
 
 		for (const segment of this.segments.values()) {
@@ -26,7 +26,19 @@ export class Skeleton {
 			}
 		}
 
-		return Array.from(this.segments.values()).filter(s => !parentNames.includes(s.name));
+		const extremities = Array.from(this.segments.values()).filter(s => !parentNames.includes(s.name));
+
+		if (ignoreSegments.length > 0) {
+			for (const extrimity of extremities) {
+				for (const ignoreSegment of ignoreSegments) {
+					if (extrimity.name === ignoreSegment) {
+						extremities.splice(extremities.indexOf(extrimity), 1, extrimity.parent);
+					}
+				}
+			}
+		}
+
+		return extremities;
 	}
 
 	/**

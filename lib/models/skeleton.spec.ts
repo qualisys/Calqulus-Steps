@@ -57,6 +57,14 @@ test('Skeleton - getExtremities', (t) => {
 	t.true(extremities.includes(segmentFoot));
 });
 
+test('Skeleton - getExtremities with ignoreSegments param', (t) => {
+	const extremities = skeleton.getExtremities(['head']);
+
+	t.is(extremities.length, 2);
+	t.true(extremities.includes(segmentSpine));
+	t.true(extremities.includes(segmentFoot));
+});
+
 test('Skeleton - getSegment', (t) => {
 	t.is(skeleton.getSegment('head'), segmentHead);
 	t.is(skeleton.getSegment('hip'), segmentHip);
