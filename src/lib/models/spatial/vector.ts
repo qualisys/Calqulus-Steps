@@ -96,17 +96,29 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Subtracts vector b from vector a
+
+	/**
+	 * Subtracts a vector from this vector.
 	 *
-	 * @param {vec3} out the receiving vector
-	 * @param {ReadonlyVec3} a the first operand
-	 * @param {ReadonlyVec3} b the second operand
-	 * @returns {vec3} out
+	 * @param {Vector} otherVector the vector to subtract from this vector
+	 * @param {Vector} out the receiving vector
+	 * @returns {Vector} a new Vector
 	 */
-	static subtract(out, a, b): Vector {
-		out.x = a.x - b.x;
-		out.y = a.y - b.y;
-		out.z = a.z - b.z;
+	public subtract(otherVector: Vector): Vector {
+		return new Vector(this.x - otherVector.x, this.y - otherVector.y, this.z - otherVector.z);
+	}
+
+	/**
+	 * Subtracts a vector from this vector.
+	 *
+	 * @param {Vector} otherVector the vector to subtract from this vector
+	 * @param {Vector} out the receiving vector
+	 * @returns {Vector} out
+	 */
+	public subtractToRef(otherVector: Vector, out: Vector): Vector {
+		out.x = this.x - otherVector.x;
+		out.y = this.y - otherVector.y;
+		out.z = this.z - otherVector.z;
 
 		return out;
 	}
