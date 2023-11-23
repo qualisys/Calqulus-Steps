@@ -41,6 +41,12 @@ test('Vector - dot', (t) => {
 	const vec2 = new Vector(3, 2, 1);
 
 	t.is(Vector.dot(vec1, vec2), 10);
+test('Vector - length', (t) => {
+	const v1 = new Vector(3, 0, 4);
+	const v2 = new Vector(1, 0, 0);
+
+	t.is(v1.length(), 5);
+	t.is(v2.length(), 1);
 });
 
 test('Vector - normalize', (t) => {
