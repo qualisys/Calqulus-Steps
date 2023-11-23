@@ -43,6 +43,14 @@ test('Vector - dot', (t) => {
 	t.is(Vector.dot(v1, v2), 10);
 });
 
+test('Vector - fromArray', (t) => {
+	const v1 = Vector.fromArray([1, 2, 3]);
+
+	t.is(v1.x, 1);
+	t.is(v1.y, 2);
+	t.is(v1.z, 3);
+});
+
 test('Vector - length', (t) => {
 	const v1 = new Vector(3, 0, 4);
 	const v2 = new Vector(1, 0, 0);

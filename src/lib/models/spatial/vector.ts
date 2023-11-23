@@ -96,6 +96,15 @@ export class Vector implements IVector {
 	}
 
 	/**
+	 * Returns a [[Vector]] from an array, where 
+	 * `x`, `y`, `z` are included.
+	 * 
+	 * @param param0 
+	 * @returns 
+	 */
+	static fromArray([x, y, z]: number[]): Vector {
+		return new Vector(x, y, z);
+	}
 
 	/**
 	 * Subtracts a vector from this vector.
