@@ -37,10 +37,12 @@ test('Vector - cross product', (t) => {
 });
 
 test('Vector - dot', (t) => {
-	const vec1 = new Vector(1, 2, 3);
-	const vec2 = new Vector(3, 2, 1);
+	const v1 = new Vector(1, 2, 3);
+	const v2 = new Vector(3, 2, 1);
 
-	t.is(Vector.dot(vec1, vec2), 10);
+	t.is(Vector.dot(v1, v2), 10);
+});
+
 test('Vector - length', (t) => {
 	const v1 = new Vector(3, 0, 4);
 	const v2 = new Vector(1, 0, 0);
@@ -59,6 +61,27 @@ test('Vector - normalize', (t) => {
 			+ normalized.z * normalized.z
 		), 1, 'Magnitude of normalized vector does not equal 1'
 	);
+});
+
+test('Vector - subtract', (t) => {
+	const v1 = new Vector(2, 3, 1);
+	const v2 = new Vector(1, 2, 1);
+	const result = v1.subtract(v2);
+
+	t.is(result.x, 1);
+	t.is(result.y, 1);
+	t.is(result.z, 0);
+});
+
+test('Vector - subtractToRef', (t) => {
+	const v1 = new Vector(2, 3, 1);
+	const v2 = new Vector(1, 2, 1);
+	const v3 = new Vector(1, 2, 1);
+	v1.subtractToRef(v2, v3);
+
+	t.is(v3.x, 1);
+	t.is(v3.y, 1);
+	t.is(v3.z, 0);
 });
 
 test('Vector - transformMatrix', (t) => {

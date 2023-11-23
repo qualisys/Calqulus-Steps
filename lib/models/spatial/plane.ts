@@ -18,8 +18,8 @@ export class Plane {
 	 * @param out Optional plane reference to use for the output.
 	 */
 	static fromVector(v1: Vector, v2: Vector, v3: Vector, out: Plane = new Plane(0, 0, 0, 0)): Plane {
-		const AB = Vector.subtract(Vector.tmpVec1, v2, v1);
-		const AC = Vector.subtract(Vector.tmpVec2, v3, v1);
+		const AB = v2.subtractToRef(v1, Vector.tmpVec1);
+		const AC = v3.subtractToRef(v1, Vector.tmpVec2);
 		
 		const cross = Vector.cross(Vector.tmpVec3, AB, AC);
 
