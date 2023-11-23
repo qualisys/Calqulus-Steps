@@ -5,6 +5,33 @@ import { Segment } from './segment';
  */
 export class Skeleton {
 	protected segments: Map<string, Segment> = new Map<string, Segment>();
+	public static jointMap = new Map<string, string[]>([
+		['LeftToeBase', [null, null]],
+		['LeftFoot', ['LeftAnkle', 'External']],
+		['LeftLeg', ['LeftKnee', 'LeftAnkle']],
+		['LeftUpLeg', ['LeftHip', 'LeftKnee']],
+		['RightToeBase', [null, null]],
+		['RightFoot', ['RightAnkle', 'External']],
+		['RightLeg', ['RightKnee', 'RightAnkle']],
+		['RightUpLeg', ['RightHip', 'RightKnee']],
+		['Hips', [null, null]],
+		['Spine', ['HipsSpine', 'SpineSpine1']],
+		['Spine1', ['SpineSpine1', 'Spine1Spine2']],
+		['Spine2', ['Spine1Spine2', 'Spine2Neck']],
+		['Neck', ['Spine2Neck', 'NeckHead']],
+		['Head', ['NeckHead', 'External']],
+		['LeftShoulder', ['Sternoclavicular', 'LeftGlenohumeral']],
+		['LeftArm', ['LeftGlenohumeral', 'LeftElbow']],
+		['LeftForeArm', ['LeftElbow', 'LeftForeArmLeftForeArmRoll']],
+		['LeftForeArmRoll', ['LeftForeArmLeftForeArmRoll', 'LeftWrist']],
+		['LeftHand', ['LeftWrist', 'External']],
+		['RightShoulder', ['Sternoclavicular', 'RightGlenohumeral']],
+		['RightArm', ['RightGlenohumeral', 'RightElbow']],
+		['RightForeArm', ['RightElbow', 'RightForeArmRightForeArmRoll']],
+		['RightForeArmRoll', ['RightForeArmRightForeArmRoll', 'RightWrist']],
+		['RightHand', ['RightWrist', 'External']],
+	]);
+	
 
 	constructor(public name, segments: Segment[]) {
 		for (const segment of segments) {
