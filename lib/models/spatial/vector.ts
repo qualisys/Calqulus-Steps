@@ -57,6 +57,13 @@ export class Vector implements IVector {
 	}
 
 	/**
+	 * Calculates the length of a vector
+	 */
+	length(): number {
+		return Math.hypot(this.x, this.y, this.z);
+	}
+
+	/**
 	 * Normalize a Vector
 	 *
 	 * @param {vec3} out the receiving vector
