@@ -194,13 +194,43 @@ test('IfStep (mock) - Mixed input, simple - then', async(t) => {
 });
 
 test('IfStep (mock) - Operands with special characters - dot', async(t) => {
-	const step = mockStep(IfStep, [s1, s1], {
+	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
 	}, '2 > MyValue.x');
 
 	const res = await step.process();
 	t.is(res.getValue(), 10);
+});
+
+test.only('IfStep (mock) - Operands with spaces', async(t) => {
+	const positive1 = await mockStep(IfStep, 
+		[s2, s1], { then: [s10], else: [s0] }, 
+		'2 > My Special Value'
+	).process();
+
+	t.is(positive1.getValue(), 10);
+
+	const positive2 = await mockStep(IfStep, 
+		[s1, s1], { then: [s10], else: [s0] }, 
+		'My Special Value == My Special Value'
+	).process();
+
+	t.is(positive2.getValue(), 10);
+
+	const negative1 = await mockStep(IfStep, 
+		[s2, s1], { then: [s10], else: [s0] }, 
+		'2 < My Special Value'
+	).process();
+
+	t.is(negative1.getValue(), 0);
+
+	const negative2 = await mockStep(IfStep, 
+		[s1, s1], { then: [s10], else: [s0] }, 
+		'My Special Value < My Special Value'
+	).process();
+
+	t.is(negative2.getValue(), 0);
 });
 
 test('IfStep (mock) - One input, check existing values - else', async(t) => {
