@@ -47,6 +47,29 @@ export class Quaternion {
 	}
 
 	/**
+	 * Calculates the inverse of a quat
+	 *
+	 * @param {Quaternion} out the receiving quaternion
+	 * @param {Quaternion} a quat to calculate inverse of
+	 * @returns {Quaternion} out
+	 */
+	static invert(out: Quaternion, a: Quaternion): Quaternion {
+		const a0 = a.x;
+		const a1 = a.y;
+		const a2 = a.z;
+		const a3 = a.w;
+		const dot = a0 * a0 + a1 * a1 + a2 * a2 + a3 * a3;
+		const invDot = dot ? 1.0 / dot : 0;
+		
+		out.x = -a0 * invDot;
+		out.y = -a1 * invDot;
+		out.z = -a2 * invDot;
+		out.w = a3 * invDot;
+		
+		return out;
+	}
+
+	/**
 	 * Multiplies two quat's
 	 *
 	 * @param {Quaternion} out the receiving quaternion

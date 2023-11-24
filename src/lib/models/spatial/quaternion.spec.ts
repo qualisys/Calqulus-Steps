@@ -53,6 +53,18 @@ test('Quaternion - conjugate', (t) => {
 	});
 });
 
+test('Quaternion - invert', (t) => {
+	const quat = new Quaternion(0.1375, 0.0548, 0.6295, 0.7627);
+	const quatRef = new Quaternion(0, 0, 0, 0);
+
+	t.like(Quaternion.invert(quatRef, quat), {
+		x: -0.13751501251391615,
+		y: -0.05480598316918258,
+		z: -0.6295687300182561,
+		w: 0.7627832730499189,
+	});
+});
+
 test('Quaternion - multiply', (t) => {
 	const quat1 = new Quaternion(1, 2, 3, 4);
 	const quat2 = new Quaternion(4, 3, 2, 1);
