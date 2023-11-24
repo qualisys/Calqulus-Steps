@@ -738,3 +738,16 @@ test('parseExpressionOperands - functions - exists & empty mixed', (t) => {
 		]
 	});
 });
+
+test('parseExpressionOperands - arrow output', (t) => {
+	t.deepEqual(parseExpressionOperands('hello => world'), {
+		expression: 'hello => world',
+		operands: []
+	});
+
+	t.deepEqual(parseExpressionOperands('hello > foo => world'), {
+		expression: 'hello > foo => world',
+		operands: []
+	});
+});
+
