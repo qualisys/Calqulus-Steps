@@ -1,6 +1,7 @@
 import { NumberUtil } from './number';
 
 export interface IExpressionOperand {
+	originalValue: string | number;
 	value: string | number;
 	isInverted: boolean;
 	exists: boolean;
@@ -70,9 +71,10 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 		// Also remove any exclamation marks 
 		// that are adjacent to parentheses.
 		.map(v => v.replace(/!?[()]/g, ''))
-		.map(v => {
+		.map((v, index) => {
 			if (NumberUtil.isNumeric(v)) {
 				return {
+					originalValue: parseFloat(v),
 					value: parseFloat(v),
 					isInverted: false,
 					empty: false,
@@ -103,7 +105,15 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 				exists = functionMatches[1] === 'exists';
 			}
 
+			const originalValue = v;
+			// Remove any whitespace from the operands.
+			if (/\s/.test(v)) {
+				v = v.replace(/\s/g, '');
+				v = 'operand_' + index + '_' + v;
+			}
+
 			return {
+				originalValue: originalValue,
 				value: v,
 				isInverted: isInverted,
 				exists: exists,
@@ -115,6 +125,15 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 	// Clean up function calls from the expression.
 	const functionCleanPattern = /(!*)(empty|exists)\((.*?)\)/gi;
 	exp = exp.replace(functionCleanPattern, '$1$3');
+
+	// Replace the operands in the expression with their encoded values.
+	for (const operand of result) {
+		if (typeof operand.value === 'number') continue;
+		if (typeof operand.originalValue === 'number') continue;
+		if (operand.originalValue === operand.value) continue;
+
+		exp = exp.replace(operand.originalValue, operand.value);
+	}
 
 	return {
 		operands: result,
