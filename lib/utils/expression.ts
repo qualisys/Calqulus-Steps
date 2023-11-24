@@ -19,6 +19,14 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 	exp = exp.replace(/\s+/g, ' ');
 	exp = exp.trim();
 
+	if (!exp) return { operands: [], expression: exp };
+
+	if (/=>/.test(exp)) {
+		// The expression contains an output.
+		// This cannot be parsed as an expression.
+		return { operands: [], expression: exp };
+	}
+
 	// Define the logical operators that we want to match.
 	const logicalOperators = [
 		'<=', 
