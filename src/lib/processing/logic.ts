@@ -135,7 +135,31 @@ export class IfStep extends BaseStep {
 
 			this.processingLogs.push('Evaluated to: ' + result);
 
-			return result ? thenInput[0] : elseInput[0];
+			// Handle truthy evaluation.
+			if (result) {
+				if (thenInput[0] === undefined) {
+					throw new Error('Unexpected undefined value for \'then\' option.');
+				}
+
+				// If the input is a string, it is a reference to a signal that could not be found.
+				if (thenInput[0].type === SignalType.String) {
+					throw new Error(`Could not resolve signal '${ thenInput[0].getStringValue() }' for 'then' option.`);
+				}
+
+				return thenInput[0].clone();
+			}
+
+			// Handle falsy evaluation.
+			if (elseInput[0] === undefined) {
+				throw new Error('Unexpected undefined value for \'else\' option.');
+			}
+
+			// If the input is a string, it is a reference to a signal that could not be found.
+			if (elseInput[0].type === SignalType.String) {
+				throw new Error(`Could not resolve signal '${ elseInput[0].getStringValue() }' for 'else' option.`);
+			}
+
+			return elseInput[0].clone();
 		}
 		catch (err) {
 			throw new ProcessingError('Evaluating expression failed: ' + err.message);

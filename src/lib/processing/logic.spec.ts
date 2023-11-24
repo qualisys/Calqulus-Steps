@@ -44,6 +44,82 @@ test('IfStep (mock) - Missing "else"', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
+test('IfStep (mock) - String then', async(t) => {
+	// Not a problem if the 'then' is empty, as long as the then is not and is chosen.
+	const step1 = mockStep(IfStep, [s1, s2], {
+		then: [new Signal('test')],
+		else: [s10],
+	}, '1 > 2');
+
+	const res1 = await step1.process();
+	t.is(res1.getValue(), 10);
+
+	// If the empty 'then' is chosen, it's a problem.
+	const step2 = mockStep(IfStep, [s1, s2], {
+		then: [new Signal('test')],
+		else: [s10],
+	}, '1 < 2');
+
+	await t.throwsAsync(step2.process());
+});
+
+test('IfStep (mock) - String else', async(t) => {
+	// Not a problem if the 'then' is empty, as long as the then is not and is chosen.
+	const step1 = mockStep(IfStep, [s1, s2], {
+		then: [s10],
+		else: [new Signal('test')],
+	}, '1 < 2');
+
+	const res1 = await step1.process();
+	t.is(res1.getValue(), 10);
+
+	// If the empty 'then' is chosen, it's a problem.
+	const step2 = mockStep(IfStep, [s1, s2], {
+		then: [s10],
+		else: [new Signal('test')],
+	}, '1 > 2');
+
+	await t.throwsAsync(step2.process());
+});
+
+test('IfStep (mock) - Empty else', async(t) => {
+	// Not a problem if the 'else' is empty, as long as the then is not and is chosen.
+	const step1 = mockStep(IfStep, [s1, s2], {
+		then: [s10],
+		else: [undefined],
+	}, '1 < 2');
+
+	const res1 = await step1.process();
+	t.is(res1.getValue(), 10);
+
+	// If the empty 'else' is chosen, it's a problem.
+	const step2 = mockStep(IfStep, [s1, s2], {
+		then: [s10],
+		else: [undefined],
+	}, '1 > 2');
+
+	await t.throwsAsync(step2.process());
+});
+
+test('IfStep (mock) - Empty then', async(t) => {
+	// Not a problem if the 'then' is empty, as long as the then is not and is chosen.
+	const step1 = mockStep(IfStep, [s1, s2], {
+		then: [undefined],
+		else: [s10],
+	}, '1 > 2');
+
+	const res1 = await step1.process();
+	t.is(res1.getValue(), 10);
+
+	// If the empty 'then' is chosen, it's a problem.
+	const step2 = mockStep(IfStep, [s1, s2], {
+		then: [undefined],
+		else: [s10],
+	}, '1 < 2');
+
+	await t.throwsAsync(step2.process());
+});
+
 test('IfStep (mock) - More than one input to "then" option', async(t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s1, s2],
@@ -203,7 +279,7 @@ test('IfStep (mock) - Operands with special characters - dot', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
-test.only('IfStep (mock) - Operands with spaces', async(t) => {
+test('IfStep (mock) - Operands with spaces', async(t) => {
 	const positive1 = await mockStep(IfStep, 
 		[s2, s1], { then: [s10], else: [s0] }, 
 		'2 > My Special Value'
