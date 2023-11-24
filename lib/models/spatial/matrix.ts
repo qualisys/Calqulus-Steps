@@ -525,6 +525,30 @@ export class Matrix {
 	}
 
 	/**
+	 * Calculates the skew matrix from a vector
+	 *
+	 * @param v Vector
+	 *
+	 * @returns The skew matrix
+	 */
+	static skew(v: Vector): Matrix {
+		const vx = v.x;
+		const vy = v.y;
+		const vz = v.z;
+		const mat = new Matrix();
+		const m = mat._m;
+
+		m[1] = vz;
+		m[2] = -vy;
+		m[4] = -vz;
+		m[6] = vx;
+		m[8] = vy;
+		m[9] = -vx;
+		
+		return mat;
+	}
+
+	/**
 	 * Get a string representation of this matrix.
 	 * 
 	 * Use the `fractionDigits` property to control the number of decimals in
