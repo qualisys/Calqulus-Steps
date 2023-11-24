@@ -72,10 +72,10 @@ export class BaseStep {
 					if (expectedTypes.length === 1 && expectedTypes[0] === PropertyType.Number) {
 						const convertedSignals = [];
 						for (const signal of optionSignals) {
-							if (signal.type === SignalType.Float32) {
+							if (signal?.type === SignalType.Float32) {
 								convertedSignals.push(signal);
 							}
-							else if (signal.type === SignalType.Float32Array && signal.length === 1) {
+							else if (signal?.type === SignalType.Float32Array && signal.length === 1) {
 								const value = signal.clone(signal.getValue()[0]);
 								convertedSignals.push(value);
 							}
