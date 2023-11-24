@@ -261,6 +261,18 @@ test('Matrix - transpose self', (t) => {
 	]);
 });
 
+test('Matrix - skew matrix', (t) => {
+	const v = new Vector(-0.1, 0.05, -0.01);
+	const m = Matrix.skew(v);
+
+	t.deepEqual(Array.from(m._m), [
+		0, -0.01, -0.05, 0,
+		0.01, 0, -0.1, 0,
+		0.05, 0.1, 0, 0,
+		0, 0, 0, 0
+	]);
+});
+
 test('Matrix - toString', (t) => {
 	const v = [
 		1.001, 2.001, 3.999, 0,
