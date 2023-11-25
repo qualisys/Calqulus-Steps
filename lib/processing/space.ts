@@ -92,7 +92,7 @@ export class Space extends BaseStep {
 		const y = new Vector(0, 1, 0);
 		const vector = new Vector(0, 0, 0);
 
-		Vector.transformQuat(vector, y, avgQuat);
+		Vector.transformQuat(y, avgQuat, vector);
 
 		vector.z = 0;
 
@@ -104,13 +104,13 @@ export class Space extends BaseStep {
 			if (vector.x > 0) {
 				// Segment points in positive X.
 				this.rotationMatrix = Space.getRotationMatrixAroundZ(90);
-				this._quaternion = Quaternion.fromRotationMatrix(this._quaternion, Matrix.fromRotationMatrix(0, -1, 0, 1, 0, 0, 0, 0, 1));
+				this._quaternion = Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(0, -1, 0, 1, 0, 0, 0, 0, 1), this._quaternion);
 				this.stringValue = 'Forward direction: Positive X. Rotation around world Z = 90 deg';
 			}
 			else {
 				// Segment points in negative X.
 				this.rotationMatrix = Space.getRotationMatrixAroundZ(-90);
-				this._quaternion = Quaternion.fromRotationMatrix(this._quaternion, Matrix.fromRotationMatrix(0, 1, 0, -1, 0, 0, 0, 0, 1));
+				this._quaternion = Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(0, 1, 0, -1, 0, 0, 0, 0, 1), this._quaternion);
 				this.stringValue = 'Forward direction: Negative X. Rotation around world Z = -90 deg';
 			}
 		}
@@ -124,14 +124,14 @@ export class Space extends BaseStep {
 			else {
 				// Segment points in negative Y.
 				this.rotationMatrix = Space.getRotationMatrixAroundZ(180);
-				this._quaternion = Quaternion.fromRotationMatrix(this._quaternion, Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, 1));
+				this._quaternion = Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, 1), this._quaternion);
 				this.stringValue = 'Forward direction: Negative Y. Rotation around world Z = 180 deg';
 			}
 		}
 	}
 
 	public static getDefaultQuaternion(): Quaternion {
-		return Quaternion.fromRotationMatrix(new Quaternion(0, 0, 0, 1), Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1));
+		return Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1), new Quaternion(0, 0, 0, 1));
 	}
 
 	public static getRotationMatrixAroundZ(deg: number) {
@@ -210,16 +210,16 @@ export class Space extends BaseStep {
 			const j = Math.min(i, this.origin.length - 1);
 			const segmentPositionOriginOffset = worldSegmentFrame.position.subtractToRef(this.origin.getVectorAtFrame(j + 1), Vector.tmpVec1);
 
-			Vector.transformMatrix(resultVec, segmentPositionOriginOffset, Matrix.transpose(Matrix.tmpMat3, this._rotationMatrix.getMatrixAtFrame(i + 1)));
+			Vector.transformMatrix(resultVec, segmentPositionOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat3));
 
 			x[i] = resultVec.x;
 			y[i] = resultVec.y;
 			z[i] = resultVec.z;
 
 			// Handle rotation.
-			Matrix.fromQuaternion(segmentMatrix, worldSegmentFrame.rotation);
-			Matrix.multiply(multipliedMatrix, Matrix.tmpMat3, segmentMatrix);
-			Quaternion.fromRotationMatrix(resultQuat, multipliedMatrix);
+			Matrix.fromQuaternion(worldSegmentFrame.rotation, segmentMatrix);
+			Matrix.multiply(Matrix.tmpMat3, segmentMatrix, multipliedMatrix);
+			Quaternion.fromRotationMatrix(multipliedMatrix, resultQuat);
 
 			rw[i] = resultQuat.w;
 			rx[i] = resultQuat.x;
@@ -251,7 +251,7 @@ export class Space extends BaseStep {
 				const j = Math.min(i, this.origin.length - 1);
 				const pointFrameOriginOffset = worldPointFrame.subtractToRef(this.origin.getVectorAtFrame(j + 1), Vector.tmpVec2);
 
-				Vector.transformMatrix(vec, pointFrameOriginOffset, Matrix.transpose(Matrix.tmpMat1, this._rotationMatrix.getMatrixAtFrame(i + 1)));
+				Vector.transformMatrix(vec, pointFrameOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat1));
 
 				x[i] = vec.x;
 				y[i] = vec.y;

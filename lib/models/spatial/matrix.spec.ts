@@ -29,9 +29,9 @@ test('Matrix - compose & composeToRef', (t) => {
 	const m1b = new Matrix();
 	const m2b = new Matrix();
 
-	Matrix.composeToRef(m0b, r0, t0);
-	Matrix.composeToRef(m1b, r0, t0, new Vector(2, 2, 2));
-	Matrix.composeToRef(m2b, r2, t2);
+	Matrix.composeToRef(r0, t0, null, m0b);
+	Matrix.composeToRef(r0, t0, new Vector(2, 2, 2), m1b);
+	Matrix.composeToRef(r2, t2, null, m2b);
 
 	const o0 = Matrix.fromArray([
 		1, 0, 0, 0,
@@ -209,7 +209,7 @@ test('Matrix - fromQuaternion', (t) => {
 	const mat = new Matrix();
 	const quat = new Quaternion(1, 2, 3, 4);
 
-	Matrix.fromQuaternion(mat, quat);
+	Matrix.fromQuaternion(quat, mat);
 
 	t.deepEqual(Array.from(mat._m), [
 		-25, 28, -10, 0,
@@ -222,7 +222,7 @@ test('Matrix - fromQuaternion', (t) => {
 test('Matrix - multiply', (t) => {
 	const mat = new Matrix();
 
-	Matrix.multiply(mat, Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9), Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1));
+	Matrix.multiply(Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9), Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1), mat);
 
 	t.is(mat._m[0], 90);
 	t.is(mat._m[1], 114);
@@ -238,7 +238,7 @@ test('Matrix - multiply', (t) => {
 test('Matrix - transpose other', (t) => {
 	const mat = new Matrix();
 
-	Matrix.transpose(mat, Matrix.fromValues(...values));
+	Matrix.transpose(Matrix.fromValues(...values), mat);
 
 	t.deepEqual(Array.from(mat._m), [
 		1, 5, 9, 13,

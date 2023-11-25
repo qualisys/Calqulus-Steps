@@ -68,7 +68,7 @@ export class Matrix {
 	static compose(rotation: Quaternion, translation, scale?: Vector) {
 		const result = new Matrix();
 
-		Matrix.composeToRef(result, rotation, translation, scale);
+		Matrix.composeToRef(rotation, translation, scale, result);
 
 		return result;
 	}
@@ -77,13 +77,13 @@ export class Matrix {
 	 * Creates a matrix from a quaternion rotation, vector translation and
 	 * vector scale.
 	 *
-	 * @param result The receiving operation result.
 	 * @param rotation The rotation quaternion.
 	 * @param translation The translation vector.
 	 * @param scale The scaling vector.
+	 * @param result The receiving operation result.
 	 * @returns The resulting matrix.
 	 */
-	static composeToRef(result: Matrix, rotation: Quaternion, translation: Vector, scale?: Vector) {
+	static composeToRef(rotation: Quaternion, translation: Vector, scale: Vector, result: Matrix) {
 		const m = result._m;
 		const x = rotation.x,
 			y = rotation.y,
@@ -263,12 +263,12 @@ export class Matrix {
 	/**
 	 * Calculates a 4x4 matrix from the given quaternion.
 	 *
-	 * @param result The resulting matrix.
 	 * @param q Quaternion to create matrix from.
+	 * @param result The resulting matrix.
 	 *
 	 * @returns The resulting matrix.
 	 */
-	static fromQuaternion(result: Matrix, q: Quaternion): Matrix {
+	static fromQuaternion(q: Quaternion, result: Matrix): Matrix {
 		const x = q.x,
 			y = q.y,
 			z = q.z,
@@ -405,12 +405,12 @@ export class Matrix {
 	/**
 	 * Multiplies two matrices.
 	 *
-	 * @param result The receiving matrix,
 	 * @param a The first operand.
 	 * @param b The second operand.
+	 * @param result The receiving matrix,
 	 * @returns The resulting matrix.
 	 */
-	static multiply(result: Matrix, a: Matrix, b: Matrix): Matrix {
+	static multiply(a: Matrix, b: Matrix, result: Matrix): Matrix {
 		const m = result._m;
 		const ma = a._m;
 		const mb = b._m;
@@ -475,12 +475,12 @@ export class Matrix {
 	/**
 	 * Calculates the transpose of the given matrix.
 	 *
-	 * @param result Matrix receiving operation result.
 	 * @param a Matrix to transpose,
+	 * @param result Matrix receiving operation result.
 	 *
 	 * @returns The transposed matrix.
 	 */
-	static transpose(result: Matrix, a: Matrix): Matrix {
+	static transpose(a: Matrix, result: Matrix): Matrix {
 		const m = result._m;
 		const ma = a._m;
 
