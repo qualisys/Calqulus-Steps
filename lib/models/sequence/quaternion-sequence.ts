@@ -43,7 +43,7 @@ export class QuaternionSequence implements ISequence {
 	/** 
 	 * Returns a [[Quaternion]] for a specified frame.
 	 * 
-	 * If the `ref` parameter is passed, this method will update and return
+	 * If the `result` parameter is passed, this method will update and return
 	 * that Quaternion instance instead of creating a new instance.
 	 * 
 	 * @param frame The frame of which to get the quaternion of.

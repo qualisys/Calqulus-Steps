@@ -19,19 +19,20 @@ export class Plane {
 	) { }
 
 	/**
-	 * Generates a plane given 3 points on the plane.
+	 * Creates a Plane that passes through the given points.
 	 * 
 	 * @param v1 Point 1
 	 * @param v2 Point 2
 	 * @param v3 Point 3
-	 * @param result Optional plane reference to use for the output.
+	 * @param result A Plane to store the result in.
 	 * @returns The resulting plane.
 	 */
-	static fromVector(v1: Vector, v2: Vector, v3: Vector, result: Plane = new Plane(0, 0, 0, 0)): Plane {
-		const AB = v2.subtractToRef(v1, Vector.tmpVec1);
-		const AC = v3.subtractToRef(v1, Vector.tmpVec2);
-		
-		const cross = Vector.cross(AB, AC, Vector.tmpVec3);
+	static fromVector(v1: Vector, v2: Vector, v3: Vector, result?: Plane): Plane {
+		result = result || new Plane(0, 0, 0, 0);
+
+		const ab = v2.subtractToRef(v1, Vector.tmpVec1);
+		const ac = v3.subtractToRef(v1, Vector.tmpVec2);
+		const cross = Vector.cross(ab, ac, Vector.tmpVec3);
 
 		result.a = cross.x;
 		result.b = cross.y;
@@ -45,12 +46,17 @@ export class Plane {
 	 * Orthogonally projects a point onto a plane and returns the
 	 * location of the projected point.
 	 * 
-	 * @param point Point to project
-	 * @param plane Plane on which the point is projected
-	 * @param result Optional vector reference to use for the output.
+	 * If the `result` parameter is passed, this method will update and return
+	 * that Vector instance instead of creating a new instance.
+	 * 
+	 * @param point A point to project.
+	 * @param plane A Plane on which the point is projected.
+	 * @param result A Vector to store the result in.
 	 * @returns The projected point.
 	 */
-	static project(point: Vector, plane: Plane, result: Vector = new Vector(0, 0, 0)): Vector {
+	static project(point: Vector, plane: Plane, result?: Vector): Vector {
+		result = result || new Vector(0, 0, 0);
+
 		const squareSum = plane.a * plane.a + plane.b * plane.b + plane.c * plane.c;
 
 		if (squareSum === 0) return undefined;

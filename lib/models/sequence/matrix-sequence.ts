@@ -154,17 +154,17 @@ export class MatrixSequence {
 	/** 
 	 * Returns a [[Matrix]] for a specified frame.
 	 * 
-	 * If the `ref` parameter is passed, this method will update and return
+	 * If the `result` parameter is passed, this method will update and return
 	 * that Matrix instance instead of creating a new instance.
 	 * 
 	 * @param frame The frame of which to get the matrix of.
-	 * @param ref The matrix to update and return.
+	 * @param result The matrix to update and return.
 	 * @returns Matrix at the specified frame.
 	 * @remark The frame index is 1-based.
 	 */
-	getMatrixAtFrame(frame: number, ref?: Matrix): Matrix {
+	getMatrixAtFrame(frame: number, result?: Matrix): Matrix {
 		const frameIndex = Math.min(frame, this.m11.length) - 1;
-		const matrix = ref ? ref : new Matrix();
+		const matrix = result ? result : new Matrix();
 		const m = matrix._m;
 
 		m[0] = this.m00[frameIndex];

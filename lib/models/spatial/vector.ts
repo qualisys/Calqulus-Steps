@@ -192,14 +192,14 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Transforms the vector with a Matrix.
+	 * Transforms a vector with a Matrix.
 	 *
-	 * @param result The receiving vector.
 	 * @param a The vector to transform.
 	 * @param m The 3x3 matrix to transform with.
+	 * @param result The receiving vector.
 	 * @returns The transformed vector.
 	 */
-	static transformMatrix(result: Vector, a: Vector, m: Matrix): Vector {
+	static transformMatrix(a: Vector, m: Matrix, result: Vector): Vector {
 		result.x = a.x * m._m[0] + a.y * m._m[4] + a.z * m._m[8];
 		result.y = a.x * m._m[1] + a.y * m._m[5] + a.z * m._m[9];
 		result.z = a.x * m._m[2] + a.y * m._m[6] + a.z * m._m[10];
@@ -208,11 +208,11 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Transforms the Vector with a Quat
+	 * Transforms a Vector with a Quat
 	 *
-	 * @param result The receiving vector.
 	 * @param a The vector to transform.
 	 * @param q The quaternion to transform with.
+	 * @param result The receiving vector.
 	 * @returns The transformed vector.
 	 */
 	static transformQuat(a: Vector, q: Quaternion, result: Vector): Vector {
