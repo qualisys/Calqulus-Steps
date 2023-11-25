@@ -650,7 +650,7 @@ export class AngularVelocityStep extends AngleStep {
 			}
 			else {
 				const qdotFrame = new Vector(NaN, NaN, NaN);
-				Vector.transformMatrix(qdotFrame, omegaSegRefFrame, rResFrame);
+				Vector.transformMatrix(omegaSegRefFrame, rResFrame, qdotFrame);
 				qdot.x[frame] = qdotFrame.x * 180 / Math.PI;
 				qdot.y[frame] = qdotFrame.y * 180 / Math.PI;
 				qdot.z[frame] = qdotFrame.z * 180 / Math.PI;

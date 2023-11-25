@@ -210,7 +210,7 @@ export class Space extends BaseStep {
 			const j = Math.min(i, this.origin.length - 1);
 			const segmentPositionOriginOffset = worldSegmentFrame.position.subtractToRef(this.origin.getVectorAtFrame(j + 1), Vector.tmpVec1);
 
-			Vector.transformMatrix(resultVec, segmentPositionOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat3));
+			Vector.transformMatrix(segmentPositionOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat3), resultVec);
 
 			x[i] = resultVec.x;
 			y[i] = resultVec.y;
@@ -251,7 +251,7 @@ export class Space extends BaseStep {
 				const j = Math.min(i, this.origin.length - 1);
 				const pointFrameOriginOffset = worldPointFrame.subtractToRef(this.origin.getVectorAtFrame(j + 1), Vector.tmpVec2);
 
-				Vector.transformMatrix(vec, pointFrameOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat1));
+				Vector.transformMatrix(pointFrameOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat1), vec);
 
 				x[i] = vec.x;
 				y[i] = vec.y;

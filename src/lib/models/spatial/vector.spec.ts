@@ -97,7 +97,7 @@ test('Vector - transformMatrix', (t) => {
 	const mat = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
 	const vecRef = new Vector(0, 0, 0);
 
-	t.like(Vector.transformMatrix(vecRef, vec, mat), {
+	t.like(Vector.transformMatrix(vec, mat, vecRef), {
 		x: 30,
 		y: 36,
 		z: 42,

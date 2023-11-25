@@ -38,24 +38,24 @@ export class PlaneSequence implements ISequence {
 	/** 
 	 * Returns a [[Plane]] for a specified frame.
 	 * 
-	 * If the `ref` parameter is passed, this method will update and return
+	 * If the `result` parameter is passed, this method will update and return
 	 * that Plane instance instead of creating a new instance.
 	 * 
 	 * @param frame The frame index.
-	 * @param ref The plane to update and return.
+	 * @param result The plane to update and return.
 	 * @returns A plane at the specified frame.
 	 * @remark The frame index is 1-based.
 	 */
-	getPlaneAtFrame(frame: number, ref?: Plane): Plane {
+	getPlaneAtFrame(frame: number, result?: Plane): Plane {
 		const frameIndex = Math.min(frame, this.a.length) - 1;
 
-		if (ref) {
-			ref.a = this.a[frameIndex];
-			ref.b = this.b[frameIndex];
-			ref.c = this.c[frameIndex];
-			ref.d = this.d[frameIndex];
+		if (result) {
+			result.a = this.a[frameIndex];
+			result.b = this.b[frameIndex];
+			result.c = this.c[frameIndex];
+			result.d = this.d[frameIndex];
 
-			return ref;
+			return result;
 		}
 
 		return new Plane(this.a[frameIndex], this.b[frameIndex], this.c[frameIndex], this.d[frameIndex]);
