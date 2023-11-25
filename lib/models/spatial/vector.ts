@@ -72,13 +72,13 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Computes the cross product of the current Vector and the specified Vector.
+	 * Computes the cross product of the current Vector and returns a new Vector.
 	 *
 	 * @param otherVector The Vector to calculate the cross product with.
 	 * @returns The cross product.
 	 */
 	cross(otherVector: Vector): Vector {
-		return this.crossToRef(otherVector, this);
+		return this.crossToRef(otherVector, new Vector(0, 0, 0));
 	}
 
 	/**
@@ -90,7 +90,7 @@ export class Vector implements IVector {
 	 * @returns The cross product.
 	 */
 	crossToRef(otherVector: Vector, result: Vector): Vector {
-		return Vector.cross(result, this, otherVector);
+		return Vector.cross(this === result ? new Vector(this.x, this.y, this.z) : this, otherVector, result);
 	}
 
 	/**
