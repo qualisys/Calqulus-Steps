@@ -75,7 +75,7 @@ export class Matrix {
 
 	/**
 	 * Creates a matrix from a quaternion rotation, vector translation and
-	 * vector scale.
+	 * vector scale and store it in the specified matrix.
 	 *
 	 * @param rotation The rotation quaternion.
 	 * @param translation The translation vector.
@@ -264,7 +264,7 @@ export class Matrix {
 	 * Calculates a 4x4 matrix from the given quaternion.
 	 *
 	 * @param q Quaternion to create matrix from.
-	 * @param result The resulting matrix.
+	 * @param result The Matrix instance to store the result in.
 	 *
 	 * @returns The resulting matrix.
 	 */
@@ -473,7 +473,8 @@ export class Matrix {
 	}
 
 	/**
-	 * Calculates the transpose of the given matrix.
+	 * Calculates the transpose of the given matrix and stores it in the
+	 * specified matrix.
 	 *
 	 * @param a Matrix to transpose,
 	 * @param result Matrix receiving operation result.
