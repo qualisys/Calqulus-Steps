@@ -92,12 +92,37 @@ test('Vector - subtractToRef', (t) => {
 	t.is(v3.z, 0);
 });
 
-test('Vector - transformMatrix', (t) => {
+test('Vector - transformMatrix (static)', (t) => {
 	const vec = new Vector(1, 2, 3);
 	const mat = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
 	const vecRef = new Vector(0, 0, 0);
 
 	t.like(Vector.transformMatrix(vec, mat, vecRef), {
+		x: 30,
+		y: 36,
+		z: 42,
+	});
+});
+
+test('Vector - transformMatrix (non-static)', (t) => {
+	const vec = new Vector(1, 2, 3);
+	const mat = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+	t.like(vec.transformMatrix(mat), {
+		x: 30,
+		y: 36,
+		z: 42,
+	});
+});
+
+test('Vector - transformMatrixToRef', (t) => {
+	const vec = new Vector(1, 2, 3);
+	const mat = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const vecRef = new Vector(0, 0, 0);
+
+	vec.transformMatrixToRef(mat, vecRef);
+
+	t.like(vecRef, {
 		x: 30,
 		y: 36,
 		z: 42,
@@ -110,6 +135,29 @@ test('Vector - transformQuat', (t) => {
 	const vecRef = new Vector(0, 0, 0);
 
 	t.like(Vector.transformQuat(vec, quat, vecRef), {
+		x: 81,
+		y: -38,
+		z: -97,
+	});
+});
+
+test('Vector - transformQuat (non-static)', (t) => {
+	const vec = new Vector(1, 2, 3);
+	const quat = new Quaternion(4, 3, 2, 1);
+
+	t.like(vec.transformQuat(quat), {
+		x: 81,
+		y: -38,
+		z: -97,
+	});
+});
+
+test('Vector - transformQuatToRef', (t) => {
+	const vec = new Vector(1, 2, 3);
+	const quat = new Quaternion(4, 3, 2, 1);
+	const vecRef = new Vector(0, 0, 0);
+
+	t.like(vec.transformQuatToRef(quat, vecRef), {
 		x: 81,
 		y: -38,
 		z: -97,

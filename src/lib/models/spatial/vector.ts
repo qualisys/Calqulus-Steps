@@ -200,6 +200,28 @@ export class Vector implements IVector {
 	}
 
 	/**
+	 * Transforms this vector with the specified Matrix.
+	 *
+	 * @param matrix The matrix to use for the transformation.
+	 * @returns The transformed vector.
+	 */
+	transformMatrix(matrix: Matrix): Vector {
+		return this.transformMatrixToRef(matrix, this);
+	}
+
+	/**
+	 * Transforms this vector with the specified Matrix and stores the result in
+	 * the given Vector.
+	 *
+	 * @param matrix The matrix to use for the transformation.
+	 * @param result The receiving vector.
+	 * @returns The transformed vector.
+	 */
+	transformMatrixToRef(matrix: Matrix, result: Vector): Vector {
+		return Vector.transformMatrix(this === result ? new Vector(this.x, this.y, this.z) : this, matrix, result);
+	}
+
+	/**
 	 * Transforms a vector with a Matrix.
 	 *
 	 * @param a The vector to transform.
@@ -213,6 +235,27 @@ export class Vector implements IVector {
 		result.z = a.x * m._m[2] + a.y * m._m[6] + a.z * m._m[10];
 		
 		return result;
+	}
+
+	/**
+	 * Transforms this vector with the specified Quaternion.
+	 * @param quat The quaternion to use for the transformation.
+	 * @returns The transformed vector.
+	 */
+	transformQuat(quat: Quaternion): Vector {
+		return this.transformQuatToRef(quat, this);
+	}
+
+	/**
+	 * Transforms this vector with the specified Quaternion and stores the
+	 * result in the given Vector.
+	 * 
+	 * @param quat The quaternion to use for the transformation.
+	 * @param result The receiving vector.
+	 * @returns The transformed vector.
+	 */
+	transformQuatToRef(quat: Quaternion, result: Vector): Vector {
+		return Vector.transformQuat(this === result ? new Vector(this.x, this.y, this.z) : this, quat, result);
 	}
 
 	/**
