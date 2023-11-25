@@ -16,10 +16,19 @@ export class QuaternionSequence implements ISequence {
 	 * @param frameRate The frame rate of the sequence.
 	 */
 	constructor(
+		/** The x component. */
 		public x: TypedArray,
+
+		/** The y component. */
 		public y: TypedArray,
+
+		/** The z component. */
 		public z: TypedArray,
+
+		/** The w component. */
 		public w: TypedArray,
+
+		/** The frame rate. */
 		public frameRate?: number
 	) {}
 

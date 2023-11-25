@@ -21,7 +21,15 @@ export class Vector implements IVector {
 	 * @param y The y component.
 	 * @param z THe z component.
 	 */
-	constructor(public x: number, public y: number, public z: number) {}
+	constructor(
+		/** The x component. */
+		public x: number,
+		
+		/** The y component. */
+		public y: number,
+		
+		/** The z component. */
+		public z: number) {}
 
 	/**
 	 * Get the components of this vector as an array.

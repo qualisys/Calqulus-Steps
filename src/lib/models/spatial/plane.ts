@@ -1,6 +1,9 @@
 import { Vector } from './vector';
 
 export class Plane {
+	/**
+	 * A Plane instance to temporarily store values in.
+	 */
 	static tmpPlane1 = new Plane(0, 0, 0, 0);
 
 	/**
@@ -12,9 +15,16 @@ export class Plane {
 	 * @param d The d component.
 	 */
 	constructor(
+		/** The a component. */
 		public a: number,
+
+		/** The b component. */
 		public b: number,
+
+		/** The c component. */
 		public c: number,
+
+		/** The d component. */
 		public d: number,
 	) { }
 

@@ -13,7 +13,18 @@ export class Quaternion {
 	 * @param z The z component.
 	 * @param w The w component.
 	 */
-	constructor(public x: number, public y: number, public z: number, public w: number) {}
+	constructor(
+		 /** The x component of this Quaternion. */
+		public x: number,
+
+		/** The y component. */
+		public y: number,
+
+		/** The z component. */
+		public z: number,
+
+		/** The w component. */
+		public w: number) {}
 
 	/**
 	 * Calculates the conjugate of a quat.
