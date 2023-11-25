@@ -27,11 +27,11 @@ test('Vector - cross product', (t) => {
 	const v3 = new Vector(0, 1, 0);
 	const v4 = new Vector(0, 0, 1);
 
-	const cross1 = Vector.cross(Vector.tmpVec1, v1, v2);
+	const cross1 = Vector.cross(v1, v2, Vector.tmpVec1);
 
 	t.like(cross1, { x: 0, y: 0, z: 1 }, 'Cross product is not orthogonal to v1 and v2');
 
-	const cross2 = Vector.cross(Vector.tmpVec1, v3, v4);
+	const cross2 = Vector.cross(v3, v4, Vector.tmpVec1);
 
 	t.like(cross2, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
 });
