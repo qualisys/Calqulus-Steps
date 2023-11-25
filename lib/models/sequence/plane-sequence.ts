@@ -18,9 +18,16 @@ export class PlaneSequence implements ISequence {
 	 * @param d The fourth component of the plane.
 	 */
 	constructor(
+		/** The a component. */
 		public a: TypedArray, 
+
+		/** The b component. */
 		public b: TypedArray, 
+
+		/** The c component. */
 		public c: TypedArray, 
+
+		/** The d component. */
 		public d: TypedArray,
 	) {}
 
