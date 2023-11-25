@@ -9,6 +9,14 @@ export class PlaneSequence implements ISequence {
 	array = [this.a, this.b, this.c, this.d];
 	components = ['a', 'b', 'c', 'd'];
 
+	/**
+	 * Create a PlaneSequence with the given values.
+	 * 
+	 * @param a The first component of the plane.
+	 * @param b The second component of the plane.
+	 * @param c The third component of the plane.
+	 * @param d The fourth component of the plane.
+	 */
 	constructor(
 		public a: TypedArray, 
 		public b: TypedArray, 
@@ -16,6 +24,9 @@ export class PlaneSequence implements ISequence {
 		public d: TypedArray,
 	) {}
 
+	/**
+	 * Get the number of elements in this sequence.
+	 */
 	get length() { return this.a.length; };
 
 	getComponent(component: string): TypedArray {
@@ -27,9 +38,12 @@ export class PlaneSequence implements ISequence {
 	/** 
 	 * Returns a [[Plane]] for a specified frame.
 	 * 
-	 * If a Plane is passed as `ref`, the function will 
-	 * update and return it instead of creating a new instance.
+	 * If the `ref` parameter is passed, this method will update and return
+	 * that Plane instance instead of creating a new instance.
 	 * 
+	 * @param frame The frame index.
+	 * @param ref The plane to update and return.
+	 * @returns A plane at the specified frame.
 	 * @remark The frame index is 1-based.
 	 */
 	getPlaneAtFrame(frame: number, ref?: Plane): Plane {
@@ -50,7 +64,9 @@ export class PlaneSequence implements ISequence {
 	/**
 	 * Returns a [[PlaneSequence]] from an array, where 
 	 * `a`, `b`, `c`, and `d` are included.
-	 * @param param0 
+	 * 
+	 * @param components The components of the plane.
+	 * @returns A new PlaneSequence.
 	 */
 	static fromArray([a, b, c, d]: TypedArray[]) {
 		return new PlaneSequence(a, b, c, d);
@@ -59,9 +75,11 @@ export class PlaneSequence implements ISequence {
 	/**
 	 * Generates a plane sequence given a sequence of 
 	 * 3 points on the plane.
-	 * @param v1 
-	 * @param v2 
-	 * @param v3 
+	 * 
+	 * @param v1 The first point on the plane.
+	 * @param v2 The second point on the plane.
+	 * @param v3 The third point on the plane.
+	 * @returns A plane sequence.
 	 */
 	static fromVectorSequence(v1: VectorSequence, v2: VectorSequence, v3: VectorSequence): PlaneSequence {
 		const length = Math.min(v1.length, v2.length, v3.length);
@@ -86,9 +104,11 @@ export class PlaneSequence implements ISequence {
 	/**
 	 * Orthogonally projects a point sequence onto a plane sequence 
 	 * and returns the location of the projected points.
+	 * 
 	 * @param point Point sequence to project
 	 * @param plane Plane sequence on which the point is projected
 	 * @param allowSinglePlane If true and the plane sequence is of length 1, the same plane is applied for all frames of the vector sequence.
+	 * @returns The projected point as a VectorSequence.
 	 */
 	static project(point: VectorSequence, plane: PlaneSequence, allowSinglePlane = false): VectorSequence {
 		let length = Math.min(point.length, plane.length);

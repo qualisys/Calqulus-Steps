@@ -7,6 +7,14 @@ export class VectorSequence implements ISequence {
 	array = [this.x, this.y, this.z];
 	components = ['x', 'y', 'z'];
 
+	/**
+	 * Creates a new VectorSequence from the specified values.
+	 * 
+	 * @param x The x component.
+	 * @param y The y component.
+	 * @param z The z component.
+	 * @param frameRate The frame rate of the sequence.
+	 */
 	constructor(
 		public x: TypedArray,
 		public y: TypedArray,
@@ -17,8 +25,12 @@ export class VectorSequence implements ISequence {
 	/** 
 	 * Computes the cross product from each vector in this and the specified vector sequence.
 	 * 
-	 * If a Vector is passed as `result`, the function will 
-	 * update and return it instead of creating a new instance.
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
+	 * @param v The vector sequence to compute the cross product with.
+	 * @param result A vector sequence to store the result in.
+	 * @returns The cross product of the two vector sequences.
 	 */
 	cross(v: VectorSequence, result?: VectorSequence): VectorSequence {
 		const len = Math.max(this.length, v.length);
@@ -43,6 +55,14 @@ export class VectorSequence implements ISequence {
 
 	/** 
 	 * Computes the dot product of two vector sequences.
+	 * 
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
+	 * @param a The first vector sequence.
+	 * @param b The second vector sequence.
+	 * @param result A vector sequence to store the result in.
+	 * @returns The dot product of the two vector sequences.
 	 */
 	static dot(a: VectorSequence, b: VectorSequence, result?: TypedArray): TypedArray {
 		const res = result ? result : new Float32Array(a.length);
@@ -54,14 +74,36 @@ export class VectorSequence implements ISequence {
 		return res;
 	}
 
+	/**
+	 * Creates a new VectorSequence from the specified values.
+	 * 
+	 * @param name Not used by the VectorSequence base class. Can be used by
+	 * subclasses to identify the sequence.
+	 * @param components The values of the new vector sequence.
+	 * @returns A new VectorSequence.
+	 */
 	static fromArray(name: string, [x, y, z]: TypedArray[]) {
 		return new VectorSequence(x, y, z);
 	}
 
+	/**
+	 * Creates a new VectorSequence of length 1 from the specified values. 
+	 * 
+	 * @param x The x component.
+	 * @param y The y component.
+	 * @param z The z component.
+	 * @returns A new VectorSequence of length 1.
+	 */
 	static fromFloats(x: number, y: number, z: number) {
 		return new VectorSequence(new Float32Array([x]), new Float32Array([y]), new Float32Array([z]));
 	}
 
+	/**
+	 * Gets the specified component as a TypedArray.
+	 * 
+	 * @param component The component to get.
+	 * @returns A TypedArray containing the specified component.
+	 */
 	getComponent(component: string): TypedArray {
 		const index = this.components.indexOf(component);
 
@@ -69,11 +111,14 @@ export class VectorSequence implements ISequence {
 	}
 
 	/** 
-	 * Returns a [[Vector]] for a specified frame.
+	 * Gets a [[Vector]] for a specified frame.
 	 * 
-	 * If a Vector is passed as `result`, the function will 
-	 * update and return it instead of creating a new instance.
+	 * If the `result` parameter is passed, this method will update and return
+	 * that Vector instance instead of creating a new instance.
 	 * 
+	 * @param frame The frame of which to get the vector of.
+	 * @param result A vector to update and return.
+	 * @returns A vector at the specified frame.
 	 * @remark The frame index is 1-based.
 	 */
 	getVectorAtFrame(frame: number, result?: Vector): Vector {
@@ -99,8 +144,11 @@ export class VectorSequence implements ISequence {
 	 * Multiplies each vector in this sequence with a factor.
 	 * The factor can be a [[VectorSequence]], a [[Vector]], a TypedArray, or a number.
 	 * 
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
 	 * @param factor The factor to multiply with.
-	 * @param result The vector sequence to store the result in.
+	 * @param result A vector sequence to store the result in.
 	 * @returns The resulting vector sequence.
 	 */
 	multiply(factor: VectorSequence | TypedArray | Vector | number, result?: VectorSequence): VectorSequence {
@@ -123,9 +171,12 @@ export class VectorSequence implements ISequence {
 
 	/**
 	 * Multiplies each vector in this sequence with a scalar from an array of scalars.
+	 *
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
 	 * 
 	 * @param scalarArray The array of scalars to multiply with.
-	 * @param result The vector sequence to store the result in.
+	 * @param result A vector sequence to store the result in.
 	 * @returns The resulting vector sequence.
 	 */
 	multiplyArray(scalarArray: TypedArray, result?: VectorSequence): VectorSequence {
@@ -149,8 +200,11 @@ export class VectorSequence implements ISequence {
 	/**
 	 * Multiplies each vector in this sequence with a scalar.
 	 * 
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
 	 * @param scalar The scalar to multiply with.
-	 * @param result The vector sequence to store the result in.
+	 * @param result A vector sequence to store the result in.
 	 * @returns The resulting vector sequence.
 	 */
 	multiplyScalar(scalar: number, result?: VectorSequence): VectorSequence {
@@ -169,9 +223,12 @@ export class VectorSequence implements ISequence {
 
 	/**
 	 * Multiplies each vector in this sequence with a vector.
+	 *
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
 	 * 
 	 * @param vector The vector to multiply with.
-	 * @param result The vector sequence to store the result in.
+	 * @param result A vector sequence to store the result in.
 	 * @returns The resulting vector sequence.
 	 */
 	multiplyVector(vector: Vector, result?: VectorSequence): VectorSequence {
@@ -190,9 +247,12 @@ export class VectorSequence implements ISequence {
 
 	/**
 	 * Multiplies two vector sequences.
+	 *
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
 	 * 
 	 * @param otherVector The vector sequence to multiply with.
-	 * @param result The vector sequence to store the result in.
+	 * @param result A vector sequence to store the result in.
 	 * @returns The resulting vector sequence.
 	 */
 	multiplyVectorSequence(otherVector: VectorSequence, result?: VectorSequence): VectorSequence {
@@ -216,8 +276,11 @@ export class VectorSequence implements ISequence {
 	/** 
 	 * Normalizes all vectors in this sequence to unit vectors.
 	 * 
-	 * If a Vector is passed as `result`, the function will 
-	 * update and return it instead of creating a new instance.
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
+	 * @param result The vector to update and return.
+	 * @returns A vector sequence of unit vectors.
 	 */
 	normalize(result?: VectorSequence): VectorSequence {
 		const x = result ? result.x : new Float32Array(this.length);
@@ -238,13 +301,14 @@ export class VectorSequence implements ISequence {
 	/**
 	 * Subtracts a vector from each vector in the current [[VectorSequence]].
 	 *
-	 * If a VectorSequence is passed as `result`, the function will
-	 * update and return it instead of creating a new instance.
-	 *
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
 	 * @remark The returned VectorSequence length is the smallest of the
 	 *         current length and the length of the input VectorSequence.
-	 * @param v
-	 * @param result
+	 * @param v The vector sequence to subtract.
+	 * @param result A vector sequence to store the result in.
+	 * @returns The resulting vector sequence.
 	 */
 	subtract(v: VectorSequence, result?: VectorSequence) {
 		const len = Math.max(this.length, v.length);

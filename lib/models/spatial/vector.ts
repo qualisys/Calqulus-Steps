@@ -15,6 +15,12 @@ export class Vector implements IVector {
 	/** Vector instance used for performance reasons. */
 	static tmpVec3: Vector = new Vector(0, 0, 0);
 
+	/**
+	 * Creates a new Vector from the specified values.
+	 * @param x The x component.
+	 * @param y The y component.
+	 * @param z THe z component.
+	 */
 	constructor(public x: number, public y: number, public z: number) {}
 
 	/**

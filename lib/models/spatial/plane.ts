@@ -3,6 +3,14 @@ import { Vector } from './vector';
 export class Plane {
 	static tmpPlane1 = new Plane(0, 0, 0, 0);
 
+	/**
+	 * Creates a new plane from the specified values.
+	 * 
+	 * @param a The a component.
+	 * @param b The b component.
+	 * @param c The c component.
+	 * @param d The d component.
+	 */
 	constructor(
 		public a: number,
 		public b: number,

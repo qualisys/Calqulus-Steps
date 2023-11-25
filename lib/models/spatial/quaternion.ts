@@ -6,6 +6,13 @@ export class Quaternion {
 	/** Quaternion instance used for performance reasons. */
 	static tmpQuat2: Quaternion = new Quaternion(0, 0, 0, 1);
 
+	/**
+	 * Creates a new Quaternion from the specified values.
+	 * @param x The x component.
+	 * @param y The y component.
+	 * @param z The z component.
+	 * @param w The w component.
+	 */
 	constructor(public x: number, public y: number, public z: number, public w: number) {}
 
 	/**
@@ -156,7 +163,7 @@ export class Quaternion {
 	}
 
 	/**
-	 * Normalizes a quaternion and store in a the specified reference.
+	 * Normalizes a quaternion and store the result in the specified reference.
 	 *
 	 * @param a The quaternion to normalize
 	 * @param result The receiving vector.
