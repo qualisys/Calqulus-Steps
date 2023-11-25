@@ -403,6 +403,28 @@ export class Matrix {
 	}
 
 	/**
+	 * Multiply the current matrix by another one.
+	 * 
+	 * @param matrix The matrix to multiply by.
+	 * @returns The multiplication result.
+	 */
+	multiply(matrix: Matrix) {
+		return this.multiplyToRef(matrix, Matrix.identity());
+	}
+
+	/**
+	 * Multiply the current matrix by another one and stores the result in the
+	 * given matrix.
+	 * 
+	 * @param matrix The matrix to multiply by.
+	 * @param result The matrix to store the result in.
+	 * @returns The multiplication result.
+	 */
+	multiplyToRef(matrix: Matrix, result: Matrix) {
+		return Matrix.multiply(this === result ? Matrix.fromArray(Array.from(this._m)) : this, matrix, result);
+	}
+
+	/**
 	 * Multiplies two matrices.
 	 *
 	 * @param a The first operand.

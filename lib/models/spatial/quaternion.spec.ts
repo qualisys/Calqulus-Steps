@@ -78,6 +78,27 @@ test('Quaternion - multiply', (t) => {
 	});
 });
 
+test('Quaternion - multiply (non-static)', (t) => {
+	const quat1 = new Quaternion(1, 2, 3, 4);
+	const quat2 = new Quaternion(4, 3, 2, 1);
+
+	t.like(quat1.multiply(quat2), { x: 12, y: 24, z: 6, w: -12, });
+	t.like(quat1, { x: 1, y: 2, z: 3, w: 4 }, 'Input quaternion should not be modified');
+	t.like(quat2, { x: 4, y: 3, z: 2, w: 1 }, 'Input quaternion should not be modified');
+});
+
+test('Quaternion - multiplyToRef', (t) => {
+	const quat1 = new Quaternion(1, 2, 3, 4);
+	const quat2 = new Quaternion(4, 3, 2, 1);
+	const ref = new Quaternion(0, 0, 0, 1);
+	const res1 = quat1.multiplyToRef(quat2, ref);
+
+	t.like(res1, { x: 12, y: 24, z: 6, w: -12 });
+	t.like(ref, { x: 12, y: 24, z: 6, w: -12 });
+	t.like(quat1, { x: 1, y: 2, z: 3, w: 4 }, 'Input quaternion should not be modified');
+	t.like(quat2, { x: 4, y: 3, z: 2, w: 1 }, 'Input quaternion should not be modified');
+});
+
 test('Quaternion - normalize', (t) => {
 	const q0 = new Quaternion(0, 0, 0, 1);
 	const q1 = new Quaternion(1, 2, 3, 4);

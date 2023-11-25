@@ -219,6 +219,40 @@ test('Matrix - fromQuaternion', (t) => {
 	]);
 });
 
+test('Matrix - multiply (non-static)', (t) => {
+	const m1 = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const m2 = Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1);
+	const mat = m1.multiply(m2);
+
+	t.is(mat._m[0], 90);
+	t.is(mat._m[1], 114);
+	t.is(mat._m[2], 138);
+	t.is(mat._m[4], 54);
+	t.is(mat._m[5], 69);
+	t.is(mat._m[6], 84);
+	t.is(mat._m[8], 18);
+	t.is(mat._m[9], 24);
+	t.is(mat._m[10], 30);
+});
+
+test('Matrix - multiplyToRef', (t) => {
+	const m1 = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const m2 = Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1);
+	const ref = Matrix.identity();
+
+	m1.multiplyToRef(m2, ref);
+
+	t.is(ref._m[0], 90);
+	t.is(ref._m[1], 114);
+	t.is(ref._m[2], 138);
+	t.is(ref._m[4], 54);
+	t.is(ref._m[5], 69);
+	t.is(ref._m[6], 84);
+	t.is(ref._m[8], 18);
+	t.is(ref._m[9], 24);
+	t.is(ref._m[10], 30);
+});
+
 test('Matrix - multiply', (t) => {
 	const mat = new Matrix();
 

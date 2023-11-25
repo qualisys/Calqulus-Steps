@@ -148,6 +148,28 @@ export class Quaternion {
 	}
 
 	/**
+	 * Multiplies two quaternions.
+	 * 
+	 * @param otherQuaternion The quaternion to multiply with.
+	 * @returns The multiplication result.
+	 */
+	multiply(otherQuaternion: Quaternion): Quaternion {
+		return this.multiplyToRef(otherQuaternion, Quaternion.tmpQuat2);
+	}
+
+	/**
+	 * Multiplies the current Quaternion with another one and stores the result
+	 * in the given Quaternion.
+	 * 
+	 * @param otherQuaternion The quaternion to multiply with.
+	 * @param result The receiving quaternion.
+	 * @returns The multiplication result.
+	 */
+	multiplyToRef(otherQuaternion: Quaternion, result: Quaternion): Quaternion {
+		return Quaternion.multiply(this === result ? new Quaternion(this.x, this.y, this.z, this.w) : this, otherQuaternion, result);
+	}
+
+	/**
 	 * Multiplies two quat's
 	 *
 	 * @param a The first operand.
