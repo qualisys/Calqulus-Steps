@@ -212,5 +212,4 @@ export class Quaternion {
 		if (i == 2) { this.z = value; }
 		if (i == 3) { this.w = value; }
 	}
-
 }
