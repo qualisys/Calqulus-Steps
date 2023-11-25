@@ -21,7 +21,7 @@ test('Vector - angle', (t) => {
 	t.is(Vector.angle(vec1, vec2), 0.7751933733103613);
 });
 
-test('Vector - cross product', (t) => {
+test('Vector - cross', (t) => {
 	const v1 = new Vector(1, 0, 0);
 	const v2 = new Vector(0, 1, 0);
 	const v3 = new Vector(0, 1, 0);
@@ -35,6 +35,54 @@ test('Vector - cross product', (t) => {
 
 	t.like(cross2, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
 });
+
+test('Vector - cross (non-static)', (t) => {
+	const v1 = new Vector(1, 0, 0);
+	const v2 = new Vector(0, 1, 0);
+	const v3 = new Vector(0, 1, 0);
+	const v4 = new Vector(0, 0, 1);
+
+	const cross1 = v1.cross(v2);
+
+	t.like(cross1, { x: 0, y: 0, z: 1 }, 'Cross product is not orthogonal to v1 and v2');
+	t.like(v1, { x: 1, y: 0, z: 0 }, 'Input vector should not be modified');
+	t.like(v2, { x: 0, y: 1, z: 0 }, 'Input vector should not be modified');
+
+	const cross2 = v3.cross(v4);
+
+	t.like(cross2, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
+	t.like(v3, { x: 0, y: 1, z: 0 }, 'Input vector should not be modified');
+	t.like(v4, { x: 0, y: 0, z: 1 }, 'Input vector should not be modified');
+});
+
+test('Vector - crossToRef', (t) => {
+	const v1 = new Vector(1, 0, 0);
+	const v2 = new Vector(0, 1, 0);
+	const v3 = new Vector(0, 1, 0);
+	const v4 = new Vector(0, 0, 1);
+	const ref = new Vector(0, 0, 0);
+	const cross1 = v1.crossToRef(v2, ref);
+
+	t.like(ref, { x: 0, y: 0, z: 1 }, 'Cross product is not orthogonal to v1 and v2');
+	t.like(cross1, { x: 0, y: 0, z: 1 }, 'Cross product is not orthogonal to v1 and v2');
+	t.like(v1, { x: 1, y: 0, z: 0 }, 'Input vector should not be modified');
+	t.like(v2, { x: 0, y: 1, z: 0 }, 'Input vector should not be modified');
+
+	const cross2 = v3.crossToRef(v4, ref);
+
+	t.like(ref, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
+	t.like(cross2, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
+	t.like(v3, { x: 0, y: 1, z: 0 }, 'Input vector should not be modified');
+	t.like(v4, { x: 0, y: 0, z: 1 }, 'Input vector should not be modified');
+
+	// Test with self as ref
+	const cross3 = v3.crossToRef(v4, v3);
+
+	t.like(v3, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
+	t.like(cross3, { x: 1, y: 0, z: 0 }, 'Cross product is not orthogonal to v3 and v4');
+	t.like(v4, { x: 0, y: 0, z: 1 }, 'Input vector should not be modified');
+});
+
 
 test('Vector - dot', (t) => {
 	const v1 = new Vector(1, 2, 3);
