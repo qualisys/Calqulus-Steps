@@ -626,7 +626,7 @@ export class AngularVelocityStep extends AngleStep {
 				const vProx = new Vector(rParFrame.get(i, 0), rParFrame.get(i, 1), rParFrame.get(i, 2));
 				const vDist = new Vector(rSegFrame.get(k, 0), rSegFrame.get(k, 1), rSegFrame.get(k, 2));
 				const vFloat = new Vector(NaN, NaN, NaN);
-				Vector.cross(vFloat, vDist, vProx);
+				Vector.cross(vDist, vProx, vFloat);
 				const vFloatNorm = Vector.norm(vFloat);
 				vFloat.x = vFloat.x / vFloatNorm;
 				vFloat.y = vFloat.y / vFloatNorm;
