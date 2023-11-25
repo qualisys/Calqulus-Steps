@@ -61,7 +61,7 @@ test('Vector - length', (t) => {
 
 test('Vector - normalize', (t) => {
 	const v1 = new Vector(0.2, 231, 0.9);
-	const normalized = Vector.normalize(Vector.tmpVec1, v1);
+	const normalized = Vector.normalize(v1, Vector.tmpVec1);
 
 	t.is(
 		Math.sqrt(normalized.x * normalized.x
@@ -109,7 +109,7 @@ test('Vector - transformQuat', (t) => {
 	const quat = new Quaternion(4, 3, 2, 1);
 	const vecRef = new Vector(0, 0, 0);
 
-	t.like(Vector.transformQuat(vecRef, vec, quat), {
+	t.like(Vector.transformQuat(vec, quat, vecRef), {
 		x: 81,
 		y: -38,
 		z: -97,

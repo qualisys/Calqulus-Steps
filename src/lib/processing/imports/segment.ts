@@ -74,7 +74,7 @@ export class SegmentStep extends BaseImportStep {
 		const quatTmp = Quaternion.tmpQuat1;
 
 		for (let i = 0; i < nFrames; i++) {
-			Quaternion.fromRotationMatrix(quatTmp, rotationMatrix.getMatrixAtFrame(i + 1));
+			Quaternion.fromRotationMatrix(rotationMatrix.getMatrixAtFrame(i + 1), quatTmp);
 
 			quats.x[i] = quatTmp.x;
 			quats.y[i] = quatTmp.y;

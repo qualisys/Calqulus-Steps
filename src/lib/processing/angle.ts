@@ -560,13 +560,13 @@ export class AngularVelocityStep extends AngleStep {
 		const rResTemp = Matrix.identity();
 
 		for (let frame = 0; frame < nFrames; frame++) {
-			Matrix.fromQuaternion(rParTemp, sPar.rotation.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(sPar.rotation.getQuaternionAtFrame(frame + 1), rParTemp);
 			rPar.setMatrixAtFrame(frame + 1, Matrix.transpose(rParTemp, rParTemp));
-			Matrix.fromQuaternion(rSegTemp, sSeg.rotation.getQuaternionAtFrame(frame + 1));
-			rSeg.setMatrixAtFrame(frame + 1, Matrix.transpose(rSegTemp, rSegTemp));
-			Matrix.fromQuaternion(rRefTemp, sRef.rotation.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(sSeg.rotation.getQuaternionAtFrame(frame + 1), rSegTemp);
+			rSeg.setMatrixAtFrame(frame + 1, Matrix.transpose(rSegTemp, rSegTemp, ));
+			Matrix.fromQuaternion(sRef.rotation.getQuaternionAtFrame(frame + 1), rRefTemp);
 			rRef.setMatrixAtFrame(frame + 1, Matrix.transpose(rRefTemp, rRefTemp));
-			Matrix.fromQuaternion(rResTemp, sRes.rotation.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(sRes.rotation.getQuaternionAtFrame(frame + 1), rResTemp);
 			rRes.setMatrixAtFrame(frame + 1, Matrix.transpose(rResTemp, rResTemp));
 		}
 
@@ -611,8 +611,8 @@ export class AngularVelocityStep extends AngleStep {
 			const rRefFrame = rRef.getMatrixAtFrame(frame + 1);
 			const rResFrame = rRes.getMatrixAtFrame(frame + 1);
 
-			Matrix.multiply(omegaRSegFrame, Matrix.transpose(rSegFrameTrans, rSegFrame), rSegDiff.getMatrixAtFrame(frame + 1));
-			Matrix.multiply(omegaRRefFrame, Matrix.transpose(rRefFrameTrans, rRefFrame), rRefDiff.getMatrixAtFrame(frame + 1));
+			Matrix.multiply(Matrix.transpose(rSegFrame, rSegFrameTrans), rSegDiff.getMatrixAtFrame(frame + 1), omegaRSegFrame);
+			Matrix.multiply(Matrix.transpose(rRefFrame, rRefFrameTrans), rRefDiff.getMatrixAtFrame(frame + 1), omegaRRefFrame);
 
 			const omegaSegFrame = new Vector(omegaRSegFrame._m[9], omegaRSegFrame._m[2], omegaRSegFrame._m[4]);
 			const omegaRefFrame = new Vector(omegaRRefFrame._m[9], omegaRRefFrame._m[2], omegaRRefFrame._m[4]);

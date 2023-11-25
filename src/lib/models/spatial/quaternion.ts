@@ -12,11 +12,11 @@ export class Quaternion {
 	 * Calculates the conjugate of a quat.
 	 * If the quaternion is normalized, this function is faster than quat.inverse and produces the same result.
 	 *
-	 * @param result The receiving quaternion.
 	 * @param a The quaternion to calculate the conjugate of.
+	 * @param result The receiving quaternion.
 	 * @returns The receiving quaternion.
 	 */
-	static conjugate(result: Quaternion, a: Quaternion): Quaternion {
+	static conjugate(a: Quaternion, result: Quaternion): Quaternion {
 		result.x = -a.x;
 		result.y = -a.y;
 		result.z = -a.z;
@@ -39,11 +39,11 @@ export class Quaternion {
 	 * NOTE: The resultant quaternion is not normalized, so you should be sure
 	 * to renormalize the quaternion yourself where necessary.
 	 *
-	 * @param result The receiving quaternion.
 	 * @param m The rotation matrix.
+	 * @param result The receiving quaternion.
 	 * @returns The quaternion result.
 	 */
-	static fromRotationMatrix(result: Quaternion, matrix: Matrix): Quaternion {
+	static fromRotationMatrix(matrix: Matrix, result: Quaternion): Quaternion {
 		const m = new Float32Array(9);
 		const m4 = matrix._m;
 
@@ -100,11 +100,11 @@ export class Quaternion {
 	/**
 	 * Calculates the inverse of a quaternion.
 	 *
-	 * @param result The receiving quaternion.
 	 * @param a The quaternion to calculate the inverse of.
+	 * @param result The receiving quaternion.
 	 * @returns The inverse quaternion.
 	 */
-	static invert(result: Quaternion, a: Quaternion): Quaternion {
+	static invert(a: Quaternion, result: Quaternion): Quaternion {
 		const a0 = a.x;
 		const a1 = a.y;
 		const a2 = a.z;
@@ -132,12 +132,12 @@ export class Quaternion {
 	/**
 	 * Multiplies two quat's
 	 *
-	 * @param result The receiving quaternion.
 	 * @param a The first operand.
 	 * @param b The second operand.
+	 * @param result The receiving quaternion.
 	 * @returns The multiplication result.
 	 */
-	static multiply(result: Quaternion, a: Quaternion, b: Quaternion): Quaternion {
+	static multiply(a: Quaternion, b: Quaternion, result: Quaternion): Quaternion {
 		result.x = a.x * b.w + a.w * b.x + a.y * b.z - a.z * b.y;
 		result.y = a.y * b.w + a.w * b.y + a.z * b.x - a.x * b.z;
 		result.z = a.z * b.w + a.w * b.z + a.x * b.y - a.y * b.x;
@@ -158,11 +158,11 @@ export class Quaternion {
 	/**
 	 * Normalizes a quaternion and store in a the specified reference.
 	 *
-	 * @param result The receiving vector.
 	 * @param a The quaternion to normalize
+	 * @param result The receiving vector.
 	 * @returns The normalized quaternion.
 	 */
-	static normalizeToRef(result: Quaternion, a: Quaternion) {
+	static normalizeToRef(a: Quaternion, result: Quaternion) {
 		const x = a.x;
 		const y = a.y;
 		const z = a.z;

@@ -123,11 +123,11 @@ export class Vector implements IVector {
 	/**
 	 * Normalize a Vector
 	 *
-	 * @param result The receiving vector:
 	 * @param a The vector to normalize.
+	 * @param result The receiving vector:
 	 * @returns The normalized Vector.
 	 */
-	static normalize(result: Vector, a: Vector): Vector {
+	static normalize(a: Vector, result: Vector): Vector {
 		let len = a.x * a.x + a.y * a.y + a.z * a.z;
 
 		if (len > 0) {
@@ -209,7 +209,7 @@ export class Vector implements IVector {
 	 * @param q The quaternion to transform with.
 	 * @returns The transformed vector.
 	 */
-	static transformQuat(result: Vector, a: Vector, q: Quaternion): Vector {
+	static transformQuat(a: Vector, q: Quaternion, result: Vector): Vector {
 		// benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
 		let uvx = q.y * a.z - q.z * a.y,
 			uvy = q.z * a.x - q.x * a.z,

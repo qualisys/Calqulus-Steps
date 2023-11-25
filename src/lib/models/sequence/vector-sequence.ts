@@ -225,7 +225,7 @@ export class VectorSequence implements ISequence {
 		const z = result ? result.z : new Float32Array(this.length);
 
 		for (let i = 0; i < this.length; i++) {
-			Vector.normalize(Vector.tmpVec1, this.getVectorAtFrame(i + 1, Vector.tmpVec2));
+			Vector.normalize(this.getVectorAtFrame(i + 1, Vector.tmpVec2), Vector.tmpVec1);
 
 			x[i] = Vector.tmpVec1.x;
 			y[i] = Vector.tmpVec1.y;
