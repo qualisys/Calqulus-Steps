@@ -10,7 +10,7 @@ test('Euler - getEuler - Cardan', (t) => {
 	const mat = Matrix.identity();
 	const quat = new Quaternion(-0.076565, 0.030934, -0.720501, 0.688520);
 
-	Matrix.fromQuaternion(mat, quat);
+	Matrix.fromQuaternion(quat, mat);
 	const vec = new Vector(0, 0, 0);
 
 	// Test a representative subset of RotationOrder
@@ -41,7 +41,7 @@ test('Euler - getEuler - Euler', (t) => {
 	const mat = Matrix.identity();
 	const quat = new Quaternion(-0.076565, 0.030934, -0.720501, 0.688520);
 
-	Matrix.fromQuaternion(mat, quat);
+	Matrix.fromQuaternion(quat, mat);
 	const vec = new Vector(0, 0, 0);
 
 	// Test a representative subset of RotationOrder

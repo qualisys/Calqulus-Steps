@@ -18,7 +18,7 @@ export class Matrix {
 	 * Format: column-major, when typed out it looks like row-major
 	 * The matrices are being post multiplied.
 	 *
-	 * @returns a new 4x4 matrix
+	 * @returns A new 4x4 matrix.
 	 */
 
 	constructor() {
@@ -33,7 +33,7 @@ export class Matrix {
 	/**
 	 * Copy all components from the specified matrix.
 	 * 
-	 * @param m The matrix to copy values from
+	 * @param m The matrix to copy values from.
 	 */
 	copyFrom(matrix: Matrix) {
 		const m = this._m;
@@ -60,32 +60,31 @@ export class Matrix {
 	 * Creates a matrix from a quaternion rotation, vector translation and
 	 * vector scale.
 	 *
-	 * @param rotation Rotation quaternion
-	 * @param translation Translation vector
-	 * @param scale Scaling vector
-	 * @returns the resulting matrix
+	 * @param rotation The rotation quaternion.
+	 * @param translation The translation vector.
+	 * @param scale The scaling vector.
+	 * @returns The resulting matrix.
 	 */
 	static compose(rotation: Quaternion, translation, scale?: Vector) {
 		const result = new Matrix();
 
-		Matrix.composeToRef(result, rotation, translation, scale);
+		Matrix.composeToRef(rotation, translation, scale, result);
 
 		return result;
 	}
 
 	/**
 	 * Creates a matrix from a quaternion rotation, vector translation and
-	 * vector scale.
+	 * vector scale and store it in the specified matrix.
 	 *
-	 * @param out the receiving operation result
-	 * @param rotation Rotation quaternion
-	 * @param translation Translation vector
-	 * @param scale Scaling vector
-	 * @returns the resulting matrix
+	 * @param rotation The rotation quaternion.
+	 * @param translation The translation vector.
+	 * @param scale The scaling vector.
+	 * @param result The receiving operation result.
+	 * @returns The resulting matrix.
 	 */
-	static composeToRef(out: Matrix, rotation: Quaternion, translation: Vector, scale?: Vector) {
-		const m = out._m;
-
+	static composeToRef(rotation: Quaternion, translation: Vector, scale: Vector, result: Matrix) {
+		const m = result._m;
 		const x = rotation.x,
 			y = rotation.y,
 			z = rotation.z,
@@ -124,17 +123,18 @@ export class Matrix {
 		m[14] = translation.z;
 		m[15] = 1;
 	
-		return out;
+		return result;
 	}
 	
 	/**
 	 * Decomposes a transformation matrix into its rotation, translation
-	 * and scale components. Returns only the rotation component
-	 * @param  rotation Quaternion to receive the rotation component
-	 * @param  translation Vector to receive the translation vector
-	 * @param  scale Vector to receive the scaling factor
-	 * @param  mat Matrix to be decomposed (input)
-	 * @returns the rotation component
+	 * and scale components. Returns only the rotation component.
+	 * 
+	 * @param rotation The quaternion to receive the rotation component.
+	 * @param translation The vector to receive the translation vector.
+	 * @param scale The vector to receive the scaling factor.
+	 * @param mat The matrix to be decomposed (input).
+	 * @returns The rotation component.
 	 */
 	decompose(rotation: Quaternion, translation: Vector, scale: Vector) {
 		return Matrix.decomposeToRef(rotation, translation, scale, this);
@@ -143,11 +143,12 @@ export class Matrix {
 	/**
 	 * Decomposes a transformation matrix into its rotation, translation
 	 * and scale components. Returns only the rotation component
-	 * @param  rotation Quaternion to receive the rotation component
-	 * @param  translation Vector to receive the translation vector
-	 * @param  scale Vector to receive the scaling factor
-	 * @param  mat Matrix to be decomposed (input)
-	 * @returns the rotation component
+	 * 
+	 * @param rotation The quaternion to receive the rotation component.
+	 * @param translation The vector to receive the translation vector.
+	 * @param scale The vector to receive the scaling factor.
+	 * @param matrix The matrix to be decomposed (input).
+	 * @returns The rotation component.
 	 */
 	static decomposeToRef(rotation: Quaternion, translation: Vector, scale: Vector, matrix: Matrix) {
 		const m = matrix._m;
@@ -224,19 +225,19 @@ export class Matrix {
 	 * The remaining elements are assigned the corresponding elements in the
 	 * identity.
 	 * 
-	 * @param m00 Component in column 0, row 0 position (index 0)
-	 * @param m01 Component in column 0, row 1 position (index 1)
-	 * @param m02 Component in column 0, row 2 position (index 2)
-	 * @param m10 Component in column 1, row 0 position (index 4)
-	 * @param m11 Component in column 1, row 1 position (index 5)
-	 * @param m12 Component in column 1, row 2 position (index 6)
-	 * @param m20 Component in column 2, row 0 position (index 8)
-	 * @param m21 Component in column 2, row 1 position (index 9)
-	 * @param m22 Component in column 2, row 2 position (index 10)
-	 * @param m30 Component in column 3, row 0 position (index 12)
-	 * @param m31 Component in column 3, row 1 position (index 13)
-	 * @param m32 Component in column 3, row 2 position (index 14)
-	 * @returns A new matrix
+	 * @param m00 Component in column 0, row 0 position (index 0).
+	 * @param m01 Component in column 0, row 1 position (index 1).
+	 * @param m02 Component in column 0, row 2 position (index 2).
+	 * @param m10 Component in column 1, row 0 position (index 4).
+	 * @param m11 Component in column 1, row 1 position (index 5).
+	 * @param m12 Component in column 1, row 2 position (index 6).
+	 * @param m20 Component in column 2, row 0 position (index 8).
+	 * @param m21 Component in column 2, row 1 position (index 9).
+	 * @param m22 Component in column 2, row 2 position (index 10).
+	 * @param m30 Component in column 3, row 0 position (index 12).
+	 * @param m31 Component in column 3, row 1 position (index 13).
+	 * @param m32 Component in column 3, row 2 position (index 14).
+	 * @returns A new matrix.
 	 */
 	static fromRotationMatrix(
 		m00: number, m01: number, m02: number,
@@ -258,15 +259,16 @@ export class Matrix {
 
 		return matrix;
 	}
+
 	/**
-	 * Calculates a 4x4 matrix from the given quaternion
+	 * Calculates a 4x4 matrix from the given quaternion.
 	 *
-	 * @param operation result
-	 * @param q Quaternion to create matrix from
+	 * @param q Quaternion to create matrix from.
+	 * @param result The Matrix instance to store the result in.
 	 *
-	 * @returns the resulting matrix
+	 * @returns The resulting matrix.
 	 */
-	static fromQuaternion(out: Matrix, q: Quaternion): Matrix {
+	static fromQuaternion(q: Quaternion, result: Matrix): Matrix {
 		const x = q.x,
 			y = q.y,
 			z = q.z,
@@ -285,7 +287,7 @@ export class Matrix {
 		const wy = w * y2;
 		const wz = w * z2;
 
-		const m = out._m;
+		const m = result._m;
 		
 		m[0] = 1 - yy - zz;
 		m[1] = yx + wz;
@@ -307,39 +309,39 @@ export class Matrix {
 		m[14] = 0;
 		m[15] = 1;
 		
-		return out;
+		return result;
 	}
 
 	/**
-	 * Create a new Matrix with the given values
+	 * Create a new Matrix with the given values.
 	 *
-	 * @param values Array of 16 numbers to create matrix from
-	 * @returns A new matrix
+	 * @param values Array of 16 numbers to create matrix from.
+	 * @returns A new matrix.
 	 */
 	static fromArray(values: number[]): Matrix {
 		return Matrix.fromValues.apply(null, values);
 	}
 
 	/**
-	 * Create a new Matrix with the given values
+	 * Create a new Matrix with the given values.
 	 *
-	 * @param m00 Component in column 0, row 0 position (index 0)
-	 * @param m01 Component in column 0, row 1 position (index 1)
-	 * @param m02 Component in column 0, row 2 position (index 2)
-	 * @param m03 Component in column 0, row 3 position (index 3)
-	 * @param m10 Component in column 1, row 0 position (index 4)
-	 * @param m11 Component in column 1, row 1 position (index 5)
-	 * @param m12 Component in column 1, row 2 position (index 6)
-	 * @param m13 Component in column 1, row 3 position (index 7)
-	 * @param m20 Component in column 2, row 0 position (index 8)
-	 * @param m21 Component in column 2, row 1 position (index 9)
-	 * @param m22 Component in column 2, row 2 position (index 10)
-	 * @param m23 Component in column 2, row 3 position (index 11)
-	 * @param m30 Component in column 3, row 0 position (index 12)
-	 * @param m31 Component in column 3, row 1 position (index 13)
-	 * @param m32 Component in column 3, row 2 position (index 14)
-	 * @param m33 Component in column 3, row 3 position (index 15)
-	 * @returns A new matrix
+	 * @param m00 Component in column 0, row 0 position (index 0).
+	 * @param m01 Component in column 0, row 1 position (index 1).
+	 * @param m02 Component in column 0, row 2 position (index 2).
+	 * @param m03 Component in column 0, row 3 position (index 3).
+	 * @param m10 Component in column 1, row 0 position (index 4).
+	 * @param m11 Component in column 1, row 1 position (index 5).
+	 * @param m12 Component in column 1, row 2 position (index 6).
+	 * @param m13 Component in column 1, row 3 position (index 7).
+	 * @param m20 Component in column 2, row 0 position (index 8).
+	 * @param m21 Component in column 2, row 1 position (index 9).
+	 * @param m22 Component in column 2, row 2 position (index 10).
+	 * @param m23 Component in column 2, row 3 position (index 11).
+	 * @param m30 Component in column 3, row 0 position (index 12).
+	 * @param m31 Component in column 3, row 1 position (index 13).
+	 * @param m32 Component in column 3, row 2 position (index 14).
+	 * @param m33 Component in column 3, row 3 position (index 15).
+	 * @returns A new matrix.
 	 */
 	static fromValues(
 		m00: number, m01: number, m02: number, m03: number,
@@ -369,14 +371,14 @@ export class Matrix {
 
 		return matrix;
 	}
-
   
 	/**
 	 * Returns a matrix cell at the specified row and column.
-	 * @param row
-	 * @param column
 	 * 
-	 * @returns the value on the specified matrix cell
+	 * @param row Defines the row index.
+	 * @param column Defines the column index.
+	 * 
+	 * @returns The value on the specified matrix cell.
  	 */
 	get(row: number, column: number): number {
 		return this._m[4 * column + row];
@@ -384,6 +386,8 @@ export class Matrix {
 
 	/**
 	 * Creates an identity matrix.
+	 * 
+	 * @returns A new identity matrix.
 	 */
 	static identity() {
 		const matrix = new Matrix();
@@ -399,15 +403,37 @@ export class Matrix {
 	}
 
 	/**
+	 * Multiply the current matrix by another one.
+	 * 
+	 * @param matrix The matrix to multiply by.
+	 * @returns The multiplication result.
+	 */
+	multiply(matrix: Matrix) {
+		return this.multiplyToRef(matrix, Matrix.identity());
+	}
+
+	/**
+	 * Multiply the current matrix by another one and stores the result in the
+	 * given matrix.
+	 * 
+	 * @param matrix The matrix to multiply by.
+	 * @param result The matrix to store the result in.
+	 * @returns The multiplication result.
+	 */
+	multiplyToRef(matrix: Matrix, result: Matrix) {
+		return Matrix.multiply(this === result ? Matrix.fromArray(Array.from(this._m)) : this, matrix, result);
+	}
+
+	/**
 	 * Multiplies two matrices.
 	 *
-	 * @param out the receiving matrix
-	 * @param a the first operand
-	 * @param b the second operand
-	 * @returns the resulting matrix
+	 * @param a The first operand.
+	 * @param b The second operand.
+	 * @param result The receiving matrix,
+	 * @returns The resulting matrix.
 	 */
-	static multiply(out: Matrix, a: Matrix, b: Matrix): Matrix {
-		const m = out._m;
+	static multiply(a: Matrix, b: Matrix, result: Matrix): Matrix {
+		const m = result._m;
 		const ma = a._m;
 		const mb = b._m;
 
@@ -465,23 +491,24 @@ export class Matrix {
 		m[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
 		m[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-		return out;
+		return result;
 	}
 
 	/**
-	 * Calculates the transpose of the given matrix
+	 * Calculates the transpose of the given matrix and stores it in the
+	 * specified matrix.
 	 *
-	 * @param out Matrix receiving operation result
-	 * @param a Matrix to transpose
+	 * @param a Matrix to transpose,
+	 * @param result Matrix receiving operation result.
 	 *
-	 * @returns the transposed matrix
+	 * @returns The transposed matrix.
 	 */
-	static transpose(out: Matrix, a: Matrix): Matrix {
-		const m = out._m;
+	static transpose(a: Matrix, result: Matrix): Matrix {
+		const m = result._m;
 		const ma = a._m;
 
 		// If we are transposing ourselves we can skip a few steps but have to cache some values.
-		if (out === a) {
+		if (result === a) {
 			const a01 = ma[1],
 				a02 = ma[2],
 				a03 = ma[3];
@@ -521,15 +548,15 @@ export class Matrix {
 			m[15] = ma[15];
 		}
 
-		return out;
+		return result;
 	}
 
 	/**
-	 * Calculates the skew matrix from a vector
+	 * Calculates the skew matrix from a vector.
 	 *
 	 * @param v Vector
 	 *
-	 * @returns The skew matrix
+	 * @returns The skew matrix.
 	 */
 	static skew(v: Vector): Matrix {
 		const vx = v.x;
@@ -553,6 +580,8 @@ export class Matrix {
 	 * 
 	 * Use the `fractionDigits` property to control the number of decimals in
 	 * the output.
+	 * 
+	 * @returns A string representation of this matrix.
 	 */
 	toString() {
 		const m = this._m;

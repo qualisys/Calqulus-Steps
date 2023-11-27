@@ -37,6 +37,7 @@ export class MatrixSequence {
 	 * length .
 	 *
 	 * @param length the length of the MatrixSequence
+	 * @returns A MatrixSequence filled with NaNs.
 	 */
 	static createEmpty(length: number) {
 		const nan = new Float32Array(length).fill(NaN);
@@ -52,10 +53,10 @@ export class MatrixSequence {
 	/**
 	 * Constructs a rotation matrix from two vectors.
 	 * 
-	 * @param u 
-	 * @param v 
-	 * @param order 
-	 * @returns 
+	 * @param u The first vector. 
+	 * @param v The second vector.
+	 * @param order The rotation order.
+	 * @returns A rotation matrix.
 	 */
 	static fromVectors(u: VectorSequence, v: VectorSequence, order: string) {
 		// To build the rotation matrix we will need to build each axis X, Y and Z one by one.
@@ -116,6 +117,7 @@ export class MatrixSequence {
 	}
 
 	/**
+	 * Create a MatrixSequence from the specified arrays.
 	 * 
 	 * @param m00 Component in column 0, row 0 position (index 0)
 	 * @param m01 Component in column 0, row 1 position (index 1)
@@ -126,6 +128,7 @@ export class MatrixSequence {
 	 * @param m20 Component in column 2, row 0 position (index 8)
 	 * @param m21 Component in column 2, row 1 position (index 9)
 	 * @param m22 Component in column 2, row 2 position (index 10)
+	 * @returns A MatrixSequence with the specified values.
 	 */
 	static fromRotationMatrixValues(
 		m00: Float32Array, m01: Float32Array, m02: Float32Array,
@@ -143,19 +146,25 @@ export class MatrixSequence {
 		);
 	}
 
+	/**
+	 * The number of elements in this sequence.
+	 */
 	get length() { return this.m11.length; };
 
 	/** 
 	 * Returns a [[Matrix]] for a specified frame.
 	 * 
-	 * If a Matrix is passed as `ref`, the function will 
-	 * update and return it instead of creating a new instance.
+	 * If the `result` parameter is passed, this method will update and return
+	 * that Matrix instance instead of creating a new instance.
 	 * 
+	 * @param frame The frame of which to get the matrix of.
+	 * @param result The matrix to update and return.
+	 * @returns Matrix at the specified frame.
 	 * @remark The frame index is 1-based.
 	 */
-	getMatrixAtFrame(frame: number, ref?: Matrix): Matrix {
+	getMatrixAtFrame(frame: number, result?: Matrix): Matrix {
 		const frameIndex = Math.min(frame, this.m11.length) - 1;
-		const matrix = ref ? ref : new Matrix();
+		const matrix = result ? result : new Matrix();
 		const m = matrix._m;
 
 		m[0] = this.m00[frameIndex];
@@ -181,6 +190,9 @@ export class MatrixSequence {
 	/** 
 	 * Set elements of a [[Matrix]] for a specified frame.
 	 * 
+	 * @param frame The frame of which to set the matrix of.
+	 * @param matrix The matrix to assign to the specified frame.
+	 * @returns The current (and updated) matrix sequence.
 	 * @remark The frame index is 1-based.
 	 */
 	setMatrixAtFrame(frame: number, matrix: Matrix): MatrixSequence {

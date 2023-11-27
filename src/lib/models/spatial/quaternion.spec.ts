@@ -45,7 +45,7 @@ test('Quaternion - conjugate', (t) => {
 	const quat = new Quaternion(1, 2, 3, 4);
 	const quatRef = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.conjugate(quatRef, quat), {
+	t.like(Quaternion.conjugate(quat, quatRef), {
 		x: -1,
 		y: -2,
 		z: -3,
@@ -57,7 +57,7 @@ test('Quaternion - invert', (t) => {
 	const quat = new Quaternion(0.1375, 0.0548, 0.6295, 0.7627);
 	const quatRef = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.invert(quatRef, quat), {
+	t.like(Quaternion.invert(quat, quatRef), {
 		x: -0.13751501251391615,
 		y: -0.05480598316918258,
 		z: -0.6295687300182561,
@@ -70,12 +70,33 @@ test('Quaternion - multiply', (t) => {
 	const quat2 = new Quaternion(4, 3, 2, 1);
 	const quatRef = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.multiply(quatRef, quat1, quat2), {
+	t.like(Quaternion.multiply(quat1, quat2, quatRef), {
 		x: 12,
 		y: 24,
 		z: 6,
 		w: -12,
 	});
+});
+
+test('Quaternion - multiply (non-static)', (t) => {
+	const quat1 = new Quaternion(1, 2, 3, 4);
+	const quat2 = new Quaternion(4, 3, 2, 1);
+
+	t.like(quat1.multiply(quat2), { x: 12, y: 24, z: 6, w: -12, });
+	t.like(quat1, { x: 1, y: 2, z: 3, w: 4 }, 'Input quaternion should not be modified');
+	t.like(quat2, { x: 4, y: 3, z: 2, w: 1 }, 'Input quaternion should not be modified');
+});
+
+test('Quaternion - multiplyToRef', (t) => {
+	const quat1 = new Quaternion(1, 2, 3, 4);
+	const quat2 = new Quaternion(4, 3, 2, 1);
+	const ref = new Quaternion(0, 0, 0, 1);
+	const res1 = quat1.multiplyToRef(quat2, ref);
+
+	t.like(res1, { x: 12, y: 24, z: 6, w: -12 });
+	t.like(ref, { x: 12, y: 24, z: 6, w: -12 });
+	t.like(quat1, { x: 1, y: 2, z: 3, w: 4 }, 'Input quaternion should not be modified');
+	t.like(quat2, { x: 4, y: 3, z: 2, w: 1 }, 'Input quaternion should not be modified');
 });
 
 test('Quaternion - normalize', (t) => {
@@ -93,7 +114,7 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	const mat = Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, -1);
 	const quatRef = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.fromRotationMatrix(quatRef, mat), {
+	t.like(Quaternion.fromRotationMatrix(mat, quatRef), {
 		x: 0.7071067811865476,
 		y: 0,
 		z: 0,
@@ -103,7 +124,7 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	const mat2 = Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1);
 	const quatRef2 = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.fromRotationMatrix(quatRef2, mat2), {
+	t.like(Quaternion.fromRotationMatrix(mat2, quatRef2), {
 		x: 0,
 		y: 0,
 		z: 0,
@@ -113,7 +134,7 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	const mat3 = Matrix.fromRotationMatrix(-1, 0, 0, 0, -0.5, 0, 0, 0, -1);
 	const quatRef3 = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.fromRotationMatrix(quatRef3, mat3), {
+	t.like(Quaternion.fromRotationMatrix(mat3, quatRef3), {
 		x: 0,
 		y: 0.7905694150420949,
 		z: 0,
@@ -121,9 +142,9 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	});
 
 	const mat4 = Matrix.fromRotationMatrix(0, 0, -1, 0, 1, 0, 1, 0, 0);
-	const q4 = Quaternion.fromRotationMatrix(Quaternion.tmpQuat1, mat4);
+	const q4 = Quaternion.fromRotationMatrix(mat4, Quaternion.tmpQuat1);
 
-	t.like(Quaternion.fromRotationMatrix(q4, mat4), {
+	t.like(Quaternion.fromRotationMatrix(mat4, q4), {
 		x: 0,
 		y: 0.7071067811865475,
 		z: 0,
