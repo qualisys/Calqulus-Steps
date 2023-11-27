@@ -29,6 +29,36 @@ export class VectorSequence implements ISequence {
 		public frameRate?: number
 	) {}
 
+	/**
+	 * Adds a vector from each vector in the current [[VectorSequence]].
+	 *
+	 * If the `result` parameter is passed, this method will update and return
+	 * that VectorSequence instance instead of creating a new instance.
+	 * 
+	 * @remark The returned VectorSequence length is the smallest of the
+	 *         current length and the length of the input VectorSequence.
+	 * @param v The vector sequence to add.
+	 * @param result A vector sequence to store the result in.
+	 * @returns The resulting vector sequence.
+	 */
+	add(v: VectorSequence, result?: VectorSequence) {
+		const len = Math.max(this.length, v.length);
+		const x = result ? result.x : new Float32Array(len);
+		const y = result ? result.y : new Float32Array(len);
+		const z = result ? result.z : new Float32Array(len);
+
+		for (let i = 0; i < len; i++) {
+			const i0 = Math.min(i, this.length - 1);
+			const i1 = Math.min(i, v.length - 1);
+
+			x[i] = this.x[i0] + v.x[i1];
+			y[i] = this.y[i0] + v.y[i1];
+			z[i] = this.z[i0] + v.z[i1];
+		}
+
+		return result ? result : new VectorSequence(x, y, z);
+	}
+
 	/** 
 	 * Computes the cross product from each vector in this and the specified vector sequence.
 	 * 
