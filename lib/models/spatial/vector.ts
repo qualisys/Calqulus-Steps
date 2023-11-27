@@ -15,7 +15,21 @@ export class Vector implements IVector {
 	/** Vector instance used for performance reasons. */
 	static tmpVec3: Vector = new Vector(0, 0, 0);
 
-	constructor(public x: number, public y: number, public z: number) {}
+	/**
+	 * Creates a new Vector from the specified values.
+	 * @param x The x component.
+	 * @param y The y component.
+	 * @param z THe z component.
+	 */
+	constructor(
+		/** The x component. */
+		public x: number,
+		
+		/** The y component. */
+		public y: number,
+		
+		/** The z component. */
+		public z: number) {}
 
 	/**
 	 * Get the components of this vector as an array.
@@ -26,10 +40,11 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Get the angle between two 3D vectors
-	 * @param {Vector} a The first operand
-	 * @param {Vector} b The second operand
-	 * @returns {number} The angle in radians
+	 * Get the angle between two 3D vectors.
+	 * 
+	 * @param a The first operand.
+	 * @param b The second operand.
+	 * @returns The angle in radians.
 	 */
 	static angle(a: Vector, b: Vector): number {
 		const mag1: number = <number>Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
@@ -41,55 +56,49 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Computes the cross product of two vectors
+	 * Computes the cross product of two vectors.
 	 *
-	 * @param {vec3} out the receiving vector
-	 * @param {ReadonlyVec3} a the first operand
-	 * @param {ReadonlyVec3} b the second operand
-	 * @returns {vec3} out
+	 * @param a The first operand.
+	 * @param b The second operand.
+	 * @param result The receiving vector.
+	 * @returns The cross product.
 	 */
-	static cross(out: Vector, a: Vector, b): Vector {
-		out.x = a.y * b.z - a.z * b.y;
-		out.y = a.z * b.x - a.x * b.z;
-		out.z = a.x * b.y - a.y * b.x;
+	static cross(a: Vector, b: Vector, result: Vector): Vector {
+		result.x = a.y * b.z - a.z * b.y;
+		result.y = a.z * b.x - a.x * b.z;
+		result.z = a.x * b.y - a.y * b.x;
 
-		return out;
+		return result;
 	}
 
 	/**
-	 * Calculates the length of a vector
-	 */
-	length(): number {
-		return Math.hypot(this.x, this.y, this.z);
-	}
-
-	/**
-	 * Normalize a Vector
+	 * Computes the cross product of the current Vector and returns a new Vector.
 	 *
-	 * @param {vec3} out the receiving vector
-	 * @param {ReadonlyVec3} a vector to normalize
-	 * @returns {vec3} out
+	 * @param otherVector The Vector to calculate the cross product with.
+	 * @returns The cross product.
 	 */
-	static normalize(out: Vector, a: Vector): Vector {
-		let len = a.x * a.x + a.y * a.y + a.z * a.z;
-
-		if (len > 0) {
-			len = 1 / Math.sqrt(len);
-		}
-
-		out.x = a.x * len;
-		out.y = a.y * len;
-		out.z = a.z * len;
-
-		return out;
+	cross(otherVector: Vector): Vector {
+		return this.crossToRef(otherVector, new Vector(0, 0, 0));
 	}
 
 	/**
-	* Calculates the dot product of two Vectors
+	 * Computes the cross product of the current Vector and the specified Vector
+	 * and stores it in the result Vector.
+	 *
+	 * @param otherVector The Vector to calculate the cross product with.
+	 * @param result The Vector to store the result in.
+	 * @returns The cross product.
+	 */
+	crossToRef(otherVector: Vector, result: Vector): Vector {
+		return Vector.cross(this === result ? new Vector(this.x, this.y, this.z) : this, otherVector, result);
+	}
+
+	/**
+	* Calculates the dot product of two Vectors.
 	*
-	* @param {Vector} a the first operand
-	* @param {Vector} b the second operand
-	* @returns {number} dot product of a and b
+	* @param a The first operand.
+	* @param b The second operand.
+	* @returns The dot product of a and b.
 	*/
 	static dot(a: Vector, b: Vector): number {
 		return a.x * b.x + a.y * b.y + a.z * b.z;
@@ -99,64 +108,165 @@ export class Vector implements IVector {
 	 * Returns a [[Vector]] from an array, where 
 	 * `x`, `y`, `z` are included.
 	 * 
-	 * @param param0 
-	 * @returns 
+	 * @param components The array to create the Vector from.
+	 * @returns A new Vector.
 	 */
 	static fromArray([x, y, z]: number[]): Vector {
 		return new Vector(x, y, z);
 	}
 
 	/**
-	 * Subtracts a vector from this vector.
-	 *
-	 * @param {Vector} otherVector the vector to subtract from this vector
-	 * @param {Vector} out the receiving vector
-	 * @returns {Vector} a new Vector
+	 * Calculates the length of a vector.
+	 * 
+	 * @returns The length of the vector.
 	 */
-	public subtract(otherVector: Vector): Vector {
-		return new Vector(this.x - otherVector.x, this.y - otherVector.y, this.z - otherVector.z);
+	length(): number {
+		return Math.hypot(this.x, this.y, this.z);
+	}
+
+	/**
+	 * Calculates the Euclidian norm of a Vector.
+	 *
+	 * @param result The receiving vector.
+	 * @returns The Euclidian norm.
+	 */
+	static norm(result: Vector): number {
+		return Math.hypot(result.x, result.y, result.z);
+	}
+
+	/**
+	 * Normalize a Vector
+	 *
+	 * @param a The vector to normalize.
+	 * @param result The receiving vector:
+	 * @returns The normalized Vector.
+	 */
+	static normalize(a: Vector, result: Vector): Vector {
+		let len = a.x * a.x + a.y * a.y + a.z * a.z;
+
+		if (len > 0) {
+			len = 1 / Math.sqrt(len);
+		}
+
+		result.x = a.x * len;
+		result.y = a.y * len;
+		result.z = a.z * len;
+
+		return result;
+	}
+
+	/**
+	 * Normalize the current Vector.
+	 *
+	 * @returns The normalized Vector.
+	 */
+	normalize(): Vector {
+		return this.normalizeToRef(this);
+	}
+
+	/**
+	 * Normalize the current Vector to the reference.
+	 *
+	 * @param result The receiving vector.
+	 * @returns The normalized Vector.
+	 */
+	normalizeToRef(result: Vector): Vector {
+		return Vector.normalize(result, this);
 	}
 
 	/**
 	 * Subtracts a vector from this vector.
 	 *
-	 * @param {Vector} otherVector the vector to subtract from this vector
-	 * @param {Vector} out the receiving vector
-	 * @returns {Vector} out
+	 * @param otherVector The vector to subtract from this vector.
+	 * @returns A new Vector.
 	 */
-	public subtractToRef(otherVector: Vector, out: Vector): Vector {
-		out.x = this.x - otherVector.x;
-		out.y = this.y - otherVector.y;
-		out.z = this.z - otherVector.z;
-
-		return out;
+	subtract(otherVector: Vector): Vector {
+		return this.subtractToRef(otherVector, this);
 	}
 
 	/**
-	 * Transforms the vector with a Matrix.
+	 * Subtracts a vector from this vector.
 	 *
-	 * @param {Vector} out the receiving vector
-	 * @param {Vector} a the vector to transform
-	 * @param {Vector} m the 3x3 matrix to transform with
-	 * @returns {Vector} out
+	 * @param otherVector The vector to subtract from this vector.
+	 * @param result The receiving vector.
+	 * @returns The subtraction result.
 	 */
-	static transformMatrix(out: Vector, a: Vector, m: Matrix): Vector {
-		out.x = a.x * m._m[0] + a.y * m._m[4] + a.z * m._m[8];
-		out.y = a.x * m._m[1] + a.y * m._m[5] + a.z * m._m[9];
-		out.z = a.x * m._m[2] + a.y * m._m[6] + a.z * m._m[10];
+	subtractToRef(otherVector: Vector, result: Vector): Vector {
+		result.x = this.x - otherVector.x;
+		result.y = this.y - otherVector.y;
+		result.z = this.z - otherVector.z;
+
+		return result;
+	}
+
+	/**
+	 * Transforms this vector with the specified Matrix.
+	 *
+	 * @param matrix The matrix to use for the transformation.
+	 * @returns The transformed vector.
+	 */
+	transformMatrix(matrix: Matrix): Vector {
+		return this.transformMatrixToRef(matrix, this);
+	}
+
+	/**
+	 * Transforms this vector with the specified Matrix and stores the result in
+	 * the given Vector.
+	 *
+	 * @param matrix The matrix to use for the transformation.
+	 * @param result The receiving vector.
+	 * @returns The transformed vector.
+	 */
+	transformMatrixToRef(matrix: Matrix, result: Vector): Vector {
+		return Vector.transformMatrix(this === result ? new Vector(this.x, this.y, this.z) : this, matrix, result);
+	}
+
+	/**
+	 * Transforms a vector with a Matrix.
+	 *
+	 * @param a The vector to transform.
+	 * @param m The 3x3 matrix to transform with.
+	 * @param result The receiving vector.
+	 * @returns The transformed vector.
+	 */
+	static transformMatrix(a: Vector, m: Matrix, result: Vector): Vector {
+		result.x = a.x * m._m[0] + a.y * m._m[4] + a.z * m._m[8];
+		result.y = a.x * m._m[1] + a.y * m._m[5] + a.z * m._m[9];
+		result.z = a.x * m._m[2] + a.y * m._m[6] + a.z * m._m[10];
 		
-		return out;
+		return result;
 	}
 
 	/**
-	 * Transforms the Vector with a Quat
-	 *
-	 * @param {Vector} out the receiving vector
-	 * @param {Vector} a the vector to transform
-	 * @param {Quaternion} q quaternion to transform with
-	 * @returns {Vector} out
+	 * Transforms this vector with the specified Quaternion.
+	 * @param quat The quaternion to use for the transformation.
+	 * @returns The transformed vector.
 	 */
-	static transformQuat(out: Vector, a: Vector, q: Quaternion): Vector {
+	transformQuat(quat: Quaternion): Vector {
+		return this.transformQuatToRef(quat, this);
+	}
+
+	/**
+	 * Transforms this vector with the specified Quaternion and stores the
+	 * result in the given Vector.
+	 * 
+	 * @param quat The quaternion to use for the transformation.
+	 * @param result The receiving vector.
+	 * @returns The transformed vector.
+	 */
+	transformQuatToRef(quat: Quaternion, result: Vector): Vector {
+		return Vector.transformQuat(this === result ? new Vector(this.x, this.y, this.z) : this, quat, result);
+	}
+
+	/**
+	 * Transforms a Vector with a Quat
+	 *
+	 * @param a The vector to transform.
+	 * @param q The quaternion to transform with.
+	 * @param result The receiving vector.
+	 * @returns The transformed vector.
+	 */
+	static transformQuat(a: Vector, q: Quaternion, result: Vector): Vector {
 		// benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
 		let uvx = q.y * a.z - q.z * a.y,
 			uvy = q.z * a.x - q.x * a.z,
@@ -175,20 +285,10 @@ export class Vector implements IVector {
 		uuvy *= 2;
 		uuvz *= 2;
 
-		out.x = a.x + uvx + uuvx;
-		out.y = a.y + uvy + uuvy;
-		out.z = a.z + uvz + uuvz;
+		result.x = a.x + uvx + uuvx;
+		result.y = a.y + uvy + uuvy;
+		result.z = a.z + uvz + uuvz;
 
-		return out;
-	}
-
-	/**
-	 * Calculates the Euclidian norm of a Vector
-	 *
-	 * @param {Vector} out the receiving vector
-	 * @returns {number} the Euclidian norm
-	 */
-	static norm(out: Vector): number {
-		return Math.hypot(out.x, out.y, out.z);
+		return result;
 	}
 }
