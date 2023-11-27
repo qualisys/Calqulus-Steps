@@ -3,7 +3,8 @@ import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 
 export class Joint implements ISequence, IDataSequence {
-	array = [...this.force.array, ...this.moment.array, ...this.power.array];
+	array = [...this.force.array, ...this.moment.array,
+		this.power?.array[0], this.power?.array[1], this.power?.array[2]];
 	components = ['fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
 	distalSegment: Segment;
 	proximalSegment: Segment;
@@ -12,7 +13,7 @@ export class Joint implements ISequence, IDataSequence {
 		public name: string,
 		public force: VectorSequence,
 		public moment: VectorSequence,
-		public power: VectorSequence,
+		public power?: VectorSequence,
 		public frameRate?: number
 	) {}
 
