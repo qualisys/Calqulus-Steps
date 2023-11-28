@@ -421,7 +421,7 @@ export class Matrix {
 	 * @returns The multiplication result.
 	 */
 	multiplyToRef(matrix: Matrix, result: Matrix) {
-		return Matrix.multiply(this === result ? Matrix.fromArray(Array.from(this._m)) : this, matrix, result);
+		return Matrix.multiply(this, matrix, result);
 	}
 
 	/**
