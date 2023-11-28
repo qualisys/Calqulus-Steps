@@ -88,3 +88,34 @@ test('QuaternionSequence - invert', (t) => {
 	t.deepEqual(Array.from(result.z), [0.6676268577575684, 0.6672449111938477, 0.6654576063156128]);
 	t.deepEqual(Array.from(result.w), [0.7230291366577148, 0.7243487238883972, 0.7263537645339966]);
 });
+
+test('QuaternionSequence - multiply', (t) => {
+	const q0 = new QuaternionSequence(
+		new Float32Array([0, 1, 2]),
+		new Float32Array([1, 2, 3]),
+		new Float32Array([2, 3, 4]),
+		new Float32Array([3, 4, 5])
+	);
+
+	const q1 = new QuaternionSequence(
+		new Float32Array([3, 4, 5]),
+		new Float32Array([4, 5, 6]),
+		new Float32Array([5, 6, 7]),
+		new Float32Array([6, 7, 8])
+	);
+
+	const r0 = q0.multiply(q1);
+
+	t.deepEqual(Array.from(r0.x), [6, 20, 38], 'x');
+	t.deepEqual(Array.from(r0.y), [24, 40, 60], 'y');
+	t.deepEqual(Array.from(r0.z), [24, 42, 64], 'z');
+	t.deepEqual(Array.from(r0.w), [4, -4, -16], 'w');
+
+	const r1 = new QuaternionSequence(new Float32Array(3), new Float32Array(3), new Float32Array(3), new Float32Array(3));
+	q0.multiply(q1, r1);
+
+	t.deepEqual(Array.from(r1.x), [6, 20, 38], 'x');
+	t.deepEqual(Array.from(r1.y), [24, 40, 60], 'y');
+	t.deepEqual(Array.from(r1.z), [24, 42, 64], 'z');
+	t.deepEqual(Array.from(r1.w), [4, -4, -16], 'w');
+});

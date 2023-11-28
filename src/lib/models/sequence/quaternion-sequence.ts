@@ -141,4 +141,34 @@ export class QuaternionSequence implements ISequence {
 
 		return result ? result : new QuaternionSequence(x, y, z, w);
 	}
+
+	/**
+	 * Multiplies this sequence with another sequence.
+	 * 
+	 * @param otherQuaternion The sequence to multiply with.
+	 * @param result The sequence to store the result in.
+	 * @returns The resulting quaternion sequence.
+	 */
+	multiply(otherQuaternion: QuaternionSequence, result?: QuaternionSequence): QuaternionSequence {
+		const len = Math.max(this.length, otherQuaternion.length);
+		const x = result ? result.x : new Float32Array(len);
+		const y = result ? result.y : new Float32Array(len);
+		const z = result ? result.z : new Float32Array(len);
+		const w = result ? result.w : new Float32Array(len);
+
+		for (let i = 0; i < len; i++) {
+			const i0 = Math.min(i, this.length - 1);
+			const i1 = Math.min(i, otherQuaternion.length - 1);
+			const q0 = this.getQuaternionAtFrame(i0 + 1);
+			const q1 = otherQuaternion.getQuaternionAtFrame(i1 + 1);
+			const r = q0.multiply(q1);
+
+			x[i] = r.x;
+			y[i] = r.y;
+			z[i] = r.z;
+			w[i] = r.w;
+		}
+
+		return result ? result : new QuaternionSequence(x, y, z, w);
+	}
 }
