@@ -154,7 +154,7 @@ export class Quaternion {
 	 * @returns The multiplication result.
 	 */
 	multiply(otherQuaternion: Quaternion): Quaternion {
-		return this.multiplyToRef(otherQuaternion, Quaternion.tmpQuat2);
+		return this.multiplyToRef(otherQuaternion, Quaternion.identity());
 	}
 
 	/**
