@@ -181,7 +181,7 @@ export class Vector implements IVector {
 	 * @returns A new Vector.
 	 */
 	subtract(otherVector: Vector): Vector {
-		return this.subtractToRef(otherVector, this);
+		return this.subtractToRef(otherVector, new Vector(0, 0, 0));
 	}
 
 	/**
