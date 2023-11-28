@@ -123,4 +123,22 @@ export class QuaternionSequence implements ISequence {
 
 		return new QuaternionSequence(x, y, z, w);
 	}
+
+	static invert(quat: QuaternionSequence, result?: QuaternionSequence) {
+		const x = result ? result.x : new Float32Array(quat.length);
+		const y = result ? result.y : new Float32Array(quat.length);
+		const z = result ? result.z : new Float32Array(quat.length);
+		const w = result ? result.w : new Float32Array(quat.length);
+
+		for (let i = 0; i < quat.length; i++) {
+			const invQuat = Quaternion.invert(quat.getQuaternionAtFrame(i + 1), Quaternion.tmpQuat1);
+
+			x[i] = invQuat.x;
+			y[i] = invQuat.y;
+			z[i] = invQuat.z;
+			w[i] = invQuat.w;
+		}
+
+		return result ? result : new QuaternionSequence(x, y, z, w);
+	}
 }
