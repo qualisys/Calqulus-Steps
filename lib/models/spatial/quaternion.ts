@@ -166,7 +166,7 @@ export class Quaternion {
 	 * @returns The multiplication result.
 	 */
 	multiplyToRef(otherQuaternion: Quaternion, result: Quaternion): Quaternion {
-		return Quaternion.multiply(this === result ? new Quaternion(this.x, this.y, this.z, this.w) : this, otherQuaternion, result);
+		return Quaternion.multiply(this, otherQuaternion, result);
 	}
 
 	/**
