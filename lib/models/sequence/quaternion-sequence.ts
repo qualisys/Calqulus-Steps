@@ -124,6 +124,12 @@ export class QuaternionSequence implements ISequence {
 		return new QuaternionSequence(x, y, z, w);
 	}
 
+	/**
+	 * Calculates the inverse of this quaternion sequence.
+	 * @param quat The quaternion sequence to invert.
+	 * @param result The quaternion sequence to store the result in.
+	 * @returns The inverted quaternion sequence.
+	 */
 	static invert(quat: QuaternionSequence, result?: QuaternionSequence) {
 		const x = result ? result.x : new Float32Array(quat.length);
 		const y = result ? result.y : new Float32Array(quat.length);
