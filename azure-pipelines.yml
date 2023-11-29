@@ -2,22 +2,39 @@ trigger:
   batch: true
   branches:
     include:
-      - '*'
+      - "*"
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 resources:
   repositories:
     - repository: calqulus-ci
       type: git
       name: app-calqulus-ci-templates
+    - repository: calqulus
+      type: git
+      name: Calqulus
+      ref: refs/heads/master
+    - repository: pipelines
+      type: github
+      endpoint: qualisys
+      name: Qualisys/Calqulus-Pipelines
+      ref: refs/heads/main
+    - repository: data
+      type: git
+      name: Dev/Calqulus-Test-Data
+      ref: refs/heads/master
+    - repository: toolbelt
+      type: git
+      name: Dev/Calqulus-Toolbelt
+      ref: refs/heads/main
 
 parameters:
-- name: skipLastSuccessfulBuild
-  displayName: Skip checking regressions against last successful build
-  type: boolean
-  default: false
+  - name: skipLastSuccessfulBuild
+    displayName: Skip checking regressions against last successful build
+    type: boolean
+    default: false
 
 extends:
   template: calqulus-steps.yml@calqulus-ci
