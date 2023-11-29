@@ -48,7 +48,7 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 		regexOperators.push('(?:[\\s]*' + op + '[\\s]*)');
 	}
 
-	const functionPattern = /^!*?[^\w!]*(!*)(empty|exists)\((.*)\)$/gi;
+	const functionPattern = /^!*?[^\w!]*(!*)(empty|exists|\$field)\(([^)]+\))\)*$/gi;
 
 	const regexpStr = regexOperators.join('|');
 	const regexp = new RegExp(regexpStr);
@@ -62,15 +62,27 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 		// Check if the expression is inverted.
 		// Package the result in an object.
 		.map(v => v.trim())
-		// Extract any function calls (empty and exists).
-		// Encode them in a way that avoids parenthesis.
+		// Extract any function calls (empty and exists)
+		// or variables, that are using parenthesis as part
+		// of their syntax.
+		// Encode them in a way that avoids parenthesis (b64).
 		.map(v => {
 			functionPattern.lastIndex = 0;
 			const functionMatches = functionPattern.exec(v);
 
 			if (functionMatches && functionMatches.length === 4) {
 				const [_, exclamationMarks, functionName, signal] = functionMatches;
-				return `${ exclamationMarks }$$${ functionName }$$${ signal }`;
+				let cleanedSignal = signal;
+
+				if (signal.indexOf('(') > -1) {
+					cleanedSignal = signal;
+				}
+				else {
+					cleanedSignal = signal.replace(/[)]/g, '');
+				}
+
+				const formattedString = `${ exclamationMarks }${ functionName }(${ cleanedSignal })`;
+				return '$$B64$$' + btoa(formattedString);
 			}
 
 			return v;
@@ -91,6 +103,14 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 			}
 
 			v = v.trim();
+
+			// Decode any encoded function calls.
+			if (v.startsWith('$$B64$$')) {
+				v = atob(v.substring(7));
+			}
+
+			v = v.trim();
+
 			// Replace extraneous exclamation marks (since two 
 			// exclamation marks cancels out).
 			v = v.replace(/!!/g, '');
@@ -102,10 +122,11 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 			}
 
 			// Detect encoded function calls.
-			let empty = false;
-			let exists = false;
+			let empty = v.startsWith('empty(');
+			let exists = v.startsWith('exists(');
 
-			const functionMatches = v.match(/^\$\$(empty|exists)\$\$(.*)$/);
+			// Clean up function calls from the expression.
+			const functionMatches = v.match(/^(empty|exists)\((.*)\)$/);
 
 			if (functionMatches && functionMatches.length === 3) {
 				v = functionMatches[2];
@@ -114,6 +135,14 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 			}
 
 			const originalValue = v;
+
+			// Clean up field calls from the expression.
+			const fieldMatches = v.match(/^\$field\((.*)\)$/);
+
+			if (fieldMatches && fieldMatches.length === 2) {
+				v = '$field_' + fieldMatches[1].split(',').join('_');
+			}
+
 			// Remove any whitespace from the operands.
 			if (/\s/.test(v)) {
 				v = v.replace(/\s/g, '');

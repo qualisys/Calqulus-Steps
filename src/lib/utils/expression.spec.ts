@@ -737,6 +737,14 @@ test('parseExpressionOperands - functions - exists & empty mixed', (t) => {
 			{ value: 'bar', originalValue: 'bar', ...defaultResult },
 		]
 	});
+	
+	t.deepEqual(parseExpressionOperands('(exists(hello) && !empty(world))'), {
+		expression: '(hello && !world)',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'world', originalValue: 'world', ...defaultResult, empty: true, isInverted: true },
+		]
+	});
 });
 
 test('parseExpressionOperands - arrow output', (t) => {
@@ -751,3 +759,106 @@ test('parseExpressionOperands - arrow output', (t) => {
 	});
 });
 
+test('parseExpressionOperands - variable inputs', (t) => {
+	t.deepEqual(parseExpressionOperands('$field(Field Name)'), {
+		expression: 'operand_0_$field_FieldName',
+		operands: [
+			{ value: 'operand_0_$field_FieldName', originalValue: '$field(Field Name)', ...defaultResult },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('!$field(Field Name)'), {
+		expression: '!operand_0_$field_FieldName',
+		operands: [
+			{ value: 'operand_0_$field_FieldName', originalValue: '$field(Field Name)', ...defaultResult, isInverted: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists(hello) && $field(Field Name)'), {
+		expression: 'hello && operand_1_$field_FieldName',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName', originalValue: '$field(Field Name)', ...defaultResult },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists(hello) && !$field(Field Name)'), {
+		expression: 'hello && !operand_1_$field_FieldName',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName', originalValue: '$field(Field Name)', ...defaultResult, isInverted: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('(exists(hello) && $field(Field Name))'), {
+		expression: '(hello && operand_1_$field_FieldName)',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName', originalValue: '$field(Field Name)', ...defaultResult },
+		]
+	});
+});
+
+test('parseExpressionOperands - variable inputs - with options', (t) => {
+	t.deepEqual(parseExpressionOperands('$field(Field Name, My Measurement, numeric)'), {
+		expression: 'operand_0_$field_FieldName_MyMeasurement_numeric',
+		operands: [
+			{ value: 'operand_0_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('!$field(Field Name, My Measurement, numeric)'), {
+		expression: '!operand_0_$field_FieldName_MyMeasurement_numeric',
+		operands: [
+			{ value: 'operand_0_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult, isInverted: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists(hello) && $field(Field Name, My Measurement, numeric)'), {
+		expression: 'hello && operand_1_$field_FieldName_MyMeasurement_numeric',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists(hello) && !$field(Field Name, My Measurement, numeric)'), {
+		expression: 'hello && !operand_1_$field_FieldName_MyMeasurement_numeric',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult, isInverted: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('(exists(hello) && $field(Field Name, My Measurement, numeric))'), {
+		expression: '(hello && operand_1_$field_FieldName_MyMeasurement_numeric)',
+		operands: [
+			{ value: 'hello', originalValue: 'hello', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult },
+		]
+	});
+});
+
+test('parseExpressionOperands - variable inputs - with options - with functions', (t) => {
+	t.deepEqual(parseExpressionOperands('empty($field(Field Name, My Measurement, numeric))'), {
+		expression: 'operand_0_$field_FieldName_MyMeasurement_numeric',
+		operands: [
+			{ value: 'operand_0_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult, empty: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists($field(Field Name, My Measurement, numeric))'), {
+		expression: 'operand_0_$field_FieldName_MyMeasurement_numeric',
+		operands: [
+			{ value: 'operand_0_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult, exists: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('(exists($field(Field Name, My Measurement, numeric)) && !empty($field(Field Name, My Measurement, numeric)))'), {
+		expression: '(operand_0_$field_FieldName_MyMeasurement_numeric && !operand_1_$field_FieldName_MyMeasurement_numeric)',
+		operands: [
+			{ value: 'operand_0_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult, exists: true },
+			{ value: 'operand_1_$field_FieldName_MyMeasurement_numeric', originalValue: '$field(Field Name, My Measurement, numeric)', ...defaultResult, empty: true, isInverted: true },
+		]
+	});
+});
