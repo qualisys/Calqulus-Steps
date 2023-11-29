@@ -1,3 +1,5 @@
+import * as base64 from 'base-64';
+
 import { NumberUtil } from './number';
 
 export interface IExpressionOperand {
@@ -82,7 +84,7 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 				}
 
 				const formattedString = `${ exclamationMarks }${ functionName }(${ cleanedSignal })`;
-				return '$$B64$$' + btoa(formattedString);
+				return '$$B64$$' + base64.encode(formattedString);
 			}
 
 			return v;
@@ -106,7 +108,7 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 
 			// Decode any encoded function calls.
 			if (v.startsWith('$$B64$$')) {
-				v = atob(v.substring(7));
+				v = base64.decode(v.substring(7));
 			}
 
 			v = v.trim();
