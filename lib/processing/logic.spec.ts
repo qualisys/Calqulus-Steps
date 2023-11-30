@@ -553,3 +553,76 @@ test('IfStep (mock) - field variable', async(t) => {
 
 	t.is(negative4.getValue(), 10);
 });
+
+test('IfStep (mock) - $prev variable', async(t) => {
+	const positive1 = await mockStep(IfStep, 
+		[new Signal(3)], { then: [s2], else: [s10] }, 
+		'$prev > 2'
+	).process();
+
+	t.is(positive1.getValue(), 2);
+
+	const positive2 = await mockStep(IfStep, 
+		[new Signal(3)], { then: [s2], else: [s10] }, 
+		'$prev(2) > 2'
+	).process();
+
+	t.is(positive2.getValue(), 2);
+
+	const positive3 = await mockStep(IfStep, 
+		[new Signal(1)], { then: [s2], else: [s10] }, 
+		'exists($prev(2))'
+	).process();
+
+	t.is(positive3.getValue(), 2);
+
+	const positive4 = await mockStep(IfStep, 
+		[new Signal(f32(NaN))], { then: [s2], else: [s10] }, 
+		'empty($prev(2))'
+	).process();
+
+	t.is(positive4.getValue(), 2);
+
+	const positive5 = await mockStep(IfStep, 
+		[new Signal(f32(1, 2, 3))], { then: [s2], else: [s10] }, 
+		'!empty($prev(2))'
+	).process();
+
+	t.is(positive5.getValue(), 2);
+
+
+	const negative1 = await mockStep(IfStep, 
+		[new Signal(1)], { then: [s2], else: [s10] }, 
+		'$prev > 2'
+	).process();
+
+	t.is(negative1.getValue(), 10);
+
+	const negative2 = await mockStep(IfStep, 
+		[new Signal(1)], { then: [s2], else: [s10] }, 
+		'$prev > 2'
+	).process();
+
+	t.is(negative2.getValue(), 10);
+
+	const negative3 = await mockStep(IfStep, 
+		[undefined], { then: [s2], else: [s10] }, 
+		'exists($prev(2))'
+	).process();
+
+	t.is(negative3.getValue(), 10);
+
+	const negative4 = await mockStep(IfStep, 
+		[new Signal(f32(1, 2, 3))], { then: [s2], else: [s10] }, 
+		'empty($prev(2))'
+	).process();
+
+	t.is(negative4.getValue(), 10);
+
+	const negative5 = await mockStep(IfStep, 
+		[new Signal(f32(NaN))], { then: [s2], else: [s10] }, 
+		'!empty($prev(2))'
+	).process();
+
+	t.is(negative5.getValue(), 10);
+});
