@@ -35,6 +35,10 @@ parameters:
     displayName: Skip checking regressions against last successful build
     type: boolean
     default: false
+  - name: useLatestPublishedCalqulus
+    displayName: Use the latest published Calqulus version
+    type: boolean
+    default: true
 
 extends:
   template: calqulus-steps.yml@calqulus-ci
