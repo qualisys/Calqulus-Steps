@@ -9,6 +9,7 @@ export * from './lib/models/spatial/plane';
 export * from './lib/models/spatial/quaternion';
 export * from './lib/models/spatial/vector';
 
+export * from './lib/models/body-segment-parameters';
 export * from './lib/models/data-collection';
 export * from './lib/models/event';
 export * from './lib/models/force-plate';
