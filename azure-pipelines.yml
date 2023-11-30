@@ -12,7 +12,7 @@ resources:
     - repository: calqulus
       type: git
       name: Dev/app-calqulus
-      ref: refs/heads/master
+      ref: refs/heads/main
     - repository: pipelines
       type: github
       endpoint: qualisys
@@ -21,7 +21,7 @@ resources:
     - repository: data
       type: git
       name: Dev/app-calqulus-test-data
-      ref: refs/heads/master
+      ref: refs/heads/main
     - repository: toolbelt
       type: git
       name: Dev/app-calqulus-toolbelt
