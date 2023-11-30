@@ -44,3 +44,4 @@ extends:
   template: calqulus-steps.yml@calqulus-ci
   parameters:
     skipLastSuccessfulBuild: ${{ parameters.skipLastSuccessfulBuild }}
+    useLatestPublishedCalqulus: ${{ parameters.useLatestPublishedCalqulus }}
