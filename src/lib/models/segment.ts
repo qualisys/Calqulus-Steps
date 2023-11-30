@@ -2,6 +2,7 @@ import { Joint } from './joint';
 import { QuaternionSequence } from './sequence/quaternion-sequence';
 import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
+import { Matrix } from './spatial/matrix';
 import { Quaternion } from './spatial/quaternion';
 import { Vector } from './spatial/vector';
 
@@ -28,7 +29,7 @@ export class Segment implements ISequence, IDataSequence {
 	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
 	distalJoint: Joint;
 	emptyValues = new Float32Array(0);
-	inertia: Vector;
+	inertia: Matrix;
 	mass: number;
 	parent: Segment;
 	proximalJoint: Joint;

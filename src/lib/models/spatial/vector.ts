@@ -156,6 +156,21 @@ export class Vector implements IVector {
 	}
 
 	/**
+	 * Multiplies with a number or vector.
+	 * 
+	 * @param factor the factor to multiply with.
+	 * @returns the multiplication result.
+	*/
+	multiply(factor: number | Vector): Vector {
+		if (typeof factor === 'number') {
+			return new Vector(this.x * factor, this.y * factor, this.z * factor);
+		}
+		else {
+			return new Vector(this.x * factor.x, this.y * factor.y, this.z * factor.z);
+		}
+	}
+
+	/**
 	 * Normalize the current Vector.
 	 *
 	 * @returns The normalized Vector.
