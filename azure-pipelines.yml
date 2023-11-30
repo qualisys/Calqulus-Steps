@@ -20,7 +20,7 @@ resources:
       ref: refs/heads/main
     - repository: data
       type: git
-      name: Dev/app-calqulus-test-Data
+      name: Dev/app-calqulus-test-data
       ref: refs/heads/master
     - repository: toolbelt
       type: git
