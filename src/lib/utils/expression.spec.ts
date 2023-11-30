@@ -862,3 +862,70 @@ test('parseExpressionOperands - variable inputs - with options - with functions'
 		]
 	});
 });
+
+test('parseExpressionOperands - $prev inputs', (t) => {
+	t.deepEqual(parseExpressionOperands('$prev'), {
+		expression: '$prev',
+		operands: [
+			{ value: '$prev', originalValue: '$prev', ...defaultResult },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('$prev(2)'), {
+		expression: '$prev_2',
+		operands: [
+			{ value: '$prev_2', originalValue: '$prev(2)', ...defaultResult },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('$prev( 2 )'), {
+		expression: 'operand_0_$prev_2',
+		operands: [
+			{ value: 'operand_0_$prev_2', originalValue: '$prev( 2 )', ...defaultResult },
+		]
+	});
+});
+
+test('parseExpressionOperands - $prev inputs - with functions', (t) => {
+	t.deepEqual(parseExpressionOperands('empty($prev)'), {
+		expression: '$prev',
+		operands: [
+			{ value: '$prev', originalValue: '$prev', ...defaultResult, empty: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('empty($prev(2))'), {
+		expression: '$prev_2',
+		operands: [
+			{ value: '$prev_2', originalValue: '$prev(2)', ...defaultResult, empty: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('empty($prev( 2 ))'), {
+		expression: 'operand_0_$prev_2',
+		operands: [
+			{ value: 'operand_0_$prev_2', originalValue: '$prev( 2 )', ...defaultResult, empty: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists($prev)'), {
+		expression: '$prev',
+		operands: [
+			{ value: '$prev', originalValue: '$prev', ...defaultResult, exists: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists($prev(2))'), {
+		expression: '$prev_2',
+		operands: [
+			{ value: '$prev_2', originalValue: '$prev(2)', ...defaultResult, exists: true },
+		]
+	});
+
+	t.deepEqual(parseExpressionOperands('exists($prev( 2 ))'), {
+		expression: 'operand_0_$prev_2',
+		operands: [
+			{ value: 'operand_0_$prev_2', originalValue: '$prev( 2 )', ...defaultResult, exists: true },
+		]
+	});
+});
