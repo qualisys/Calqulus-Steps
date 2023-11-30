@@ -9,9 +9,6 @@ pool:
 
 resources:
   repositories:
-    - repository: calqulus-ci
-      type: git
-      name: app-calqulus-ci-templates
     - repository: calqulus
       type: git
       name: Calqulus
@@ -29,6 +26,9 @@ resources:
       type: git
       name: Dev/Calqulus-Toolbelt
       ref: refs/heads/main
+    - repository: calqulus-ci
+      type: git
+      name: app-calqulus-ci-templates
 
 parameters:
   - name: skipLastSuccessfulBuild
