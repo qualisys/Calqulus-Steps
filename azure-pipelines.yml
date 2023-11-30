@@ -11,7 +11,7 @@ resources:
   repositories:
     - repository: calqulus
       type: git
-      name: Calqulus
+      name: Dev/app-calqulus
       ref: refs/heads/master
     - repository: pipelines
       type: github
@@ -20,11 +20,11 @@ resources:
       ref: refs/heads/main
     - repository: data
       type: git
-      name: Dev/Calqulus-Test-Data
+      name: Dev/app-calqulus-test-Data
       ref: refs/heads/master
     - repository: toolbelt
       type: git
-      name: Dev/Calqulus-Toolbelt
+      name: Dev/app-calqulus-toolbelt
       ref: refs/heads/main
     - repository: calqulus-ci
       type: git
