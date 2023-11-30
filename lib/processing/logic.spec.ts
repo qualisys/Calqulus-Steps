@@ -269,7 +269,7 @@ test('IfStep (mock) - Mixed input, simple - then', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Operands with special characters - dot', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot - then', async(t) => {
 	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
@@ -277,6 +277,56 @@ test('IfStep (mock) - Operands with special characters - dot', async(t) => {
 
 	const res = await step.process();
 	t.is(res.getValue(), 10);
+});
+
+test('IfStep (mock) - Operands with special characters - dot - else', async(t) => {
+	const step = mockStep(IfStep, [new Signal(2), s10], {
+		then: [s10],
+		else: [s0],
+	}, '2 > MyValue.x');
+
+	const res = await step.process();
+	t.is(res.getValue(), 0);
+});
+
+test.only('IfStep (mock) - Operands with special characters - @ - then', async(t) => {
+	const step = mockStep(IfStep, [new Signal(2), s1], {
+		then: [s10],
+		else: [s0],
+	}, '2 > MyValue@MyEvent');
+
+	const res = await step.process();
+	t.is(res.getValue(), 10);
+});
+
+test.only('IfStep (mock) - Operands with special characters - @ - else', async(t) => {
+	const step = mockStep(IfStep, [new Signal(2), s10], {
+		then: [s10],
+		else: [s0],
+	}, '2 > MyValue@MyEvent');
+
+	const res = await step.process();
+	t.is(res.getValue(), 0);
+});
+
+test.only('IfStep (mock) - Operands with special characters - dot and @ - then', async(t) => {
+	const step = mockStep(IfStep, [new Signal(2), s1], {
+		then: [s10],
+		else: [s0],
+	}, '2 > MyValue.x@MyEvent');
+
+	const res = await step.process();
+	t.is(res.getValue(), 10);
+});
+
+test.only('IfStep (mock) - Operands with special characters - dot and @ - else', async(t) => {
+	const step = mockStep(IfStep, [new Signal(2), s10], {
+		then: [s10],
+		else: [s0],
+	}, '2 > MyValue.x@MyEvent');
+
+	const res = await step.process();
+	t.is(res.getValue(), 0);
 });
 
 test('IfStep (mock) - Operands with spaces', async(t) => {

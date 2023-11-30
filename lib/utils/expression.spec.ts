@@ -929,3 +929,12 @@ test('parseExpressionOperands - $prev inputs - with functions', (t) => {
 		]
 	});
 });
+
+test.only('parseExpressionOperands - @ syntax', (t) => {
+	t.deepEqual(parseExpressionOperands('hello@event'), {
+		expression: 'hello@event',
+		operands: [
+			{ value: 'hello@event', originalValue: 'hello@event', ...defaultResult },
+		]
+	});
+});
