@@ -58,9 +58,32 @@ The following operators are supported:
 
 Parentheses can be used to influence the order of evaluation.
 
-Only numbers and single-element arrays can be part of operands in the
-expression. In addition, a single input can be used to check for existence 
-of values.
+You are able to use "functions" in the expression to validate if a 
+signal is empty or exists. The following functions are supported:
+
+* `empty(signalName)` - Returns true if the signal is empty, 
+i.e. the signal does not exist or the value is falsy 
+(false, null, NaN, empty string).
+* `exists(signalName)` - Returns true if the signal exists, 
+i.e. the signal is _defined_. This function does not validate 
+the _value_ of the signal but _only_ if the signal is defined 
+or not. The signal value could be falsy, but as long as the 
+signal is defined, this function will return true.
+
+***Note:** Due to the way YAML is parsed, you must wrap expressions
+beginning with an exclamation mark in quotes, e.g. `"!empty(mySignal)"`.*
+
+***Note:** In order to be able to evaluate missing signals, this 
+step does not validate the inputs to the expression. To validate 
+a signal's existence, use the `exists` function.*
+
+***Note:** The validation of the inputs to the `then` and `else` 
+options are deferred until they are needed. This means that if the 
+expression evaluates to true, but the `then` option is missing, 
+the step will not fail until the `then` option is needed. This is 
+done to allow for the use of references to signals that may only be 
+able to be resolved in certain circumstances, e.g. when the 
+expression evaluates to true.*
 
 ## Examples
 
@@ -85,8 +108,34 @@ signal. If `mySignal` has values, the resulting signal would be `mySignal`, othe
 the result is `myDefault`.
 
 ``` yaml
-- if: mySignal
+- if: "!empty(mySignal)"
   then: mySignal
+  else: myDefault
+```
+
+The following example shows how you can check for the existence of of a
+signal. If `mySignal` exists, the resulting signal would be `mySignal`, 
+otherwise the result is `myDefault`.
+
+``` yaml
+- if: exists(mySignal)
+  then: mySignal
+  else: myDefault
+```
+
+The following example shows how you can compare values from measurement fields.
+
+``` yaml
+- if: $field(My Field, measurement, numeric) > $field(My Other Field, measurement, numeric)
+  then: mySignal
+  else: myDefault
+```
+
+The following example shows how to return a field value if it is not empty, otherwise return a default value.
+
+``` yaml
+- if: "!empty($field(My Field, measurement, numeric))"
+  then: $field(My Field, measurement, numeric)
   else: myDefault
 ```
 
