@@ -19,12 +19,19 @@ export class EventUtil {
 	 * or higher than the previous end frame, then finds the next
 	 * frame in `toFrames` which is higher than the current start frame.
 	 * 
+	 * If `excludeFrames` is defined, any sequence containing any of these
+	 * frames will be excluded.
+	 * 
+	 * If `includeFrames` is defined, only sequences that contain at least
+	 * one frame from each of the frame arrays will be returned.
+	 * 
 	 * This sequence repeats for all possible pairs.
 	 * @param fromFrames Frames to use as starting frames.
 	 * @param toFrames Frames to use as ending frames.
+	 * @param excludeFrames Frames which invalidates the sequence. Any sequence containing any of these frames will be excluded.
+	 * @param includeFrames Frames which must be present in the sequence. Only sequences that contain at least one frame from each of the frame arrays will be returned.
 	 */
-	static eventSequence(fromFrames: NumericArray, toFrames: NumericArray): IFrameSpan[] {
-		// TODO: add support for required events and excluded events.
+	static eventSequence(fromFrames: NumericArray, toFrames: NumericArray, excludeFrames: NumericArray[] = undefined, includeFrames: NumericArray[] = undefined): IFrameSpan[] {
 		// TODO: Use logic from web report
 
 		// Generate event frame pairs
@@ -47,6 +54,25 @@ export class EventUtil {
 					nextToIndex = j;
 
 					break;
+				}
+			}
+		}
+
+		// Filter out pairs that contain excluded events or does not contain included events.
+		if (excludeFrames || includeFrames) {
+			for (let i = pairs.length - 1; i >= 0; i--) {
+				const pair = pairs[i];
+
+				// If an excluded event is found within the pair, remove the pair.
+				if (excludeFrames) {
+					const exclude = excludeFrames.find(f => f.find(f2 => f2 >= pair.start && f2 <= pair.end));
+					if (exclude) pairs.splice(i, 1);
+				}
+
+				// If all included events are not found within the pair, remove the pair.
+				if (includeFrames) {
+					const include = includeFrames.every(f => f.find(f2 => f2 >= pair.start && f2 <= pair.end));
+					if (!include) pairs.splice(i, 1);
 				}
 			}
 		}
