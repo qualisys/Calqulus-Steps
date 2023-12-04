@@ -47,10 +47,19 @@ export class ConcatenateStep extends BaseStep {
 
 		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError('Expected all inputs to be of equivalent types.');
 
+		let referenceArray = arrays[0][0];
+
+		if (this.inputs[0].type === SignalType.Uint32Array) {
+			// If not all inputs are Uint32Arrays, we need to use float arrays instead.
+			if (!this.inputs.every(i => i.type === SignalType.Uint32Array)) {
+				referenceArray = new Float32Array();
+			}
+		}
+
 		const baseArray = arrays.shift();
 		const concatArrays = baseArray.map((arr, index) =>
 			SeriesUtil.createNumericArrayOfSameType(
-				arr,
+				referenceArray,
 				[...arr].concat(...arrays.map(a => [...a[index]]))
 			)
 		);
