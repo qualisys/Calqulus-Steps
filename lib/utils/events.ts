@@ -66,7 +66,10 @@ export class EventUtil {
 				// If an excluded event is found within the pair, remove the pair.
 				if (excludeFrames) {
 					const exclude = excludeFrames.find(f => f.find(f2 => f2 >= pair.start && f2 <= pair.end));
-					if (exclude) pairs.splice(i, 1);
+					if (exclude) {
+						pairs.splice(i, 1);
+						continue;
+					}
 				}
 
 				// If all included events are not found within the pair, remove the pair.
