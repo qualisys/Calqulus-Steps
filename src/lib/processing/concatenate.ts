@@ -1,4 +1,4 @@
-import { Signal } from '../models/signal';
+import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
 import { SeriesUtil } from '../utils/series';
@@ -55,8 +55,13 @@ export class ConcatenateStep extends BaseStep {
 			)
 		);
 
+		let targetType = this.inputs[0].type;
+		if (targetType === SignalType.Float32) {
+			targetType = SignalType.Float32Array;
+		}
+
 		// Create a new instance of the same type as the input.
-		const returnData = Signal.typeFromArray(this.inputs[0].type, concatArrays as TypedArray[]);
+		const returnData = Signal.typeFromArray(targetType, concatArrays as TypedArray[]);
 
 		return this.inputs[0].clone(returnData);
 	}
