@@ -42,6 +42,11 @@ The `concatenate` step takes any number of inputs (at least 2)
 of the same (or equivalent) types and appends the values into one 
 output. This will be done on each component, if they exist.
 
+Scalar inputs will be converted to arrays. 
+
+If all the inputs are integer arrays, the output will be an integer array.
+However, if any of the inputs are floats, the output will be a float array.
+
 ## Examples
 
 The following example calculates the average "step length" 
