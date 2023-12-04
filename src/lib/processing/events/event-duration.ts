@@ -1,3 +1,4 @@
+import { PropertyType } from '../../models/property';
 import { ResultType, Signal } from '../../models/signal';
 import { StepCategory, StepClass } from '../../step-registry';
 import { EventUtil } from '../../utils/events';
@@ -38,9 +39,41 @@ import { BaseStep } from '../base-step';
 		{ type: ['Event'] },
 		{ type: ['Event'] },
 	],
+	options: [{
+		name: 'exclude',
+		type: ['Number', 'Number array'],
+		required: false,
+		default: 'null',
+		description: markdownFmt`
+			One or more event signals that should invalidate an event
+			sequence. If any of these events occur within a sequence,
+			the sequence is invalidated.
+		`,
+	},
+	{
+		name: 'include',
+		type: ['Number', 'Number array'],
+		required: false,
+		default: 'null',
+		description: markdownFmt`
+			One or more event signals that should be included in an
+			event sequence, otherwise it is excluded. If multiple 
+			events are supplied, all of them must be present in each
+			sequence for it to be included.
+		`,
+	}],
 	output: ['Scalar'],
 })
 export class EventDurationStep extends BaseStep {
+	exclude: Signal[];
+	include: Signal[];
+
+	init() {
+		super.init();
+
+		this.exclude = this.getPropertySignalValue('exclude', PropertyType.Any, false);
+		this.include = this.getPropertySignalValue('include', PropertyType.Any, false);
+	}
 
 	async process(): Promise<Signal> {
 		// Validate inputs
@@ -59,6 +92,14 @@ export class EventDurationStep extends BaseStep {
 			throw new ProcessingError('Inputs are expected to be events.');
 		}
 
+		if (this.exclude && this.exclude.find(s => !s.isEventLike)) {
+			throw new ProcessingError('The event duration step expects only events in the exclude option.');
+		}
+
+		if (this.include && this.include.find(s => !s.isEventLike)) {
+			throw new ProcessingError('The event duration step expects only events in the include option.');
+		}
+
 		const frameRate = from.frameRate || to.frameRate;
 
 		if (!frameRate) {
@@ -68,8 +109,11 @@ export class EventDurationStep extends BaseStep {
 		const fromFrames = from.getEventArrayValue();
 		const toFrames = to.getEventArrayValue();
 
+		const excludeFrames = this.exclude?.map(i => i.getEventArrayValue());
+		const includeFrames = this.include?.map(i => i.getEventArrayValue());
+
 		// Generate event frame pairs
-		const pairs = EventUtil.eventSequence(fromFrames, toFrames);
+		const pairs = EventUtil.eventSequence(fromFrames, toFrames, excludeFrames, includeFrames);
 
 		const durations = pairs
 			.map(span => span.end - span.start)

@@ -31,3 +31,57 @@ test('EventDurationStep', async(t) => {
 
 	t.deepEqual(res.getValue(), f32(...eventFrames1).map((f, i) => (eventFrames2[i] - f) / frameRate));
 });
+
+test('EventDurationStep - exclude single', async(t) => {
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const exclude = new Signal(i32(2, 3, 32), 100);
+
+	const step = mockStep(EventDurationStep, [framesA, framesB], { exclude: [exclude] });
+	const res = await step.process();
+
+	console.log(res.getValue());
+
+	t.deepEqual(res.getValue(), f32(0.09, 0.14, 0.24));
+});
+
+test('EventDurationStep - exclude multiple', async(t) => {
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const excludeA = new Signal(i32(2, 3, 32), 100);
+	const excludeB = new Signal(i32(7, 33), 100);
+
+	const step = mockStep(EventDurationStep, [framesA, framesB], { exclude: [excludeA, excludeB] });
+	const res = await step.process();
+
+	console.log(res.getValue());
+
+	t.deepEqual(res.getValue(), f32(0.14, 0.24));
+});
+
+test('EventDurationStep - include single', async(t) => {
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const include = new Signal(i32(12, 24, 62), 100);
+	
+	const step = mockStep(EventDurationStep, [framesA, framesB], { include: [include] });
+	const res = await step.process();
+
+	console.log(res.getValue());
+
+	t.deepEqual(res.getValue(), f32(0.09, 0.14, 0.24));
+});
+
+test('EventDurationStep - include multiple', async(t) => {
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const includeA = new Signal(i32(12, 24, 62), 100);
+	const includeB = new Signal(i32(27, 72), 100);
+	
+	const step = mockStep(EventDurationStep, [framesA, framesB], { include: [includeA, includeB] });
+	const res = await step.process();
+
+	console.log(res.getValue());
+
+	t.deepEqual(res.getValue(), f32(0.14, 0.24));
+});
