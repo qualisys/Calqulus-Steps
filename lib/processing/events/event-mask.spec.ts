@@ -317,3 +317,13 @@ test('EventMaskStep - include and exclude', async(t) => {
 		end: 79,
 	}]);
 });
+
+test('EventMaskStep - incompatible include', async(t) => {
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { include: [new Signal('My string')]}).process());
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { include: [new Signal(vs)]}).process());
+});
+
+test('EventMaskStep - incompatible exclude', async(t) => {
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { exclude: [new Signal('My string')]}).process());
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { exclude: [new Signal(vs)]}).process());
+});
