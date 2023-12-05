@@ -23,6 +23,29 @@ in various ways.
 
 **Output:** `Scalar`
 
+**Options**
+>
+> #### `exclude`
+>
+> **Type:** `Number | Number array`  
+> **Required:** `False`  
+> **Default value:** `null`  
+>
+> One or more event signals that should invalidate an event
+> sequence. If any of these events occur within a sequence,
+> the sequence is invalidated.
+>
+> #### `include`
+>
+> **Type:** `Number | Number array`  
+> **Required:** `False`  
+> **Default value:** `null`  
+>
+> One or more event signals that should be included in an
+> event sequence, otherwise it is excluded. If multiple 
+> events are supplied, all of them must be present in each
+> sequence for it to be included.
+>
 
 **Shared options**
 >
@@ -101,6 +124,27 @@ the "from", or "to" input event.
 > that were not within an "event pair" should be removed or not. 
 >
 > This will only apply if `replacement` does not have a value.
+>
+> #### `exclude`
+>
+> **Type:** `Number | Number array`  
+> **Required:** `False`  
+> **Default value:** `null`  
+>
+> One or more event signals that should invalidate an event
+> sequence. If any of these events occur within a sequence,
+> the sequence is invalidated.
+>
+> #### `include`
+>
+> **Type:** `Number | Number array`  
+> **Required:** `False`  
+> **Default value:** `null`  
+>
+> One or more event signals that should be included in an
+> event sequence, otherwise it is excluded. If multiple 
+> events are supplied, all of them must be present in each
+> sequence for it to be included.
 >
 
 **Shared options**
