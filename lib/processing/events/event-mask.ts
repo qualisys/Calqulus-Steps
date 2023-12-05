@@ -181,11 +181,11 @@ export class EventMaskStep extends BaseStep {
 		}
 
 		if (this.exclude && this.exclude.find(s => !s.isEventLike)) {
-			throw new ProcessingError('The event duration step expects only events in the exclude option.');
+			throw new ProcessingError('The event mask step expects only events in the exclude option.');
 		}
 
 		if (this.include && this.include.find(s => !s.isEventLike)) {
-			throw new ProcessingError('The event duration step expects only events in the include option.');
+			throw new ProcessingError('The event mask step expects only events in the include option.');
 		}
 
 		// Expect a one-dimensional array, round all values and cast into a Uint array.
