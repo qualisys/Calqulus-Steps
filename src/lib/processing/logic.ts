@@ -34,8 +34,9 @@ import { BaseStep } from './base-step';
 		signal is empty or exists. The following functions are supported:
 
 		* ''empty(signalName)'' - Returns true if the signal is empty, 
-		i.e. the signal does not exist or the value is falsy 
-		(false, null, NaN, empty string).
+		i.e. the signal does not exist or the value is falsy but not zero
+		(false, null, NaN, empty string). The value zero (0) is not
+		considered empty because it is a valid value for a signal.
 		* ''exists(signalName)'' - Returns true if the signal exists, 
 		i.e. the signal is _defined_. This function does not validate 
 		the _value_ of the signal but _only_ if the signal is defined 
@@ -169,7 +170,13 @@ export class IfStep extends BaseStep {
 				}
 
 				if (operand.empty) {
-					value = !value;
+					// Zeroes are not considered empty.
+					if (value === 0) {
+						value = false;
+					}
+					else {
+						value = !value;
+					}
 				}
 
 				set(expressionValues, operand.value, value);
