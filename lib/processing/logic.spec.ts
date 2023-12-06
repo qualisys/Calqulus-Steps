@@ -289,7 +289,7 @@ test('IfStep (mock) - Operands with special characters - dot - else', async(t) =
 	t.is(res.getValue(), 0);
 });
 
-test.only('IfStep (mock) - Operands with special characters - @ - then', async(t) => {
+test('IfStep (mock) - Operands with special characters - @ - then', async(t) => {
 	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
@@ -299,7 +299,7 @@ test.only('IfStep (mock) - Operands with special characters - @ - then', async(t
 	t.is(res.getValue(), 10);
 });
 
-test.only('IfStep (mock) - Operands with special characters - @ - else', async(t) => {
+test('IfStep (mock) - Operands with special characters - @ - else', async(t) => {
 	const step = mockStep(IfStep, [new Signal(2), s10], {
 		then: [s10],
 		else: [s0],
@@ -309,7 +309,7 @@ test.only('IfStep (mock) - Operands with special characters - @ - else', async(t
 	t.is(res.getValue(), 0);
 });
 
-test.only('IfStep (mock) - Operands with special characters - dot and @ - then', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot and @ - then', async(t) => {
 	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
@@ -319,7 +319,7 @@ test.only('IfStep (mock) - Operands with special characters - dot and @ - then',
 	t.is(res.getValue(), 10);
 });
 
-test.only('IfStep (mock) - Operands with special characters - dot and @ - else', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot and @ - else', async(t) => {
 	const step = mockStep(IfStep, [new Signal(2), s10], {
 		then: [s10],
 		else: [s0],
@@ -457,6 +457,7 @@ test('IfStep (mock) - One input, function - exists', async(t) => {
 
 	t.is(positive.getValue(), 2);
 
+
 	const negative = await mockStep(IfStep, 
 		[undefined], { then: [s2], else: [s10] }, 
 		'exists(MyValue)'
@@ -489,9 +490,10 @@ test('IfStep (mock) - Two inputs, function - exists', async(t) => {
 });
 
 test('IfStep (mock) - One input, function - empty', async(t) => {
+	// 0 is not empty
 	const positive1 = await mockStep(IfStep, 
 		[new Signal(0)], { then: [s2], else: [s10] }, 
-		'empty(MyValue)'
+		'!empty(MyValue)'
 	).process();
 
 	t.is(positive1.getValue(), 2);
@@ -544,6 +546,22 @@ test('IfStep (mock) - One input, function - empty', async(t) => {
 	).process();
 
 	t.is(negative3.getValue(), 10);
+
+	// 0 is not empty
+	const negative4 = await mockStep(IfStep, 
+		[new Signal(0)], { then: [s2], else: [s10] }, 
+		'empty(MyValue)'
+	).process();
+
+	t.is(negative4.getValue(), 10);
+
+	// 0 is not empty
+	const negative5 = await mockStep(IfStep, 
+		[new Signal(f32(0, 1, 2, 3))], { then: [s2], else: [s10] }, 
+		'empty(MyValue)'
+	).process();
+
+	t.is(negative5.getValue(), 10);
 });
 
 test('IfStep (mock) - field variable', async(t) => {
@@ -640,6 +658,14 @@ test('IfStep (mock) - $prev variable', async(t) => {
 
 	t.is(positive5.getValue(), 2);
 
+	// 0 is not empty
+	const positive6 = await mockStep(IfStep, 
+		[new Signal(f32(0))], { then: [s2], else: [s10] }, 
+		'!empty($prev(2))'
+	).process();
+
+	t.is(positive6.getValue(), 2);
+
 
 	const negative1 = await mockStep(IfStep, 
 		[new Signal(1)], { then: [s2], else: [s10] }, 
@@ -675,4 +701,12 @@ test('IfStep (mock) - $prev variable', async(t) => {
 	).process();
 
 	t.is(negative5.getValue(), 10);
+
+	// 0 is not empty
+	const negative6 = await mockStep(IfStep, 
+		[new Signal(f32(0))], { then: [s2], else: [s10] }, 
+		'empty($prev(2))'
+	).process();
+
+	t.is(negative6.getValue(), 10);
 });
