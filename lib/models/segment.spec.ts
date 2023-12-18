@@ -13,7 +13,6 @@ test('Segment - constructor', (t) => {
 		'test',
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		undefined, undefined, undefined,
 		300
 	);
 
@@ -37,9 +36,6 @@ test('Segment - constructor', (t) => {
 		'test',
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		300,
 	);
 
@@ -52,15 +48,6 @@ test('Segment - constructor', (t) => {
 		ry: fakeArray,
 		rz: fakeArray,
 		rw: fakeArray,
-		fx: fakeArray,
-		fy: fakeArray,
-		fz: fakeArray,
-		mx: fakeArray,
-		my: fakeArray,
-		mz: fakeArray,
-		px: fakeArray,
-		py: fakeArray,
-		pz: fakeArray,
 		length: 3,
 		frameRate: 300,
 	});
@@ -90,15 +77,6 @@ test('Segment - getComponent', (t) => {
 		'test',
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		undefined, undefined, undefined, 300
-	);
-	const segment2 = new Segment(
-		'test',
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
-		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		300
 	);
 
@@ -109,33 +87,11 @@ test('Segment - getComponent', (t) => {
 		rx: fakeArray,
 		ry: fakeArray,
 		rz: fakeArray,
-		rw: fakeArray,
-		fx: fakeArray,
-		fy: fakeArray,
-		fz: fakeArray,
-		mx: fakeArray,
-		my: fakeArray,
-		mz: fakeArray,
-		px: fakeArray,
-		py: fakeArray,
-		pz: fakeArray
+		rw: fakeArray
 	};
 
-	// Segment without force, moment and power.
-	let j = 0;
 	for (const i in components) {
-		if (j++ < 7) {
-			t.deepEqual(Array.from(segment1.getComponent(i)), Array.from(components[i] as TypedArray));
-		}
-		else {
-			t.deepEqual(Array.from(segment1.getComponent(i)), [NaN, NaN, NaN]);
-		}
-	}
-
-	// Segment with force, moment and power.
-	j = 0;
-	for (const i in components) {
-		t.deepEqual(Array.from(segment2.getComponent(i)), Array.from(components[i] as TypedArray));
+		t.deepEqual(Array.from(segment1.getComponent(i)), Array.from(components[i] as TypedArray));
 	}
 
 	t.is(segment1.getComponent('wrongComponent'), undefined);
@@ -146,7 +102,6 @@ test('Segment - getTransformationAtFrame', (t) => {
 		'test',
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		undefined, undefined, undefined,
 		300
 	);
 
