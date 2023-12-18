@@ -21,7 +21,7 @@ export type Kinematics = {
 }
 
 export class Segment implements ISequence, IDataSequence {
-	array = [...this.position.array, ...this.rotation.array,
+	array = [...this._position.array, ...this._rotation.array,
 		this.force?.array[0], this.force?.array[1], this.force?.array[2],
 		this.moment?.array[0], this.moment?.array[1], this.moment?.array[2],
 		this.power?.array[0], this.power?.array[1], this.power?.array[2]];
@@ -36,19 +36,36 @@ export class Segment implements ISequence, IDataSequence {
 
 	constructor(
 		public name: string,
-		public position: VectorSequence,
-		public rotation: QuaternionSequence,
+		protected _position: VectorSequence,
+		protected _rotation: QuaternionSequence,
 		public force?: VectorSequence,
 		public moment?: VectorSequence,
 		public power?: VectorSequence,
 		public frameRate?: number,
 	) {
-		this.emptyValues = new Float32Array(this.position.x.length).fill(NaN);
+		this.emptyValues = new Float32Array(this._position.x.length).fill(NaN);
 	}
 
-	get x(): TypedArray { return this.position.x; }
-	get y(): TypedArray { return this.position.y; }
-	get z(): TypedArray { return this.position.z; }
+	get position(): VectorSequence { return this._position; }
+	set position(value: VectorSequence) {
+		this._position = value;
+		this.array[0] = value?.x;
+		this.array[1] = value?.y;
+		this.array[2] = value?.z;
+	}
+
+	get rotation(): QuaternionSequence { return this._rotation; }
+	set rotation(value: QuaternionSequence) {
+		this._rotation = value;
+		this.array[3] = value?.x;
+		this.array[4] = value?.y;
+		this.array[5] = value?.z;
+		this.array[6] = value?.w;
+	}
+
+	get x(): TypedArray { return this._position.x; }
+	get y(): TypedArray { return this._position.y; }
+	get z(): TypedArray { return this._position.z; }
 
 	get fx(): TypedArray { return this.force?.x; }
 	get fy(): TypedArray { return this.force?.y; }
@@ -62,14 +79,14 @@ export class Segment implements ISequence, IDataSequence {
 	get py(): TypedArray { return this.power?.y; }
 	get pz(): TypedArray { return this.power?.z; }
 
-	get rx(): TypedArray { return this.rotation.x; }
-	get ry(): TypedArray { return this.rotation.y; }
-	get rz(): TypedArray { return this.rotation.z; }
-	get rw(): TypedArray { return this.rotation.w; }
+	get rx(): TypedArray { return this._rotation.x; }
+	get ry(): TypedArray { return this._rotation.y; }
+	get rz(): TypedArray { return this._rotation.z; }
+	get rw(): TypedArray { return this._rotation.w; }
 
 	get length() {
-		if (!this.position) return 0;
-		return this.position.length;
+		if (!this._position) return 0;
+		return this._position.length;
 	};
 
 	getComponent(component: string): TypedArray {
@@ -97,18 +114,18 @@ export class Segment implements ISequence, IDataSequence {
 	 * @remark The frame index is 1-based.
 	 */
 	getTransformationAtFrame(frame: number, ref?: ISegment): ISegment {
-		if (!this.position || !this.rotation) return undefined;
+		if (!this._position || !this._rotation) return undefined;
 
 		if (ref && ref.position && ref.rotation) {
-			this.position.getVectorAtFrame(frame, ref.position);
-			this.rotation.getQuaternionAtFrame(frame, ref.rotation);
+			this._position.getVectorAtFrame(frame, ref.position);
+			this._rotation.getQuaternionAtFrame(frame, ref.rotation);
 
 			return ref;
 		}
 
 		return {
-			position: this.position.getVectorAtFrame(frame),
-			rotation: this.rotation.getQuaternionAtFrame(frame),
+			position: this._position.getVectorAtFrame(frame),
+			rotation: this._rotation.getQuaternionAtFrame(frame),
 		};
 	}
 
