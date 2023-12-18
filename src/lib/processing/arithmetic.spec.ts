@@ -15,7 +15,6 @@ const frameSignal1 = new Signal(f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).getFrames
 const frameSignal2 = new Signal(f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).getFrames(i32(2, 5, 9));
 
 const segment1 = new Signal(new Segment('test 1', new VectorSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3)), new QuaternionSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3))));
-const segment2 = new Signal(new Segment('test 2', new VectorSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3)), new QuaternionSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3)), new VectorSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3))));
 const vs1 = new Signal(new VectorSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3)));
 
 test('Arithmetic - Input errors', async(t) => {
@@ -73,22 +72,6 @@ test('Arithmetic - SubtractionStep', async(t) => {
 
 test('Arithmetic - AdditionStep (Segment)', async(t) => {
 	const step = mockStep(AdditionStep, [segment1, segment1]);
-	const res = await step.process();
-
-	t.deepEqual(res.components, segment1.components);
-
-	for (let i = 0; i < res.components.length; i++) {
-		if (i < 7) {
-			t.deepEqual(Array.from(res.getComponent(res.components[i])),[2, 4, 6]);
-		}
-		else {
-			t.deepEqual(Array.from(res.getComponent(res.components[i])), [NaN, NaN, NaN]);
-		}
-	}
-});
-
-test('Arithmetic - AdditionStep (Segment with force data)', async(t) => {
-	const step = mockStep(AdditionStep, [segment1, segment2]);
 	const res = await step.process();
 
 	t.deepEqual(res.components, segment1.components);

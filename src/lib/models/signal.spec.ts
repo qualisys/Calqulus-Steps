@@ -22,7 +22,7 @@ const testString = 'test';
 const vecSeq = new VectorSequence(fakeArray, fakeArray, fakeArray, frameRate);
 const markerSeq = new Marker('test', fakeArray, fakeArray, fakeArray, frameRate);
 const quatSeq = new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray);
-const segment = new Segment('head', vecSeq, quatSeq, undefined, undefined, undefined, frameRate);
+const segment = new Segment('head', vecSeq, quatSeq, frameRate);
 const plane = new PlaneSequence(fakeArray, fakeArray, fakeArray, fakeArray);
 
 // Signal variants
@@ -336,13 +336,10 @@ test('Signal - getFrames', (t) => {
 	// Segment
 	const segmentFrames = s1_segment.getFrames(frames);
 
-	// Position, rotation, force, moment, power.
+	// Position, rotation.
 	t.deepEqual(segmentFrames.array.map((a => a === undefined ? undefined : Array.from(a))), [
 		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
-		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
-		undefined, undefined, undefined,
-		undefined, undefined, undefined,
-		undefined, undefined, undefined
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp)
 	]);
 
 	// Vector
@@ -459,7 +456,7 @@ test('Signal - convertToTargetSpace - Float32Array from a VectorSequence', (t) =
 
 test('Signal - convertToTargetSpace - Float32Array from a Segment', (t) => {
 	// Test Float32Array (as a component from a segment)
-	const segment2 = new Segment('head', vecSeq, quatSeq, undefined, undefined, undefined, frameRate);
+	const segment2 = new Segment('head', vecSeq, quatSeq, undefined);
 	const s1_segment2 = new Signal(segment2, frameRate);
 
 	// Get "y" component, like it's done by DataStore

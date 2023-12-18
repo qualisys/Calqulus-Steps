@@ -21,12 +21,9 @@ export type Kinematics = {
 }
 
 export class Segment implements ISequence, IDataSequence {
-	array = [...this._position.array, ...this._rotation.array,
-		this.force?.array[0], this.force?.array[1], this.force?.array[2],
-		this.moment?.array[0], this.moment?.array[1], this.moment?.array[2],
-		this.power?.array[0], this.power?.array[1], this.power?.array[2]];
+	array = [...this._position.array, ...this._rotation.array];
 	centerOfMass: Vector;
-	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
+	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw'];
 	distalJoint: Joint;
 	emptyValues = new Float32Array(0);
 	inertia: Matrix;
@@ -38,9 +35,6 @@ export class Segment implements ISequence, IDataSequence {
 		public name: string,
 		protected _position: VectorSequence,
 		protected _rotation: QuaternionSequence,
-		public force?: VectorSequence,
-		public moment?: VectorSequence,
-		public power?: VectorSequence,
 		public frameRate?: number,
 	) {
 		this.emptyValues = new Float32Array(this._position.x.length).fill(NaN);
@@ -66,18 +60,6 @@ export class Segment implements ISequence, IDataSequence {
 	get x(): TypedArray { return this._position.x; }
 	get y(): TypedArray { return this._position.y; }
 	get z(): TypedArray { return this._position.z; }
-
-	get fx(): TypedArray { return this.force?.x; }
-	get fy(): TypedArray { return this.force?.y; }
-	get fz(): TypedArray { return this.force?.z; }
-
-	get mx(): TypedArray { return this.moment?.x; }
-	get my(): TypedArray { return this.moment?.y; }
-	get mz(): TypedArray { return this.moment?.z; }
-
-	get px(): TypedArray { return this.power?.x; }
-	get py(): TypedArray { return this.power?.y; }
-	get pz(): TypedArray { return this.power?.z; }
 
 	get rx(): TypedArray { return this._rotation.x; }
 	get ry(): TypedArray { return this._rotation.y; }
@@ -134,13 +116,10 @@ export class Segment implements ISequence, IDataSequence {
 	 * `x`, `y`, `z`, `rx`, `ry`, `rz`, `rw`, `fx`, `fy`, `fz`, `mx`, `my`, `mz`, `px`, `py`, `pz` are included.
 	 * @param param0 
 	 */
-	static fromArray(name: string, [x, y, z, rx, ry, rz, rw, fx, fy, fz, mx, my, mz, px, py, pz]: TypedArray[]) {
+	static fromArray(name: string, [x, y, z, rx, ry, rz, rw]: TypedArray[]) {
 		return new Segment(name,
 			new VectorSequence(x, y, z),
 			new QuaternionSequence(rx, ry, rz, rw),
-			fx !== undefined && fy !== undefined && fz !== undefined ? new VectorSequence(fx, fy, fz) : undefined,
-			mx !== undefined && my !== undefined && mz !== undefined ? new VectorSequence(mx, my, mz) : undefined,
-			px !== undefined && py !== undefined && pz !== undefined ? new VectorSequence(px, py, pz) : undefined,
 			undefined
 		);
 	}
