@@ -12,12 +12,10 @@ export interface ISegment {
 }
 
 export type Kinematics = {
-	alpha: VectorSequence,
 	angularAcceleration: VectorSequence,
 	angularVelocity: VectorSequence,
 	linearAcceleration: VectorSequence,
 	linearVelocity: VectorSequence,
-	omega: VectorSequence,
 }
 
 export class Segment implements ISequence, IDataSequence {
@@ -27,6 +25,7 @@ export class Segment implements ISequence, IDataSequence {
 	distalJoint: Joint;
 	emptyValues = new Float32Array(0);
 	inertia: Matrix;
+	kinematics: Kinematics;
 	mass: number;
 	parent: Segment;
 	proximalJoint: Joint;
@@ -123,6 +122,4 @@ export class Segment implements ISequence, IDataSequence {
 			undefined
 		);
 	}
-
-	public kinematics: Kinematics;
 }
