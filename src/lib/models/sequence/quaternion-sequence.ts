@@ -33,6 +33,10 @@ export class QuaternionSequence implements ISequence {
 		public frameRate?: number
 	) {}
 
+	ensureContinuity() {
+		QuaternionSequence.ensureContinuity(this, this);
+	}
+
 	/**
 	 * Create a new [[QuaternionSequence]] without discontinuity.
 	 */
