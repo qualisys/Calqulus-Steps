@@ -1,4 +1,5 @@
 import { Quaternion } from '../spatial/quaternion';
+import { Vector } from '../spatial/vector';
 
 import { ISequence } from './sequence';
 
@@ -31,6 +32,53 @@ export class QuaternionSequence implements ISequence {
 		/** The frame rate. */
 		public frameRate?: number
 	) {}
+
+	/**
+	 * Create a new [[QuaternionSequence]] without discontinuity.
+	 */
+	static ensureContinuity(quat: QuaternionSequence, result?: QuaternionSequence) {
+		const x = result ? result.x : new Float32Array(quat.x);
+		const y = result ? result.y : new Float32Array(quat.y);
+		const z = result ? result.z : new Float32Array(quat.z);
+		const w = result ? result.w : new Float32Array(quat.w);
+
+		for (let i = 1; i < quat.length; i++) {
+			// const cur = Quaternion.tmpQuat1;
+			// const prev = Quaternion.tmpQuat2;
+			const cur = Quaternion.identity();
+			const prev = Quaternion.identity();
+
+			cur.x = x[i];
+			cur.y = y[i];
+			cur.z = z[i];
+			cur.w = w[i];
+
+			prev.x = x[i - 1];
+			prev.y = y[i - 1];
+			prev.z = z[i - 1];
+			prev.w = w[i - 1];
+
+			// Method with geodesic distance
+			const prevInv = Quaternion.invert(prev, Quaternion.tmpQuat2);
+			const prevInvCur = prevInv.multiply(cur);
+			const theta = 2 * Math.atan2(Math.hypot(prevInvCur.x, prevInvCur.y, prevInvCur.z), prevInvCur.w);
+			const k = Vector.normalize(new Vector(prevInvCur.x, prevInvCur.y, prevInvCur.z), Vector.tmpVec1);
+			let halfKTheta = new Vector(0, 0, 0);
+
+			if (theta != 0) {
+				halfKTheta = k.multiply(theta / 2);
+			}
+
+			if (Vector.norm(halfKTheta) > Math.PI / 2) {
+				x[i] = -x[i];
+				y[i] = -y[i];
+				z[i] = -z[i];
+				w[i] = -w[i];
+			}
+		}
+
+		return result ? result : new QuaternionSequence(x, y, z, w);
+	}
 
 	/**
 	 * Get the number of elements in this sequence.
