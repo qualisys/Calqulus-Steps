@@ -8,6 +8,7 @@ export enum SeriesBufferMethod {
 	None,
 	/** The signal is extrapolated. */
 	Extrapolate,
+	Reflect,
 }
 
 export class SeriesUtil {
@@ -33,6 +34,10 @@ export class SeriesUtil {
 		if (method === SeriesBufferMethod.Extrapolate && series.length > 1) {
 			startBuffer = SeriesUtil.extrapolate(length, series[0], series[0] - series[1], true);
 			endBuffer = SeriesUtil.extrapolate(length, series[series.length - 1], series[series.length - 1] - series[series.length - 2]);
+		}
+		else if (method === SeriesBufferMethod.Reflect && series.length > 1) {
+			startBuffer = SeriesUtil.reflectBeginning(series, length);
+			endBuffer = SeriesUtil.reflectEnd(series, length);
 		}
 		else {
 			startBuffer = SeriesUtil.extrapolate(length, series[0], 0);
@@ -119,6 +124,32 @@ export class SeriesUtil {
 		if (values.length === 1 && classInstance['constructor']['name'] === 'Number') return [values[0]];
 
 		return classInstance['constructor']['from'](values) as NumericArray;
+	}
+
+	/**
+	 * Returns an array where the values from the beginning of the input series are reflected for the specified length.
+	 * 
+	 * @series The series 
+	 * @length The array length.
+	 */
+	static reflectBeginning(series: NumericArray, length: number): NumericArray {
+		return series
+			.slice(0, length)
+			.reverse()
+			.map((v) => series[0] - v);
+		;
+	}
+
+	/**
+	 * Returns an array where the values from the end of the input series are reflected for the specified length.
+	 * 
+	 * @series The series 
+	 * @length The array length.
+	 */
+	static reflectEnd(series: NumericArray, length: number): NumericArray {
+		const seriesReverse = series.slice().reverse();
+		const buffer = SeriesUtil.reflectBeginning(seriesReverse, length);
+		return buffer.reverse();
 	}
 
 	/**
