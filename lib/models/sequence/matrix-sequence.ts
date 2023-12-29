@@ -330,6 +330,27 @@ export class MatrixSequence {
 		return result ? result : new MatrixSequence(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
 	}
 
+	/**
+	 * Calculates the transpose of the given matrix sequence and stores it in the
+	 * specified matrix sequence.
+	 *
+	 * @param a Matrix sequence to transpose,
+	 * @param result Matrix sequence receiving operation result.
+	 *
+	 * @returns The transposed matrix sequence.
+	 */
+	static transpose(m: MatrixSequence): MatrixSequence {
+		const result = MatrixSequence.createEmpty(m.length);
+		
+		for (let i = 0; i < m.length; i++) {
+			const mFrameT = Matrix.transpose(m.getMatrixAtFrame(i + 1), Matrix.tmpMat1);
+			result.setMatrixAtFrame(i + 1, mFrameT);
+		}
+
+		return result;
+	}
+	
+
 	/** 
 	 * Set elements of a [[Matrix]] for a specified frame.
 	 * 
