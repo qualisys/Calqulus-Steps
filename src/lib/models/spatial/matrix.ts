@@ -494,6 +494,62 @@ export class Matrix {
 		return result;
 	}
 
+
+	/**
+	 * Multiply the current matrix by a vector.
+	 * 
+	 * @param vector The vector to multiply by.
+	 * @returns The resulting vector.
+	 */
+	multiplyByVector(vector: Vector) {
+		return this.multiplyByVectorToRef(vector, Vector.tmpVec1);
+	}
+
+	/**
+	 * Multiply the current matrix by a vector and stores the result in the
+	 * given vector.
+	 * 
+	 * @param vector The vector to multiply by.
+	 * @param result The vector to store the result in.
+	 * @returns The resulting vector.
+	 */
+	multiplyByVectorToRef(vector: Vector, result: Vector) {
+		return Matrix.multiplyByVector(this, vector, result);
+	}
+
+
+	/**
+	 * Multiplies matrix a with vector b.
+	 *
+	 * @param a The matrix.
+	 * @param b The vector .
+	 * @param result The receiving vector,
+	 * @returns The resulting vector.
+	 */
+	static multiplyByVector(a: Matrix, b: Vector, result: Vector): Vector {
+		const ma = a._m;
+
+		const a00 = ma[0],
+			a01 = ma[1],
+			a02 = ma[2];
+		const a10 = ma[4],
+			a11 = ma[5],
+			a12 = ma[6];
+		const a20 = ma[8],
+			a21 = ma[9],
+			a22 = ma[10];
+	
+		const b0 = b.x,
+			b1 = b.y,
+			b2 = b.z;
+			
+		result.x = b0 * a00 + b1 * a10 + b2 * a20;
+		result.y = b0 * a01 + b1 * a11 + b2 * a21;
+		result.z = b0 * a02 + b1 * a12 + b2 * a22;
+		
+		return result;
+	}
+
 	/**
 	 * Calculates the transpose of the given matrix and stores it in the
 	 * specified matrix.
