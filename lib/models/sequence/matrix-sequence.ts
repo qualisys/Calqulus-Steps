@@ -331,6 +331,82 @@ export class MatrixSequence {
 	}
 
 	/**
+	 * Multiplies this matrix sequence with a vector sequence.
+	 * 
+	 * @param v The vector sequence to multiply with.
+	 * @param result The vector sequence to store the result in.
+	 * @returns The resulting vector sequence.
+	 */
+	multiplyVectorSequence(v: VectorSequence, result?: VectorSequence): VectorSequence {
+		const len = Math.max(this.length, v.length);
+		const x = result ? result.x : new Float32Array(len);
+		const y = result ? result.y : new Float32Array(len);
+		const z = result ? result.z : new Float32Array(len);
+		
+		for (let i = 0; i < len; i++) {
+			const i0 = Math.min(i, this.length - 1);
+			const i1 = Math.min(i, v.length - 1);
+			const matrix = this.getMatrixAtFrame(i0 + 1);
+			const vector = v.getVectorAtFrame(i1 + 1);
+			const r = matrix.multiplyByVector(vector);
+			
+			x[i] = r.x;
+			y[i] = r.y;
+			z[i] = r.z;
+		}
+
+		return result ? result : new VectorSequence(x, y, z);
+	}
+
+	/**
+	 * Multiplies this matrix sequence with a scalar.
+	 * 
+	 * @param n The scalar to multiply with.
+	 * @param result The matrix sequence to store the result in.
+	 * @returns The resulting matrix sequence.
+	 */
+	multiplyScalar(n: number, result?: MatrixSequence): MatrixSequence {
+		const len = this.length;
+		const m00 = result ? result.m00 : new Float32Array(len);
+		const m01 = result ? result.m01 : new Float32Array(len);
+		const m02 = result ? result.m02 : new Float32Array(len);
+		const m03 = result ? result.m03 : new Float32Array(len);
+		const m10 = result ? result.m00 : new Float32Array(len);
+		const m11 = result ? result.m11 : new Float32Array(len);
+		const m12 = result ? result.m12 : new Float32Array(len);
+		const m13 = result ? result.m13 : new Float32Array(len);
+		const m20 = result ? result.m20 : new Float32Array(len);
+		const m21 = result ? result.m21 : new Float32Array(len);
+		const m22 = result ? result.m22 : new Float32Array(len);
+		const m23 = result ? result.m23 : new Float32Array(len);
+		const m30 = result ? result.m30 : new Float32Array(len);
+		const m31 = result ? result.m31 : new Float32Array(len);
+		const m32 = result ? result.m32 : new Float32Array(len);
+		const m33 = result ? result.m33 : new Float32Array(len);
+		
+		for (let i = 0; i < len; i++) {
+			m00[i] = this.m00[0];
+			m01[i] = this.m01[1];
+			m02[i] = this.m02[2];
+			m03[i] = this.m03[3];
+			m10[i] = this.m10[4];
+			m11[i] = this.m11[5];
+			m12[i] = this.m12[6];
+			m13[i] = this.m13[7];
+			m20[i] = this.m20[8];
+			m21[i] = this.m21[9];
+			m22[i] = this.m22[10];
+			m23[i] = this.m23[11];
+			m30[i] = this.m30[12];
+			m31[i] = this.m31[13];
+			m32[i] = this.m32[14];
+			m33[i] = this.m33[15];
+		}
+
+		return result ? result : new MatrixSequence(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
+	}
+
+	/**
 	 * Calculates the transpose of the given matrix sequence and stores it in the
 	 * specified matrix sequence.
 	 *
@@ -381,5 +457,25 @@ export class MatrixSequence {
 		this.m33[frameIndex] = m[15];
 
 		return this;
+	}
+
+	/**
+	 * Calculates the skew matrix sequence and stores it in the
+	 * specified matrix sequence.
+	 *
+	 * @param v Vector sequence to transpose,
+	 * @param result Matrix sequence receiving operation result.
+	 *
+	 * @returns The skew matrix sequence.
+	 */
+	static skew(v: VectorSequence): MatrixSequence {
+		const result = MatrixSequence.createEmpty(v.length);
+		
+		for (let i = 0; i < v.length; i++) {
+			const mFrameSkew = Matrix.skew(v.getVectorAtFrame(i + 1));
+			result.setMatrixAtFrame(i + 1, mFrameSkew);
+		}
+
+		return result;
 	}
 }
