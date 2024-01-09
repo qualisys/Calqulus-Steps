@@ -188,6 +188,14 @@ export class EventMaskStep extends BaseStep {
 			throw new ProcessingError('The event mask step expects only events in the include option.');
 		}
 
+		if (!from.isPositive) {
+			throw new ProcessingError('The second input, "from", contains negative frame indices.');
+		}
+
+		if (!to.isPositive) {
+			throw new ProcessingError('The third input, "to", contains negative frame indices.');
+		}
+
 		// Expect a one-dimensional array, round all values and cast into a Uint array.
 		const fromFrames = Uint32Array.from(from.array[0].map(v => Math.round(v)));
 		const toFrames = Uint32Array.from(to.array[0].map(v => Math.round(v)));

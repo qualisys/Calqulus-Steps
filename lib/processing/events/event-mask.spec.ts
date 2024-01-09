@@ -46,6 +46,10 @@ test('EventMaskStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [e1, e2]).process()); // Too few inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [s3, e1, e2]).process()); // Wrong type
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, s1, s1]).process()); // Wrong type for events
+
+	// Negative event frames
+	await t.throwsAsync(mockStep(EventMaskStep, [s1, new Signal([1, 3, -5]), new Signal([2, 4, 6])]).process());
+	await t.throwsAsync(mockStep(EventMaskStep, [s1, new Signal([1, 3, 5]), new Signal([2, -4, 6])]).process());
 });
 
 test('EventMaskStep - simple array', async(t) => {

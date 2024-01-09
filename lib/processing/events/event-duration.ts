@@ -118,7 +118,7 @@ export class EventDurationStep extends BaseStep {
 		const durations = pairs
 			.map(span => span.end - span.start)
 			.map(frameDur => frameDur / frameRate)
-			;
+		;
 
 		const returnSignal = from.clone(Float32Array.from(durations));
 		returnSignal.frameRate = frameRate;
