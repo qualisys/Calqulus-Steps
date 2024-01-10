@@ -60,20 +60,56 @@ test('MatrixSequence - getMatrixAtFrame - ref', (t) => {
 });
 
 test('MatrixSequence - createEmpty', (t) => {
-	const mXy = MatrixSequence.createEmpty(2);
+	const matrix = MatrixSequence.createEmpty(2);
 
-	t.deepEqual(Array.from(mXy.getMatrixAtFrame(1)._m), [
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(1)._m), [
 		NaN, NaN, NaN, NaN,
 		NaN, NaN, NaN, NaN,
 		NaN, NaN, NaN, NaN,
 		NaN, NaN, NaN, NaN
 	]);
 
-	t.deepEqual(Array.from(mXy.getMatrixAtFrame(2)._m), [
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(2)._m), [
 		NaN, NaN, NaN, NaN,
 		NaN, NaN, NaN, NaN,
 		NaN, NaN, NaN, NaN,
 		NaN, NaN, NaN, NaN
+	]);
+});
+
+test('MatrixSequence - createIdentity', (t) => {
+	const matrix = MatrixSequence.createIdentity(2);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(1)._m), [
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	]);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(2)._m), [
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	]);
+});
+
+test('MatrixSequence - createZero', (t) => {
+	const matrix = MatrixSequence.createZero(2);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(1)._m), [
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0
+	]);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(2)._m), [
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0
 	]);
 });
 
