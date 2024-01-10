@@ -27,6 +27,9 @@ export class KinematicsUtil {
 			}
 		}
 
+		result[0] = (values[1] - values[0]) / xStep;
+		result[values.length - 1] = (values[values.length - 1] - values[values.length - 2]) / xStep;
+
 		return result;
 	}
 
