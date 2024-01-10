@@ -132,3 +132,22 @@ test('MatrixSequence - fromVectors', (t) => {
 		0, 0, 0, 1
 	]);
 });
+
+test('MatrixSequence - fromMatrix', (t) => {
+	const matrix = Matrix.fromValues(0,0,1,0,1,2,4,5,6,7,8,9,1,1,1,1);
+	const matrixSequence = MatrixSequence.fromMatrix(matrix, 3);
+
+	t.deepEqual(Array.from(matrixSequence.getMatrixAtFrame(1)._m), [
+		0, 0, 1, 0,
+		1, 2, 4, 5,
+		6, 7, 8, 9,
+		1, 1, 1, 1
+	]);
+
+	t.deepEqual(Array.from(matrixSequence.getMatrixAtFrame(3)._m), [
+		0, 0, 1, 0,
+		1, 2, 4, 5,
+		6, 7, 8, 9,
+		1, 1, 1, 1
+	]);
+});
