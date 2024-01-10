@@ -59,6 +59,24 @@ test('MatrixSequence - getMatrixAtFrame - ref', (t) => {
 	]);
 });
 
+test('MatrixSequence - createEmpty', (t) => {
+	const mXy = MatrixSequence.createEmpty(2);
+
+	t.deepEqual(Array.from(mXy.getMatrixAtFrame(1)._m), [
+		NaN, NaN, NaN, NaN,
+		NaN, NaN, NaN, NaN,
+		NaN, NaN, NaN, NaN,
+		NaN, NaN, NaN, NaN
+	]);
+
+	t.deepEqual(Array.from(mXy.getMatrixAtFrame(2)._m), [
+		NaN, NaN, NaN, NaN,
+		NaN, NaN, NaN, NaN,
+		NaN, NaN, NaN, NaN,
+		NaN, NaN, NaN, NaN
+	]);
+});
+
 test('MatrixSequence - fromVectors', (t) => {
 	const v1 = new VectorSequence(f32(1, 0), f32(0, 0), f32(0, 1));
 	const v2 = new VectorSequence(f32(0, 0.5), f32(0, 0.5), f32(1, 0));
