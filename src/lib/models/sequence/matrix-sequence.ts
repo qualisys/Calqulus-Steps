@@ -212,9 +212,9 @@ export class MatrixSequence {
 
 		return new MatrixSequence(
 			m00, m01, m02, zero,
-			m10, m11, m12, new Float32Array(zero),
-			m20, m21, m22, new Float32Array(zero),
-			new Float32Array(zero), new Float32Array(zero), new Float32Array(zero), new Float32Array(len).fill(1),
+			m10, m11, m12, zero,
+			m20, m21, m22, zero,
+			zero, zero, zero, new Float32Array(len).fill(1),
 		);
 	}
 

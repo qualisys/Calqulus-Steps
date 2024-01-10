@@ -151,3 +151,35 @@ test('MatrixSequence - fromMatrix', (t) => {
 		1, 1, 1, 1
 	]);
 });
+
+test('MatrixSequence - fromRotationMatrixValues', (t) => {
+	const m00 = new Float32Array(3).fill(0.10000000149011612);
+	const m01 = new Float32Array(3).fill(0.5);
+	const m02 = new Float32Array(3).fill(0.30000001192092896);
+	const m10 = new Float32Array(3).fill(0.5);
+	const m11 = new Float32Array(3).fill(0.800000011920929);
+	const m12 = new Float32Array(3).fill(0.4000000059604645);
+	const m20 = new Float32Array(3).fill(0.30000001192092896);
+	const m21 = new Float32Array(3).fill(0.5);
+	const m22 = new Float32Array(3).fill(0.6000000238418579);
+	
+	const matrixSequence = MatrixSequence.fromRotationMatrixValues(
+		m00, m01, m02,
+		m10, m11, m12,
+		m20, m21, m22
+	);
+
+	t.deepEqual(Array.from(matrixSequence.getMatrixAtFrame(1)._m), [
+		0.10000000149011612, 0.5, 0.30000001192092896, 0,
+		0.5, 0.800000011920929, 0.4000000059604645, 0,
+		0.30000001192092896, 0.5, 0.6000000238418579, 0,
+		0, 0, 0, 1
+	]);
+
+	t.deepEqual(Array.from(matrixSequence.getMatrixAtFrame(3)._m), [
+		0.10000000149011612, 0.5, 0.30000001192092896, 0,
+		0.5, 0.800000011920929, 0.4000000059604645, 0,
+		0.30000001192092896, 0.5, 0.6000000238418579, 0,
+		0, 0, 0, 1
+	]);
+});
