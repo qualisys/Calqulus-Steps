@@ -236,3 +236,24 @@ test('MatrixSequence - multiplyVectorSequence', (t) => {
 	t.deepEqual(Array.from(v2.y), [6, 0, 6]);
 	t.deepEqual(Array.from(v2.z), [9, 0, 9]);
 });
+
+test('MatrixSequence - multiplyScalar', (t) => {
+	const m1 = Matrix.fromValues(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4);
+	const matrix1 = MatrixSequence.fromMatrix(m1,3);
+	const scalar = 2;
+	const matrix2 = matrix1.multiplyScalar(scalar);
+
+	t.deepEqual(Array.from(matrix2.getMatrixAtFrame(1)._m), [
+		2, 4, 6, 8,
+		2, 4, 6, 8,
+		2, 4, 6, 8,
+		2, 4, 6, 8, 
+	]);
+
+	t.deepEqual(Array.from(matrix2.getMatrixAtFrame(3)._m), [
+		2, 4, 6, 8,
+		2, 4, 6, 8,
+		2, 4, 6, 8,
+		2, 4, 6, 8, 
+	]);
+});
