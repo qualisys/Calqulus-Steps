@@ -225,3 +225,14 @@ test('MatrixSequence - multiply', (t) => {
 		0, 0, 0, 1 
 	]);
 });
+
+test('MatrixSequence - multiplyVectorSequence', (t) => {
+	const m1 = Matrix.fromValues(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4);
+	const matrix1 = MatrixSequence.fromMatrix(m1,3);
+	const v1 = new VectorSequence(f32(1, 0, 1), f32(1, 0, 1), f32(1, 0, 1));
+	const v2 = matrix1.multiplyVectorSequence(v1);
+
+	t.deepEqual(Array.from(v2.x), [3, 0, 3]);
+	t.deepEqual(Array.from(v2.y), [6, 0, 6]);
+	t.deepEqual(Array.from(v2.z), [9, 0, 9]);
+});
