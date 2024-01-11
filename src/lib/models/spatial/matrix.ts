@@ -244,7 +244,7 @@ export class Matrix {
 		m10: number, m11: number, m12: number,
 		m20: number, m21: number, m22: number
 	) {
-		const matrix = new Matrix();
+		const matrix = Matrix.identity();
 		const m = matrix._m;
 
 		m[0] = m00;
