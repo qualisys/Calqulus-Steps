@@ -203,3 +203,25 @@ test('MatrixSequence - fromQuaternionSequence', (t) => {
 		0, 0, 0, 1
 	]);
 });
+
+test('MatrixSequence - multiply', (t) => {
+	const m1 = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const m2 = Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1);
+	const matrix1 = MatrixSequence.fromMatrix(m1,3);
+	const matrix2 = MatrixSequence.fromMatrix(m2,3);
+	const matrix3 = matrix1.multiply(matrix2);
+
+	t.deepEqual(Array.from(matrix3.getMatrixAtFrame(1)._m), [
+		90, 114, 138, 0,
+		54, 69, 84, 0,
+		18,24, 30, 0,
+		0, 0, 0, 1 
+	]);
+
+	t.deepEqual(Array.from(matrix3.getMatrixAtFrame(3)._m), [
+		90, 114, 138, 0,
+		54, 69, 84, 0,
+		18,24, 30, 0,
+		0, 0, 0, 1 
+	]);
+});
