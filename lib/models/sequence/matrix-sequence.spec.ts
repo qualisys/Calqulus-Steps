@@ -305,3 +305,22 @@ test('MatrixSequence - setMatrixAtFrame', (t) => {
 		0, 0, 0, 1,
 	]);
 });
+
+test('MatrixSequence - skew', (t) => {
+	const v = new VectorSequence(f32(1, 1, 1), f32(1, 1, 2), f32(1, 1, 3));
+	const matrix = MatrixSequence.skew(v);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(1)._m), [
+		0, 1, -1, 0,
+		-1, 0, 1, 0,
+		1, -1, 0, 0,
+		0, 0, 0, 0,
+	]);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(3)._m), [
+		0, 3, -2, 0,
+		-3, 0, 1, 0,
+		2, -1, 0, 0,
+		0, 0, 0, 0,
+	]);
+});
