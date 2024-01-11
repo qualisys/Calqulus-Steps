@@ -3,6 +3,7 @@ import test from 'ava';
 import { Matrix } from '../spatial/matrix';
 
 import { MatrixSequence } from './matrix-sequence';
+import { QuaternionSequence } from './quaternion-sequence';
 import { VectorSequence } from './vector-sequence';
 
 const f32 = (...arr: number[]) => Float32Array.from(arr);
@@ -180,6 +181,25 @@ test('MatrixSequence - fromRotationMatrixValues', (t) => {
 		0.10000000149011612, 0.5, 0.30000001192092896, 0,
 		0.5, 0.800000011920929, 0.4000000059604645, 0,
 		0.30000001192092896, 0.5, 0.6000000238418579, 0,
+		0, 0, 0, 1
+	]);
+});
+
+test('MatrixSequence - fromQuaternionSequence', (t) => {
+	const quat = new QuaternionSequence(f32(-0.0131, 1, 1), f32(0.0104, 2, 2), f32(-0.7093, 3, 3), f32(0.7047, 4, 4));
+	const matrix = MatrixSequence.fromQuaternionSequence(quat);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(1)._m), [
+		-0.006429247558116913, -0.9999598860740662, 0.003925899975001812, 0,
+		0.9994149208068848, -0.006556147709488869, -0.033216580748558044, 0,
+		0.03324142098426819, 0.0037097001913934946, 0.9994404315948486, 0,
+		0, 0, 0, 1
+	]);
+
+	t.deepEqual(Array.from(matrix.getMatrixAtFrame(3)._m), [
+		-25, 28, -10, 0,
+		-20, -19, 20, 0,
+		22, 4, -9, 0,
 		0, 0, 0, 1
 	]);
 });
