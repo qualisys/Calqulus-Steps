@@ -3,6 +3,7 @@ import test from 'ava';
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Space } from '../processing/space';
 
+import { Joint } from './joint';
 import { Marker } from './marker';
 import { Segment } from './segment';
 import { PlaneSequence } from './sequence/plane-sequence';
@@ -23,6 +24,7 @@ const vecSeq = new VectorSequence(fakeArray, fakeArray, fakeArray, frameRate);
 const markerSeq = new Marker('test', fakeArray, fakeArray, fakeArray, frameRate);
 const quatSeq = new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray);
 const segment = new Segment('head', vecSeq, quatSeq, frameRate);
+const joint = new Joint('LeftKnee', vecSeq, vecSeq, undefined, undefined, 100);
 const plane = new PlaneSequence(fakeArray, fakeArray, fakeArray, fakeArray);
 
 // Signal variants
@@ -38,6 +40,8 @@ const s1_numarr = new Signal([...fakeArray], frameRate);
 const s2_numarr = new Signal().setValue([...fakeArray]);
 const s1_segment = new Signal(segment, frameRate);
 const s2_segment = new Signal().setValue(segment);
+const s1_joint = new Signal(joint, frameRate);
+const s2_joint = new Signal().setValue(joint);
 const s1_string = new Signal(testString, frameRate);
 const s2_string = new Signal().setValue(testString);
 const s1_vecseq = new Signal(vecSeq, frameRate);
@@ -125,6 +129,15 @@ test('Signal - Segment constructor', (t) => {
 	t.is(s1_segment.components, segment.components);
 });
 
+test('Signal - Joint constructor', (t) => {
+	t.assert(s1_joint.type === s2_joint.type && s1_joint.type === SignalType.Joint);
+	t.is(s1_joint.typeToString, 'Joint');
+	t.is(s1_joint.frameRate, frameRate);
+	t.is(s1_joint.length, joint.length);
+	t.is(s1_joint.getValue(), joint);
+	t.is(s1_joint.components, joint.components);
+});
+
 test('Signal - String constructor', (t) => {
 	t.assert(s1_string.type === s2_string.type && s1_string.type === SignalType.String);
 	t.is(s1_string.typeToString, 'String');
@@ -180,6 +193,7 @@ test('Signal - typeToString', (t) => {
 		[SignalType.Float32, 'Float32'],
 		[SignalType.Float32Array, 'Float32Array'],
 		[SignalType.Float32ArrayArray, 'Float32Array[]'],
+		[SignalType.Joint, 'Joint'],
 		[SignalType.Segment, 'Segment'],
 		[SignalType.String, 'String'],
 		[SignalType.VectorSequence, 'VectorSequence'],
@@ -198,6 +212,7 @@ test('Signal - typeToResultType', (t) => {
 		[SignalType.Float32, ResultType.Scalar],
 		[SignalType.Float32Array, ResultType.Scalar],
 		[SignalType.Float32ArrayArray, ResultType.Series],
+		[SignalType.Joint, ResultType.Series],
 		[SignalType.Segment, ResultType.Series],
 		[SignalType.VectorSequence, ResultType.Series],
 		[SignalType.PlaneSequence, ResultType.Series],
@@ -215,6 +230,21 @@ test('Signal - typeFromArray', (t) => {
 	t.is(Signal.typeFromArray(SignalType.Float32, [Float32Array.from([floatVal])]), Float32Array.from([floatVal])[0]);
 	t.is(Signal.typeFromArray(SignalType.Float32Array, [fakeArray]), fakeArray);
 	t.is(Signal.typeFromArray(SignalType.Float32ArrayArray, fakeNestedArray), fakeNestedArray);
+
+	t.like(Signal.typeFromArray(SignalType.Joint, joint.array), {
+		x: joint.x,
+		y: joint.y,
+		z: joint.z,
+		fx: joint.fx,
+		fy: joint.fy,
+		fz: joint.fz,
+		mx: joint.mx,
+		my: joint.my,
+		mz: joint.mz,
+		px: joint.px,
+		py: joint.py,
+		pz: joint.pz
+	});
 
 	t.like(Signal.typeFromArray(SignalType.Segment, segment.array), {
 		x: segment.x,
@@ -286,6 +316,7 @@ test('Signal - getting values', (t) => {
 	t.is(s1_f32arr.getFloat32ArrayValue(), fakeArray);
 	t.is(s1_f32arrarr.getFloat32ArrayArrayValue(), fakeNestedArray);
 	t.deepEqual(s1_numarr.getFloat32ArrayValue(), fakeArray);
+	t.is(s1_joint.getJointValue(), joint);
 	t.is(s1_segment.getSegmentValue(), segment);
 	t.is(s1_string.getStringValue(), testString);
 	t.is(s1_vecseq.getVectorSequenceValue(), vecSeq);
@@ -339,7 +370,18 @@ test('Signal - getFrames', (t) => {
 	// Position, rotation.
 	t.deepEqual(segmentFrames.array.map((a => a === undefined ? undefined : Array.from(a))), [
 		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
-		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp)
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+	]);
+
+	// Joint
+	const jointFrames = s1_joint.getFrames(frames);
+
+	// Position, force, moment, force.
+	t.deepEqual(jointFrames.array.map((a => a === undefined ? undefined : Array.from(a))), [
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+		undefined, undefined, undefined,
+		undefined, undefined, undefined
 	]);
 
 	// Vector
