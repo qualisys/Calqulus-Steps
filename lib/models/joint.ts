@@ -71,8 +71,13 @@ export class Joint implements ISequence, IDataSequence {
 
 
 	get length() {
-		if (!this._force) return 0;
-		return this._force.length;
+		const components = [this._position, this._force, this._moment, this._power].filter(c => !!c);
+
+		if (components.length < 1) {
+			return 0;
+		} 
+
+		return Math.max(...components.map(c => c.length));
 	};
 
 	getComponent(component: string): TypedArray {
