@@ -184,6 +184,17 @@ test('Matrix - fromValues', (t) => {
 	t.deepEqual(Array.from(mat._m), values);
 });
 
+test('Matrix - identity', (t) => {
+	const mat = Matrix.identity();
+
+	t.deepEqual(Array.from(mat._m), [
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1,
+	]);
+});
+
 test('Matrix - get', (t) => {
 	const mat = Matrix.fromValues(...values);
 
