@@ -169,7 +169,7 @@ test('Matrix - fromRotationMatrix', (t) => {
 	t.is(m[12], 0);
 	t.is(m[13], 0);
 	t.is(m[14], 0);
-	t.is(m[15], 0);
+	t.is(m[15], 1);
 });
 
 test('Matrix - fromArray', (t) => {
