@@ -94,3 +94,36 @@ test('Joint - getComponent', (t) => {
 
 	t.is(joint.getComponent('wrongComponent'), undefined);
 });
+
+test('Joint - length', (t) => {
+	const joint = new Joint(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		undefined,
+		300
+	);
+
+	t.is(joint.length, 3);
+
+	const fourElements = Float32Array.from([1, 2, 3, 4]);
+	const fiveElements = Float32Array.from([1, 2, 3, 4, 5]);
+
+	t.is(joint.length, 3);
+
+	joint.force = new VectorSequence(fourElements, fourElements, fourElements, 300),
+	t.is(joint.length, 4);
+
+	joint.force = new VectorSequence(fiveElements, fiveElements, fiveElements, 300),
+	t.is(joint.length, 5);
+
+	joint.force = undefined;
+	t.is(joint.length, 3);
+
+	joint.moment = undefined;
+	t.is(joint.length, 3);
+
+	joint.position = undefined;
+	t.is(joint.length, 0);
+});
