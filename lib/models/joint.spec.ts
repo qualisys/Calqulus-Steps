@@ -33,8 +33,10 @@ test('Joint - constructor', (t) => {
 		frameRate: 300,
 	});
 
-	joint.force = undefined;
-	t.is(joint.length, 0);
+	t.is(joint.position.length, 3);
+	t.is(joint.force.length, 3);
+	t.is(joint.moment.length, 3);
+	t.is(joint.power?.length, undefined);
 });
 
 test('Joint - fromArray', (t) => {
