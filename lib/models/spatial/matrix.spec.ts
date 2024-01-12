@@ -280,6 +280,16 @@ test('Matrix - multiply', (t) => {
 	t.is(mat._m[10], 30);
 });
 
+test('Matrix - multiplyVector', (t) => {
+	const m1 = Matrix.fromValues(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4);
+	const v1 = new Vector(1, 0, 1);
+	const v2 = m1.multiplyVector(v1);
+
+	t.deepEqual(v2.x, 2);
+	t.deepEqual(v2.y, 4);
+	t.deepEqual(v2.z, 6);
+});
+
 test('Matrix - transpose other', (t) => {
 	const mat = new Matrix();
 
