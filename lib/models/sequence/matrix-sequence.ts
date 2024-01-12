@@ -348,7 +348,7 @@ export class MatrixSequence {
 			const i1 = Math.min(i, v.length - 1);
 			const matrix = this.getMatrixAtFrame(i0 + 1);
 			const vector = v.getVectorAtFrame(i1 + 1);
-			const r = matrix.multiplyByVector(vector);
+			const r = matrix.multiplyVector(vector);
 			
 			x[i] = r.x;
 			y[i] = r.y;

@@ -501,8 +501,8 @@ export class Matrix {
 	 * @param vector The vector to multiply by.
 	 * @returns The resulting vector.
 	 */
-	multiplyByVector(vector: Vector) {
-		return this.multiplyByVectorToRef(vector, Vector.tmpVec1);
+	multiplyVector(vector: Vector) {
+		return this.multiplyVectorToRef(vector, Vector.tmpVec1);
 	}
 
 	/**
@@ -513,8 +513,8 @@ export class Matrix {
 	 * @param result The vector to store the result in.
 	 * @returns The resulting vector.
 	 */
-	multiplyByVectorToRef(vector: Vector, result: Vector) {
-		return Matrix.multiplyByVector(this, vector, result);
+	multiplyVectorToRef(vector: Vector, result: Vector) {
+		return Matrix.multiplyVector(this, vector, result);
 	}
 
 
@@ -526,7 +526,7 @@ export class Matrix {
 	 * @param result The receiving vector,
 	 * @returns The resulting vector.
 	 */
-	static multiplyByVector(a: Matrix, b: Vector, result: Vector): Vector {
+	static multiplyVector(a: Matrix, b: Vector, result: Vector): Vector {
 		const ma = a._m;
 
 		const a00 = ma[0],
