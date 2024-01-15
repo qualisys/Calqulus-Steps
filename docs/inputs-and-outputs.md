@@ -71,9 +71,10 @@ The global scope contains the named signals from the measurement file(s). This i
 
 To resolve any naming conflicts or for clarity/readability, you can use a "protocol" to specify which data type you are trying to access. A protocol is a word prepended to the signal name, followed by a colon and two slashes, like so: 
 
-* `segment://My Marker Name`
+* `segment://Hips`
 * `marker://My Marker Name`
-* `emg://My Marker Name`
+* `emg://Left EMG Channel`
+* `event://My Event`
 
 #### Segments
 All segments from the solved skeleton is available to use as inputs in the pipeline. Currently, Calqulus supports the Sports Markerset. See the available segments [here](./segments.md).
@@ -108,6 +109,13 @@ Some examples of EMG channel name normalization:
 - `LEFT_TIBIALIS_ANTERIOR`   => `Left Tibialis Anterior`
 - `left tibialis anterior`   => `Left Tibialis Anterior`
 - `LEFT-Tibialis__Anterior`  => `Left Tibialis Anterior`
+
+Currently, EMG signals from the following EMG boards are supported:
+
+* Noraxon
+* MEGA/ME6000
+* Cometa
+* Delsys Trigno
 
 ### Components
 
