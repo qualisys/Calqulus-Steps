@@ -120,11 +120,6 @@ export class BodySegmentParameters {
 		['Head', undefined],
 	]);
 
-	static calcualteAndAddToSegments(segments: Segment[], bodyMass: number) {
-		const bsp = BodySegmentParameters.calculate(segments, bodyMass);
-		BodySegmentParameters.addToSegments(segments, bsp);
-	}
-
 	static addToSegments(segments: Segment[], parameters: Map<string, BodySegmentParameterResult>) {
 		for (const segment of segments) {
 			const bsp = parameters.get(segment.name);
@@ -151,6 +146,11 @@ export class BodySegmentParameters {
 		}
 
 		return result;
+	}
+
+	static calculateAndAddToSegments(segments: Segment[], bodyMass: number) {
+		const bsp = BodySegmentParameters.calculate(segments, bodyMass);
+		BodySegmentParameters.addToSegments(segments, bsp);
 	}
 
 	static calculateCenterOfMass(segment: Segment, segmentLength: number): Vector {
