@@ -42,7 +42,7 @@ export class Skeleton {
 	}
 
 	get segments() {
-		return this._segments.values();
+		return Array.from(this._segments.values());
 	}
 
 	/**
