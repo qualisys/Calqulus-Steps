@@ -3,6 +3,11 @@
 - [Inputs](#inputs)
   * [Numeric inputs](#numeric-inputs)
   * [Named inputs](#named-inputs)
+    + [Measurement data](#measurement-data)
+      - [Segments](#segments)
+      - [Markers](#markers)
+      - [Events](#events)
+      - [EMG channels](#emg-channels)
     + [Components](#components)
   * [Mixed inputs](#mixed-inputs)
   * [Variable inputs](#variable-inputs)
@@ -54,11 +59,63 @@ Some steps can also accept nested arrays of numbers:
 
 Most commonly, you will be using a named input. This will either be:
 
-- a signal containing data from the measurement, i.e., a segment or marker, or
+- a signal containing data from the measurement, i.e., a segment, a marker, an event, an EMG channel, or
 - an exported signal on the global scope, or
 - a signal output on the local scope.
 
 If a locally scoped signal exists with _the same name_ as a globally scoped signal, the input will use the locally scoped signal.
+
+### Measurement data
+
+The global scope contains the named signals from the measurement file(s). This includes **segments**, **markers**, and **EMG channels**. To access them, simply use the name of the segment, marker or EMG channel as the input to a step. 
+
+To resolve any naming conflicts or for clarity/readability, you can use a "protocol" to specify which data type you are trying to access. A protocol is a word prepended to the signal name, followed by a colon and two slashes, like so: 
+
+* `segment://Hips`
+* `marker://My Marker Name`
+* `emg://Left EMG Channel`
+* `event://My Event`
+
+#### Segments
+All segments from the solved skeleton is available to use as inputs in the pipeline. Currently, Calqulus supports the Sports Markerset. See the available segments [here](./segments.md).
+
+#### Markers
+All markers from the measurements are made available to use as inputs in the pipeline. This includes the markers used for solving the skeleton as well as any other markers used and identified during the recording.
+
+#### Events
+Events defined in the measurement files are imported to Calqulus and are available to use in the pipeline. Due to the [immutability](#output-immutability) of signals, an event imported from a measurement file will not be overwritten by an event of the same name defined within the pipeline.
+
+#### EMG channels
+EMG channels recorded using an analog interface are automatically imported and made available to use as inputs in the pipeline. These signals are also automatically exported to the resulting JSON file.
+
+Due to the somewhat flexible nature of naming EMG channels, the names are "normalized" before being made available to the pipeline or export. This is to make addressing EMG channels more predictable.
+
+These are the rules of the EMG channel renaming:
+
+* `Left` and `Right` prefixes (`L_*`, `R_*`, etc.) are normalized to use the fully qualified words `Left` and `Right`.
+* Whitespace and separator characters (such as underscores or dashes) are normalized to spaces.
+* Repeated whitespace characters are removed.
+* Leading or trailing whitespace characters are removed.
+* The names are transformed to use title case, where each word is capitalized.
+
+Some examples of EMG channel name normalization:
+
+- `L_Tibialis Anterior`  => `Left Tibialis Anterior`
+- `L Tibialis Anterior`  => `Left Tibialis Anterior`
+- `L-Tibialis Anterior`  => `Left Tibialis Anterior`
+- `Left_Tibialis Anterior`   => `Left Tibialis Anterior`
+- `Left Tibialis Anterior`   => `Left Tibialis Anterior`
+- `Left-tibialis anterior`   => `Left Tibialis Anterior`
+- `LEFT_TIBIALIS_ANTERIOR`   => `Left Tibialis Anterior`
+- `left tibialis anterior`   => `Left Tibialis Anterior`
+- `LEFT-Tibialis__Anterior`  => `Left Tibialis Anterior`
+
+Currently, EMG signals from the following EMG boards are supported:
+
+* Noraxon
+* MEGA/ME6000
+* Cometa
+* Delsys Trigno
 
 ### Components
 
