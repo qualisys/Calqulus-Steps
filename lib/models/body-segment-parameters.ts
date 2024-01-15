@@ -1,5 +1,4 @@
 import { Segment } from './segment';
-import { Skeleton } from './skeleton';
 import { Matrix } from './spatial/matrix';
 import { Vector } from './spatial/vector';
 
@@ -121,13 +120,13 @@ export class BodySegmentParameters {
 		['Head', undefined],
 	]);
 
-	static calcualteAndAddToSegments(skeleton: Skeleton, bodyMass: number) {
-		const bsp = BodySegmentParameters.calculate(skeleton, bodyMass);
-		BodySegmentParameters.addToSegments(skeleton, bsp);
+	static calcualteAndAddToSegments(segments: Segment[], bodyMass: number) {
+		const bsp = BodySegmentParameters.calculate(segments, bodyMass);
+		BodySegmentParameters.addToSegments(segments, bsp);
 	}
 
-	static addToSegments(skeleton: Skeleton, parameters: Map<string, BodySegmentParameterResult>) {
-		for (const segment of skeleton.segments) {
+	static addToSegments(segments: Segment[], parameters: Map<string, BodySegmentParameterResult>) {
+		for (const segment of segments) {
 			const bsp = parameters.get(segment.name);
 
 			segment.mass = bsp.mass;
@@ -136,11 +135,11 @@ export class BodySegmentParameters {
 		}
 	}
 
-	static calculate(skeleton: Skeleton, bodyMass: number): Map<string, BodySegmentParameterResult> {
+	static calculate(segments: Segment[], bodyMass: number): Map<string, BodySegmentParameterResult> {
 		const result = new Map();
 
-		for (const segment of skeleton.segments) {
-			const segmentLength = BodySegmentParameters.calculateSegmentLength(segment, skeleton) * 0.001;
+		for (const segment of segments) {
+			const segmentLength = BodySegmentParameters.calculateSegmentLength(segment, segments) * 0.001;
 			const segmentMass = BodySegmentParameters.calculateSegmentMass(segment, bodyMass);
 
 			result.set(segment.name, {
@@ -158,8 +157,8 @@ export class BodySegmentParameters {
 		return BodySegmentParameters.centerOfMassConstants.get(segment.name)?.multiply(segmentLength);
 	}
 
-	static calculateSegmentLength(segment: Segment, skeleton: Skeleton): number {
-		const childSegment = segment.name === 'Hips' ? undefined : Array.from(skeleton.segments).filter((s) => s.parent === segment)[0];
+	static calculateSegmentLength(segment: Segment, segments: Segment[]): number {
+		const childSegment = segment.name === 'Hips' ? undefined : Array.from(segments).filter((s) => s.parent === segment)[0];
 
 		if (!childSegment) {
 			return undefined;
