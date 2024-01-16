@@ -471,7 +471,10 @@ export class Signal implements IDataSequence {
 	 * If the signal is of any other type, this function returns `undefined`.
 	 */
 	getComponent(component: string): TypedArray {
-		if (this._type === SignalType.Segment) {
+		if (this._type === SignalType.Joint) {
+			return this._value.joint.getComponent(component);
+		}
+		else if (this._type === SignalType.Segment) {
 			return this._value.segment.getComponent(component);
 		}
 		else if (this._type === SignalType.VectorSequence) {
