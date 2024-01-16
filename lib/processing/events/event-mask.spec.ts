@@ -60,6 +60,21 @@ test('EventMaskStep - simple array', async(t) => {
 	t.deepEqual(res.getValue(), comp);
 });
 
+test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
+	const oobEventFrames1 = i32(0, 4, 8);
+	const oobEventFrames2 = i32(2, 6, 15); // 15 is out-of-bounds, the 8-15 cycle should be ignored.
+
+	const oobe1 = new Signal(oobEventFrames1, frameRate);
+	const oobe2 = new Signal(oobEventFrames2, frameRate);
+	oobe1.isEvent = oobe2.isEvent = true;
+
+	const res = await mockStep(EventMaskStep, [s2, oobe1, oobe2]).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{ start: 0, end: 2 }, { start: 4, end: 6 }]);
+	t.deepEqual(res.getValue(), comp);
+});
+
 test('EventMaskStep - event array', async(t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2]).process();
 	
