@@ -10,9 +10,9 @@
 | LeftArm      |            | RightArm      |
 | LeftForeArm  |            | RightForeArm  |
 | LeftHand     |            | RightHand     |
-|              | Spine      |               |
-|              | Spine1     |               |
 |              | Spine2     |               |
+|              | Spine1     |               |
+|              | Spine      |               |
 
 ## Lower body
 
