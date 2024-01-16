@@ -7,6 +7,7 @@ Pipeline basics:
 
 - [Introduction](./introduction.md)
 - [Inputs and outputs](./inputs-and-outputs.md)
+- [Working with data](./working-with-data.md)
 
 Pipeline base nodes:
 
