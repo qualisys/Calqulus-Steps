@@ -21,4 +21,5 @@ Step nodes:
 - [Step nodes](./nodes/steps/index.md)
 
 Other topics:
+- [Joint names](./joints.md)
 - [Segment names](./segments.md)
