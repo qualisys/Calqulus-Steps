@@ -6,9 +6,9 @@ export class Joint implements ISequence, IDataSequence {
 	array = [...this._position.array,
 		this._force?.array[0], this._force?.array[1], this._force?.array[2],
 		this._moment?.array[0], this._moment?.array[1], this._moment?.array[2],
-		this._power?.array[0], this._power?.array[1], this._power?.array[2]
+		this._power
 	];
-	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'px', 'py', 'pz'];
+	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'p'];
 	distalSegment: Segment;
 	proximalSegment: Segment;
 
@@ -17,7 +17,7 @@ export class Joint implements ISequence, IDataSequence {
 		protected _position: VectorSequence,
 		protected _force: VectorSequence,
 		protected _moment: VectorSequence,
-		protected _power?: VectorSequence,
+		protected _power: Float32Array,
 		public frameRate?: number
 	) { }
 
@@ -45,17 +45,13 @@ export class Joint implements ISequence, IDataSequence {
 	get my(): TypedArray { return this._moment?.y; }
 	get mz(): TypedArray { return this._moment?.z; }
 
-	get power(): VectorSequence { return this._power; }
-	set power(value: VectorSequence) {
+	get power(): Float32Array { return this._power; }
+	set power(value: Float32Array) {
 		this._power = value;
-		this.array[9] = value?.x;
-		this.array[10] = value?.y;
-		this.array[11] = value?.z;
+		this.array[9] = value;
 	}
 
-	get px(): TypedArray { return this._power?.x; }
-	get py(): TypedArray { return this._power?.y; }
-	get pz(): TypedArray { return this._power?.z; }
+	get p(): TypedArray { return this._power; }
 
 	get position(): VectorSequence { return this._position; }
 	set position(value: VectorSequence) {
@@ -71,13 +67,13 @@ export class Joint implements ISequence, IDataSequence {
 
 
 	get length() {
-		const components = [this._position, this._force, this._moment, this._power].filter(c => !!c);
+		const components = [this._position, this._force, this._moment].filter(c => !!c);
 
 		if (components.length < 1) {
 			return 0;
 		} 
 
-		return Math.max(...components.map(c => c.length));
+		return Math.max(...components.map(c => c.length), this._power?.length);
 	};
 
 	getComponent(component: string): TypedArray {
@@ -88,10 +84,10 @@ export class Joint implements ISequence, IDataSequence {
 
 	/**
 	 * Returns a [[Joint]] from an array, where 
-	 * `x`, `y`, `z`, `fx`, `fy`, `fz`, `mx`, `my`, `mz`, `px`, `py`, and `pz` are included.
+	 * `x`, `y`, `z`, `fx`, `fy`, `fz`, `mx`, `my`, `mz`, `p` are included.
 	 * @param param0 
 	 */
-	static fromArray(name: string, [x, y, z, fx, fy, fz, mx, my, mz, px, py, pz]: TypedArray[]) {
-		return new Joint(name, new VectorSequence(x, y, z), new VectorSequence(fx, fy, fz), new VectorSequence(mx, my, mz), new VectorSequence(px, py, pz));
+	static fromArray(name: string, [x, y, z, fx, fy, fz, mx, my, mz, p]: TypedArray[]) {
+		return new Joint(name, new VectorSequence(x, y, z), new VectorSequence(fx, fy, fz), new VectorSequence(mx, my, mz), p as Float32Array);
 	}
 }
