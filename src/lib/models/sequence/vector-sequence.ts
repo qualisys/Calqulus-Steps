@@ -56,7 +56,7 @@ export class VectorSequence implements ISequence {
 			z[i] = this.z[i0] + v.z[i1];
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 
 	/** 
@@ -87,7 +87,7 @@ export class VectorSequence implements ISequence {
 			z[i] = result.z;
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 
 	/** 
@@ -231,7 +231,7 @@ export class VectorSequence implements ISequence {
 			z[i] = this.z[i0] * scalarArray[i1];
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 	
 	/**
@@ -255,7 +255,7 @@ export class VectorSequence implements ISequence {
 			z[i] = this.z[i] * scalar;
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 
 	/**
@@ -279,7 +279,7 @@ export class VectorSequence implements ISequence {
 			z[i] = this.z[i] * vector.z;
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 
 	/**
@@ -307,7 +307,7 @@ export class VectorSequence implements ISequence {
 			z[i] = this.z[i0] * otherVector.z[i1];
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
  
 	/** 
@@ -332,7 +332,7 @@ export class VectorSequence implements ISequence {
 			z[i] = Vector.tmpVec1.z;
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 
 	/**
@@ -362,6 +362,6 @@ export class VectorSequence implements ISequence {
 			z[i] = this.z[i0] - v.z[i1];
 		}
 
-		return result ? result : new VectorSequence(x, y, z);
+		return result ? result : new VectorSequence(x, y, z, this.frameRate);
 	}
 }
