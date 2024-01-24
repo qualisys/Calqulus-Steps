@@ -46,6 +46,10 @@ test('EventMaskStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [e1, e2]).process()); // Too few inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [s3, e1, e2]).process()); // Wrong type
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, s1, s1]).process()); // Wrong type for events
+
+	// Negative event frames
+	await t.throwsAsync(mockStep(EventMaskStep, [s1, new Signal([1, 3, -5]), new Signal([2, 4, 6])]).process());
+	await t.throwsAsync(mockStep(EventMaskStep, [s1, new Signal([1, 3, 5]), new Signal([2, -4, 6])]).process());
 });
 
 test('EventMaskStep - simple array', async(t) => {
@@ -53,6 +57,21 @@ test('EventMaskStep - simple array', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, cycles);
+	t.deepEqual(res.getValue(), comp);
+});
+
+test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
+	const oobEventFrames1 = i32(0, 4, 8);
+	const oobEventFrames2 = i32(2, 6, 15); // 15 is out-of-bounds, the 8-15 cycle should be ignored.
+
+	const oobe1 = new Signal(oobEventFrames1, frameRate);
+	const oobe2 = new Signal(oobEventFrames2, frameRate);
+	oobe1.isEvent = oobe2.isEvent = true;
+
+	const res = await mockStep(EventMaskStep, [s2, oobe1, oobe2]).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{ start: 0, end: 2 }, { start: 4, end: 6 }]);
 	t.deepEqual(res.getValue(), comp);
 });
 
@@ -205,4 +224,125 @@ test('EventMaskStep - Multidimensional array - truncate', async(t) => {
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, cyclesTruncated);
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated]);
+});
+
+test('EventMaskStep - exclude single', async(t) => {
+	const signal = new Signal(new Float32Array(100).fill(50), 100);
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const exclude = new Signal(i32(2, 3, 32), 100);
+
+	const res = await mockStep(EventMaskStep, [signal, framesA, framesB], {
+		exclude: [exclude],
+	}).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{
+		start: 5,
+		end: 14,
+	}, {
+		start: 15,
+		end: 29,
+	}, {
+		start: 55,
+		end: 79,
+	}]);
+});
+
+test('EventMaskStep - exclude multiple', async(t) => {
+	const signal = new Signal(new Float32Array(100).fill(50), 100);
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const excludeA = new Signal(i32(2, 3, 32), 100);
+	const excludeB = new Signal(i32(7, 33), 100);
+
+	const res = await mockStep(EventMaskStep, [signal, framesA, framesB], {
+		exclude: [excludeA, excludeB],
+	}).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{
+		start: 15,
+		end: 29,
+	}, {
+		start: 55,
+		end: 79,
+	}]);
+});
+
+test('EventMaskStep - include single', async(t) => {
+	const signal = new Signal(new Float32Array(100).fill(50), 100);
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const include = new Signal(i32(12, 24, 62), 100);
+
+	const res = await mockStep(EventMaskStep, [signal, framesA, framesB], {
+		include: [include],
+	}).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{
+		start: 5,
+		end: 14,
+	}, {
+		start: 15,
+		end: 29,
+	}, {
+		start: 55,
+		end: 79,
+	}]);
+});
+
+test('EventMaskStep - include multiple', async(t) => {
+	const signal = new Signal(new Float32Array(100).fill(50), 100);
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const includeA = new Signal(i32(12, 24, 62), 100);
+	const includeB = new Signal(i32(27, 72), 100);
+
+	const res = await mockStep(EventMaskStep, [signal, framesA, framesB], {
+		include: [includeA, includeB],
+	}).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{
+		start: 15,
+		end: 29,
+	}, {
+		start: 55,
+		end: 79,
+	}]);
+});
+
+test('EventMaskStep - include and exclude', async(t) => {
+	const signal = new Signal(new Float32Array(100).fill(50), 100);
+	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
+	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
+	const exclude = new Signal(i32(22, 32), 100);
+	const include = new Signal(i32(12, 24, 62), 100);
+
+	const res = await mockStep(EventMaskStep, [signal, framesA, framesB], {
+		include: [include],
+		exclude: [exclude],
+	}).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+
+	t.deepEqual(res.cycles, [{
+		start: 5,
+		end: 14,
+	}, {
+		start: 55,
+		end: 79,
+	}]);
+});
+
+test('EventMaskStep - incompatible include', async(t) => {
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { include: [new Signal('My string')]}).process());
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { include: [new Signal(vs)]}).process());
+});
+
+test('EventMaskStep - incompatible exclude', async(t) => {
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { exclude: [new Signal('My string')]}).process());
+	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { exclude: [new Signal(vs)]}).process());
 });
