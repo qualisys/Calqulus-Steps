@@ -127,7 +127,7 @@ otherwise the result is `myDefault`.
 The following example shows how you can compare values from measurement fields.
 
 ``` yaml
-- if: $field(My Field, measurement, numeric) > $field(My Other Field, measurement, numeric)
+- if: $field(My Field; measurement; numeric) > $field(My Other Field; measurement; numeric)
   then: mySignal
   else: myDefault
 ```
@@ -135,8 +135,8 @@ The following example shows how you can compare values from measurement fields.
 The following example shows how to return a field value if it is not empty, otherwise return a default value.
 
 ``` yaml
-- if: "!empty($field(My Field, measurement, numeric))"
-  then: $field(My Field, measurement, numeric)
+- if: "!empty($field(My Field; measurement; numeric))"
+  then: $field(My Field; measurement; numeric)
   else: myDefault
 ```
 

@@ -174,17 +174,17 @@ _This example shows how to use the `$length` and `$framerate` to calculate the m
 
 - `$field(Field Name)` - returns the value of the **measurement field** specified within the brackets. If no measurement field was found, returns the value of a **session field** of the same name. The name of the field is case sensitive.
 
-- `$field(Field Name, measurement)` - returns the value of the **measurement field** specified within the brackets. The name of the field is case sensitive.
+- `$field(Field Name; measurement)` - returns the value of the **measurement field** specified within the brackets. The name of the field is case sensitive.
 
-- `$field(Field Name, trial)` - the argument `trial` is an alias for `measurement` and returns a **measurement field** value like above.
+- `$field(Field Name; trial)` - the argument `trial` is an alias for `measurement` and returns a **measurement field** value like above.
 
-- `$field(Field Name, session)` - returns the value of the **session field** specified within the brackets. The name of the field is case sensitive.
+- `$field(Field Name; session)` - returns the value of the **session field** specified within the brackets. The name of the field is case sensitive.
 
 ### Value casting
 
 If a field value is fully numeric, it will automatically be cast as a numeric value rather than a string. However, if the value is a number followed by a string – such as a unit – the field value will be treated as a string.
 
-To force the interpretation of the field to be numeric, pass in the value `numeric` as a third parameter to the `field` syntax, like so: `$field(Field Name, measurement, numeric)`.
+To force the interpretation of the field to be numeric, pass in the value `numeric` as a third parameter to the `field` syntax, like so: `$field(Field Name; measurement; numeric)`.
 
 If the value was not able to be parsed as a number, the result will be `NaN`.
 
@@ -195,7 +195,7 @@ If the value was not able to be parsed as a number, the result will be `NaN`.
 ```yaml
 - parameter: Speed_Diff
   steps:
-    - subtract: [$field(Treadmill Speed, measurement), Caclulated_Running_Speed]
+    - subtract: [$field(Treadmill Speed; measurement), Caclulated_Running_Speed]
 ```
 
 _This example shows how to use a `Treadmill Speed` measurement field to calculate the difference between the entered speed and the calculated speed._
@@ -204,8 +204,8 @@ _This example shows how to use a `Treadmill Speed` measurement field to calculat
 - parameter: BMI
   steps:
     - multiply:
-        [$field(Subject Height, session), $field(Subject Height, session)]
-    - divide: [$field(Subject Weight, session), $prev]
+        [$field(Subject Height; session), $field(Subject Height; session)]
+    - divide: [$field(Subject Weight; session), $prev]
 ```
 
 _This example shows how to use the `Subject Height` and `Subject Weight` session fields to calculate the subject BMI._
