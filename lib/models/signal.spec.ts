@@ -241,9 +241,7 @@ test('Signal - typeFromArray', (t) => {
 		mx: joint.mx,
 		my: joint.my,
 		mz: joint.mz,
-		px: joint.px,
-		py: joint.py,
-		pz: joint.pz
+		px: joint.p
 	});
 
 	t.like(Signal.typeFromArray(SignalType.Segment, segment.array), {

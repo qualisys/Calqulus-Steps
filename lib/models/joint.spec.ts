@@ -69,7 +69,7 @@ test('Joint - getComponent', (t) => {
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
 		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
-		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		fakeArray,
 		300
 	);
 
@@ -83,9 +83,7 @@ test('Joint - getComponent', (t) => {
 		mx: fakeArray,
 		my: fakeArray,
 		mz: fakeArray,
-		px: fakeArray,
-		py: fakeArray,
-		pz: fakeArray
+		p: fakeArray,
 	};
 
 	for (const i in components) {
