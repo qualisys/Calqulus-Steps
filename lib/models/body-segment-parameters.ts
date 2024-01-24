@@ -37,7 +37,7 @@ export class BodySegmentParameters {
 
 	static centerOfMassConstants = new Map<string, Vector>([
 		['LeftToeBase', undefined],
-		['LeftFoot', new Vector(0.034, 0.502, -0.199)],
+		['LeftFoot', new Vector(-0.034, 0.502, -0.199)],
 		['LeftLeg', new Vector(0, 0, -0.433)],
 		['LeftUpLeg', new Vector(0, 0, -0.433)],
 		['RightToeBase', undefined],
