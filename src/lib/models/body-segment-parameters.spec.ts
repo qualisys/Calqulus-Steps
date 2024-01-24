@@ -55,8 +55,6 @@ test('BodySegmentParameters - addToSegments', (t) => {
 	t.deepEqual(segments[1].centerOfMass, new Vector(0, 1, 0));
 	t.deepEqual(segments[1].mass, 3.5);
 	t.deepEqual(segments[1].inertia._m, new Matrix()._m);
-	// console.log(segments[1]);
-	// console.log(segments[1].inertia.toString());
 });
 
 test('BodySegmentParameters - calculate', (t) => {
@@ -115,7 +113,7 @@ test('BodySegmentParameters - calculateCenterOfMass', (t) => {
 
 	const com = BodySegmentParameters.calculateCenterOfMass(segment, 1);
 
-	t.is(com.x, 0.034);
+	t.is(com.x, -0.034);
 	t.is(com.y, 0.502);
 	t.is(com.z, -0.199);
 });
@@ -158,5 +156,18 @@ test('BodySegmentParameters - calculateSegmentMass', (t) => {
 });
 
 test('BodySegmentParameters - calculateInertia', (t) => {
+	const leg = new Segment(
+		'LeftLeg',
+		new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([4, 4, 6]), 100),
+		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+		100
+	);
 
+	const inertia = BodySegmentParameters.calculateInertia(leg, 4.875, 0.394);
+	t.deepEqual(Array.from(inertia._m), [
+		0.069020952702, 0, 0, 0,
+		0, 0.069020952702, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0
+	]);
 });
