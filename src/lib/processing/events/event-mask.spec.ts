@@ -82,6 +82,16 @@ test('EventMaskStep - event array', async(t) => {
 	t.deepEqual(res.getValue(), f32(0, 1, 2, 5, 6, 7, 8));
 });
 
+test('EventMaskStep - event array - short events', async(t) => {
+	const shortEvent = new Signal(i32(6), frameRate);
+	shortEvent.isEvent = true;
+
+	const res = await mockStep(EventMaskStep, [shortEvent, e1, e2]).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.getValue(), i32(6));
+});
+
 test('EventMaskStep - event array - keep (array)', async(t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, 3] }).process();
 	
