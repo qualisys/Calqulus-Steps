@@ -1,3 +1,5 @@
+name: $[counter('c',1)]
+
 trigger:
   batch: true
   branches:
@@ -12,14 +14,7 @@ resources:
     - repository: calqulus-ci
       type: git
       name: app-calqulus-ci-templates
-
-parameters:
-- name: skipLastSuccessfulBuild
-  displayName: Skip checking regressions against last successful build
-  type: boolean
-  default: false
+      ref: refs/heads/feature/azure-pipeline-unification
 
 extends:
-  template: calqulus-steps.yml@calqulus-ci
-  parameters:
-    skipLastSuccessfulBuild: ${{ parameters.skipLastSuccessfulBuild }}
+  template: base-steps.yml@calqulus-ci

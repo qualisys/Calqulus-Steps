@@ -1,0 +1,17 @@
+{
+	"current": {
+		"engine": "main",
+		"toolbelt": "release/v1.1.0",
+		"pipelines": "main"
+	},
+	"reference": {
+		"engine": "a348dda6e2d87de93faeda5f2111dcee8cb90e92",
+		"steps": "d1d2ce59c90e230d4d218db5b038967c1f03c2e9",
+		"pipelines": "main",
+		"toolbelt": "main"
+	},
+	"lastSuccessful": {
+		"engine": "main",
+		"toolbelt": "main"
+	}
+}
