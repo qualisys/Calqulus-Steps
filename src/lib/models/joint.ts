@@ -3,11 +3,7 @@ import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 
 export class Joint implements ISequence, IDataSequence {
-	array = [...this._position.array,
-		this._force?.array[0], this._force?.array[1], this._force?.array[2],
-		this._moment?.array[0], this._moment?.array[1], this._moment?.array[2],
-		this._power
-	];
+	array: TypedArray[];
 	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'p'];
 	distalSegment: Segment;
 	proximalSegment: Segment;
@@ -19,7 +15,13 @@ export class Joint implements ISequence, IDataSequence {
 		protected _moment: VectorSequence,
 		protected _power: Float32Array,
 		public frameRate?: number
-	) { }
+	) {
+		this.array = [...this._position.array,
+			this._force?.array[0], this._force?.array[1], this._force?.array[2],
+			this._moment?.array[0], this._moment?.array[1], this._moment?.array[2],
+			this._power
+		];
+	}
 
 	get force(): VectorSequence { return this._force; }
 	set force(value: VectorSequence) {

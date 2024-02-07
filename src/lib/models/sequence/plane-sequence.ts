@@ -6,7 +6,7 @@ import { VectorSequence } from './vector-sequence';
 
 export class PlaneSequence implements ISequence {
 	
-	array = [this.a, this.b, this.c, this.d];
+	array: TypedArray[];
 	components = ['a', 'b', 'c', 'd'];
 
 	/**
@@ -29,7 +29,9 @@ export class PlaneSequence implements ISequence {
 
 		/** The d component. */
 		public d: TypedArray,
-	) {}
+	) {
+		this.array = [this.a, this.b, this.c, this.d];
+	}
 
 	/**
 	 * Get the number of elements in this sequence.

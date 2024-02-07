@@ -4,7 +4,7 @@ import { Vector } from '../spatial/vector';
 import { ISequence } from './sequence';
 
 export class QuaternionSequence implements ISequence {
-	array = [this.x, this.y, this.z, this.w];
+	array: TypedArray[];
 	components = ['x', 'y', 'z', 'w'];
 
 	/**
@@ -31,7 +31,9 @@ export class QuaternionSequence implements ISequence {
 
 		/** The frame rate. */
 		public frameRate?: number
-	) {}
+	) {
+		this.array = [this.x, this.y, this.z, this.w];
+	}
 
 	ensureContinuity() {
 		QuaternionSequence.ensureContinuity(this, this);
