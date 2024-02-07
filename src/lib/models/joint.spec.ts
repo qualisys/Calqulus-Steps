@@ -26,9 +26,7 @@ test('Joint - constructor', (t) => {
 		mx: fakeArray,
 		my: fakeArray,
 		mz: fakeArray,
-		px: undefined,
-		py: undefined,
-		pz: undefined,
+		p: undefined,
 		length: 3,
 		frameRate: 300,
 	});
@@ -42,7 +40,7 @@ test('Joint - constructor', (t) => {
 test('Joint - fromArray', (t) => {
 	const joint = Joint.fromArray(
 		'test',
-		[fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray]
+		[fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray, fakeArray]
 	);
 
 	t.like(joint, {
@@ -56,9 +54,7 @@ test('Joint - fromArray', (t) => {
 		mx: fakeArray,
 		my: fakeArray,
 		mz: fakeArray,
-		px: fakeArray,
-		py: fakeArray,
-		pz: fakeArray,
+		p: fakeArray,
 		length: 3
 	});
 });

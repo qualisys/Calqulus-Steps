@@ -379,7 +379,7 @@ test('Signal - getFrames', (t) => {
 		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
 		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
 		undefined, undefined, undefined,
-		undefined, undefined, undefined
+		undefined
 	]);
 
 	// Vector
