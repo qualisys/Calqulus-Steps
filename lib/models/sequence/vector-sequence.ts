@@ -4,7 +4,7 @@ import { Vector } from '../spatial/vector';
 import { ISequence } from './sequence';
 
 export class VectorSequence implements ISequence {
-	array = [this.x, this.y, this.z];
+	array: TypedArray[];
 	components = ['x', 'y', 'z'];
 
 	/**
@@ -27,7 +27,9 @@ export class VectorSequence implements ISequence {
 
 		/** The frame rate. */
 		public frameRate?: number
-	) {}
+	) {
+		this.array = [this.x, this.y, this.z];
+	}
 
 	/**
 	 * Adds a vector from each vector in the current [[VectorSequence]].

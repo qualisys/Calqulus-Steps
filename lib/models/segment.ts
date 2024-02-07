@@ -19,7 +19,7 @@ export type Kinematics = {
 }
 
 export class Segment implements ISequence, IDataSequence {
-	array = [...this._position.array, ...this._rotation.array];
+	array: TypedArray[];
 	centerOfMass: Vector;
 	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw'];
 	distalJoint: Joint;
@@ -36,6 +36,7 @@ export class Segment implements ISequence, IDataSequence {
 		protected _rotation: QuaternionSequence,
 		public frameRate?: number,
 	) {
+		this.array = [...this._position.array, ...this._rotation.array];
 		this.emptyValues = new Float32Array(this._position.x.length).fill(NaN);
 	}
 

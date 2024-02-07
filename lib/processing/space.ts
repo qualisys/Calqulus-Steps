@@ -18,7 +18,6 @@ import { BaseStep } from './base-step';
 
 @StepClass({ name: 'space' })
 export class Space extends BaseStep {
-	public name: string;
 	protected _quaternion: Quaternion;
 	protected _rotationMatrix: MatrixSequence;
 	protected _primaryAxis: VectorSequence;

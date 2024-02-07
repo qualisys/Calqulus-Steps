@@ -495,7 +495,6 @@ export class JointAngleStep extends AngleStep {
 })
 export class AngularVelocityStep extends AngleStep {
 	useRotationOrder: boolean;
-	rotationOrder: RotationOrder;
 
 	init() {
 		super.init();
