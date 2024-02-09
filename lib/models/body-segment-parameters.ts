@@ -10,31 +10,6 @@ export type BodySegmentParameterResult = {
 };
 
 export class BodySegmentParameters {
-	static massConstants = new Map<string, number>([
-		['LeftToeBase', undefined],
-		['LeftFoot', 0.0145],
-		['LeftLeg', 0.065],
-		['LeftUpLeg', 0.1],
-		['RightToeBase', undefined],
-		['RightFoot', 0.0145],
-		['RightLeg', 0.065],
-		['RightUpLeg', 0.1],
-		['Hips', 0.142],
-		['LeftHand', undefined],
-		['LeftForeArm', undefined],
-		['LeftForeArmRoll', undefined],
-		['LeftArm', undefined],
-		['RightHand', undefined],
-		['RightForeArm', undefined],
-		['RightForeArmRoll', undefined],
-		['RightArm', undefined],
-		['Spine', undefined],
-		['Spine1', undefined],
-		['Spine2', undefined],
-		['Neck', undefined],
-		['Head', undefined],
-	]);
-
 	static centerOfMassConstants = new Map<string, Vector>([
 		['LeftToeBase', undefined],
 		['LeftFoot', new Vector(-0.034, 0.502, -0.199)],
@@ -59,6 +34,8 @@ export class BodySegmentParameters {
 		['Neck', undefined],
 		['Head', undefined],
 	]);
+
+	static defaultBodyMass = 65;
 
 	static inertiaConstants = new Map<string, number[]>([
 		['LeftToeBase', undefined],
@@ -105,6 +82,31 @@ export class BodySegmentParameters {
 			0, 0, 1.06, 0,
 			0, 0, 0, 0
 		]],
+		['LeftHand', undefined],
+		['LeftForeArm', undefined],
+		['LeftForeArmRoll', undefined],
+		['LeftArm', undefined],
+		['RightHand', undefined],
+		['RightForeArm', undefined],
+		['RightForeArmRoll', undefined],
+		['RightArm', undefined],
+		['Spine', undefined],
+		['Spine1', undefined],
+		['Spine2', undefined],
+		['Neck', undefined],
+		['Head', undefined],
+	]);
+
+	static massConstants = new Map<string, number>([
+		['LeftToeBase', undefined],
+		['LeftFoot', 0.0145],
+		['LeftLeg', 0.065],
+		['LeftUpLeg', 0.1],
+		['RightToeBase', undefined],
+		['RightFoot', 0.0145],
+		['RightLeg', 0.065],
+		['RightUpLeg', 0.1],
+		['Hips', 0.142],
 		['LeftHand', undefined],
 		['LeftForeArm', undefined],
 		['LeftForeArmRoll', undefined],
