@@ -2,7 +2,7 @@
 	"current": {
 		"engine": "feature/revert-field-syntax",
 		"toolbelt": "release/v1.1.0",
-		"pipelines": "main"
+		"pipelines": "feature/field-syntax-separator"
 	},
 	"reference": {
 		"engine": "a348dda6e2d87de93faeda5f2111dcee8cb90e92",
