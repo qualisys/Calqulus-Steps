@@ -48,6 +48,11 @@ class BaseAggregationStep extends BaseStep {
 	useCycles: boolean;
 	returnFrames: boolean;
 
+	// Indicates that the aggregation method returns a value
+	// that is _describing_ the input rather than operating
+	// on the input values. For example, the count method.
+	summaryOperation: boolean;
+
 	init() {
 		super.init();
 
@@ -108,7 +113,8 @@ class BaseAggregationStep extends BaseStep {
 		returnSignal.cycles = undefined;
 
 		// Set event status.
-		returnSignal.isEvent = returnSignal.isEvent || (this.returnFrames && !!this.indexAggregation);
+		const isRetuningFrames = this.returnFrames && !!this.indexAggregation;
+		returnSignal.isEvent = !this.summaryOperation && (returnSignal.isEvent || isRetuningFrames);
 
 		return returnSignal;
 	}
@@ -128,6 +134,7 @@ class BaseAggregationStep extends BaseStep {
 })
 export class CountStep extends BaseAggregationStep {
 	aggregation = Aggregation.count;
+	summaryOperation = true;
 }
 
 @StepClass({
