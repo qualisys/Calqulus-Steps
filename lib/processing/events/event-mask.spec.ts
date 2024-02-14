@@ -46,10 +46,6 @@ test('EventMaskStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [e1, e2]).process()); // Too few inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [s3, e1, e2]).process()); // Wrong type
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, s1, s1]).process()); // Wrong type for events
-
-	// Negative event frames
-	await t.throwsAsync(mockStep(EventMaskStep, [s1, new Signal([1, 3, -5]), new Signal([2, 4, 6])]).process());
-	await t.throwsAsync(mockStep(EventMaskStep, [s1, new Signal([1, 3, 5]), new Signal([2, -4, 6])]).process());
 });
 
 test('EventMaskStep - simple array', async(t) => {
@@ -72,6 +68,21 @@ test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, [{ start: 0, end: 2 }, { start: 4, end: 6 }]);
+	t.deepEqual(res.getValue(), comp);
+});
+
+test('EventMaskStep - simple array - negative events', async(t) => {
+	const oobEventFrames1 = i32(-1, 4, 8); // -1 is out-of-bounds, the -1-2 cycle should be ignored.
+	const oobEventFrames2 = i32(2, 6, 9); 
+
+	const oobe1 = new Signal(oobEventFrames1, frameRate);
+	const oobe2 = new Signal(oobEventFrames2, frameRate);
+	oobe1.isEvent = oobe2.isEvent = true;
+
+	const res = await mockStep(EventMaskStep, [s2, oobe1, oobe2]).process();
+	
+	t.is(res.resultType, ResultType.Scalar);
+	t.deepEqual(res.cycles, [{ start: 4, end: 6 }, { start: 8, end: 9 }]);
 	t.deepEqual(res.getValue(), comp);
 });
 
