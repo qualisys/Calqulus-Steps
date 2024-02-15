@@ -1,6 +1,7 @@
 {
+	"ci": "main",
 	"current": {
-		"engine": "main",
+		"engine": "feature/revert-field-syntax",
 		"toolbelt": "release/v1.1.0",
 		"pipelines": "main"
 	},

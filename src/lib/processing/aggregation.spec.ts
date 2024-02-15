@@ -189,3 +189,34 @@ test('Aggregation - MaxStep (frames, with cycles)', async(t) => {
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(4, 7));
 });
+
+// Event inputs
+test('Aggregation - event inputs, event outputs', async(t) => {
+	const e = new Signal(f32(1, 2, 3, 4, 5, 6, 7, 8, 9));
+	e.isEvent = true;
+
+	const count = await mockStep(CountStep, [e]).process();
+	t.deepEqual(count.isEvent, false); // Count is a summary operation, so it's not an event.
+
+	const max = await mockStep(MaxStep, [e]).process();
+	t.deepEqual(max.isEvent, true);
+
+	const mean = await mockStep(MeanStep, [e]).process();
+	t.deepEqual(mean.isEvent, true);
+
+	const median = await mockStep(MedianStep, [e]).process();
+	t.deepEqual(median.isEvent, true);
+
+	const min = await mockStep(MinStep, [e]).process();
+	t.deepEqual(min.isEvent, true);
+
+	const range = await mockStep(RangeStep, [e]).process();
+	t.deepEqual(range.isEvent, true);
+
+	const std = await mockStep(StandardDeviationStep, [e]).process();
+	t.deepEqual(std.isEvent, true);
+
+	const sum = await mockStep(SumStep, [e]).process();
+	t.deepEqual(sum.isEvent, true);
+
+});
