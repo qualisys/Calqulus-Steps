@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+* Changed syntax for field access to use semicolons instead of commas. (!2090)
 * Do not stop processing due to empty/missing inputs in `if` step. (#35)
 * Defers checking the `then` and `else` option inputs until they are needed in `if` step. (#35)
 * Ensure that frames in `eventMask` step are not negative. (#38)
