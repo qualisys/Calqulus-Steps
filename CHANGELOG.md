@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] 2024-01-24
+## [1.1.1] 2024-02-15
+
+### Fixed
+
+* Regressions in `eventMask` and `count` steps.
+
+## [1.1.0] 2024-02-15
 
 ### Added
 
