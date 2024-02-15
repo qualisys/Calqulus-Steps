@@ -1,4 +1,5 @@
 {
+	"ci": "main",
 	"current": {
 		"engine": "feature/revert-field-syntax",
 		"toolbelt": "release/v1.1.0",
