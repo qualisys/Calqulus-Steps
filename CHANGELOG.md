@@ -6,36 +6,36 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-* Regressions in `eventMask` and `count` steps. (#43)
+* Regressions in `eventMask` and `count` steps. ([#43](https://github.com/qualisys/Calqulus-Steps/pull/43))
 
 ## [1.1.0] 2024-02-15
 
 ### Added
 
-* New steps: `root`, `sqrt`, `cbrt`, and `power` (alias `pow`). (#31)
-* Analog data model. (#39)
-* Support for `include` and `exclude` options for `eventDuration` and `eventMask` steps. (#37)
-* Support for `exist` and `empty` functions in `if` step. (#35)
-* Allow more input data types (anything but signals with components) in `if` step. (#35)
-* Documentation regarding templates, measurement data, EMG. (#35)
+* New steps: `root`, `sqrt`, `cbrt`, and `power` (alias `pow`). ([#31](https://github.com/qualisys/Calqulus-Steps/pull/31))
+* Analog data model. ([#39](https://github.com/qualisys/Calqulus-Steps/pull/39))
+* Support for `include` and `exclude` options for `eventDuration` and `eventMask` steps. ([#37](https://github.com/qualisys/Calqulus-Steps/pull/37))
+* Support for `exist` and `empty` functions in `if` step. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
+* Allow more input data types (anything but signals with components) in `if` step. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
+* Documentation regarding templates, measurement data, EMG. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
 
 ### Fixed
 
-* Support spaces in signal names in `if` step. (#35)
-* Support field accessor syntax in `if` step. (#35)
-* Support dot notation syntax in `if` step. (#34)
-* Support for `include` and `exclude` options for `eventDuration` and `eventMask` steps. (#37)
-* Return scalar value when both operands are scalar in arithmetic steps. (#32)
+* Support spaces in signal names in `if` step. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
+* Support field accessor syntax in `if` step. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
+* Support dot notation syntax in `if` step. ([#34](https://github.com/qualisys/Calqulus-Steps/pull/34))
+* Support for `include` and `exclude` options for `eventDuration` and `eventMask` steps. ([#37](https://github.com/qualisys/Calqulus-Steps/pull/37))
+* Return scalar value when both operands are scalar in arithmetic steps. ([#32](https://github.com/qualisys/Calqulus-Steps/pull/32))
 
 ### Changed
 
 * Changed syntax for field access to use semicolons instead of commas. (!2090)
-* Do not stop processing due to empty/missing inputs in `if` step. (#35)
-* Defers checking the `then` and `else` option inputs until they are needed in `if` step. (#35)
-* Ensure that frames in `eventMask` step are not negative. (#38)
-* Ignore events that are outside of the measurement range in `eventMask` step. (#40)
-* More flexible handling of data types in `concat` step. (#36)
-* Automatically unpack number-like arrays for options. (#33)
+* Do not stop processing due to empty/missing inputs in `if` step. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
+* Defers checking the `then` and `else` option inputs until they are needed in `if` step. ([#35](https://github.com/qualisys/Calqulus-Steps/pull/35))
+* Ensure that frames in `eventMask` step are not negative. ([#38](https://github.com/qualisys/Calqulus-Steps/pull/38))
+* Ignore events that are outside of the measurement range in `eventMask` step. ([#40](https://github.com/qualisys/Calqulus-Steps/pull/40))
+* More flexible handling of data types in `concat` step. ([#36](https://github.com/qualisys/Calqulus-Steps/pull/36))
+* Automatically unpack number-like arrays for options. ([#33](https://github.com/qualisys/Calqulus-Steps/pull/33))
 
 ## [1.0.0] 2023-06-01
 
