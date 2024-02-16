@@ -8,6 +8,8 @@ Besides making it more obvious what type of data is being processed, the
 difference compared to `parameter` is that a segment is not exported to the
 resulting JSON file.
 
+## Options
+
 ### `steps`
 
 > **Type:** `Array`  

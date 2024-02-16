@@ -80,7 +80,7 @@ export class Property {
 	 */
 	static validateSignalTypes(signals: Signal[], propertyTypes: PropertyType | PropertyType[]): boolean {
 		for (const signal of signals) {
-			if (!Property.validateSignalType(signal.type, propertyTypes)) {
+			if (!Property.validateSignalType(signal?.type, propertyTypes)) {
 				return false;
 			}
 		}

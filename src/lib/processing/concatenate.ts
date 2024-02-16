@@ -1,4 +1,4 @@
-import { Signal } from '../models/signal';
+import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
 import { SeriesUtil } from '../utils/series';
@@ -19,7 +19,12 @@ import { BaseStep } from './base-step';
 	description: markdownFmt`
 		The ''concatenate'' step takes any number of inputs (at least 2) 
 		of the same (or equivalent) types and appends the values into one 
-		output. This will be done on each component, if they exist.`,
+		output. This will be done on each component, if they exist.
+		
+		Scalar inputs will be converted to arrays. 
+		
+		If all the inputs are integer arrays, the output will be an integer array.
+		However, if any of the inputs are floats, the output will be a float array.`,
 	examples: markdownFmt`
 		The following example calculates the average "step length" 
 		by concatenating the (already calculated) ''Right_Step_Length'' 
@@ -47,16 +52,30 @@ export class ConcatenateStep extends BaseStep {
 
 		if (!arrays.every(a => a.length === arrays[0].length)) throw new ProcessingError('Expected all inputs to be of equivalent types.');
 
+		let referenceArray = arrays[0][0];
+
+		if (this.inputs[0].type === SignalType.Uint32Array) {
+			// If not all inputs are Uint32Arrays, we need to use float arrays instead.
+			if (!this.inputs.every(i => i.type === SignalType.Uint32Array)) {
+				referenceArray = new Float32Array();
+			}
+		}
+
 		const baseArray = arrays.shift();
-		const concatArrays = baseArray.map((arr, index) => 
-			arr === undefined ? undefined : SeriesUtil.createNumericArrayOfSameType(
-				arr,
+		const concatArrays = baseArray.map((arr, index) =>
+			SeriesUtil.createNumericArrayOfSameType(
+				referenceArray,
 				[...arr].concat(...arrays.map(a => [...a[index]]))
 			)
 		);
 
+		let targetType = this.inputs[0].type;
+		if (targetType === SignalType.Float32) {
+			targetType = SignalType.Float32Array;
+		}
+
 		// Create a new instance of the same type as the input.
-		const returnData = Signal.typeFromArray(this.inputs[0].type, concatArrays as TypedArray[]);
+		const returnData = Signal.typeFromArray(targetType, concatArrays as TypedArray[]);
 
 		return this.inputs[0].clone(returnData);
 	}

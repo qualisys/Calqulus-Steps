@@ -13,6 +13,10 @@ export enum FilterType {
 	HighPass,
 }
 
+export type IirFilter = {
+	filtfilt: (input: number[], overwrite: boolean) => number[],
+}
+
 // This class should not be used directly since it does not define its
 // filterType member - it's meant to be subclassed.
 @StepCategory({
@@ -41,7 +45,7 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 	order: number;
 
 	filterType: FilterType; // The filter type to use.
-	protected filter: Fili.IirFilter;
+	protected filter: IirFilter;
 
 	init() {
 		super.init();

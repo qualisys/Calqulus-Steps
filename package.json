@@ -39,6 +39,8 @@
     "node": ">=14"
   },
   "dependencies": {
+    "@typescript-eslint/parser": "^5.27.0",
+    "base-64": "^1.0.0",
     "cubic-spline": "^3.0.3",
     "expression-engine": "^1.8.1",
     "fili": "^2.0.3",
