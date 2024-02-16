@@ -207,7 +207,7 @@ export class Space extends BaseStep {
 
 			// Handle position.
 			const j = Math.min(i, this.origin.length - 1);
-			const segmentPositionOriginOffset = worldSegmentFrame.position.subtractToRef(this.origin.getVectorAtFrame(j + 1), Vector.tmpVec1);
+			const segmentPositionOriginOffset = worldSegmentFrame.position.subtractToRef(this.origin.getVectorAtFrame(j + 1), Vector.tmpVec2);
 
 			Vector.transformMatrix(segmentPositionOriginOffset, Matrix.transpose(this._rotationMatrix.getMatrixAtFrame(i + 1), Matrix.tmpMat3), resultVec);
 
