@@ -1,3 +1,4 @@
+import { Analog } from './analog';
 import { IEvent } from './event';
 import { ForcePlate } from './force-plate';
 import { Marker } from './marker';
@@ -18,5 +19,6 @@ export interface IMeasurement {
 	primarySkeleton?: string;
 	segments: Segment[];
 	skeletons: Skeleton[];
+	emg?: Analog[]
 	startFrame: number;
 }

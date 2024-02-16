@@ -99,4 +99,6 @@ test('Arithmetic - Return types', (t) => {
 	// Integer arrays should be returned as Float32Array
 	t.true(Arithmetic.applyOp(Int32Array.from([1, 2, 3]), 2, ArithmeticOp.Add) instanceof Float32Array);
 	t.true(Arithmetic.applyOp(Uint32Array.from([1, 2, 3]), 2, ArithmeticOp.Add) instanceof Float32Array);
+	t.true(Arithmetic.applyOp(Float32Array.from([1, 2, 3]), Uint32Array.from([1, 2, 3]), ArithmeticOp.Add) instanceof Float32Array);
+	t.true(Arithmetic.applyOp(3, Uint32Array.from([1, 2, 3]), ArithmeticOp.Add) instanceof Float32Array);
 });

@@ -43,12 +43,14 @@ export const mockStep = <S extends BaseStep>(stepClass: { new (node: IStepNode, 
 	const inputSignals = Array.isArray(inputs) ? inputs : Object.values(inputs);
 	// Get the input names or generate new ones if none was provided.
 	const inputNames = Array.isArray(inputs) ? inputs.map((_, i) => 'Input ' + (i + 1)) : Object.keys(inputs);
+
+	const stepAcceptsMissingInputs = (stepClass as unknown as typeof BaseStep).acceptsMissingInputs;
 	
 	// Find options whose value is an array of Signals, then create a Map.
 	// These are used to mock the `Inputs` object for the step class.
 	const optionSignals = Object
 		.entries(options || {})
-		.map(entry => (Array.isArray(entry[1]) && entry[1][0] instanceof Signal) ? entry : [entry[0], [new Signal(entry[1])]]) as [string, Signal[]][]
+		.map(entry => (Array.isArray(entry[1]) && entry[1][0] instanceof Signal) ? entry : [entry[0], [(!stepAcceptsMissingInputs || (entry[1] !== undefined && entry[1][0] !== undefined)) ? new Signal(entry[1]) : undefined]]) as [string, Signal[]][]
 	;
 	const optionSignalsMap = new Map(optionSignals);
 

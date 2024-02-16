@@ -21,6 +21,90 @@ test('EventUtil - eventSequence', (t) => {
 	t.deepEqual(spans2, []);
 });
 
+test('EventUtil - eventSequence - exclude single', (t) => {
+	const framesA = [1, 5, 10, 15, 20];
+	const framesB = [4, 9, 14, 19, 24];
+	const exclude = [2, 3, 16];
+
+	const spans = EventUtil.eventSequence(framesA, framesB, [exclude]);
+
+	t.deepEqual(spans, [
+		{ start: 5, end: 9 },
+		{ start: 10, end: 14 },
+		{ start: 20, end: 24 },
+	]);
+});
+
+test('EventUtil - eventSequence - exclude multiple', (t) => {
+	const framesA = [1, 5, 10, 15, 20];
+	const framesB = [4, 9, 14, 19, 24];
+	const excludeA = [2, 3, 16];
+	const excludeB = [4, 8];
+	const excludeC = [22];
+
+	const spans = EventUtil.eventSequence(framesA, framesB, [excludeA, excludeB, excludeC]);
+
+	t.deepEqual(spans, [
+		{ start: 10, end: 14 },
+	]);
+});
+
+test('EventUtil - eventSequence - include single', (t) => {
+	const framesA = [1, 5, 10, 15, 20];
+	const framesB = [4, 9, 14, 19, 24];
+	const include = [2, 3, 16];
+
+	const spans = EventUtil.eventSequence(framesA, framesB, undefined, [include]);
+
+	t.deepEqual(spans, [
+		{ start: 1, end: 4 },
+		{ start: 15, end: 19 },
+	]);
+});
+
+test('EventUtil - eventSequence - include multiple', (t) => {
+	const framesA = [1, 5, 10, 15, 20];
+	const framesB = [4, 9, 14, 19, 24];
+	const includeA = [2, 3, 16];
+	const includeB = [8, 12, 18];
+	const includeC = [13, 17, 21];
+
+	const spans = EventUtil.eventSequence(framesA, framesB, undefined, [includeA, includeB, includeC]);
+
+	t.deepEqual(spans, [
+		{ start: 15, end: 19 },
+	]);
+});
+
+test('EventUtil - eventSequence - include and exclude - single', (t) => {
+	const framesA = [1, 5, 10, 15, 20];
+	const framesB = [4, 9, 14, 19, 24];
+	const exclude = [4, 17];
+	const include = [2, 3, 8, 12, 16];
+
+	const spans = EventUtil.eventSequence(framesA, framesB, [exclude], [include]);
+
+	t.deepEqual(spans, [
+		{ start: 5, end: 9 },
+		{ start: 10, end: 14 },
+	]);
+});
+
+test('EventUtil - eventSequence - include and exclude - multiple', (t) => {
+	const framesA = [1, 5, 10, 15, 20];
+	const framesB = [4, 9, 14, 19, 24];
+	const excludeA = [4, 17];
+	const excludeB = [2, 12];
+	const includeA = [2, 8, 16, 24];
+	const includeB = [3, 6, 12, 18];
+
+	const spans = EventUtil.eventSequence(framesA, framesB, [excludeA, excludeB], [includeA, includeB]);
+
+	t.deepEqual(spans, [
+		{ start: 5, end: 9 },
+	]);
+});
+
 
 test('EventUtil - pickFromSequence', (t) => {
 	const framesA  = f32(1, 5, 10, 15, 20);

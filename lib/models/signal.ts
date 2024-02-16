@@ -228,6 +228,27 @@ export class Signal implements IDataSequence {
 	}
 
 	/**
+	 * Returns true if all values in the signal are positive.
+	 */
+	get isPositive(): boolean {
+		switch (this._type) {
+			case SignalType.Uint32Array:
+				return this.getUint32ArrayValue().every(v => v >= 0);
+			case SignalType.Float32:
+				return this.getNumberValue() >= 0;
+			case SignalType.Float32Array:
+				return this.getFloat32ArrayValue().every(v => v >= 0);
+			case SignalType.Float32ArrayArray:
+			case SignalType.Segment:
+			case SignalType.VectorSequence:
+			case SignalType.PlaneSequence:
+				return this.array.every(arr => arr.every(v => v >= 0));
+			default:
+				return undefined;
+		}
+	}
+
+	/**
 	 * Instantiate a [[SignalType]] data structure from an array.
 	 * @param type The intended data type.
 	 * @param array A multi-dimensional array of signal data.

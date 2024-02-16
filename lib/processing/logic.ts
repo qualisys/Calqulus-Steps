@@ -1,4 +1,5 @@
 import { evaluateExpression, parseExpression, printExpression, tokenizeExpression } from 'expression-engine';
+import { set } from 'lodash';
 
 import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
@@ -29,9 +30,33 @@ import { BaseStep } from './base-step';
 		
 		Parentheses can be used to influence the order of evaluation.
 		
-		Only numbers and single-element arrays can be part of operands in the
-		expression. In addition, a single input can be used to check for existence 
-		of values.
+		You are able to use "functions" in the expression to validate if a 
+		signal is empty or exists. The following functions are supported:
+
+		* ''empty(signalName)'' - Returns true if the signal is empty, 
+		i.e. the signal does not exist or the value is falsy but not zero
+		(false, null, NaN, empty string). The value zero (0) is not
+		considered empty because it is a valid value for a signal.
+		* ''exists(signalName)'' - Returns true if the signal exists, 
+		i.e. the signal is _defined_. This function does not validate 
+		the _value_ of the signal but _only_ if the signal is defined 
+		or not. The signal value could be falsy, but as long as the 
+		signal is defined, this function will return true.
+		
+		***Note:** Due to the way YAML is parsed, you must wrap expressions
+		beginning with an exclamation mark in quotes, e.g. ''"!empty(mySignal)"''.*
+
+		***Note:** In order to be able to evaluate missing signals, this 
+		step does not validate the inputs to the expression. To validate 
+		a signal's existence, use the ''exists'' function.*
+
+		***Note:** The validation of the inputs to the ''then'' and ''else'' 
+		options are deferred until they are needed. This means that if the 
+		expression evaluates to true, but the ''then'' option is missing, 
+		the step will not fail until the ''then'' option is needed. This is 
+		done to allow for the use of references to signals that may only be 
+		able to be resolved in certain circumstances, e.g. when the 
+		expression evaluates to true.*
 	`,
 	examples: markdownFmt`
 		''' yaml
@@ -55,8 +80,34 @@ import { BaseStep } from './base-step';
 		the result is ''myDefault''.
 
 		''' yaml
-		- if: mySignal
+		- if: "!empty(mySignal)"
 		  then: mySignal
+		  else: myDefault
+		'''
+
+		The following example shows how you can check for the existence of of a
+		signal. If ''mySignal'' exists, the resulting signal would be ''mySignal'', 
+		otherwise the result is ''myDefault''.
+
+		''' yaml
+		- if: exists(mySignal)
+		  then: mySignal
+		  else: myDefault
+		'''
+
+		The following example shows how you can compare values from measurement fields.
+
+		''' yaml
+		- if: $field(My Field, measurement, numeric) > $field(My Other Field, measurement, numeric)
+		  then: mySignal
+		  else: myDefault
+		'''
+
+		The following example shows how to return a field value if it is not empty, otherwise return a default value.
+
+		''' yaml
+		- if: "!empty($field(My Field, measurement, numeric))"
+		  then: $field(My Field, measurement, numeric)
 		  else: myDefault
 		'''
 	`,
@@ -77,6 +128,8 @@ import { BaseStep } from './base-step';
 	output: ['Scalar', 'Series', 'Event', 'Number'],
 })
 export class IfStep extends BaseStep {
+	static acceptsMissingInputs = true;
+
 	originalExpr;
 
 	async process(): Promise<Signal> {
@@ -88,22 +141,12 @@ export class IfStep extends BaseStep {
 			throw new ProcessingError('Found no expression in input.');
 		}
 
-		const exp = this.node.originalInputString;
-		const operands = parseExpressionOperands(exp);
+		const inputExp = this.node.originalInputString;
+		const { operands, expression: exp } = parseExpressionOperands(inputExp);
 		const expressionValues = {};
 
 		const thenInput = this.getPropertySignalValue('then');
 		const elseInput = this.getPropertySignalValue('else');
-
-		if (operands.length === 0) {
-			// If there are no operands, we assume that we are checking for the
-			// existence of values. If no values exist, we should get undefined
-			// which will be evaluated to false.
-			const value = this.getValueForInput(0);
-
-			this.processingLogs.push('Evaluated to: ' + value);
-			return isNaN(value) ? elseInput[0] : thenInput[0];
-		}
 
 		if (!thenInput || !elseInput) {
 			throw new ProcessingError('Missing \'then\' and/or \'else\' options.');
@@ -118,47 +161,94 @@ export class IfStep extends BaseStep {
 		}
 
 		for (let i = 0; i < operands.length; i++) {
-			if (!NumberUtil.isNumeric(operands[i])) {
-				expressionValues[operands[i]] = this.getValueForInput(i);
+			const operand = operands[i];
+			if (!NumberUtil.isNumeric(operand.value)) {
+				let value: string | number | boolean = this.getValueForInput(i);
+
+				if (operand.exists) {
+					value = value !== undefined;
+				}
+
+				if (operand.empty) {
+					// Zeroes are not considered empty.
+					if (value === 0) {
+						value = false;
+					}
+					else {
+						value = !value;
+					}
+				}
+
+				set(expressionValues, operand.value, value);
 			}
 		}
 
 		try {
 			const tokens = tokenizeExpression(exp);
 			const ast = parseExpression(tokens);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const expression = printExpression(ast);
+			const _expression = printExpression(ast);
 			const result = evaluateExpression(ast, expressionValues);
 
 			this.processingLogs.push('Evaluated to: ' + result);
 
-			return result ? thenInput[0] : elseInput[0];
+			// Handle truthy evaluation.
+			if (result) {
+				if (thenInput[0] === undefined) {
+					throw new Error('Unexpected undefined value for \'then\' option.');
+				}
+
+				// If the input is a string, it is a reference to a signal that could not be found.
+				if (thenInput[0].type === SignalType.String) {
+					throw new Error(`Could not resolve signal '${ thenInput[0].getStringValue() }' for 'then' option.`);
+				}
+
+				return thenInput[0].clone();
+			}
+
+			// Handle falsy evaluation.
+			if (elseInput[0] === undefined) {
+				throw new Error('Unexpected undefined value for \'else\' option.');
+			}
+
+			// If the input is a string, it is a reference to a signal that could not be found.
+			if (elseInput[0].type === SignalType.String) {
+				throw new Error(`Could not resolve signal '${ elseInput[0].getStringValue() }' for 'else' option.`);
+			}
+
+			return elseInput[0].clone();
 		}
 		catch (err) {
 			throw new ProcessingError('Evaluating expression failed: ' + err.message);
 		}
 	}
 
-	getValueForInput(inputIndex: number): number {
+	getValueForInput(inputIndex: number): number | string | undefined {
 		const value = this.inputs[inputIndex];
-		let result: number;
+
+		if (!value) {
+			return undefined;
+		}
+
+		if (value.type === SignalType.String) {
+			return value.getStringValue();
+		}
 
 		if (value.type === SignalType.Float32) {
-			result = value.getNumberValue();
+			return value.getNumberValue();
 		}
-		else if (value.type === SignalType.Uint32Array && value.length === 1) {
-			result = value.getUint32ArrayValue()[0];
+
+		const valueArray = value.array;
+
+		if (!valueArray?.length || !valueArray[0]?.length) {
+			return undefined;
 		}
-		else if (value.type === SignalType.Float32Array && value.length === 1) {
-			result = value.getFloat32ArrayValue()[0];
-		}
-		else if (value.length === 0) {
-			result = undefined;
-		}
-		else {
+
+		// Check if the value is a multi-component array.
+		if (valueArray.length > 1) {
 			throw new ProcessingError('Unsupported type: ' + value.typeToString + '.');
 		}
 
-		return result;
+		// Return value of first frame.
+		return valueArray[0][0];
 	}
 }
