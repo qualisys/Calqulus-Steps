@@ -29,6 +29,12 @@ export class SeriesUtil {
 	static buffer(series: NumericArray, length: number, method: SeriesBufferMethod = SeriesBufferMethod.Extrapolate): number[] {
 		if (!series || !series.length) return undefined;
 
+		if (length === 0) return [...series];
+
+		if (length < 0) {
+			throw new Error('The length must be a positive number.');
+		}
+
 		let startBuffer, endBuffer;
 
 		if (method === SeriesBufferMethod.Extrapolate && series.length > 1) {
@@ -127,26 +133,83 @@ export class SeriesUtil {
 	}
 
 	/**
-	 * Returns an array where the values from the beginning of the input series are reflected for the specified length.
+	 * Returns an array where the values from the beginning of the input series 
+	 * are reflected for the specified length.
 	 * 
 	 * @series The series 
 	 * @length The array length.
 	 */
 	static reflectBeginning(series: NumericArray, length: number): NumericArray {
-		return series
-			.slice(0, length)
+		if (length < 0) throw new Error('The length must be a positive number.');
+
+		if (length === 0) return [];
+
+		// If the series is empty, throw an error.
+		if (!series || series.length === 0) {
+			throw new Error('The series is empty.');
+		}
+
+		// If the series is of length 1, repeat the value for the specified length.
+		if (series.length === 1) {
+			return new Array(length).fill(series[0]);
+		}
+
+		// If the series is of length 2, return an array of the specified length
+		// where the slope is extrapolated.
+		if (series.length === 2) {
+			const diff = series[0] - series[1];
+			return SeriesUtil.extrapolate(length, series[0], diff, true);
+		}
+
+		// Extract the specified length from the series and reverse it.
+		// The first value is removed since the reflection should not include
+		// the first value.
+		const rev =  series
+			.slice(1, length + 1)
 			.reverse()
-			.map((v) => series[0] - v);
 		;
+
+		// Next, we need to normalize the reflected series so that it continues
+		// in the opposite direction of the initial slope. This is done by
+		// calculating an offset value from which the reflected series is
+		// subtracted. 
+
+		// Grab the last frame of the reflected series.
+		const endValue = rev.slice(-1)[0];
+
+		// Calculate the diff between the first and second frame.
+		const initialDelta = series[1] - series[0];
+
+		// Apply the offset to the reflected series.
+		const totalOffset = series[0] + endValue - initialDelta;
+		const buffer = rev
+			.map((v) => totalOffset - v)
+		;
+		
+		// If the buffer is shorter than the specified length, recursively call
+		// the function until the buffer is of the correct length.
+		if (buffer.length < length) {
+			const diff = length - buffer.length;
+			return [...SeriesUtil.reflectBeginning(buffer, diff), ...buffer];
+		}
+
+		return buffer;
+
 	}
 
 	/**
-	 * Returns an array where the values from the end of the input series are reflected for the specified length.
+	 * Returns an array where the values from the end of the input series 
+	 * are reflected for the specified length.
 	 * 
 	 * @series The series 
 	 * @length The array length.
 	 */
 	static reflectEnd(series: NumericArray, length: number): NumericArray {
+		if (!series || series.length === 0) {
+			throw new Error('The series is empty.');
+		}
+
+		// Reverse the series and call reflectBeginning, then reverse the result.
 		const seriesReverse = series.slice().reverse();
 		const buffer = SeriesUtil.reflectBeginning(seriesReverse, length);
 		return buffer.reverse();
@@ -154,7 +217,8 @@ export class SeriesUtil {
 
 	/**
 	 * Returns an array of the specified length where the first item is `startValue`
-	 * and the remaining values progressively increases or decreases according to the `delta`.
+	 * and the remaining values progressively increases or decreases according 
+	 * to the `delta`.
 	 * 
 	 * Can optionally reverse the order of the array.
 	 * @param length The array length.
