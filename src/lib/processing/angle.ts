@@ -483,11 +483,11 @@ export class JointAngleStep extends AngleStep {
 		default: 'false',
 		description: markdownFmt`
 			If set to false it means that the angular velocity between the 
-			segment and refernce segment is transformed to be expressed 
+			segment and reference segment is transformed to be expressed 
 			into the resolution coordinate system.
 
 			If set to true it means that angular velocity between the segment
-			and refernce segment is transformed to be expressed into the 
+			and reference segment is transformed to be expressed into the 
 			joint coordinate system using the Euler/Cardan sequence.
 		`,
 	}],
@@ -703,11 +703,11 @@ export class AngularVelocityStep extends AngleStep {
 		default: 'false',
 		description: markdownFmt`
 			If set to false it means that the angular velocity between the 
-			segment and refernce segment is transformed to be expressed 
+			segment and reference segment is transformed to be expressed 
 			into the resolution coordinate system.
 
 			If set to true it means that angular velocity between the segment
-			and refernce segment is transformed to be expressed into the 
+			and reference segment is transformed to be expressed into the 
 			joint coordinate system using the Euler/Cardan sequence.
 		`,
 	}],

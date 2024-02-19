@@ -155,10 +155,10 @@ export class Vector implements IVector {
 	}
 
 	/**
-	 * Calculates the Euclidian norm of a Vector
+	 * Calculates the Euclidean norm of a Vector
 	 *
 	 * @param {Vector} out the receiving vector
-	 * @returns {number} the Euclidian norm
+	 * @returns {number} the Euclidean norm
 	 */
 	static norm(out: Vector): number {
 		return Math.hypot(out.x, out.y, out.z);
