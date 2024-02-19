@@ -121,3 +121,90 @@ test('Joint - length', (t) => {
 	joint.position = undefined;
 	t.is(joint.length, 0);
 });
+
+test('Joint - getter / setter - force', (t) => {
+	const joint = new Joint(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		undefined,
+		300
+	);
+	
+	const fakeArray2 = Float32Array.from([4, 5, 6]);
+	const force = new VectorSequence(fakeArray2, fakeArray2, fakeArray2, 300);
+	joint.force = force;
+
+	t.is(joint.force, force);
+	t.is(joint.fx, fakeArray2);
+	t.is(joint.fy, fakeArray2);
+	t.is(joint.fz, fakeArray2);
+	t.is(joint.array[3], fakeArray2);
+	t.is(joint.array[4], fakeArray2);
+	t.is(joint.array[5], fakeArray2);
+});
+
+test('Joint - getter / setter - moment', (t) => {
+	const joint = new Joint(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		undefined,
+		300
+	);
+	
+	const fakeArray2 = Float32Array.from([4, 5, 6]);
+	const moment = new VectorSequence(fakeArray2, fakeArray2, fakeArray2, 300);
+	joint.moment = moment;
+
+	t.is(joint.moment, moment);
+	t.is(joint.mx, fakeArray2);
+	t.is(joint.my, fakeArray2);
+	t.is(joint.mz, fakeArray2);
+	t.is(joint.array[6], fakeArray2);
+	t.is(joint.array[7], fakeArray2);
+	t.is(joint.array[8], fakeArray2);
+});
+
+test('Joint - getter / setter - power', (t) => {
+	const joint = new Joint(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		undefined,
+		300
+	);
+	
+	const fakeArray2 = Float32Array.from([4, 5, 6]);
+	joint.power = fakeArray2;
+
+	t.is(joint.power, fakeArray2);
+	t.is(joint.p, fakeArray2);
+	t.is(joint.array[9], fakeArray2);
+});
+
+test('Joint - getter / setter - position', (t) => {
+	const joint = new Joint(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		undefined,
+		300
+	);
+	
+	const fakeArray2 = Float32Array.from([4, 5, 6]);
+	const position = new VectorSequence(fakeArray2, fakeArray2, fakeArray2, 300);
+	joint.position = position;
+
+	t.is(joint.position, position);
+	t.is(joint.x, fakeArray2);
+	t.is(joint.y, fakeArray2);
+	t.is(joint.z, fakeArray2);
+	t.is(joint.array[0], fakeArray2);
+	t.is(joint.array[1], fakeArray2);
+	t.is(joint.array[2], fakeArray2);
+});

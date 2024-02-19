@@ -26,6 +26,22 @@ test('Analog - length', (t) => {
 	);
 
 	t.is(a.length, 3);
+
+	const b = new Analog(
+		'test',
+		new Float32Array(),
+		300
+	);
+
+	t.is(b.length, 0);
+
+	const c = new Analog(
+		'test',
+		undefined,
+		300
+	);
+
+	t.is(c.length, 0);
 });
 
 test('Analog - getComponent', (t) => {

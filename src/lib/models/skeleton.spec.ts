@@ -70,3 +70,7 @@ test('Skeleton - getSegment', (t) => {
 		skeleton.getSegment('toe');
 	}, { message: 'Skeleton: No segment named \'toe\'' });
 });
+
+test('Skeleton - segments', (t) => {
+	t.deepEqual(skeleton.segments, [segmentHead, segmentHip, segmentFoot]);
+});
