@@ -7,6 +7,10 @@ import { Quaternion } from './spatial/quaternion';
 import { Vector } from './spatial/vector';
 
 const fakeArray = Float32Array.from([1, 2, 3]);
+const fakeArray2 = Float32Array.from([4, 5, 6]);
+const fakeArray3 = Float32Array.from([7, 8, 9]);
+const fakeArray4 = Float32Array.from([10, 11, 12]);
+const fakeArray5 = Float32Array.from([13, 14, 15]);
 
 test('Segment - constructor', (t) => {
 	const s1 = new Segment(
@@ -127,4 +131,56 @@ test('Segment - getTransformationAtFrame', (t) => {
 
 	segment.rotation = undefined;
 	t.is(segment.getTransformationAtFrame(2), undefined);
+});
+
+test('Segment - length', (t) => {
+	const segment = new Segment(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+		300
+	);
+
+	t.is(segment.length, 3);
+
+	segment.position = undefined;
+	t.is(segment.length, 0);
+});
+
+test('Segment - position', (t) => {
+	const segment = new Segment(
+		'test',
+		new VectorSequence(fakeArray2, fakeArray3, fakeArray4, 300),
+		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+		300
+	);
+
+	t.deepEqual(segment.position.x, fakeArray2);
+	t.deepEqual(segment.position.y, fakeArray3);
+	t.deepEqual(segment.position.z, fakeArray4);
+});
+
+test('Segment - rotation', (t) => {
+	const segment = new Segment(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new QuaternionSequence(fakeArray2, fakeArray3, fakeArray4, fakeArray5),
+		300
+	);
+
+	t.deepEqual(segment.rotation.x, fakeArray2);
+	t.deepEqual(segment.rotation.y, fakeArray3);
+	t.deepEqual(segment.rotation.z, fakeArray4);
+	t.deepEqual(segment.rotation.w, fakeArray5);
+});
+
+test('Segment - components', (t) => {
+	const segment = new Segment(
+		'test',
+		new VectorSequence(fakeArray2, fakeArray3, fakeArray4, 300),
+		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+		300
+	);
+
+	t.deepEqual(segment.x, fakeArray2);
 });

@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { f32, mockStep } from '../../test-utils/mock-step';
+import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { Space } from '../processing/space';
 
 import { Joint } from './joint';
@@ -25,6 +25,7 @@ const markerSeq = new Marker('test', fakeArray, fakeArray, fakeArray, frameRate)
 const quatSeq = new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray);
 const segment = new Segment('head', vecSeq, quatSeq, frameRate);
 const joint = new Joint('LeftKnee', vecSeq, vecSeq, undefined, undefined, 100);
+const joint2 = new Joint('LeftKnee', vecSeq, vecSeq, vecSeq, fakeArray, 100);
 const plane = new PlaneSequence(fakeArray, fakeArray, fakeArray, fakeArray);
 
 // Signal variants
@@ -42,6 +43,7 @@ const s1_segment = new Signal(segment, frameRate);
 const s2_segment = new Signal().setValue(segment);
 const s1_joint = new Signal(joint, frameRate);
 const s2_joint = new Signal().setValue(joint);
+const s1_joint2 = new Signal(joint2, frameRate);
 const s1_string = new Signal(testString, frameRate);
 const s2_string = new Signal().setValue(testString);
 const s1_vecseq = new Signal(vecSeq, frameRate);
@@ -320,6 +322,7 @@ test('Signal - getting values', (t) => {
 	t.is(s1_vecseq.getVectorSequenceValue(), vecSeq);
 	t.is(s1_marker.getVectorSequenceValue(), markerSeq);
 	t.is(s1_segment.getVectorSequenceValue(), segment.position);
+	t.is(s1_joint.getVectorSequenceValue(), joint.position);
 	t.is(s1_plane.getPlaneSequenceValue(), plane);
 
 	t.is(s1_undef.getVectorSequenceValue(), undefined);
@@ -343,6 +346,17 @@ test('Signal - getComponent', (t) => {
 	t.is(s1_plane.getComponent('b'), fakeArray);
 	t.is(s1_plane.getComponent('c'), fakeArray);
 	t.is(s1_plane.getComponent('d'), fakeArray);
+
+	t.is(s1_joint2.getComponent('x'), fakeArray);
+	t.is(s1_joint2.getComponent('y'), fakeArray);
+	t.is(s1_joint2.getComponent('z'), fakeArray);
+	t.is(s1_joint2.getComponent('fx'), fakeArray);
+	t.is(s1_joint2.getComponent('fy'), fakeArray);
+	t.is(s1_joint2.getComponent('fz'), fakeArray);
+	t.is(s1_joint2.getComponent('mx'), fakeArray);
+	t.is(s1_joint2.getComponent('my'), fakeArray);
+	t.is(s1_joint2.getComponent('mz'), fakeArray);
+	t.is(s1_joint2.getComponent('p'), fakeArray);
 
 	// Wrong component names
 	t.is(s1_segment.getComponent('wrong'), undefined);
@@ -512,6 +526,174 @@ test('Signal - convertToTargetSpace - Float32Array from a Segment', (t) => {
 	t.deepEqual(s1_segment2.getFloat32ArrayValue(), Float32Array.from([1, 2, 3]));
 });
 
+test('Signal - setValue', (t) => {
+	// Test setting a number
+	let s1 = new Signal(segment, 10);
+	s1.setValue(floatVal);
+
+	t.is(s1.getValue(), floatVal);
+	t.is(s1.type, SignalType.Float32);
+	t.is(s1.length, 1);
+	t.is(s1.frameRate, 10);
+
+	// Test setting a float array
+	s1 = new Signal(segment, 10);
+	const t1 = f32(4, 5, 6);
+	s1.setValue(t1);
+	
+	t.is(s1.getValue(), t1);
+	t.is(s1.type, SignalType.Float32Array);
+	t.is(s1.length, t1.length);
+	t.is(s1.frameRate, 10);
+
+	// Test setting a VectorSequence
+	s1 = new Signal(segment, 10);
+	const t2 = new VectorSequence(f32(7, 8, 9), f32(10, 11, 12), f32(13, 14, 15), frameRate);
+	s1.setValue(t2);
+
+	t.is(s1.getValue(), t2);
+	t.is(s1.type, SignalType.VectorSequence);
+	t.is(s1.length, t2.length);
+	t.is(s1.frameRate, frameRate);
+
+	// Test setting a Segment
+	s1 = new Signal([1, 2, 3], 10);
+	s1.setValue(segment);
+
+	t.is(s1.getValue(), segment);
+	t.is(s1.type, SignalType.Segment);
+	t.is(s1.length, segment.length);
+	t.is(s1.frameRate, frameRate);
+
+	// Test setting a UInt32Array
+	s1 = new Signal(segment, 10);
+	const t3 = i32(7, 8, 9);
+	s1.setValue(t3);
+
+	t.is(s1.getValue(), t3);
+	t.is(s1.type, SignalType.Uint32Array);
+	t.is(s1.length, t3.length);
+	t.is(s1.frameRate, 10);
+
+	// Test setting a Joint
+	s1 = new Signal(segment, 10);
+	const t4 = new Joint('test', vecSeq, vecSeq, vecSeq, f32(4, 5, 6), frameRate);
+	s1.setValue(t4);
+
+	t.is(s1.getValue(), t4);
+	t.is(s1.type, SignalType.Joint);
+	t.is(s1.length, t4.length);
+	t.is(s1.frameRate, frameRate);
+
+	// Test setting a PlaneSequence
+	s1 = new Signal(segment, 10);
+	const t5 = new PlaneSequence(f32(7, 8, 9), f32(10, 11, 12), f32(13, 14, 15), f32(16, 17, 18));
+	s1.setValue(t5);
+
+	t.is(s1.getValue(), t5);
+	t.is(s1.type, SignalType.PlaneSequence);
+	t.is(s1.length, t5.length);
+	t.is(s1.frameRate, 10);
+
+	// Test setting a Marker
+	s1 = new Signal(segment, 10);
+	const t6 = new Marker('test', f32(7, 8, 9), f32(10, 11, 12), f32(13, 14, 15), frameRate);
+	s1.setValue(t6);
+
+	t.is(s1.getValue(), t6);
+	t.is(s1.type, SignalType.VectorSequence);
+	t.is(s1.length, t6.length);
+	t.is(s1.frameRate, frameRate);
+
+	// Test setting a string
+	s1 = new Signal(segment, 10);
+	const t7 = 'test';
+	s1.setValue(t7);
+
+	t.is(s1.getValue(), t7);
+	t.is(s1.type, SignalType.String);
+	t.is(s1.length, t7.length);
+	t.is(s1.frameRate, 10);
+
+	// Test setting undefined
+	s1 = new Signal(segment, 10);
+	s1.setValue(undefined);
+	
+	t.is(s1.getValue(), undefined);
+	t.is(s1.type, undefined);
+	t.is(s1.length, undefined);
+	t.is(s1.frameRate, 10);
+
+	// Test setting an array of arrays
+	s1 = new Signal(segment, 10);
+	const t8 = [f32(1, 2, 3), f32(4, 5, 6), f32(7, 8, 9)];
+	s1.setValue(t8);
+
+	t.is(s1.getValue(), t8);
+	t.is(s1.type, SignalType.Float32ArrayArray);
+	t.is(s1.length, t8[0].length);
+	t.is(s1.frameRate, 10);
+
+	// Test setting an array of numbers
+	s1 = new Signal(segment, 10);
+	const t9 = [1, 2, 3];
+	s1.setValue(t9);
+
+	t.deepEqual(s1.getValue(), f32(...t9));
+	t.is(s1.type, SignalType.Float32Array);
+	t.is(s1.length, t9.length);
+	t.is(s1.frameRate, 10);
+});
+
+test('Signal - getEventArrayValue', (t) => {
+	const s1 = new Signal(segment, 10);
+
+	const t1 = f32(4, 5, 6);
+	s1.setValue(t1);
+	t.is(s1.getEventArrayValue(), t1);
+
+	const t2 = new VectorSequence(f32(7, 8, 9), f32(10, 11, 12), f32(13, 14, 15), frameRate);
+	s1.setValue(t2);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	const t3 = i32(7, 8, 9);
+	s1.setValue(t3);
+	t.is(s1.getEventArrayValue(), t3);
+
+	const t4 = new Joint('test', vecSeq, vecSeq, vecSeq, f32(4, 5, 6), frameRate);
+	s1.setValue(t4);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	const t5 = new PlaneSequence(f32(7, 8, 9), f32(10, 11, 12), f32(13, 14, 15), f32(16, 17, 18));
+	s1.setValue(t5);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	const t6 = new Marker('test', f32(7, 8, 9), f32(10, 11, 12), f32(13, 14, 15), frameRate);
+	s1.setValue(t6);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	const t7 = 'test';
+	s1.setValue(t7);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	const t8 = [f32(1, 2, 3), f32(4, 5, 6), f32(7, 8, 9)];
+	s1.setValue(t8);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	const t9 = [1, 2, 3];
+	s1.setValue(t9);
+	t.deepEqual(s1.getEventArrayValue(), f32(...t9));
+
+	s1.setValue(undefined);
+	t.is(s1.getEventArrayValue(), undefined);
+
+	s1.setValue(5);
+	t.deepEqual(s1.getEventArrayValue(), [5]);
+
+	s1.setValue(segment);
+	t.is(s1.getEventArrayValue(), undefined);
+});
+
 test('Signal - clone', (t) => {
 	// Create all propped-up signal
 	const source = new Signal(segment, frameRate);
@@ -584,4 +766,66 @@ test('Signal - clone with a new value', (t) => {
 
 	t.is(clone.getValue(), fakeArray); // Should be our new array
 	t.is(clone.type, SignalType.Float32Array);
+});
+
+// Getters and setters
+
+test('Signal - isEventLike', (t) => {
+	const s1 = new Signal(fakeArray, frameRate);
+	s1.isEvent = true;
+	t.is(s1.isEventLike, true);
+
+	const s2 = new Signal(fakeArray, frameRate);
+	t.is(s2.isEventLike, true);
+
+	const s3 = new Signal(floatVal, frameRate);
+	t.is(s3.isEventLike, true);
+
+	const s4 = new Signal(segment, frameRate);
+	t.is(s4.isEventLike, false);
+
+	const s5 = new Signal(vecSeq, frameRate);
+	t.is(s5.isEventLike, false);
+
+	const s6 = new Signal(plane, frameRate);
+	t.is(s6.isEventLike, false);
+
+	const s7 = new Signal(markerSeq, frameRate);
+	t.is(s7.isEventLike, false);
+
+	const s8 = new Signal(fakeUIntArray, frameRate);
+	t.is(s8.isEventLike, true);
+});
+
+test('Signal - isPositive', (t) => {
+	const pos = f32(1, 2, 3);
+	const neg = f32(1, -2, 3);
+	const pos2 = i32(1, 2, 3);
+
+	const posVecSeq = new VectorSequence(pos, pos, pos, frameRate);
+	const negVecSeq = new VectorSequence(pos, pos, neg, frameRate);
+
+	t.true(new Signal(pos).isPositive);
+	t.false(new Signal(neg).isPositive);
+
+	t.true(new Signal(pos2).isPositive);
+
+	t.true(new Signal(1).isPositive);
+	t.false(new Signal(-1).isPositive);
+
+	t.true(new Signal([pos, pos, pos]).isPositive);
+	t.false(new Signal([pos, pos, neg]).isPositive);
+
+	t.true(new Signal(posVecSeq).isPositive);
+	t.false(new Signal(negVecSeq).isPositive);
+
+	t.true(new Signal(new Segment('test', posVecSeq, new QuaternionSequence(pos, pos, pos, pos))).isPositive);
+	t.false(new Signal(new Segment('test', negVecSeq, new QuaternionSequence(neg, neg, neg, neg))).isPositive);
+	t.false(new Signal(new Segment('test', posVecSeq, new QuaternionSequence(pos, pos, neg, pos))).isPositive);
+	t.false(new Signal(new Segment('test', negVecSeq, new QuaternionSequence(pos, pos, pos, pos))).isPositive);
+
+	t.true(new Signal(new PlaneSequence(pos, pos, pos, pos)).isPositive);
+	t.false(new Signal(new PlaneSequence(pos, neg, pos, pos)).isPositive);
+
+	t.is(new Signal('test').isPositive, undefined);
 });
