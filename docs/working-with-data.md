@@ -97,7 +97,7 @@ _Example of multiplying the x and y component of a marker._
 * mx, my, mz
 
 **Power**
-* px, py, pz
+* p
 
 ## Quick reference
 ### Segments
