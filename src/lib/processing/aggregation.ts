@@ -34,7 +34,7 @@ import { BaseStep } from './base-step';
 			separately over each signal, and a list of values are returned, 
 			one for each cycle.
 
-			To avoid this behaviour, set ''useCycles'' to ''false''.
+			To avoid this behavior, set ''useCycles'' to ''false''.
 			
 			For information on how to set event cycles on a signal, 
 			see the [eventMask](./event-utils.md) step.

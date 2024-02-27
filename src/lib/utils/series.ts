@@ -13,7 +13,7 @@ export enum SeriesBufferMethod {
 export class SeriesUtil {
 	/**
 	 * Returns the `series`, buffered at the start and end with the 
-	 * amount of frames given in `lenght`.
+	 * amount of frames given in `length`.
 	 * 
 	 * The `method` decides whether the buffer should be extrapolated
 	 * using the first two and last two frames or if it should repeat
