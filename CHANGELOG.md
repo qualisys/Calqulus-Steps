@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2] 2024-02-27
+
+### Added
+
+* Documentation regarding new `export` property for parameters & events. ([#44](https://github.com/qualisys/Calqulus-Steps/pull/44))
+
 ## [1.1.1] 2024-02-15
 
 ### Fixed
