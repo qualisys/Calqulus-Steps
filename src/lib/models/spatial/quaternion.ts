@@ -1,4 +1,5 @@
 import { Matrix } from './matrix';
+import { Vector } from './vector';
 
 export class Quaternion {
 	/** Quaternion instance used for performance reasons. */
@@ -61,7 +62,23 @@ export class Quaternion {
 	 * @param result The receiving quaternion.
 	 * @returns The quaternion result.
 	 */
-	static fromRotationMatrix(matrix: Matrix, result: Quaternion): Quaternion {
+	static fromRotationMatrix(matrix: Matrix): Quaternion {
+		const q = new Quaternion(0, 0, 0, 1);
+
+		return Quaternion.fromRotationMatrixToRef(matrix, q);
+	}
+
+	/**
+	 * Creates a quaternion from the given 3x3 rotation matrix.
+	 *
+	 * NOTE: The resultant quaternion is not normalized, so you should be sure
+	 * to renormalize the quaternion yourself where necessary.
+	 *
+	 * @param m The rotation matrix.
+	 * @param result The receiving quaternion.
+	 * @returns The quaternion result.
+	 */
+	static fromRotationMatrixToRef(matrix: Matrix, result: Quaternion): Quaternion {
 		const m = new Float32Array(9);
 		const m4 = matrix._m;
 
@@ -107,6 +124,7 @@ export class Quaternion {
 
 		return result;
 	}
+
 
 	/**
 	 * Creates an identity quaternion.
@@ -219,6 +237,39 @@ export class Quaternion {
 		result.w = w * len;
 
 		return result;
+	}
+
+	/**
+     * Creates a new quaternion containing the rotation value to reach the
+     * target (axis1, axis2, axis3) orientation as a rotated XYZ system (axis1,
+     * axis2 and axis3 are normalized during this operation)
+     * @param axis1 defines the first axis
+     * @param axis2 defines the second axis
+     * @param axis3 defines the third axis
+     * @returns the new quaternion
+     */
+	static rotationQuaternionFromAxis(axis1: Vector, axis2: Vector, axis3: Vector): Quaternion {
+		const quat = new Quaternion(0.0, 0.0, 0.0, 0.0);
+		Quaternion.rotationQuaternionFromAxisToRef(axis1, axis2, axis3, quat);
+		return quat;
+	}
+
+	/**
+     * Creates a rotation value to reach the target (axis1, axis2, axis3)
+     * orientation as a rotated XYZ system (axis1, axis2 and axis3 are
+     * normalized during this operation) and stores it in the target quaternion
+     * @param axis1 defines the first axis
+     * @param axis2 defines the second axis
+     * @param axis3 defines the third axis
+     * @param ref defines the target quaternion
+     * @returns result input
+     */
+	public static rotationQuaternionFromAxisToRef(axis1: Vector, axis2: Vector, axis3: Vector, ref: Quaternion): Quaternion {
+		const rotMat = Matrix.tmpMat1;
+		Matrix.fromXyzAxesToRef(axis1.normalize(), axis2.normalize(), axis3.normalize(), rotMat);
+		Quaternion.fromRotationMatrixToRef(rotMat, ref);
+
+		return ref;
 	}
 
 	/**

@@ -216,6 +216,25 @@ test('Matrix - get', (t) => {
 	t.is(mat.get(3, 3), 16);
 });
 
+test('Matrix - fromXyzAxesToRef', (t) => {
+	const v0 = new Vector(0, 0, 1);
+	const v1 = new Vector(0, 1, 0);
+	const v2 = new Vector(1, 0, 0);
+
+	const mat = new Matrix();
+	Matrix.fromXyzAxesToRef(v0, v1, v2, mat);
+
+	const rotation = Quaternion.identity();
+	const translation = Vector.zero();
+	const scale = Vector.zero();
+
+	Matrix.decomposeToRef(rotation, translation, scale, mat);
+
+	t.deepEqual(rotation.array, [0, 0, 0, 0.7071067811865476]);
+	t.deepEqual(translation.array, [0, 0, 0]);
+	t.deepEqual(scale.array, [1, 1, 1]);
+});
+
 test('Matrix - fromQuaternion', (t) => {
 	const mat = new Matrix();
 	const quat = new Quaternion(1, 2, 3, 4);

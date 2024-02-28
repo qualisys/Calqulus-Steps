@@ -40,6 +40,41 @@ export class Vector implements IVector {
 	}
 
 	/**
+	 * Adds a vector to this vector.
+	 *
+	 * @param otherVector The vector to add to this vector.
+	 * @returns A new Vector.
+	 */
+	add(otherVector: Vector): Vector {
+		return this.addToRef(otherVector, new Vector(0, 0, 0));
+	}
+
+	/**
+	 * Adds a vector to the current vector.
+	 *
+	 * @param otherVector The vector to add to this vector.
+	 * @returns This Vector.
+	 */
+	addInPlace(otherVector: Vector): Vector {
+		return this.addToRef(otherVector, this);
+	}
+
+	/**
+	 * Adds a vector to this vector.
+	 *
+	 * @param otherVector The vector to add to this vector.
+	 * @param result The receiving vector.
+	 * @returns The addition result.
+	 */
+	addToRef(otherVector: Vector, result: Vector): Vector {
+		result.x = this.x + otherVector.x;
+		result.y = this.y + otherVector.y;
+		result.z = this.z + otherVector.z;
+
+		return result;
+	}
+
+	/**
 	 * Get the angle between two 3D vectors.
 	 * 
 	 * @param a The first operand.
@@ -162,11 +197,42 @@ export class Vector implements IVector {
 	 * @returns the multiplication result.
 	*/
 	multiply(factor: number | Vector): Vector {
+		const result = new Vector(0, 0, 0);
+
+		return this.multiplyToRef(factor, result);
+	}
+
+	/**
+	 * Multiplies the current vector with a number or vector.
+	 * 
+	 * @param factor the factor to multiply with.
+	 * @returns this vector.
+	*/
+	multiplyInPlace(factor: number | Vector): Vector {
+		return this.multiplyToRef(factor, this);
+	}
+
+	/**
+	 * Multiplies with a number or vector.
+	 * 
+	 * @param factor the factor to multiply with.
+	 * @param result the receiving vector.
+	 * @returns the multiplication result.
+	*/
+	multiplyToRef(factor: number | Vector, result: Vector): Vector {
 		if (typeof factor === 'number') {
-			return new Vector(this.x * factor, this.y * factor, this.z * factor);
+			result.x = this.x * factor;
+			result.y = this.y * factor;
+			result.z = this.z * factor;
+
+			return result;
 		}
 		else {
-			return new Vector(this.x * factor.x, this.y * factor.y, this.z * factor.z);
+			result.x = this.x * factor.x;
+			result.y = this.y * factor.y;
+			result.z = this.z * factor.z;
+
+			return result;
 		}
 	}
 
@@ -305,5 +371,61 @@ export class Vector implements IVector {
 		result.z = a.z + uvz + uuvz;
 
 		return result;
+	}
+
+	/**
+     * Returns a new Vector set with the result of the transformation by the given matrix of the given vector.
+     * This method computes transformed coordinates only, not transformed direction vectors (ie. it takes translation in account)
+     * @param vector defines the Vector to transform
+     * @param transformation defines the transformation matrix
+     * @returns the transformed Vector
+     */
+	static transformCoordinates(vector: Vector, transformation: Matrix): Vector {
+		const result = new Vector(0, 0, 0);
+		Vector.transformCoordinatesToRef(vector, transformation, result);
+
+		return result;
+	}
+
+	/**
+     * Sets the given vector "result" coordinates with the result of the transformation by the given matrix of the given vector
+     * This method computes transformed coordinates only, not transformed direction vectors (ie. it takes translation in account)
+     * Example Playground https://playground.babylonjs.com/#R1F8YU#113
+     * @param vector defines the Vector3 to transform
+     * @param transformation defines the transformation matrix
+     * @param result defines the Vector3 where to store the result
+     * @returns result input
+     */
+	static transformCoordinatesToRef(vector: Vector, transformation: Matrix, result: Vector): Vector {
+		Vector.transformCoordinatesFromFloatsToRef(vector.x, vector.y, vector.z, transformation, result);
+		return result;
+	}
+
+	/**
+     * Sets the given vector "result" coordinates with the result of the transformation by the given matrix of the given floats (x, y, z)
+     * This method computes transformed coordinates only, not transformed direction vectors
+     * @param x define the x coordinate of the source vector
+     * @param y define the y coordinate of the source vector
+     * @param z define the z coordinate of the source vector
+     * @param transformation defines the transformation matrix
+     * @param result defines the Vector3 where to store the result
+     * @returns result input
+     */
+	static transformCoordinatesFromFloatsToRef(x: number, y: number, z: number, transformation: Matrix, result: Vector): Vector {
+		const m = transformation._m;
+		const rx = x * m[0] + y * m[4] + z * m[8] + m[12];
+		const ry = x * m[1] + y * m[5] + z * m[9] + m[13];
+		const rz = x * m[2] + y * m[6] + z * m[10] + m[14];
+		const rw = 1 / (x * m[3] + y * m[7] + z * m[11] + m[15]);
+
+		result.x = rx * rw;
+		result.y = ry * rw;
+		result.z = rz * rw;
+
+		return result;
+	}
+
+	static zero(): Vector {
+		return new Vector(0, 0, 0);
 	}
 }
