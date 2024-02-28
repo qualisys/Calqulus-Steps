@@ -221,43 +221,13 @@ export class Matrix {
 	}
 
 	/**
-	 * Create a 4x4 matrix from the elements of a 3x3 rotation matrix.
-	 * The remaining elements are assigned the corresponding elements in the
-	 * identity.
-	 * 
-	 * @param m00 Component in column 0, row 0 position (index 0).
-	 * @param m01 Component in column 0, row 1 position (index 1).
-	 * @param m02 Component in column 0, row 2 position (index 2).
-	 * @param m10 Component in column 1, row 0 position (index 4).
-	 * @param m11 Component in column 1, row 1 position (index 5).
-	 * @param m12 Component in column 1, row 2 position (index 6).
-	 * @param m20 Component in column 2, row 0 position (index 8).
-	 * @param m21 Component in column 2, row 1 position (index 9).
-	 * @param m22 Component in column 2, row 2 position (index 10).
-	 * @param m30 Component in column 3, row 0 position (index 12).
-	 * @param m31 Component in column 3, row 1 position (index 13).
-	 * @param m32 Component in column 3, row 2 position (index 14).
+	 * Create a new Matrix with the given values.
+	 *
+	 * @param values Array of 16 numbers to create matrix from.
 	 * @returns A new matrix.
 	 */
-	static fromRotationMatrix(
-		m00: number, m01: number, m02: number,
-		m10: number, m11: number, m12: number,
-		m20: number, m21: number, m22: number
-	) {
-		const matrix = Matrix.identity();
-		const m = matrix._m;
-
-		m[0] = m00;
-		m[1] = m01;
-		m[2] = m02;
-		m[4] = m10;
-		m[5] = m11;
-		m[6] = m12;
-		m[8] = m20;
-		m[9] = m21;
-		m[10] = m22;
-
-		return matrix;
+	static fromArray(values: number[]): Matrix {
+		return Matrix.fromValues.apply(null, values);
 	}
 
 	/**
@@ -313,13 +283,43 @@ export class Matrix {
 	}
 
 	/**
-	 * Create a new Matrix with the given values.
-	 *
-	 * @param values Array of 16 numbers to create matrix from.
+	 * Create a 4x4 matrix from the elements of a 3x3 rotation matrix.
+	 * The remaining elements are assigned the corresponding elements in the
+	 * identity.
+	 * 
+	 * @param m00 Component in column 0, row 0 position (index 0).
+	 * @param m01 Component in column 0, row 1 position (index 1).
+	 * @param m02 Component in column 0, row 2 position (index 2).
+	 * @param m10 Component in column 1, row 0 position (index 4).
+	 * @param m11 Component in column 1, row 1 position (index 5).
+	 * @param m12 Component in column 1, row 2 position (index 6).
+	 * @param m20 Component in column 2, row 0 position (index 8).
+	 * @param m21 Component in column 2, row 1 position (index 9).
+	 * @param m22 Component in column 2, row 2 position (index 10).
+	 * @param m30 Component in column 3, row 0 position (index 12).
+	 * @param m31 Component in column 3, row 1 position (index 13).
+	 * @param m32 Component in column 3, row 2 position (index 14).
 	 * @returns A new matrix.
 	 */
-	static fromArray(values: number[]): Matrix {
-		return Matrix.fromValues.apply(null, values);
+	static fromRotationMatrix(
+		m00: number, m01: number, m02: number,
+		m10: number, m11: number, m12: number,
+		m20: number, m21: number, m22: number
+	) {
+		const matrix = Matrix.identity();
+		const m = matrix._m;
+
+		m[0] = m00;
+		m[1] = m01;
+		m[2] = m02;
+		m[4] = m10;
+		m[5] = m11;
+		m[6] = m12;
+		m[8] = m20;
+		m[9] = m21;
+		m[10] = m22;
+
+		return matrix;
 	}
 
 	/**
@@ -350,7 +350,38 @@ export class Matrix {
 		m30: number, m31: number, m32: number, m33: number
 	) {
 		const matrix = new Matrix();
-		const m = matrix._m;
+		return Matrix.fromValuesToRef(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33, matrix);
+	}
+
+	/**
+	 * Create a new Matrix with the given values.
+	 *
+	 * @param m00 Component in column 0, row 0 position (index 0).
+	 * @param m01 Component in column 0, row 1 position (index 1).
+	 * @param m02 Component in column 0, row 2 position (index 2).
+	 * @param m03 Component in column 0, row 3 position (index 3).
+	 * @param m10 Component in column 1, row 0 position (index 4).
+	 * @param m11 Component in column 1, row 1 position (index 5).
+	 * @param m12 Component in column 1, row 2 position (index 6).
+	 * @param m13 Component in column 1, row 3 position (index 7).
+	 * @param m20 Component in column 2, row 0 position (index 8).
+	 * @param m21 Component in column 2, row 1 position (index 9).
+	 * @param m22 Component in column 2, row 2 position (index 10).
+	 * @param m23 Component in column 2, row 3 position (index 11).
+	 * @param m30 Component in column 3, row 0 position (index 12).
+	 * @param m31 Component in column 3, row 1 position (index 13).
+	 * @param m32 Component in column 3, row 2 position (index 14).
+	 * @param m33 Component in column 3, row 3 position (index 15).
+	 * @returns A new matrix.
+	 */
+	static fromValuesToRef(
+		m00: number, m01: number, m02: number, m03: number,
+		m10: number, m11: number, m12: number, m13: number,
+		m20: number, m21: number, m22: number, m23: number,
+		m30: number, m31: number, m32: number, m33: number,
+		result: Matrix
+	): Matrix {
+		const m = result._m;
 
 		m[0] = m00;
 		m[1] = m01;
@@ -369,7 +400,20 @@ export class Matrix {
 		m[14] = m32;
 		m[15] = m33;
 
-		return matrix;
+		return result;
+	}
+
+	/**
+     * Sets the given matrix as a rotation matrix composed from the 3 left handed axes
+     * @param xAxis defines the value of the 1st axis
+     * @param yAxis defines the value of the 2nd axis
+     * @param zAxis defines the value of the 3rd axis
+     * @param result defines the target matrix
+     * @returns result input
+     */
+	static fromXyzAxesToRef(xAxis: Vector, yAxis: Vector, zAxis: Vector, result: Matrix): Matrix {
+		Matrix.fromValuesToRef(xAxis.x, xAxis.y, xAxis.z, 0.0, yAxis.x, yAxis.y, yAxis.z, 0.0, zAxis.x, zAxis.y, zAxis.z, 0.0, 0.0, 0.0, 0.0, 1.0, result);
+		return result;
 	}
   
 	/**

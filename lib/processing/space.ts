@@ -103,13 +103,13 @@ export class Space extends BaseStep {
 			if (vector.x > 0) {
 				// Segment points in positive X.
 				this.rotationMatrix = Space.getRotationMatrixAroundZ(90);
-				this._quaternion = Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(0, -1, 0, 1, 0, 0, 0, 0, 1), this._quaternion);
+				this._quaternion = Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(0, -1, 0, 1, 0, 0, 0, 0, 1), this._quaternion);
 				this.stringValue = 'Forward direction: Positive X. Rotation around world Z = 90 deg';
 			}
 			else {
 				// Segment points in negative X.
 				this.rotationMatrix = Space.getRotationMatrixAroundZ(-90);
-				this._quaternion = Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(0, 1, 0, -1, 0, 0, 0, 0, 1), this._quaternion);
+				this._quaternion = Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(0, 1, 0, -1, 0, 0, 0, 0, 1), this._quaternion);
 				this.stringValue = 'Forward direction: Negative X. Rotation around world Z = -90 deg';
 			}
 		}
@@ -123,14 +123,14 @@ export class Space extends BaseStep {
 			else {
 				// Segment points in negative Y.
 				this.rotationMatrix = Space.getRotationMatrixAroundZ(180);
-				this._quaternion = Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, 1), this._quaternion);
+				this._quaternion = Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, 1), this._quaternion);
 				this.stringValue = 'Forward direction: Negative Y. Rotation around world Z = 180 deg';
 			}
 		}
 	}
 
 	public static getDefaultQuaternion(): Quaternion {
-		return Quaternion.fromRotationMatrix(Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1), new Quaternion(0, 0, 0, 1));
+		return Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1), new Quaternion(0, 0, 0, 1));
 	}
 
 	public static getRotationMatrixAroundZ(deg: number) {
@@ -218,7 +218,7 @@ export class Space extends BaseStep {
 			// Handle rotation.
 			Matrix.fromQuaternion(worldSegmentFrame.rotation, segmentMatrix);
 			Matrix.multiply(Matrix.tmpMat3, segmentMatrix, multipliedMatrix);
-			Quaternion.fromRotationMatrix(multipliedMatrix, resultQuat);
+			Quaternion.fromRotationMatrixToRef(multipliedMatrix, resultQuat);
 
 			rw[i] = resultQuat.w;
 			rx[i] = resultQuat.x;

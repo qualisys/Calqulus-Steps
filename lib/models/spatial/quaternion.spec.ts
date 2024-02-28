@@ -2,6 +2,7 @@ import test from 'ava';
 
 import { Matrix } from './matrix';
 import { Quaternion } from './quaternion';
+import { Vector } from './vector';
 
 test('Quaternion - constructor', (t) => {
 	const quat = new Quaternion(1, 2, 3, 4);
@@ -112,9 +113,17 @@ test('Quaternion - normalize', (t) => {
 
 test('Quaternion - fromRotationMatrix', (t) => {
 	const mat = Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, -1);
-	const quatRef = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.fromRotationMatrix(mat, quatRef), {
+	t.like(Quaternion.fromRotationMatrix(mat), {
+		x: 0.7071067811865476,
+		y: 0,
+		z: 0,
+		w: 0,
+	});
+
+	const quatRef = new Quaternion(0, 0, 0, 0);
+	Quaternion.fromRotationMatrixToRef(mat, quatRef);
+	t.like(quatRef, {
 		x: 0.7071067811865476,
 		y: 0,
 		z: 0,
@@ -122,9 +131,8 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	});
 
 	const mat2 = Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1);
-	const quatRef2 = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.fromRotationMatrix(mat2, quatRef2), {
+	t.like(Quaternion.fromRotationMatrix(mat2), {
 		x: 0,
 		y: 0,
 		z: 0,
@@ -132,9 +140,8 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	});
 
 	const mat3 = Matrix.fromRotationMatrix(-1, 0, 0, 0, -0.5, 0, 0, 0, -1);
-	const quatRef3 = new Quaternion(0, 0, 0, 0);
 
-	t.like(Quaternion.fromRotationMatrix(mat3, quatRef3), {
+	t.like(Quaternion.fromRotationMatrix(mat3), {
 		x: 0,
 		y: 0.7905694150420949,
 		z: 0,
@@ -142,12 +149,19 @@ test('Quaternion - fromRotationMatrix', (t) => {
 	});
 
 	const mat4 = Matrix.fromRotationMatrix(0, 0, -1, 0, 1, 0, 1, 0, 0);
-	const q4 = Quaternion.fromRotationMatrix(mat4, Quaternion.tmpQuat1);
 
-	t.like(Quaternion.fromRotationMatrix(mat4, q4), {
+	t.like(Quaternion.fromRotationMatrix(mat4), {
 		x: 0,
 		y: 0.7071067811865475,
 		z: 0,
 		w: 0.7071067811865476,
 	});
+});
+
+test('Quaternion - rotationQuaternionFromAxis', (t) => {
+	const q1 = Quaternion.rotationQuaternionFromAxis(new Vector(1, 0, 0), new Vector(0, 1, 0), new Vector(0, 0, 1));
+	const q2 = Quaternion.rotationQuaternionFromAxis(new Vector(0, 0, 1), new Vector(0, 1, 0), new Vector(1, 0, 0));
+	
+	t.deepEqual(q1.array, [0, 0, 0, 1]);
+	t.deepEqual(q2.array, [0, 0, 0, 0.7071067811865476]);
 });

@@ -14,6 +14,30 @@ test('Vector - constructor', (t) => {
 	});
 });
 
+test('Vector - add', (t) => {
+	const v0 = Vector.zero();
+	
+	const v1 = v0.add(new Vector(2, 0, 3));
+
+	t.is(v0.x, 0);
+	t.is(v0.y, 0);
+	t.is(v0.z, 0);
+
+	t.is(v1.x, 2);
+	t.is(v1.y, 0);
+	t.is(v1.z, 3);
+});
+
+test('Vector - addInPlace', (t) => {
+	const v0 = Vector.zero();
+	
+	v0.addInPlace(new Vector(2, 0, 3));
+
+	t.is(v0.x, 2);
+	t.is(v0.y, 0);
+	t.is(v0.z, 3);
+});
+
 test('Vector - angle', (t) => {
 	const vec1 = new Vector(1, 2, 3);
 	const vec2 = new Vector(3, 2, 1);
@@ -105,6 +129,45 @@ test('Vector - length', (t) => {
 
 	t.is(v1.length(), 5);
 	t.is(v2.length(), 1);
+});
+
+test('Vector - multiply', (t) => {
+	const v0 = new Vector(2, 5, 3);
+	const v1 = v0.multiply(new Vector(5, 0, 3));
+
+	t.is(v0.x, 2);
+	t.is(v0.y, 5);
+	t.is(v0.z, 3);
+
+	t.is(v1.x, 10);
+	t.is(v1.y, 0);
+	t.is(v1.z, 9);
+
+	const v2 = v0.multiply(5);
+
+	t.is(v0.x, 2);
+	t.is(v0.y, 5);
+	t.is(v0.z, 3);
+
+	t.is(v2.x, 10);
+	t.is(v2.y, 25);
+	t.is(v2.z, 15);
+});
+
+test('Vector - multiplyInPlace', (t) => {
+	const v0 = new Vector(2, 5, 3);
+	
+	v0.multiplyInPlace(new Vector(5, 0, 3));
+
+	t.is(v0.x, 10);
+	t.is(v0.y, 0);
+	t.is(v0.z, 9);
+
+	v0.multiplyInPlace(5);
+
+	t.is(v0.x, 50);
+	t.is(v0.y, 0);
+	t.is(v0.z, 45);
 });
 
 test('Vector - normalize', (t) => {
@@ -216,4 +279,25 @@ test('Vector - Euclidian norm', (t) => {
 	const vec = new Vector(1, 2, 3);
 
 	t.is(Vector.norm(vec), 3.741657386773941);
+});
+
+test('Vector - transformCoordinats', (t) => {
+	const v0 = new Vector(1, 2, 3);
+
+	const x0 = new Vector(1, 0, 0);
+	const y0 = new Vector(0, 1, 0);
+	const z0 = new Vector(0, 0, 1);
+	const mat0 = Matrix.fromXyzAxesToRef(x0, y0, z0, Matrix.tmpMat1);
+	const v0prim = Vector.transformCoordinates(v0, mat0);
+
+	t.deepEqual(v0prim.array, [1, 2, 3]);
+
+	const v1 = new Vector(1, 2, 3);
+	const x1 = new Vector(0, 1, 0);
+	const y1 = new Vector(1, 0, 0);
+	const z1 = new Vector(0, 0, 1);
+	const mat1 = Matrix.fromXyzAxesToRef(x1, y1, z1, Matrix.tmpMat1);
+	const v1prim = Vector.transformCoordinates(v1, mat1);
+
+	t.deepEqual(v1prim.array, [2, 1, 3]);
 });
