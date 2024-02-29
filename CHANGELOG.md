@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] 2024-03-xx
+
+### Added
+* Inverse dynamics support.
+ - Added support for joints. Segments now have a distalJoint and a proximalJoint.
+ - Added various math functions.
+ - Added class for calculating body segment parameters.
+ - Documentation regarding available joint names.
+
 ## [1.1.1] 2024-02-15
 
 ### Fixed
