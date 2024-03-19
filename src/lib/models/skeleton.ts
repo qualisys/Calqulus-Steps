@@ -1,15 +1,24 @@
 import { Segment } from './segment';
 
+export interface IPoseSegment {
+	parent: string;
+	name: string;
+	transform: number[];
+}
+
 /**
  * Provides a structure for collecting named skeleton segments.
  */
 export class Skeleton {
 	protected _segments: Map<string, Segment> = new Map<string, Segment>();
+	protected _pose: IPoseSegment[];
 
-	constructor(public name, segments: Segment[]) {
+	constructor(public name, segments: Segment[], pose: IPoseSegment[]) {
 		for (const segment of segments) {
 			this._segments.set(segment.name, segment);
 		}
+
+		this._pose = pose;
 	}
 
 	/**
@@ -39,6 +48,10 @@ export class Skeleton {
 		}
 
 		return extremities;
+	}
+
+	get pose() {
+		return this._pose;
 	}
 
 	get segments() {

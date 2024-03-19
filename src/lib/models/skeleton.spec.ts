@@ -39,7 +39,7 @@ segmentFoot.parent = segmentHip;
 segmentHead.parent = segmentSpine;
 segmentSpine.parent = segmentHip;
 
-const skeleton = new Skeleton('test', [segmentHead, segmentHip, segmentFoot]);
+const skeleton = new Skeleton('test', [segmentHead, segmentHip, segmentFoot], []);
 
 test('Skeleton - constructor', (t) => {
 	t.is(skeleton.name, 'test');
