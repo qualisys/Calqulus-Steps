@@ -23,8 +23,8 @@ export enum RotationOrder {
 
 export class Euler {
 	/**
-	 * Calculates Euler angles from a roation matrix using the specified rotation
-	 * order.
+	 * Calculates Euler angles from a rotation matrix using the specified
+	 * rotation order.
 	 * @param out A vector with the resulting Euler angles.
 	 * @param mat The rotation matrix, a 3x3 matrix.
 	 * @param order The rotation order to use for the calculation.
