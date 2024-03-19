@@ -35,12 +35,22 @@ export class QuaternionSequence implements ISequence {
 		this.array = [this.x, this.y, this.z, this.w];
 	}
 
-	ensureContinuity() {
-		QuaternionSequence.ensureContinuity(this, this);
+	/**
+	 * Ensures that the quaternion sequence is continuous. 
+	 *
+	 * @param result The quaternion sequence to store the result in.
+	 * @returns The continuous quaternion sequence.
+	 */
+	ensureContinuity(result?: QuaternionSequence) {
+		return QuaternionSequence.ensureContinuity(this, result);
 	}
 
 	/**
 	 * Create a new [[QuaternionSequence]] without discontinuity.
+	 * 
+	 * @param quat The quaternion sequence to ensure continuity for.
+	 * @param result The quaternion sequence to store the result in.
+	 * @returns The continuous quaternion sequence.
 	 */
 	static ensureContinuity(quat: QuaternionSequence, result?: QuaternionSequence) {
 		const x = result ? result.x : new Float32Array(quat.x);
