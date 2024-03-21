@@ -1,3 +1,5 @@
+import { RotationOrder } from '../../utils/math/euler';
+
 import { Matrix } from './matrix';
 import { Vector } from './vector';
 
@@ -50,6 +52,78 @@ export class Quaternion {
 	 */
 	get array() {
 		return [this.x, this.y, this.z, this.w];
+	}
+
+	/**
+	 * 
+	 * @param x Angle to rotate around X axis in degrees.
+	 * @param y Angle to rotate around Y axis in degrees.
+	 * @param z Angle to rotate around Z axis in degrees.
+	 * @param rotationOrder The order to apply the rotations.
+	 * @param result The receiving quaternion.
+	 * @returns 
+	 */
+	static fromEuler(x: number, y: number, z: number, rotationOrder: RotationOrder, result: Quaternion) {
+		// http://www.mathworks.com/matlabcentral/fileexchange/
+		// 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
+		//	content/SpinCalc.m
+		const c1 = Math.cos(x / 2);
+		const c2 = Math.cos(y / 2);
+		const c3 = Math.cos(z / 2);
+
+		const s1 = Math.sin(x / 2);
+		const s2 = Math.sin(y / 2);
+		const s3 = Math.sin(z / 2);
+
+		switch (rotationOrder) {
+
+			case RotationOrder.XYZ:
+				result.x = s1 * c2 * c3 + c1 * s2 * s3;
+				result.y = c1 * s2 * c3 - s1 * c2 * s3;
+				result.z = c1 * c2 * s3 + s1 * s2 * c3;
+				result.w = c1 * c2 * c3 - s1 * s2 * s3;
+				break;
+
+			case RotationOrder.YXZ:
+				result.x = s1 * c2 * c3 + c1 * s2 * s3;
+				result.y = c1 * s2 * c3 - s1 * c2 * s3;
+				result.z = c1 * c2 * s3 - s1 * s2 * c3;
+				result.w = c1 * c2 * c3 + s1 * s2 * s3;
+				break;
+
+			case RotationOrder.ZXY:
+				result.x = s1 * c2 * c3 - c1 * s2 * s3;
+				result.y = c1 * s2 * c3 + s1 * c2 * s3;
+				result.z = c1 * c2 * s3 + s1 * s2 * c3;
+				result.w = c1 * c2 * c3 - s1 * s2 * s3;
+				break;
+
+			case RotationOrder.ZYX:
+				result.x = s1 * c2 * c3 - c1 * s2 * s3;
+				result.y = c1 * s2 * c3 + s1 * c2 * s3;
+				result.z = c1 * c2 * s3 - s1 * s2 * c3;
+				result.w = c1 * c2 * c3 + s1 * s2 * s3;
+				break;
+
+			case RotationOrder.YZX:
+				result.x = s1 * c2 * c3 + c1 * s2 * s3;
+				result.y = c1 * s2 * c3 + s1 * c2 * s3;
+				result.z = c1 * c2 * s3 - s1 * s2 * c3;
+				result.w = c1 * c2 * c3 - s1 * s2 * s3;
+				break;
+
+			case RotationOrder.XZY:
+				result.x = s1 * c2 * c3 - c1 * s2 * s3;
+				result.y = c1 * s2 * c3 - s1 * c2 * s3;
+				result.z = c1 * c2 * s3 + s1 * s2 * c3;
+				result.w = c1 * c2 * c3 + s1 * s2 * s3;
+				break;
+
+			default:
+				console.warn('Unknown order: ' + rotationOrder);
+		}
+
+		return result;
 	}
 
 	/**
