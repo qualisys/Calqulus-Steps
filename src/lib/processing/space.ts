@@ -11,6 +11,8 @@ import { Matrix } from '../models/spatial/matrix';
 import { Quaternion } from '../models/spatial/quaternion';
 import { Vector } from '../models/spatial/vector';
 import { StepClass } from '../step-registry';
+import { AngleUtil } from '../utils/math/angle';
+import { Euler, RotationOrder } from '../utils/math/euler';
 import { ProcessingError } from '../utils/processing-error';
 import { VectorInputParser } from '../utils/vector-input-parser';
 
@@ -18,7 +20,6 @@ import { BaseStep } from './base-step';
 
 @StepClass({ name: 'space' })
 export class Space extends BaseStep {
-	protected _quaternion: Quaternion;
 	protected _rotationMatrix: MatrixSequence;
 	protected _primaryAxis: VectorSequence;
 	protected _secondaryAxis: VectorSequence;
@@ -81,51 +82,50 @@ export class Space extends BaseStep {
 	// this space.
 	// Expects segment to have Y - forward, X - to the right and Z - up.
 	createRotationMatrixAndQuaternionFromSegment(segment: Segment) {
-		const avgQuat = new Quaternion(
-			mean(segment.rotation.x),
-			mean(segment.rotation.y),
-			mean(segment.rotation.z),
-			mean(segment.rotation.w)
-		);
+		// The method is as follows:
+		// 1. Convert segment rotation to Euler angles.
+		// 2. Unwrap the angles to avoid 180 degree jumps.
+		// 3. Compute average Euler angle.
+		// 4. Project angle on XY plane, ie just look at the Z-component.
+		// 5. Depending on the angle, set the rotation matrix to be used.
 
-		const y = new Vector(0, 1, 0);
-		const vector = new Vector(0, 0, 0);
+		const ex = new Float32Array(segment.length);
+		const ey = new Float32Array(segment.length);
+		const ez = new Float32Array(segment.length);
 
-		Vector.transformQuat(y, avgQuat, vector);
+		for (let i = 0; i < segment.length; i++) {
+			Euler.getEuler(Vector.tmpVec1, Matrix.fromQuaternion(segment.rotation.getQuaternionAtFrame(i + 1), Matrix.tmpMat1), RotationOrder.XYZ);
 
-		vector.z = 0;
+			ex[i] = Vector.tmpVec1.x;
+			ey[i] = Vector.tmpVec1.y;
+			ez[i] = Vector.tmpVec1.z;
+		}
 
-		const angle = Vector.angle(y, vector) * 180 / Math.PI;
+		const exUnwrapped = AngleUtil.unwrapAngles(ex.map((v) => v * 180 / Math.PI));
+		const eyUnwrapped = AngleUtil.unwrapAngles(ey.map((v) => v * 180 / Math.PI));
+		const ezUnwrapped = AngleUtil.unwrapAngles(ez.map((v) => v * 180 / Math.PI));
+		const avgEulerUnwrapped = new Vector(mean(exUnwrapped), mean(eyUnwrapped), mean(ezUnwrapped));
+		const z = avgEulerUnwrapped.z;
 
-		this._quaternion = new Quaternion(0, 0, 0, 1);
-
-		if (angle > 45 && angle <= 135) {
-			if (vector.x > 0) {
-				// Segment points in positive X.
-				this.rotationMatrix = Space.getRotationMatrixAroundZ(90);
-				this._quaternion = Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(0, -1, 0, 1, 0, 0, 0, 0, 1), this._quaternion);
-				this.stringValue = 'Forward direction: Positive X. Rotation around world Z = 90 deg';
-			}
-			else {
-				// Segment points in negative X.
-				this.rotationMatrix = Space.getRotationMatrixAroundZ(-90);
-				this._quaternion = Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(0, 1, 0, -1, 0, 0, 0, 0, 1), this._quaternion);
-				this.stringValue = 'Forward direction: Negative X. Rotation around world Z = -90 deg';
-			}
+		if (z < -45 && z >= -135) {
+			// Segment points in positive X.
+			this.rotationMatrix = Space.getRotationMatrixAroundZ(90);
+			this.stringValue = 'Forward direction: Positive X. Rotation around world Z = 90 deg';
+		}
+		else if (z >= 45 && z < 135) {
+			// Segment points in negative X.
+			this.rotationMatrix = Space.getRotationMatrixAroundZ(-90);
+			this.stringValue = 'Forward direction: Negative X. Rotation around world Z = -90 deg';
+		}
+		else if (z >= -45 && z < 45) {
+			// Segment points in positive Y.
+			this.rotationMatrix = Space.getRotationMatrixAroundZ(0);
+			this.stringValue = 'Forward direction: Positive Y. Rotation around world Z = 0 deg';
 		}
 		else {
-			if (vector.y > 0) {
-				// Segment points in positive Y.
-				this.rotationMatrix = Space.getRotationMatrixAroundZ(0);
-				this._quaternion = Space.getDefaultQuaternion();
-				this.stringValue = 'Forward direction: Positive Y. Rotation around world Z = 0 deg';
-			}
-			else {
-				// Segment points in negative Y.
-				this.rotationMatrix = Space.getRotationMatrixAroundZ(180);
-				this._quaternion = Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(-1, 0, 0, 0, -1, 0, 0, 0, 1), this._quaternion);
-				this.stringValue = 'Forward direction: Negative Y. Rotation around world Z = 180 deg';
-			}
+			// Segment points in negative Y.
+			this.rotationMatrix = Space.getRotationMatrixAroundZ(180);
+			this.stringValue = 'Forward direction: Negative Y. Rotation around world Z = 180 deg';
 		}
 	}
 
@@ -160,12 +160,6 @@ export class Space extends BaseStep {
 
 	get primaryAxis(): VectorSequence {
 		return this._primaryAxis;
-	}
-
-	// Get a quaternion that can be used to get the relative angle of an object
-	// in this space.
-	get quaternion(): Quaternion {
-		return this._quaternion;
 	}
 
 	get rotationMatrix(): MatrixSequence {
