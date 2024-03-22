@@ -200,7 +200,6 @@ test('Get points in space defined by running direction', async(t) => {
 	t.true(eqish(m1.y[0], 1));
 	t.true(eqish(m1.z[0], 0));
 
-
 	// Runner runs towards Y.
 	const signalY = new Signal(hipsTowardsY);
 	const optionsY = { 'alignWithSegment.segment': [signalY] };
@@ -211,7 +210,6 @@ test('Get points in space defined by running direction', async(t) => {
 	t.true(eqish(m2.x[0], 1));
 	t.true(eqish(m2.y[0], 0));
 	t.true(eqish(m2.z[0], 0));
-
 
 	// Runner runs towards -X.
 	const signalNegX = new Signal(hipsTowardsNegX);

@@ -129,10 +129,6 @@ export class Space extends BaseStep {
 		}
 	}
 
-	public static getDefaultQuaternion(): Quaternion {
-		return Quaternion.fromRotationMatrixToRef(Matrix.fromRotationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1), new Quaternion(0, 0, 0, 1));
-	}
-
 	public static getRotationMatrixAroundZ(deg: number) {
 		const radians = deg / 180 * Math.PI;
 		const sin = Math.sin(radians);
