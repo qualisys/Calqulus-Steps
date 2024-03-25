@@ -58,24 +58,20 @@ test('BodySegmentParameters - addToSegments', (t) => {
 });
 
 test('BodySegmentParameters - calculate', (t) => {
-	const segments = [
-		new Segment(
-			'LeftFoot',
-			new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([3, 3, 5]), 100),
-			new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-			100
-		),
-		new Segment(
-			'LeftLeg',
-			new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([4, 4, 6]), 100),
-			new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-			100
-		)
+	const pose = [
+		{
+			'name': 'LeftLeg',
+			'parent': 'LeftUpLeg',
+			'transform': [10, 2, 100, 0, 0, 0, 1]
+		},
+		{
+			'name': 'LeftFoot',
+			'parent': 'LeftLeg',
+			'transform': [0, 0, 1, 0, 0, 0, 1]
+		},
 	];
-
-	segments[0].parent = segments[1];
-
-	const result = BodySegmentParameters.calculate(segments, 75);
+	
+	const result = BodySegmentParameters.calculate(pose, 75);
 	t.is(result.get('LeftFoot').segment, 'LeftFoot');
 	t.is(result.get('LeftFoot').centerOfMass.x, NaN);
 	t.is(result.get('LeftFoot').centerOfMass.y, NaN);
@@ -94,7 +90,7 @@ test('BodySegmentParameters - calculateAndAddToSegments', (t) => {
 	const calculateStub = sinon.stub(BodySegmentParameters, 'calculate');
 	const addToSegmentStub = sinon.stub(BodySegmentParameters, 'addToSegments');
 
-	BodySegmentParameters.calculateAndAddToSegments([], 75);
+	BodySegmentParameters.calculateAndAddToSegments([], [], 75);
 
 	t.is(calculateStub.callCount, 1);
 	t.is(addToSegmentStub.callCount, 1);
@@ -104,12 +100,13 @@ test('BodySegmentParameters - calculateAndAddToSegments', (t) => {
 });
 
 test('BodySegmentParameters - calculateCenterOfMass', (t) => {
-	 const segment = new Segment(
-		'LeftFoot',
-		new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([3, 3, 5]), 100),
-		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		100
-	);
+	const segment =
+		{
+			'name': 'LeftFoot',
+			'parent': 'LeftLeg',
+			'transform': [0, 0, 451, 0, 0, 0, 1]
+		};
+
 
 	const com = BodySegmentParameters.calculateCenterOfMass(segment, 1);
 
@@ -119,51 +116,48 @@ test('BodySegmentParameters - calculateCenterOfMass', (t) => {
 });
 
 test('BodySegmentParameters - calculateSegmentLength', (t) => {
-	const segments = [
-		new Segment(
-			'LeftFoot',
-			new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([3, 3, 5]), 100),
-			new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-			100
-		),
-		new Segment(
-			'LeftLeg',
-			new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([4, 4, 6]), 100),
-			new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-			100
-		)
+	const pose = [
+		{
+			'name': 'LeftLeg',
+			'parent': 'LeftUpLeg',
+			'transform': [0, 0, 500, 0, 0, 0, 1]
+		},
+		{
+			'name': 'LeftFoot',
+			'parent': 'LeftLeg',
+			'transform': [0, 0, 451, 0, 0, 0, 1]
+		},
 	];
-
-	segments[0].parent = segments[1];
-	const footLength = BodySegmentParameters.calculateSegmentLength(segments[0], segments);
-	const legLength = BodySegmentParameters.calculateSegmentLength(segments[1], segments);
+	
+	const footLength = BodySegmentParameters.calculateSegmentLength(pose[1], pose);
+	const legLength = BodySegmentParameters.calculateSegmentLength(pose[0], pose);
 	
 	t.is(footLength, undefined);
-	t.is(legLength, 1);
+	t.is(legLength, 451);
 });
 
 test('BodySegmentParameters - calculateSegmentMass', (t) => {
-	const leg = new Segment(
-		'LeftLeg',
-		new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([4, 4, 6]), 100),
-		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		100
-	);
-
-	const mass = BodySegmentParameters.calculateSegmentMass(leg, 75);
+	const segment =
+		{
+			'name': 'LeftLeg',
+			'parent': 'LeftUpLeg',
+			'transform': [0, 0, 500, 0, 0, 0, 1]
+		};
+	
+	const mass = BodySegmentParameters.calculateSegmentMass(segment, 75);
 	t.is(mass, 4.875);
 
 });
 
 test('BodySegmentParameters - calculateInertia', (t) => {
-	const leg = new Segment(
-		'LeftLeg',
-		new VectorSequence(Float32Array.from([1, 1, 3]), Float32Array.from([2, 2, 4]), Float32Array.from([4, 4, 6]), 100),
-		new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
-		100
-	);
-
-	const inertia = BodySegmentParameters.calculateInertia(leg, 4.875, 0.394);
+	const segment =
+		{
+			'name': 'LeftLeg',
+			'parent': 'LeftFoot',
+			'transform': [0, 0, 451, 0, 0, 0, 1]
+		};
+	
+	const inertia = BodySegmentParameters.calculateInertia(segment, 4.875, 0.394);
 	t.deepEqual(Array.from(inertia._m), [
 		0.069020952702, 0, 0, 0,
 		0, 0.069020952702, 0, 0,
