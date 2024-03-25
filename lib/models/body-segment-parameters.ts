@@ -1,4 +1,5 @@
 import { Segment } from './segment';
+import { IPoseSegment } from './skeleton';
 import { Matrix } from './spatial/matrix';
 import { Vector } from './spatial/vector';
 
@@ -124,19 +125,22 @@ export class BodySegmentParameters {
 
 	static addToSegments(segments: Segment[], parameters: Map<string, BodySegmentParameterResult>) {
 		for (const segment of segments) {
+			if (!parameters.has(segment.name)) {
+				continue;
+			} 
+			
 			const bsp = parameters.get(segment.name);
-
 			segment.mass = bsp.mass;
 			segment.centerOfMass = bsp.centerOfMass;
 			segment.inertia = bsp.inertia;
 		}
 	}
 
-	static calculate(segments: Segment[], bodyMass: number): Map<string, BodySegmentParameterResult> {
+	static calculate(pose: IPoseSegment[], bodyMass: number): Map<string, BodySegmentParameterResult> {
 		const result = new Map();
 
-		for (const segment of segments) {
-			const segmentLength = BodySegmentParameters.calculateSegmentLength(segment, segments) * 0.001;
+		for (const segment of pose) {
+			const segmentLength = BodySegmentParameters.calculateSegmentLength(segment, pose) * 0.001;
 			const segmentMass = BodySegmentParameters.calculateSegmentMass(segment, bodyMass);
 
 			result.set(segment.name, {
@@ -150,33 +154,32 @@ export class BodySegmentParameters {
 		return result;
 	}
 
-	static calculateAndAddToSegments(segments: Segment[], bodyMass: number) {
-		const bsp = BodySegmentParameters.calculate(segments, bodyMass);
+	static calculateAndAddToSegments(pose: IPoseSegment[], segments: Segment[], bodyMass: number) {
+		const bsp = BodySegmentParameters.calculate(pose, bodyMass);
 		BodySegmentParameters.addToSegments(segments, bsp);
 	}
 
-	static calculateCenterOfMass(segment: Segment, segmentLength: number): Vector {
+	static calculateCenterOfMass(segment: IPoseSegment, segmentLength: number): Vector {
 		return BodySegmentParameters.centerOfMassConstants.get(segment.name)?.multiply(segmentLength);
 	}
 
-	static calculateSegmentLength(segment: Segment, segments: Segment[]): number {
-		const childSegment = segment.name === 'Hips' ? undefined : Array.from(segments).filter((s) => s.parent === segment)[0];
+	static calculateSegmentLength(segment: IPoseSegment, segments: IPoseSegment[]): number {
+		const childSegment = segment.name === 'Hips' ? undefined : Array.from(segments).filter((s) => s.parent === segment.name)[0];
 
 		if (!childSegment) {
 			return undefined;
 		}
 
-		const distalPosition = childSegment.position.getVectorAtFrame(1);
-		const proximalPosition = segment.position.getVectorAtFrame(1);
-
-		return proximalPosition.subtract(distalPosition).length();
+		const distalPosition = new Vector(childSegment.transform[0], childSegment.transform[1], childSegment.transform[2]);
+		
+		return distalPosition.length();
 	}
 
-	static calculateSegmentMass(segment: Segment, bodyMass: number): number {
+	static calculateSegmentMass(segment: IPoseSegment, bodyMass: number): number {
 		return bodyMass * BodySegmentParameters.massConstants.get(segment.name);
 	}
 
-	static calculateInertia(segment: Segment, segmentMass: number, segmentLength: number): Matrix {
+	static calculateInertia(segment: IPoseSegment, segmentMass: number, segmentLength: number): Matrix {
 		const matrixArray = BodySegmentParameters.inertiaConstants.get(segment.name)?.map(v => segmentMass * Math.pow(segmentLength * v, 2));
 
 		return matrixArray ? Matrix.fromArray(matrixArray) : undefined;

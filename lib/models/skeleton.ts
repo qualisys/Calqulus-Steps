@@ -1,7 +1,7 @@
 import { Segment } from './segment';
 
 export interface IPoseSegment {
-	parent: string;
+	parent?: string;
 	name: string;
 	transform: number[];
 }
