@@ -174,6 +174,21 @@ export class VectorSequence implements ISequence {
 		return new Vector(this.x[frameIndex], this.y[frameIndex], this.z[frameIndex]);
 	}
 
+	map(callbackfn: (value: Vector, index: number, vectors: TypedArray[]) => Vector): VectorSequence {
+		const x = new Float32Array(this.length);
+		const y = new Float32Array(this.length);
+		const z = new Float32Array(this.length);
+
+		for (let i = 0; i < this.length; i++) {
+			const vec = callbackfn(this.getVectorAtFrame(i + 1), i, this.array);
+			x[i] = vec.x;
+			y[i] = vec.y;
+			z[i] = vec.z;
+		}
+
+		return new VectorSequence(x, y, z, this.frameRate);
+	}
+
 	/**
 	 * Get the length of this vector sequence.
 	 */
