@@ -105,6 +105,26 @@ test('VectorSequence - getVectorAtFrame', (t) => {
 	t.like(vSeqComp, { x: 2, y: 2, z: 2 });
 });
 
+test('VectorSequence - map', (t) => {
+	const v0 = new VectorSequence(
+		Float32Array.from([0, 0, 5]),
+		Float32Array.from([2, 2, 0]),
+		Float32Array.from([12, -5, -1])
+	);
+
+	const v1 = v0.map((v) => new Vector(v.x * 2, v.y * 3, v.z * 1));
+
+	t.deepEqual(Array.from(v1.x), [0, 0, 10]);
+	t.deepEqual(Array.from(v1.y), [6, 6, 0]);
+	t.deepEqual(Array.from(v1.z), [12, -5, -1]);
+
+	const v2 = v0.map((v, i) => new Vector(v.x * 2 * i, v.y * 3 * i, v.z * 1 * i));
+
+	t.deepEqual(Array.from(v2.x), [0, 0, 20]);
+	t.deepEqual(Array.from(v2.y), [0, 6, 0]);
+	t.deepEqual(Array.from(v2.z), [0, -5, -2]);
+});
+
 test('VectorSequence - multiply', (t) => {
 	const v1 = new VectorSequence(fakeArray, fakeArray, fakeArray, 300);
 	const v2 = new VectorSequence(
