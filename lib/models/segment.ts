@@ -22,6 +22,7 @@ export class Segment implements ISequence, IDataSequence {
 	array: TypedArray[];
 	centerOfMass: Vector;
 	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw'];
+	contactJoint: Joint;
 	distalJoint: Joint;
 	emptyValues = new Float32Array(0);
 	inertia: Matrix;
