@@ -1,6 +1,7 @@
 import test from 'ava';
 
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
+import { Joint } from '../models/joint';
 import { Segment } from '../models/segment';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
@@ -464,6 +465,35 @@ test('IfStep (mock) - One input, function - exists', async(t) => {
 	).process();
 
 	t.is(negative.getValue(), 10);
+});
+
+test('IfStep (mock) - Complex input, function - exists', async(t) => {
+	const component = f32(1, 2, 3);
+	const v = new VectorSequence(component, component, component, 10);
+	const q = new QuaternionSequence(component, component, component, component, 10);
+	const s = new Segment('MySegment', v, q);
+	const j = new Joint('MyJoint', v, v, v, f32(4, 5, 6), 10);
+
+	const step1 = await mockStep(IfStep,
+		[new Signal(v)], { then: [s2], else: [s10] },
+		'exists(MyValue)'
+	).process();
+
+	t.is(step1.getValue(), 2);
+
+	const step2 = await mockStep(IfStep, 
+		[new Signal(s)], { then: [s2], else: [s10] }, 
+		'exists(MyValue)'
+	).process();
+
+	t.is(step2.getValue(), 2);
+
+	const step3 = await mockStep(IfStep, 
+		[new Signal(j)], { then: [s2], else: [s10] }, 
+		'exists(MyValue)'
+	).process();
+
+	t.is(step3.getValue(), 2);
 });
 
 test('IfStep (mock) - Two inputs, function - exists', async(t) => {
