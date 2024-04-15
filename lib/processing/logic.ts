@@ -162,11 +162,15 @@ export class IfStep extends BaseStep {
 
 		for (let i = 0; i < operands.length; i++) {
 			const operand = operands[i];
+
 			if (!NumberUtil.isNumeric(operand.value)) {
-				let value: string | number | boolean = this.getValueForInput(i);
+				let value: string | number | boolean;
 
 				if (operand.exists) {
-					value = value !== undefined;
+					value = this.hasValueForInput(i);
+				}
+				else {
+					value = this.getValueForInput(i);
 				}
 
 				if (operand.empty) {
@@ -220,6 +224,22 @@ export class IfStep extends BaseStep {
 		catch (err) {
 			throw new ProcessingError('Evaluating expression failed: ' + err.message);
 		}
+	}
+
+	hasValueForInput(inputIndex: number): boolean {
+		const value = this.inputs[inputIndex];
+
+		if (!value) {
+			return false;
+		}
+
+		const valueArray = value.array;
+
+		if (!valueArray?.length || !valueArray[0]?.length) {
+			return false;
+		}
+
+		return true;
 	}
 
 	getValueForInput(inputIndex: number): number | string | undefined {
