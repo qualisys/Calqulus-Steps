@@ -304,26 +304,61 @@ export class MatrixSequence {
 		for (let i = 0; i < len; i++) {
 			const i0 = Math.min(i, this.length - 1);
 			const i1 = Math.min(i, otherMatrix.length - 1);
-			const matrix0 = this.getMatrixAtFrame(i0 + 1);
-			const matrix1 = otherMatrix.getMatrixAtFrame(i1 + 1);
-			const r = matrix0.multiply(matrix1);
+			const b = otherMatrix;
 
-			m00[i] = r._m[0];
-			m01[i] = r._m[1];
-			m02[i] = r._m[2];
-			m03[i] = r._m[3];
-			m10[i] = r._m[4];
-			m11[i] = r._m[5];
-			m12[i] = r._m[6];
-			m13[i] = r._m[7];
-			m20[i] = r._m[8];
-			m21[i] = r._m[9];
-			m22[i] = r._m[10];
-			m23[i] = r._m[11];
-			m30[i] = r._m[12];
-			m31[i] = r._m[13];
-			m32[i] = r._m[14];
-			m33[i] = r._m[15];
+			const a00 = this.m00[i0],
+				a01 = this.m01[i0],
+				a02 = this.m02[i0],
+				a03 = this.m03[i0];
+			const a10 = this.m10[i0],
+				a11 = this.m11[i0],
+				a12 = this.m12[i0],
+				a13 = this.m13[i0];
+			const a20 = this.m20[i0],
+				a21 = this.m21[i0],
+				a22 = this.m22[i0],
+				a23 = this.m23[i0];
+			const a30 = this.m30[i0],
+				a31 = this.m31[i0],
+				a32 = this.m32[i0],
+				a33 = this.m33[i0];
+	
+			// Cache only the current line of the second matrix.
+			let b0 = b.m00[i1],
+				b1 = b.m01[i1],
+				b2 = b.m02[i1],
+				b3 = b.m03[i1];
+			m00[i] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+			m01[i] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+			m02[i] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+			m03[i] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+		
+			b0 = b.m10[i1];
+			b1 = b.m11[i1];
+			b2 = b.m12[i1];
+			b3 = b.m13[i1];
+			m10[i] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+			m11[i] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+			m12[i] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+			m13[i] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+		
+			b0 = b.m20[i1];
+			b1 = b.m21[i1];
+			b2 = b.m22[i1];
+			b3 = b.m23[i1];
+			m20[i] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+			m21[i] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+			m22[i] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+			m23[i] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+		
+			b0 = b.m30[i1];
+			b1 = b.m31[i1];
+			b2 = b.m32[i1];
+			b3 = b.m33[i1];
+			m30[i] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+			m31[i] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+			m32[i] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+			m33[i] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 		}
 
 		return result ? result : new MatrixSequence(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
@@ -471,8 +506,22 @@ export class MatrixSequence {
 		const result = MatrixSequence.createEmpty(v.length);
 		
 		for (let i = 0; i < v.length; i++) {
-			const mFrameSkew = Matrix.skew(v.getVectorAtFrame(i + 1));
-			result.setMatrixAtFrame(i + 1, mFrameSkew);
+			result.m00[i] = 0;
+			result.m01[i] = v.z[i];
+			result.m02[i] = -v.y[i];
+			result.m03[i] = 0;
+			result.m10[i] = -v.z[i];
+			result.m11[i] = 0;
+			result.m12[i] = v.x[i];
+			result.m13[i] = 0;
+			result.m20[i] = v.y[i];
+			result.m21[i] = -v.x[i];
+			result.m22[i] = 0;
+			result.m23[i] = 0;
+			result.m30[i] = 0;
+			result.m31[i] = 0;
+			result.m32[i] = 0;
+			result.m33[i] = 0;
 		}
 
 		return result;
