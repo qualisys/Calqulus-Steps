@@ -162,7 +162,6 @@ export class MatrixSequence {
 	 * @returns A MatrixSequence with the specified length.
 	 */
 	static fromMatrix(matrix: Matrix, length: number) {
-
 		const m00Array = new Float32Array(length).fill(matrix._m[0]);
 		const m01Array = new Float32Array(length).fill(matrix._m[1]);
 		const m02Array = new Float32Array(length).fill(matrix._m[2]);
@@ -289,7 +288,7 @@ export class MatrixSequence {
 		const m01 = result ? result.m01 : new Float32Array(len);
 		const m02 = result ? result.m02 : new Float32Array(len);
 		const m03 = result ? result.m03 : new Float32Array(len);
-		const m10 = result ? result.m00 : new Float32Array(len);
+		const m10 = result ? result.m10 : new Float32Array(len);
 		const m11 = result ? result.m11 : new Float32Array(len);
 		const m12 = result ? result.m12 : new Float32Array(len);
 		const m13 = result ? result.m13 : new Float32Array(len);
@@ -371,7 +370,7 @@ export class MatrixSequence {
 		const m01 = result ? result.m01 : new Float32Array(len);
 		const m02 = result ? result.m02 : new Float32Array(len);
 		const m03 = result ? result.m03 : new Float32Array(len);
-		const m10 = result ? result.m00 : new Float32Array(len);
+		const m10 = result ? result.m10 : new Float32Array(len);
 		const m11 = result ? result.m11 : new Float32Array(len);
 		const m12 = result ? result.m12 : new Float32Array(len);
 		const m13 = result ? result.m13 : new Float32Array(len);
