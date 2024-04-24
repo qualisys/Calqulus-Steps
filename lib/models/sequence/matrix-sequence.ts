@@ -365,34 +365,6 @@ export class MatrixSequence {
 	}
 
 	/**
-	 * Multiplies this matrix sequence with a vector sequence.
-	 * 
-	 * @param v The vector sequence to multiply with.
-	 * @param result The vector sequence to store the result in.
-	 * @returns The resulting vector sequence.
-	 */
-	multiplyVectorSequence(v: VectorSequence, result?: VectorSequence): VectorSequence {
-		const len = Math.max(this.length, v.length);
-		const x = result ? result.x : new Float32Array(len);
-		const y = result ? result.y : new Float32Array(len);
-		const z = result ? result.z : new Float32Array(len);
-		
-		for (let i = 0; i < len; i++) {
-			const i0 = Math.min(i, this.length - 1);
-			const i1 = Math.min(i, v.length - 1);
-			const matrix = this.getMatrixAtFrame(i0 + 1);
-			const vector = v.getVectorAtFrame(i1 + 1);
-			const r = matrix.multiplyVector(vector);
-			
-			x[i] = r.x;
-			y[i] = r.y;
-			z[i] = r.z;
-		}
-
-		return result ? result : new VectorSequence(x, y, z);
-	}
-
-	/**
 	 * Multiplies this matrix sequence with a scalar.
 	 * 
 	 * @param n The scalar to multiply with.
@@ -441,6 +413,45 @@ export class MatrixSequence {
 	}
 
 	/**
+	 * Multiplies this matrix sequence with a vector sequence.
+	 * 
+	 * @param v The vector sequence to multiply with.
+	 * @param result The vector sequence to store the result in.
+	 * @returns The resulting vector sequence.
+	 */
+	multiplyVectorSequence(v: VectorSequence, result?: VectorSequence): VectorSequence {
+		const len = Math.max(this.length, v.length);
+		const x = result ? result.x : new Float32Array(len);
+		const y = result ? result.y : new Float32Array(len);
+		const z = result ? result.z : new Float32Array(len);
+		
+		for (let i = 0; i < len; i++) {
+			const i0 = Math.min(i, this.length - 1);
+			const i1 = Math.min(i, v.length - 1);
+			
+			const a00 = this.m00[i0],
+				a01 = this.m01[i0],
+				a02 = this.m02[i0];
+			const a10 = this.m10[i0],
+				a11 = this.m11[i0],
+				a12 = this.m12[i0];
+			const a20 = this.m20[i0],
+				a21 = this.m21[i0],
+				a22 = this.m22[i0];
+		
+			const b0 = v.x[i1],
+				b1 = v.y[i1],
+				b2 = v.z[i1];
+				
+			x[i] = b0 * a00 + b1 * a10 + b2 * a20;
+			y[i] = b0 * a01 + b1 * a11 + b2 * a21;
+			z[i] = b0 * a02 + b1 * a12 + b2 * a22;
+		}
+
+		return result ? result : new VectorSequence(x, y, z);
+	}
+
+	/**
 	 * Calculates the transpose of the given matrix sequence and stores it in the
 	 * specified matrix sequence.
 	 *
@@ -449,12 +460,54 @@ export class MatrixSequence {
 	 *
 	 * @returns The transposed matrix sequence.
 	 */
-	static transpose(m: MatrixSequence): MatrixSequence {
-		const result = MatrixSequence.createEmpty(m.length);
+	static transpose(m: MatrixSequence, result?: MatrixSequence): MatrixSequence {
+		result = result ? result : MatrixSequence.createEmpty(m.length);
 		
 		for (let i = 0; i < m.length; i++) {
-			const mFrameT = Matrix.transpose(m.getMatrixAtFrame(i + 1), Matrix.tmpMat1);
-			result.setMatrixAtFrame(i + 1, mFrameT);
+			// If we are transposing ourselves we can skip a few steps but have
+			// to cache some values.
+			if (result === m) {
+				const a01 = m.m01[i],
+					a02 = m.m02[i],
+					a03 = m.m03[i];
+				const a12 = m.m12[i],
+					a13 = m.m13[i];
+				const a23 = m.m23[i];
+		
+				result.m01[i] = m.m10[i];
+				result.m02[i] = m.m20[i];
+				result.m03[i] = m.m30[i];
+				result.m10[i] = a01;
+				result.m12[i] = m.m21[i];
+				result.m13[i] = m.m31[i];
+				result.m20[i] = a02;
+				result.m21[i] = a12;
+				result.m23[i] = m.m32[i];
+				result.m30[i] = a03;
+				result.m31[i] = a13;
+				result.m32[i] = a23;
+			}
+			else {
+				result.m00[i] = m.m00[i];
+				result.m01[i] = m.m10[i];
+				result.m02[i] = m.m20[i];
+				result.m03[i] = m.m30[i];
+
+				result.m10[i] = m.m01[i];
+				result.m11[i] = m.m11[i];
+				result.m12[i] = m.m21[i];
+				result.m13[i] = m.m31[i];
+
+				result.m20[i] = m.m02[i];
+				result.m21[i] = m.m12[i];
+				result.m22[i] = m.m22[i];
+				result.m23[i] = m.m32[i];
+
+				result.m30[i] = m.m03[i];
+				result.m31[i] = m.m13[i];
+				result.m32[i] = m.m23[i];
+				result.m33[i] = m.m33[i];
+			}
 		}
 
 		return result;
