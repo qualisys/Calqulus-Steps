@@ -80,13 +80,10 @@ export class VectorSequence implements ISequence {
 		for (let i = 0; i < len; i++) {
 			const i0 = Math.min(i, this.length - 1);
 			const i1 = Math.min(i, v.length - 1);
-			const result = Vector.tmpVec1;
 
-			Vector.cross(this.getVectorAtFrame(i0 + 1), v.getVectorAtFrame(i1 + 1), result);
-
-			x[i] = result.x;
-			y[i] = result.y;
-			z[i] = result.z;
+			x[i] = this.y[i0] * v.z[i1] - this.z[i0] * v.y[i1];
+			y[i] = this.z[i0] * v.x[i1] - this.x[i0] * v.z[i1];
+			z[i] = this.x[i0] * v.y[i1] - this.y[i0] * v.x[i1];
 		}
 
 		return result ? result : new VectorSequence(x, y, z, this.frameRate);
