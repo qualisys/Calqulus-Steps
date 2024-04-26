@@ -52,25 +52,6 @@ export class MatrixSequence {
 	}
 
 	/**
-	 * Create an Identity Matrix sequence (diagonal filed with 1) for the specified
-	 * length .
-	 *
-	 * @param length the length of the MatrixSequence
-	 * @returns An Identity MatrixSequence.
-	 */
-	static createIdentity(length: number) {
-		const ones = new Float32Array(length).fill(1);
-		const zeroes = new Float32Array(length).fill(0);
-
-		return new MatrixSequence(
-			new Float32Array(ones), new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(zeroes),
-			new Float32Array(zeroes), new Float32Array(ones), new Float32Array(zeroes), new Float32Array(zeroes),
-			new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(ones), new Float32Array(zeroes),
-			new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(ones)
-		);
-	}
-
-	/**
 	 * Create a Matrix sequence filled with 0 for the specified
 	 * length .
 	 *
@@ -273,6 +254,25 @@ export class MatrixSequence {
 		m[15] = this.m33[frameIndex];
 
 		return matrix;
+	}
+
+	/**
+	 * Create an Identity Matrix sequence (diagonal filed with 1) for the specified
+	 * length .
+	 *
+	 * @param length the length of the MatrixSequence
+	 * @returns An Identity MatrixSequence.
+	 */
+	static identity(length: number) {
+		const ones = new Float32Array(length).fill(1);
+		const zeroes = new Float32Array(length).fill(0);
+
+		return new MatrixSequence(
+			new Float32Array(ones), new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(zeroes),
+			new Float32Array(zeroes), new Float32Array(ones), new Float32Array(zeroes), new Float32Array(zeroes),
+			new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(ones), new Float32Array(zeroes),
+			new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(zeroes), new Float32Array(ones)
+		);
 	}
 
 	/**

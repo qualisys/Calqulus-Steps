@@ -78,8 +78,8 @@ test('MatrixSequence - createEmpty', (t) => {
 	]);
 });
 
-test('MatrixSequence - createIdentity', (t) => {
-	const matrix = MatrixSequence.createIdentity(2);
+test('MatrixSequence - identity', (t) => {
+	const matrix = MatrixSequence.identity(2);
 
 	t.deepEqual(Array.from(matrix.getMatrixAtFrame(1)._m), [
 		1, 0, 0, 0,
