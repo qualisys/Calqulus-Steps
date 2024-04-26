@@ -538,29 +538,56 @@ export class Matrix {
 		return result;
 	}
 
-
 	/**
-	 * Multiply the current matrix by a vector.
+	 * Multiply the current matrix by a scalar.
 	 * 
-	 * @param vector The vector to multiply by.
-	 * @returns The resulting vector.
+	 * @param scalar The scalar to multiply by.
+	 * @returns The resulting matrix.
 	 */
-	multiplyVector(vector: Vector) {
-		return this.multiplyVectorToRef(vector, Vector.tmpVec1);
+	multiplyScalar(scalar: number) {
+		return this.multiplyScalarToRef(scalar, Matrix.identity());
 	}
 
 	/**
-	 * Multiply the current matrix by a vector and stores the result in the
-	 * given vector.
-	 * 
-	 * @param vector The vector to multiply by.
-	 * @param result The vector to store the result in.
-	 * @returns The resulting vector.
+	 * @param scalar The scalar to multiply by.
+	 * @param result The receiving matrix.
+	 * @returns The resulting matrix.
 	 */
-	multiplyVectorToRef(vector: Vector, result: Vector) {
-		return Matrix.multiplyVector(this, vector, result);
+	multiplyScalarToRef(scalar: number, result: Matrix) {
+		return Matrix.multiplyScalar(this, scalar, result);
 	}
 
+	/**
+	 * Multiply a matrix by a scalar.
+	 *
+	 * @param matrix The matrix.
+	 * @param scalar The scalar.
+	 * @param result The receiving matrix.
+	 * @returns The resulting matrix.
+	 */
+	static multiplyScalar(matrix: Matrix, scalar: number, result: Matrix): Matrix {
+		const m = matrix._m;
+		const r = result._m;
+
+		r[0] = m[0] * scalar;
+		r[1] = m[1] * scalar;
+		r[2] = m[2] * scalar;
+		r[3] = m[3] * scalar;
+		r[4] = m[4] * scalar;
+		r[5] = m[5] * scalar;
+		r[6] = m[6] * scalar;
+		r[7] = m[7] * scalar;
+		r[8] = m[8] * scalar;
+		r[9] = m[9] * scalar;
+		r[10] = m[10] * scalar;
+		r[11] = m[11] * scalar;
+		r[12] = m[12] * scalar;
+		r[13] = m[13] * scalar;
+		r[14] = m[14] * scalar;
+		r[15] = m[15] * scalar;
+
+		return result;
+	}
 
 	/**
 	 * Multiplies matrix a with vector b.
@@ -593,6 +620,29 @@ export class Matrix {
 		
 		return result;
 	}
+
+	/**
+	 * Multiply the current matrix by a vector.
+	 * 
+	 * @param vector The vector to multiply by.
+	 * @returns The resulting vector.
+	 */
+	multiplyVector(vector: Vector) {
+		return this.multiplyVectorToRef(vector, new Vector(0, 0, 0));
+	}
+
+	/**
+	 * Multiply the current matrix by a vector and stores the result in the
+	 * given vector.
+	 * 
+	 * @param vector The vector to multiply by.
+	 * @param result The vector to store the result in.
+	 * @returns The resulting vector.
+	 */
+	multiplyVectorToRef(vector: Vector, result: Vector) {
+		return Matrix.multiplyVector(this, vector, result);
+	}
+
 
 	/**
 	 * Calculates the transpose of the given matrix and stores it in the
