@@ -555,28 +555,28 @@ export class MatrixSequence {
 	 *
 	 * @returns The skew matrix sequence.
 	 */
-	static skew(v: VectorSequence): MatrixSequence {
-		const result = MatrixSequence.createEmpty(v.length);
+	static skew(v: VectorSequence, result?: MatrixSequence): MatrixSequence {
+		const r = result ? result : MatrixSequence.createEmpty(v.length);
 		
 		for (let i = 0; i < v.length; i++) {
-			result.m00[i] = 0;
-			result.m01[i] = v.z[i];
-			result.m02[i] = -v.y[i];
-			result.m03[i] = 0;
-			result.m10[i] = -v.z[i];
-			result.m11[i] = 0;
-			result.m12[i] = v.x[i];
-			result.m13[i] = 0;
-			result.m20[i] = v.y[i];
-			result.m21[i] = -v.x[i];
-			result.m22[i] = 0;
-			result.m23[i] = 0;
-			result.m30[i] = 0;
-			result.m31[i] = 0;
-			result.m32[i] = 0;
-			result.m33[i] = 0;
+			r.m00[i] = 0;
+			r.m01[i] = v.z[i];
+			r.m02[i] = -v.y[i];
+			r.m03[i] = 0;
+			r.m10[i] = -v.z[i];
+			r.m11[i] = 0;
+			r.m12[i] = v.x[i];
+			r.m13[i] = 0;
+			r.m20[i] = v.y[i];
+			r.m21[i] = -v.x[i];
+			r.m22[i] = 0;
+			r.m23[i] = 0;
+			r.m30[i] = 0;
+			r.m31[i] = 0;
+			r.m32[i] = 0;
+			r.m33[i] = 0;
 		}
 
-		return result;
+		return r;
 	}
 }

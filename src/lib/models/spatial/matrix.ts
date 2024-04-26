@@ -658,11 +658,11 @@ export class Matrix {
 	 *
 	 * @returns The skew matrix.
 	 */
-	static skew(v: Vector): Matrix {
+	static skew(v: Vector, result?: Matrix): Matrix {
 		const vx = v.x;
 		const vy = v.y;
 		const vz = v.z;
-		const mat = new Matrix();
+		const mat = result ? result : new Matrix();
 		const m = mat._m;
 
 		m[1] = vz;
