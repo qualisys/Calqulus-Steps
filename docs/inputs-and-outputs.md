@@ -8,6 +8,7 @@
       - [Markers](#markers)
       - [Events](#events)
       - [EMG channels](#emg-channels)
+      - [Force plates](#force-plates)
     + [Components](#components)
   * [Mixed inputs](#mixed-inputs)
   * [Variable inputs](#variable-inputs)
@@ -116,6 +117,11 @@ Currently, EMG signals from the following EMG boards are supported:
 * MEGA/ME6000
 * Cometa
 * Delsys Trigno
+
+#### Force plates
+Force plates are made available to the pipeline using the names `ForcePlate1`, `ForcePlate2`, etc. The force plates are renamed from their original name for consistency and they are enumerated in the order they are exported from QTM.
+
+The force plates have components for reading the **center of pressure**, **force**, and **moment**. For more details on how to access these components, [read here](./working-with-data#force-plate).
 
 ### Components
 
