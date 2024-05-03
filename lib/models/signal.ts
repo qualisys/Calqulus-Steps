@@ -2,6 +2,7 @@ import { range } from 'lodash';
 
 import { Space } from '../processing/space';
 
+import { ForcePlate } from './force-plate';
 import { Joint } from './joint';
 import { Marker } from './marker';
 import { Segment } from './segment';
@@ -18,6 +19,7 @@ class SignalValue {
 	numberArray: Float32Array = new Float32Array(0);
 	numberArrayArray: Float32Array[] = [];
 	joint: Joint | null;
+	forcePlate: ForcePlate | null;
 	segment: Segment | null;
 	vectorSequence: VectorSequence | null;
 	planeSequence: PlaneSequence | null;
@@ -33,6 +35,7 @@ export enum SignalType {
 	Float32Array,
 	Float32ArrayArray,
 	Joint,
+	ForcePlate,
 	Segment,
 	String,
 	VectorSequence,
@@ -145,6 +148,8 @@ export class Signal implements IDataSequence {
 				return 'Float32Array[]';
 			case SignalType.Joint:
 				return 'Joint';
+			case SignalType.ForcePlate:
+				return 'ForcePlate';
 			case SignalType.Segment:
 				return 'Segment';
 			case SignalType.String:
@@ -171,6 +176,7 @@ export class Signal implements IDataSequence {
 
 			case SignalType.Float32ArrayArray:
 			case SignalType.Joint:
+			case SignalType.ForcePlate:
 			case SignalType.Segment:
 			case SignalType.VectorSequence:
 			case SignalType.PlaneSequence:
@@ -203,6 +209,8 @@ export class Signal implements IDataSequence {
 				return this.getFloat32ArrayArrayValue();
 			case SignalType.Joint:
 				return this._value.joint.array;
+			case SignalType.ForcePlate:
+				return this._value.forcePlate.array;
 			case SignalType.Segment:
 				return this._value.segment.array;
 			case SignalType.String:
@@ -265,6 +273,8 @@ export class Signal implements IDataSequence {
 				return array;
 			case SignalType.Joint:
 				return Joint.fromArray(undefined, array);
+			case SignalType.ForcePlate:
+				return ForcePlate.fromArray(undefined, array);
 			case SignalType.Segment:
 				return Segment.fromArray(undefined, array);
 			case SignalType.String:
@@ -293,6 +303,8 @@ export class Signal implements IDataSequence {
 			}
 			case SignalType.Joint:
 				return this._value.joint.length;
+			case SignalType.ForcePlate:
+				return this._value.forcePlate.length;
 			case SignalType.Segment:
 				return this._value.segment.length;
 			case SignalType.String:
@@ -387,6 +399,10 @@ export class Signal implements IDataSequence {
 			this._value.joint = value;
 			this._type = SignalType.Joint;
 		}
+		else if (value instanceof ForcePlate) {
+			this._value.forcePlate = value;
+			this._type = SignalType.ForcePlate;
+		}
 		else if (value instanceof Segment) {
 			this._value.segment = value;
 			this._type = SignalType.Segment;
@@ -409,6 +425,8 @@ export class Signal implements IDataSequence {
 		if (this._type !== SignalType.Uint32Array) this._value.uint32Array = new Uint32Array(0);
 		if (this._type !== SignalType.Float32Array) this._value.numberArray = new Float32Array(0);
 		if (this._type !== SignalType.Float32ArrayArray) this._value.numberArrayArray = [];
+		if (this._type !== SignalType.Joint) this._value.joint = undefined;
+		if (this._type !== SignalType.ForcePlate) this._value.forcePlate = undefined;
 		if (this._type !== SignalType.Segment) this._value.segment = undefined;
 		if (this._type !== SignalType.VectorSequence) this._value.vectorSequence = undefined;
 		if (this._type !== SignalType.PlaneSequence) this._value.planeSequence = undefined;
@@ -442,6 +460,10 @@ export class Signal implements IDataSequence {
 	}
 	getJointValue(): Joint | null {
 		return this._value.joint;
+	}
+
+	getForcePlateValue(): ForcePlate | null {
+		return this._value.forcePlate;
 	}
 
 	getSegmentValue(): Segment | null {
@@ -495,6 +517,9 @@ export class Signal implements IDataSequence {
 		if (this._type === SignalType.Joint) {
 			return this._value.joint.getComponent(component);
 		}
+		else if (this._type === SignalType.ForcePlate) {
+			return this._value.forcePlate.getComponent(component);
+		}
 		else if (this._type === SignalType.Segment) {
 			return this._value.segment.getComponent(component);
 		}
@@ -523,6 +548,8 @@ export class Signal implements IDataSequence {
 				return this.getFloat32ArrayArrayValue();
 			case SignalType.Joint:
 				return this.getJointValue();
+			case SignalType.ForcePlate:
+				return this.getForcePlateValue();
 			case SignalType.Segment:
 				return this.getSegmentValue();
 			case SignalType.String:
@@ -598,6 +625,7 @@ export class Signal implements IDataSequence {
 
 		switch (this.type) {
 			case SignalType.Joint:
+			case SignalType.ForcePlate:
 			case SignalType.Segment:
 			case SignalType.PlaneSequence:
 			case SignalType.VectorSequence: {
@@ -609,6 +637,9 @@ export class Signal implements IDataSequence {
 				}
 				else if (this.type === SignalType.Joint) {
 					return returnSignal.setValue(Joint.fromArray(this.name, pickedValues), frames);
+				}
+				else if (this.type === SignalType.ForcePlate) {
+					return returnSignal.setValue(ForcePlate.fromArray(this.name, pickedValues), frames);
 				}
 				else if (this.type === SignalType.PlaneSequence) {
 					return returnSignal.setValue(PlaneSequence.fromArray(pickedValues), frames);
@@ -685,7 +716,7 @@ export class Signal implements IDataSequence {
 				this.space = this.targetSpace;
 				this.targetSpace = undefined;
 			}
-			// TODO: implement support for joint and plane?
+			// TODO: implement support for joint and plane and force plate?
 		}
 	}
 
