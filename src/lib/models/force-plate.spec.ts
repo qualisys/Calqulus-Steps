@@ -131,3 +131,23 @@ test('ForcePlate - reassign sequence data', (t) => {
 
 	t.is(fp2.frameRate, 1000);
 });
+
+test('ForcePlate - getComponent', (t) => {
+	t.deepEqual(fp.getComponent('x'), fp.x);
+	t.deepEqual(fp.getComponent('y'), fp.y);
+	t.deepEqual(fp.getComponent('z'), fp.z);
+	t.deepEqual(fp.getComponent('fx'), fp.fx);
+	t.deepEqual(fp.getComponent('fy'), fp.fy);
+	t.deepEqual(fp.getComponent('fz'), fp.fz);
+	t.deepEqual(fp.getComponent('mx'), fp.mx);
+	t.deepEqual(fp.getComponent('my'), fp.my);
+	t.deepEqual(fp.getComponent('mz'), fp.mz);
+});
+
+test('ForcePlate - from array', (t) => {
+	const array = fp.array;
+	const fp2 = ForcePlate.fromArray('forceplate 2', array);
+
+	t.is(fp2.name, 'forceplate 2');
+	t.deepEqual(fp2.array, array);
+});
