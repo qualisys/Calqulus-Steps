@@ -1,9 +1,9 @@
 {
 	"ci": "main",
 	"current": {
-		"engine": "feature/inverse-dynamics",
+		"engine": "main",
 		"pipelines": "main",
-		"toolbelt": "feature/inverse-dynamics"
+		"toolbelt": "main"
 	},
 	"reference": {
 		"engine": "a348dda6e2d87de93faeda5f2111dcee8cb90e92",

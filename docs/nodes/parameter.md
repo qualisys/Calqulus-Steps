@@ -7,6 +7,19 @@ resulting JSON file.
 
 ## Options
 
+### `export`
+
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `true`
+
+Used to exclude this parameter from being exported. Useful when you don't want
+an intermediate computation to be exported to the report.
+
+If not set, this will default to `true`.
+
+---
+
 ### `set`
 
 > **Type:** `String`  

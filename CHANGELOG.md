@@ -2,14 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.2.0] 2024-03-xx
+## [1.2.0] 2024-05-03
 
 ### Added
+
 * Inverse dynamics support.
  - Added support for joints. Segments now have a distalJoint and a proximalJoint.
  - Added various math functions.
  - Added class for calculating body segment parameters.
  - Documentation regarding available joint names.
+
+## [1.1.2] 2024-02-27
+
+### Added
+
+* Documentation regarding new `export` property for parameters & events. ([#44](https://github.com/qualisys/Calqulus-Steps/pull/44))
+
 
 ## [1.1.1] 2024-02-15
 
