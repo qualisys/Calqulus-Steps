@@ -13,7 +13,7 @@ import { BaseStep } from './base-step';
 	category: 'Geometry',
 	description: markdownFmt`
 		Accepts marker or segment sequences and calculates the distance 
-		between the points (Euclidian norm).
+		between the points (Euclidean norm).
 
 		It assumes that the values are comparable by index. If the sequence 
 		length differs, the calculation will be done up until the shortest 
@@ -67,7 +67,7 @@ export class DistanceStep extends BaseStep {
 	category: 'Geometry',
 	description: markdownFmt`
 		Accepts a vector or a segment sequence and calculates 
-		the magnitude of it (Euclidian norm).`,
+		the magnitude of it (Euclidean norm).`,
 	inputs: [
 		{ type: ['Scalar', 'Series (<vector> | <segment>)'] },
 	],

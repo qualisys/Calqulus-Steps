@@ -275,7 +275,7 @@ test('Vector - transformQuatToRef', (t) => {
 	});
 });
 
-test('Vector - Euclidian norm', (t) => {
+test('Vector - Euclidean norm', (t) => {
 	const vec = new Vector(1, 2, 3);
 
 	t.is(Vector.norm(vec), 3.741657386773941);
