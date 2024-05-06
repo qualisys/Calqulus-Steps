@@ -1,6 +1,4 @@
-import { Marker } from '../../models/marker';
 import { PropertyType } from '../../models/property';
-import { Segment } from '../../models/segment';
 import { ResultType, Signal, SignalType } from '../../models/signal';
 import { StepClass } from '../../step-registry';
 import { EventUtil } from '../../utils/events';
@@ -313,13 +311,16 @@ export class EventMaskStep extends BaseStep {
 			returnSignal.cycles = filteredFrames[0].mask;
 		}
 
-		switch (source.type) {
-			case SignalType.Segment:
-				return returnSignal.setValue(Segment.fromArray(source.name, filteredFrames.map(f => f ? f.series as TypedArray : undefined)));
-			case SignalType.VectorSequence:
-				return returnSignal.setValue(Marker.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
-			default:
-				return returnSignal.setValue(filteredFrames.map(f => f ? f.series as TypedArray : undefined));
+		const outputData = filteredFrames.map(f => f ? f.series as TypedArray : undefined);
+		const outValue = Signal.typeFromArray(source.type, outputData);
+
+		if (outValue !== undefined) {
+			returnSignal.setValue(outValue);
 		}
+		else {
+			returnSignal.setValue(outputData);
+		}
+
+		return returnSignal;
 	}
 }
