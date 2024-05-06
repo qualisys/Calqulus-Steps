@@ -252,6 +252,11 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 				description: "A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.",
 				type: "string",
 			},
+			export: {
+				title: "Export results",
+				description: "Toggle export on/off for this node. Defaults to true.",
+				type: "boolean"
+			},
 			steps: {
 				title: "Node steps",
 				description: "A step node takes an input and some options and outputs a value.",
@@ -375,6 +380,7 @@ The rotation is based on the average orientation of the segment during a measure
 				description: `A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.`,
 				type: "object",
 				properties: {
+					export: { "$ref": "#/$defs/export" },
 					parameter: { "$ref": "#/$defs/parameter" },
 					steps: { "$ref": "#/$defs/steps" },
 					where: { "$ref": "#/$defs/where" },
@@ -406,6 +412,7 @@ The rotation is based on the average orientation of the segment during a measure
 				type: "object",
 				properties: {
 					event: { "$ref": "#/$defs/event" },
+					export: { "$ref": "#/$defs/export" },
 					steps: { "$ref": "#/$defs/steps" },
 					where: { "$ref": "#/$defs/where" },
 					set: { "$ref": "#/$defs/set" },
@@ -416,6 +423,7 @@ The rotation is based on the average orientation of the segment during a measure
 			"Marker Node": {
 				type: "object",
 				properties: {
+					export: { "$ref": "#/$defs/export" },
 					marker: { "$ref": "#/$defs/marker" },
 					steps: { "$ref": "#/$defs/steps" },
 					where: { "$ref": "#/$defs/where" },
@@ -427,6 +435,7 @@ The rotation is based on the average orientation of the segment during a measure
 			"Segment Node": {
 				type: "object",
 				properties: {
+					export: { "$ref": "#/$defs/export" },
 					segment: { "$ref": "#/$defs/segment" },
 					steps: { "$ref": "#/$defs/steps" },
 					where: { "$ref": "#/$defs/where" },
