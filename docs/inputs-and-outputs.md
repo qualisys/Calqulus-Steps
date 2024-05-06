@@ -123,6 +123,8 @@ Force plates are made available to the pipeline using the names `ForcePlate1`, `
 
 The force plates have components for reading the **center of pressure**, **force**, and **moment**. For more details on how to access these components, [read here](./working-with-data#force-plate).
 
+_**Note:** The force plate data is resampled to the framerate of the skeleton._
+
 ### Components
 
 For named signals with components, such as a segment or marker, you can
