@@ -2,7 +2,7 @@ import { Marker } from '../models/marker';
 import { PropertyType } from '../models/property';
 import { Segment } from '../models/segment';
 import { ISequence } from '../models/sequence/sequence';
-import { SignalType } from '../models/signal';
+import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
 import { Arithmetic, ArithmeticOp } from '../utils/math/arithmetic';
 import { ProcessingError } from '../utils/processing-error';
@@ -176,40 +176,47 @@ export class BaseArithmeticStep extends BaseStep {
 		if (!operands.length) throw new ProcessingError('No operands given.');
 
 		let res: number | TypedArray | TypedArray[] = operands[0];
-		if (operands.length > 1) {
-			for (let i = 1; i < operands.length; i++) {
-				res = Arithmetic.applyOp(res, operands[i], operation);
-			}
-
-			const referenceInput = getReferenceSignal(this.inputs, [SignalType.Segment, SignalType.VectorSequence]);
-			const out = referenceInput.clone(false);
-			const originalType = referenceInput.type;
-
-			switch (originalType) {
-				case SignalType.Float32: {
-					if (TypeCheck.isArrayLike(res) && res.length === 1) {
-						out.setValue(res[0]);
-						break;
-					}
-
-					out.setValue(res);
-					break;
-				}
-				case SignalType.VectorSequence:
-					out.setValue(Marker.fromArray(referenceInput.name, res as TypedArray[]));
-					break;
-				case SignalType.Segment:
-					out.setValue(Segment.fromArray(referenceInput.name, res as TypedArray[]));
-					break;
-				default:
-					out.setValue(res);
-			}
-
-			return out;
-		}
-		else {
+		if (operands.length <= 1) {
 			throw new ProcessingError(`At least 2 operands expected, got ${ operands.length }.`);
 		}
+
+		for (let i = 1; i < operands.length; i++) {
+			res = Arithmetic.applyOp(res, operands[i], operation);
+		}
+
+		const referenceInput = getReferenceSignal(this.inputs, [SignalType.Segment, SignalType.VectorSequence]);
+		const out = referenceInput.clone(false);
+		const originalType = referenceInput.type;
+
+		const outValue = Signal.typeFromArray(originalType, [res] as TypedArray[]);
+
+		switch (originalType) {
+			case SignalType.Float32: {
+				if (TypeCheck.isArrayLike(res) && res.length === 1) {
+					out.setValue(res[0]);
+					break;
+				}
+
+				out.setValue(res);
+				break;
+			}
+			case SignalType.VectorSequence:
+				out.setValue(Marker.fromArray(referenceInput.name, res as TypedArray[]));
+				break;
+			case SignalType.Segment:
+				out.setValue(Segment.fromArray(referenceInput.name, res as TypedArray[]));
+				break;
+			default: {
+				if (outValue !== undefined) {
+					out.setValue(outValue);
+				}
+				else {
+					out.setValue(res);
+				}
+			}
+		}
+
+		return out;
 	};
 }
 

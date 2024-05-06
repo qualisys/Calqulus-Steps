@@ -1,6 +1,4 @@
-import { Marker } from '../../models/marker';
-import { Segment } from '../../models/segment';
-import { Signal, SignalType } from '../../models/signal';
+import { Signal } from '../../models/signal';
 import { StepCategory } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
@@ -45,23 +43,13 @@ export class BaseAlgorithmStep extends BaseStep {
 		const out = this.inputs[0].clone(false);
 		const originalType = this.inputs[0].type;
 
-		switch (originalType) {
-			case SignalType.Float32:
-				out.setValue(res[0][0]);
-				break;
-			case SignalType.Float32Array:
-			case SignalType.Uint32Array:
-				out.setValue(res[0]);
-				break;
-			case SignalType.VectorSequence:
-				out.setValue(Marker.fromArray(this.inputs[0].name, res as TypedArray[]));
-				break;
-			case SignalType.Segment:
-				// TODO: Should probably not work on segments.
-				out.setValue(Segment.fromArray(this.inputs[0].name, res as TypedArray[]));
-				break;
-			default:
-				out.setValue(res);
+		const outValue = Signal.typeFromArray(originalType, res);
+
+		if (outValue !== undefined) {
+			out.setValue(outValue);
+		}
+		else {
+			out.setValue(res);
 		}
 
 		return out;

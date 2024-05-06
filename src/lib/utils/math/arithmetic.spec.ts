@@ -84,6 +84,10 @@ test('Arithmetic - Array and multi-dimensional array with mis-matching number of
 	t.deepEqual(Arithmetic.applyOp(f32(4, 5), [f32(0, 1, 2), f32(3, 4, 5), f32(6, 7, 8)], ArithmeticOp.Add), [f32(4, 5, 6), f32(8, 9, 10)]);
 });
 
+test('Arithmetic - Unsigned integer array, ensure float array is returned when result is negative', (t) => {
+	t.deepEqual(Arithmetic.applyOp(Uint32Array.from([1, 2, 3]), 5, ArithmeticOp.Subtract), f32(-4, -3, -2));
+});
+
 test('Arithmetic - Return types', (t) => {
 	t.true(typeof Arithmetic.applyOp(1, 2, ArithmeticOp.Add) === 'number');
 	t.true(Arithmetic.applyOp(f32(1, 2, 3), 2, ArithmeticOp.Add) instanceof Float32Array);
