@@ -2,7 +2,7 @@
 	"ci": "main",
 	"current": {
 		"engine": "feature/force-plate",
-		"pipelines": "feature/fa",
+		"pipelines": "404d66fd77ddcc4dccf3bba426eec88b27ec74cb",
 		"toolbelt": "feature/inverse-dynamics"
 	},
 	"reference": {
