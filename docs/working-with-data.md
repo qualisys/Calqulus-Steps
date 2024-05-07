@@ -61,9 +61,51 @@ _Just like with segments, you can access joints using `import` or by directly re
    - multiply: [RightKnee.fx, RightKnee.fy]
 ```
 
+See [Segment and joint names](./skeleton.md) for a complete reference of
+available segment & joint names.
 
-See [segment names](./segments.md) and [joint names](./joints.md) for a
-complete reference of available segment & joint names.
+## Importing kinetic data
+Kinetic data is accessible on joints when one or more measurement includes force plates.
+
+#### Examples
+_Importing forces._
+```yaml
+- parameter: LeftAnkleForce
+  steps:
+    - import: [[LeftAnkle.fx, LeftAnkle.fy, LeftAnkle.fz]]
+```
+
+_Importing moments._
+```yaml
+- parameter: LeftAnkleMoment
+  steps:
+    - import: [[LeftAnkle.mx, LeftAnkle.my, LeftAnkle.mz]]
+```
+
+_Importing power (scalar)._
+```yaml
+- parameter: LeftAnklePower
+  steps:
+    - import: [[LeftAnkle.p]]
+```
+
+_Importing center of pressure._
+```yaml
+- parameter: LeftFootCop
+  steps:
+    - import: [[LeftFootContact.x, LeftFootContact.y, LeftFootContact.z]]
+```
+
+_Importing ground reaction force._
+```yaml
+- parameter: LeftGrf
+  steps:
+    - import: [[LeftFootContact.fx, LeftFootContact.fy, LeftFootContact.fz]]
+```
+
+See [Segment and joint names](./skeleton.md) for a complete reference of
+available segment & joint names.
+
 
 ## Components
 You can access components of your data using dot (.) notation.
@@ -75,19 +117,19 @@ _Example of multiplying the x and y component of a marker._
    - multiply: [MyMarker.x, MyMarker.y]
 ```
 
-## Available components
-### Marker
+### Available components
+#### Marker
 **Position**
 * x, y, z
 
-### Segment
+#### Segment
 **Position**
 * x, y, z
 
 **Orientation**
 * rx, ry, rz, rw
 
-### Joint
+#### Joint
 **Position**
 * x, y, z
 
@@ -135,6 +177,9 @@ _Example of multiplying the x and y component of a marker._
 | LeftHip               |                  | RightHip           |
 | LeftKnee              |                  | RightKnee          |
 | LeftAnkle             |                  | RightAnkle         |
+| LeftFootContact*      |                  | RightFootContact*  |
+
+\* These are virtual joints where the external forces and moments will be applied to one or more segment extremities. It is used during the inverse dynamics procedure. For example in gait, this Contact joint is the center of pressure where the foot is in contact with the force plate. It is useful if one wants to access the force plate data such as center of pressure, force and free moment.  
 
 
 ### Markers (Sports marker set)
