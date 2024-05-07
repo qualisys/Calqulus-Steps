@@ -297,6 +297,12 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 							title: "Field to match against",
 							type: "string",
 						}
+					},
+					force: {
+						title: "Force filter",
+						description: "Target a measurement by a the existence of forces.",
+						type: "string",
+						enum: ["any", "both", "left", "none", "right"]
 					}
 				},
 				additionalProperties: false,

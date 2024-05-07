@@ -1,6 +1,6 @@
 import { SignalType } from '../../models/signal';
 import { StepCategory, StepClass } from '../../step-registry';
-import { Kinematics } from '../../utils/math/kinematics';
+import { KinematicsUtil } from '../../utils/math/kinematics';
 import { ProcessingError } from '../../utils/processing-error';
 import { SeriesSplitUtil } from '../../utils/series-split';
 import { markdownFmt } from '../../utils/template-literal-tags';
@@ -61,7 +61,7 @@ export class DerivativeStep extends BaseAlgorithmStep {
 		const splitCollection = SeriesSplitUtil.splitOnNaN(dataSet);
 
 		for (const split of splitCollection.splits) {
-			split.values = Kinematics.finiteDifference(split.values, 1 / this.frameRate, order);
+			split.values = KinematicsUtil.finiteDifference(split.values, 1 / this.frameRate, order);
 		}
 
 		return SeriesSplitUtil.merge(splitCollection) as TypedArray;

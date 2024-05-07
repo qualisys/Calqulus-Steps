@@ -129,7 +129,12 @@ test('ConcatenateStep - Multi-components (Segment)', async(t) => {
 
 	t.deepEqual(res.components, segment1.components);
 
-	for (const component of res.components) {
-		t.deepEqual(res.getComponent(component), f32(1, 2, 3, 4));
+	for (let i = 0; i < res.components.length; i++) {
+		if (i < 7) {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [1, 2, 3, 4]);
+		}
+		else {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [NaN, NaN, NaN, NaN]);
+		}
 	}
 });

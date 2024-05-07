@@ -104,8 +104,8 @@ export class AngleUtil {
 		const q1Conjugate = AngleUtil.tmpQuat1;
 		const relativeRotation = AngleUtil.tmpQuat2;
 
-		Quaternion.conjugate(q1Conjugate, q1);
-		Quaternion.multiply(relativeRotation, q1Conjugate, q2);
+		Quaternion.conjugate(q1, q1Conjugate);
+		Quaternion.multiply(q1Conjugate, q2, relativeRotation);
 
 		return relativeRotation;
 	}
@@ -129,7 +129,7 @@ export class AngleUtil {
 	 * @param rotationOrder The rotation order to use.
 	 */
 	static computeEulerAnglesFromQuaternion(q: Quaternion, rotationOrder: RotationOrder, solutionNumber?: number) {
-		Matrix.fromQuaternion(Matrix.tmpMat1, q);
+		Matrix.fromQuaternion(q, Matrix.tmpMat1);
 		Euler.getEuler(Vector.tmpVec1, Matrix.tmpMat1, rotationOrder, solutionNumber);
 
 		// Convert to degrees.

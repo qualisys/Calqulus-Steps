@@ -173,6 +173,7 @@ test('EventMaskStep - Segment', async(t) => {
 	t.is(res.resultType, ResultType.Series);
 	t.deepEqual(res.cycles, cycles);
 	t.deepEqual(res.array, [comp, comp, comp, comp, comp, comp, comp]);
+
 });
 
 test('EventMaskStep - Multidimensional array', async(t) => {
@@ -235,6 +236,7 @@ test('EventMaskStep - Segment - truncate', async(t) => {
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, cyclesTruncated);
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated]);
+
 });
 
 test('EventMaskStep - Multidimensional array - truncate', async(t) => {

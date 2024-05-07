@@ -300,7 +300,7 @@ export class EventMaskStep extends BaseStep {
 		}
 
 		const sourceFrames = [...source.array];
-		const filteredFrames = sourceFrames.map(a => SeriesUtil.mask(a, pairs, (!this.truncate) ? this.replacementValue : undefined));
+		const filteredFrames = sourceFrames.map(a => a ? SeriesUtil.mask(a, pairs, (!this.truncate) ? this.replacementValue : undefined) : undefined);
 
 		if (this.truncate) {
 			// Since we are removing frames, the resulting Signal must be marked as 
@@ -315,11 +315,11 @@ export class EventMaskStep extends BaseStep {
 
 		switch (source.type) {
 			case SignalType.Segment:
-				return returnSignal.setValue(Segment.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
+				return returnSignal.setValue(Segment.fromArray(source.name, filteredFrames.map(f => f ? f.series as TypedArray : undefined)));
 			case SignalType.VectorSequence:
 				return returnSignal.setValue(Marker.fromArray(source.name, filteredFrames.map(f => f.series as TypedArray)));
 			default:
-				return returnSignal.setValue(filteredFrames.map(f => f.series as TypedArray));
+				return returnSignal.setValue(filteredFrames.map(f => f ? f.series as TypedArray : undefined));
 		}
 	}
 }

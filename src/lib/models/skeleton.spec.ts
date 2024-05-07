@@ -21,6 +21,13 @@ const segmentHip = new Segment(
 	300
 );
 
+const segmentSpine = new Segment(
+	'spine', 
+	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+	new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray),
+	300
+);
+
 const segmentFoot = new Segment(
 	'foot', 
 	new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
@@ -28,10 +35,30 @@ const segmentFoot = new Segment(
 	300
 );
 
-const skeleton = new Skeleton('test', [segmentHead, segmentHip, segmentFoot]);
+segmentFoot.parent = segmentHip;
+segmentHead.parent = segmentSpine;
+segmentSpine.parent = segmentHip;
+
+const skeleton = new Skeleton('test', [segmentHead, segmentHip, segmentFoot], []);
 
 test('Skeleton - constructor', (t) => {
 	t.is(skeleton.name, 'test');
+});
+
+test('Skeleton - getExtremities', (t) => {
+	const extremities = skeleton.getExtremities();
+
+	t.is(extremities.length, 2);
+	t.true(extremities.includes(segmentHead));
+	t.true(extremities.includes(segmentFoot));
+});
+
+test('Skeleton - getExtremities with ignoreSegments param', (t) => {
+	const extremities = skeleton.getExtremities(['head']);
+
+	t.is(extremities.length, 2);
+	t.true(extremities.includes(segmentSpine));
+	t.true(extremities.includes(segmentFoot));
 });
 
 test('Skeleton - getSegment', (t) => {
@@ -42,4 +69,8 @@ test('Skeleton - getSegment', (t) => {
 	t.throws(() => {
 		skeleton.getSegment('toe');
 	}, { message: 'Skeleton: No segment named \'toe\'' });
+});
+
+test('Skeleton - segments', (t) => {
+	t.deepEqual(skeleton.segments, [segmentHead, segmentHip, segmentFoot]);
 });

@@ -247,26 +247,31 @@ To get a signal from a specific measurement, you can use one – or a combinatio
 ```yaml
 - step1: Hips?name=static*
 ```
-
 _Example of targeting the input `Hips` from a measurement where the name begins with `static`._
-
+<br>
+<br>
 ```yaml
 - step1: Hips?fields[type]=MyType
 ```
-
 _Example of targeting the input `Hips` from a measurement where the type is `MyType`._
-
+<br>
+<br>
 ```yaml
 - step1: Hips?name=static*&fields[type]=MyType
 ```
-
 _Example of targeting the input `Hips` from a measurement where the name begins with `static`_ **and** _the type is `MyType`._
-
+<br>
+<br>
 ```yaml
 - step1: Hips?name=static*&index=last
 ```
-
 _Example of targeting the input `Hips` from the_ **last** _matching measurement where the name begins with `static`._
+<br>
+<br>
+```yaml
+- step1: LeftFoot?force=left
+```
+_Example of targeting the input `LeftFoot` from measurements that has one or more forces on the LeftFootContact joint._
 
 ## Value inputs
 
@@ -478,19 +483,80 @@ For example, given a signal named `MySignal`, the output will be the following f
 
 # Measurement filtering
 
-When importing a signal or defining an output node, you can specify a measurement from which the signal should be imported – or for which measurement an output node should run.
+When importing a signal or defining an output node, you can specify a
+measurement from which the signal should be imported – or for which measurement
+an output node should run.
 
-You can filter measurements by name and by field values and you can use wildcard characters `*` to formulate patterns to match partial values. The matching of values is case-insensitive.
+When using a measurement filter, a list of matching measurements is created. By
+specifying the `index` option, you can define which of the matching measurements
+should apply.
 
-When using a measurement filter, a list of matching measurements is created. By specifying the `index` option, you can define which of the matching measurements should apply.
+To use filtering when importing a signal, see the [Inputs > Named inputs > From a specific measurement](#user-content-select-signal-from-a-specific-measurement) section.
 
-## Filter options
-
+## Available filters
 - **name** – To target a measurement by name.
 - **fields[field name]** – To target a measurement by a field value.
+- **force** – To target a measurement by force assignment.
 - **index** – Out of a number of matching measurements, pick the nth match. Either a 1-based index, or the values `first` or `last` to select the first or last match, respectively.
 
-To use filtering when importing a signal, see the [Inputs > Named inputs > From a specific measurement](#from-a-specific-measurement) section.
+## Filter by measurement name
+The `name` filter is used to target a measurement by a name pattern. You can use
+wildcard characters `*` to formulate patterns to match partial values. The
+matching of values is case-insensitive.
+
+### Example
+
+```yaml
+- parameter: My param
+  where:
+    name: static*
+  steps: ...
+```
+
+_Example of targeting measurements where the name begins with `static`._
+
+## Filter by field values
+The `fields` filter is used to target a measurement by one or more field values.
+You can use wildcard characters `*` to formulate patterns to match partial
+values. The matching of values is case-insensitive.
+
+### Example
+
+```yaml
+- parameter: My param
+  where:
+    fields:
+      Saddle height: Calculated
+  steps: ...
+```
+
+_Example of targeting measurements where the `Saddle height` field is set to `Calculated`._
+
+## Filter by force assignment
+The `force` filter is used to target a measurement by force assignments.
+  
+* **any** - where one or more force assignments are assigned to either left or right foot contact joints.
+* **both** - where one or more force assignments are assigned to both left and right foot contact joints.
+* **left** - where one or more forces assignments are assigned to the left foot contact joint.
+* **right** - where one or more forces assignments are assigned to the right foot contact joint.
+* **none** - where no forces assignments are assigned to the right and left foot contact joints.
+
+### Example
+
+```yaml
+- parameter: My param
+  where:
+    force: any
+  steps: ...
+```
+
+_Example of targeting measurements where there are forces assigned to either left and/or right foot contact._
+
+
+## Filter by match index
+The `index` filter is used to target a measurement out of a number of matched
+measurements by index, ie by picking the nth match. Either a 1-based index, or
+the values `first` or `last` to select the first or last match, respectively.
 
 ## Output nodes for specific measurements
 

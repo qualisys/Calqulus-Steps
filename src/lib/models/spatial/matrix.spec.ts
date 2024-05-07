@@ -29,9 +29,9 @@ test('Matrix - compose & composeToRef', (t) => {
 	const m1b = new Matrix();
 	const m2b = new Matrix();
 
-	Matrix.composeToRef(m0b, r0, t0);
-	Matrix.composeToRef(m1b, r0, t0, new Vector(2, 2, 2));
-	Matrix.composeToRef(m2b, r2, t2);
+	Matrix.composeToRef(r0, t0, null, m0b);
+	Matrix.composeToRef(r0, t0, new Vector(2, 2, 2), m1b);
+	Matrix.composeToRef(r2, t2, null, m2b);
 
 	const o0 = Matrix.fromArray([
 		1, 0, 0, 0,
@@ -169,7 +169,7 @@ test('Matrix - fromRotationMatrix', (t) => {
 	t.is(m[12], 0);
 	t.is(m[13], 0);
 	t.is(m[14], 0);
-	t.is(m[15], 0);
+	t.is(m[15], 1);
 });
 
 test('Matrix - fromArray', (t) => {
@@ -182,6 +182,17 @@ test('Matrix - fromValues', (t) => {
 	const mat = Matrix.fromValues(...values);
 
 	t.deepEqual(Array.from(mat._m), values);
+});
+
+test('Matrix - identity', (t) => {
+	const mat = Matrix.identity();
+
+	t.deepEqual(Array.from(mat._m), [
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1,
+	]);
 });
 
 test('Matrix - get', (t) => {
@@ -205,11 +216,30 @@ test('Matrix - get', (t) => {
 	t.is(mat.get(3, 3), 16);
 });
 
+test('Matrix - fromXyzAxesToRef', (t) => {
+	const v0 = new Vector(0, 0, 1);
+	const v1 = new Vector(0, 1, 0);
+	const v2 = new Vector(1, 0, 0);
+
+	const mat = new Matrix();
+	Matrix.fromXyzAxesToRef(v0, v1, v2, mat);
+
+	const rotation = Quaternion.identity();
+	const translation = Vector.zero();
+	const scale = Vector.zero();
+
+	Matrix.decomposeToRef(rotation, translation, scale, mat);
+
+	t.deepEqual(rotation.array, [0, 0, 0, 0.7071067811865476]);
+	t.deepEqual(translation.array, [0, 0, 0]);
+	t.deepEqual(scale.array, [1, 1, 1]);
+});
+
 test('Matrix - fromQuaternion', (t) => {
 	const mat = new Matrix();
 	const quat = new Quaternion(1, 2, 3, 4);
 
-	Matrix.fromQuaternion(mat, quat);
+	Matrix.fromQuaternion(quat, mat);
 
 	t.deepEqual(Array.from(mat._m), [
 		-25, 28, -10, 0,
@@ -219,10 +249,10 @@ test('Matrix - fromQuaternion', (t) => {
 	]);
 });
 
-test('Matrix - multiply', (t) => {
-	const mat = new Matrix();
-
-	Matrix.multiply(mat, Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9), Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1));
+test('Matrix - multiply (non-static)', (t) => {
+	const m1 = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const m2 = Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1);
+	const mat = m1.multiply(m2);
 
 	t.is(mat._m[0], 90);
 	t.is(mat._m[1], 114);
@@ -235,10 +265,54 @@ test('Matrix - multiply', (t) => {
 	t.is(mat._m[10], 30);
 });
 
+test('Matrix - multiplyToRef', (t) => {
+	const m1 = Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	const m2 = Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1);
+	const ref = Matrix.identity();
+
+	m1.multiplyToRef(m2, ref);
+
+	t.is(ref._m[0], 90);
+	t.is(ref._m[1], 114);
+	t.is(ref._m[2], 138);
+	t.is(ref._m[4], 54);
+	t.is(ref._m[5], 69);
+	t.is(ref._m[6], 84);
+	t.is(ref._m[8], 18);
+	t.is(ref._m[9], 24);
+	t.is(ref._m[10], 30);
+});
+
+test('Matrix - multiply', (t) => {
+	const mat = new Matrix();
+
+	Matrix.multiply(Matrix.fromRotationMatrix(1, 2, 3, 4, 5, 6, 7, 8, 9), Matrix.fromRotationMatrix(9, 8, 7, 6, 5, 4, 3, 2, 1), mat);
+
+	t.is(mat._m[0], 90);
+	t.is(mat._m[1], 114);
+	t.is(mat._m[2], 138);
+	t.is(mat._m[4], 54);
+	t.is(mat._m[5], 69);
+	t.is(mat._m[6], 84);
+	t.is(mat._m[8], 18);
+	t.is(mat._m[9], 24);
+	t.is(mat._m[10], 30);
+});
+
+test('Matrix - multiplyVector', (t) => {
+	const m1 = Matrix.fromValues(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4);
+	const v1 = new Vector(1, 0, 1);
+	const v2 = m1.multiplyVector(v1);
+
+	t.deepEqual(v2.x, 2);
+	t.deepEqual(v2.y, 4);
+	t.deepEqual(v2.z, 6);
+});
+
 test('Matrix - transpose other', (t) => {
 	const mat = new Matrix();
 
-	Matrix.transpose(mat, Matrix.fromValues(...values));
+	Matrix.transpose(Matrix.fromValues(...values), mat);
 
 	t.deepEqual(Array.from(mat._m), [
 		1, 5, 9, 13,
@@ -258,6 +332,18 @@ test('Matrix - transpose self', (t) => {
 		2, 6, 10, 14,
 		3, 7, 11, 15,
 		4, 8, 12, 16
+	]);
+});
+
+test('Matrix - skew matrix', (t) => {
+	const v = new Vector(-0.1, 0.05, -0.01);
+	const m = Matrix.skew(v);
+
+	t.deepEqual(Array.from(m._m), [
+		0, -0.01, -0.05, 0,
+		0.01, 0, -0.1, 0,
+		0.05, 0.1, 0, 0,
+		0, 0, 0, 0
 	]);
 });
 

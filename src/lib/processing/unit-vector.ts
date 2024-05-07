@@ -39,7 +39,7 @@ export class UnitVectorStep extends BaseStep {
 		const outz = new Float32Array(input.length).fill(0);
 
 		for (let i = 0; i < inpTransformed.length; i++) {
-			const vec = Vector.normalize(Vector.tmpVec1, inpTransformed.getVectorAtFrame(i + 1));
+			const vec = Vector.normalize(inpTransformed.getVectorAtFrame(i + 1), Vector.tmpVec1);
 			outx[i] = vec.x;
 			outy[i] = vec.y;
 			outz[i] = vec.z;

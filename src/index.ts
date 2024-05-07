@@ -10,9 +10,12 @@ export * from './lib/models/spatial/quaternion';
 export * from './lib/models/spatial/vector';
 
 export * from './lib/models/analog';
+export * from './lib/models/body-segment-parameters';
 export * from './lib/models/data-collection';
 export * from './lib/models/event';
+export * from './lib/models/force-plate';
 export * from './lib/models/inputs';
+export * from './lib/models/joint';
 export * from './lib/models/marker';
 export * from './lib/models/measurement';
 export * from './lib/models/node-interface';

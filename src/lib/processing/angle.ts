@@ -11,7 +11,7 @@ import { Vector } from '../models/spatial/vector';
 import { StepCategory, StepClass } from '../step-registry';
 import { AngleUtil } from '../utils/math/angle';
 import { Euler, RotationOrder } from '../utils/math/euler';
-import { Kinematics } from '../utils/math/kinematics';
+import { KinematicsUtil } from '../utils/math/kinematics';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
 import { TypeCheck } from '../utils/type-check';
@@ -272,7 +272,7 @@ export class AngleStep extends BaseStep {
 		if (this.inputs.length === 1) {
 			if (this.inputs[0].type === SignalType.Segment) {
 				const segment: Segment = this.inputs[0].getSegmentValue();
-				const angles: VectorSequence = AngleUtil.computeEulerAngle(segment.rotations, this.rotationOrder);
+				const angles: VectorSequence = AngleUtil.computeEulerAngle(segment.rotation, this.rotationOrder);
 				
 				this.exportUnit = ExportUnit.Degrees;
 				result.setValue<VectorSequence>(angles);
@@ -288,7 +288,7 @@ export class AngleStep extends BaseStep {
 			if (this.inputs[0].type == SignalType.Segment && this.inputs[1].type == SignalType.Segment) {
 				const segment1: Segment = this.inputs[0].getSegmentValue();
 				const segment2: Segment = this.inputs[1].getSegmentValue();
-				const angles: VectorSequence = AngleUtil.computeRelativeEulerAngle(segment1.rotations, segment2.rotations, this.rotationOrder);
+				const angles: VectorSequence = AngleUtil.computeRelativeEulerAngle(segment1.rotation, segment2.rotation, this.rotationOrder);
 
 				this.exportUnit = ExportUnit.Degrees;
 				result.setValue<VectorSequence>(angles);
@@ -342,7 +342,7 @@ export class AngleStep extends BaseStep {
 						return input.getVectorSequenceValue();
 					}
 					else if (input.type === SignalType.Segment) {
-						return input.getSegmentValue().positions;
+						return input.getSegmentValue().position;
 					}
 					else {
 						throw new ProcessingError(`Expected array of length 3 or Marker or Segment. Got ${ input.typeToString }.`);
@@ -495,7 +495,6 @@ export class JointAngleStep extends AngleStep {
 })
 export class AngularVelocityStep extends AngleStep {
 	useRotationOrder: boolean;
-	rotationOrder: RotationOrder;
 
 	init() {
 		super.init();
@@ -560,39 +559,39 @@ export class AngularVelocityStep extends AngleStep {
 		const rResTemp = Matrix.identity();
 
 		for (let frame = 0; frame < nFrames; frame++) {
-			Matrix.fromQuaternion(rParTemp, sPar.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(sPar.rotation.getQuaternionAtFrame(frame + 1), rParTemp);
 			rPar.setMatrixAtFrame(frame + 1, Matrix.transpose(rParTemp, rParTemp));
-			Matrix.fromQuaternion(rSegTemp, sSeg.rotations.getQuaternionAtFrame(frame + 1));
-			rSeg.setMatrixAtFrame(frame + 1, Matrix.transpose(rSegTemp, rSegTemp));
-			Matrix.fromQuaternion(rRefTemp, sRef.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(sSeg.rotation.getQuaternionAtFrame(frame + 1), rSegTemp);
+			rSeg.setMatrixAtFrame(frame + 1, Matrix.transpose(rSegTemp, rSegTemp, ));
+			Matrix.fromQuaternion(sRef.rotation.getQuaternionAtFrame(frame + 1), rRefTemp);
 			rRef.setMatrixAtFrame(frame + 1, Matrix.transpose(rRefTemp, rRefTemp));
-			Matrix.fromQuaternion(rResTemp, sRes.rotations.getQuaternionAtFrame(frame + 1));
+			Matrix.fromQuaternion(sRes.rotation.getQuaternionAtFrame(frame + 1), rResTemp);
 			rRes.setMatrixAtFrame(frame + 1, Matrix.transpose(rResTemp, rResTemp));
 		}
 
 		// Calculate the rotation matrix derivatives
 		const rSegDiff = MatrixSequence.fromRotationMatrixValues(
-			Kinematics.finiteDifference(rSeg.m00, dt, 1),
-			Kinematics.finiteDifference(rSeg.m01, dt, 1),
-			Kinematics.finiteDifference(rSeg.m02, dt, 1),
-			Kinematics.finiteDifference(rSeg.m10, dt, 1),
-			Kinematics.finiteDifference(rSeg.m11, dt, 1),
-			Kinematics.finiteDifference(rSeg.m12, dt, 1),
-			Kinematics.finiteDifference(rSeg.m20, dt, 1),
-			Kinematics.finiteDifference(rSeg.m21, dt, 1),
-			Kinematics.finiteDifference(rSeg.m22, dt, 1)
+			KinematicsUtil.finiteDifference(rSeg.m00, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m01, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m02, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m10, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m11, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m12, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m20, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m21, dt, 1),
+			KinematicsUtil.finiteDifference(rSeg.m22, dt, 1)
 		);
 
 		const rRefDiff = MatrixSequence.fromRotationMatrixValues(
-			Kinematics.finiteDifference(rRef.m00, dt, 1),
-			Kinematics.finiteDifference(rRef.m01, dt, 1),
-			Kinematics.finiteDifference(rRef.m02, dt, 1),
-			Kinematics.finiteDifference(rRef.m10, dt, 1),
-			Kinematics.finiteDifference(rRef.m11, dt, 1),
-			Kinematics.finiteDifference(rRef.m12, dt, 1),
-			Kinematics.finiteDifference(rRef.m20, dt, 1),
-			Kinematics.finiteDifference(rRef.m21, dt, 1),
-			Kinematics.finiteDifference(rRef.m22, dt, 1)
+			KinematicsUtil.finiteDifference(rRef.m00, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m01, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m02, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m10, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m11, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m12, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m20, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m21, dt, 1),
+			KinematicsUtil.finiteDifference(rRef.m22, dt, 1)
 		);
 
 		// Calculate joint velocity
@@ -611,8 +610,8 @@ export class AngularVelocityStep extends AngleStep {
 			const rRefFrame = rRef.getMatrixAtFrame(frame + 1);
 			const rResFrame = rRes.getMatrixAtFrame(frame + 1);
 
-			Matrix.multiply(omegaRSegFrame, Matrix.transpose(rSegFrameTrans, rSegFrame), rSegDiff.getMatrixAtFrame(frame + 1));
-			Matrix.multiply(omegaRRefFrame, Matrix.transpose(rRefFrameTrans, rRefFrame), rRefDiff.getMatrixAtFrame(frame + 1));
+			Matrix.multiply(Matrix.transpose(rSegFrame, rSegFrameTrans), rSegDiff.getMatrixAtFrame(frame + 1), omegaRSegFrame);
+			Matrix.multiply(Matrix.transpose(rRefFrame, rRefFrameTrans), rRefDiff.getMatrixAtFrame(frame + 1), omegaRRefFrame);
 
 			const omegaSegFrame = new Vector(omegaRSegFrame._m[9], omegaRSegFrame._m[2], omegaRSegFrame._m[4]);
 			const omegaRefFrame = new Vector(omegaRRefFrame._m[9], omegaRRefFrame._m[2], omegaRRefFrame._m[4]);
@@ -626,7 +625,7 @@ export class AngularVelocityStep extends AngleStep {
 				const vProx = new Vector(rParFrame.get(i, 0), rParFrame.get(i, 1), rParFrame.get(i, 2));
 				const vDist = new Vector(rSegFrame.get(k, 0), rSegFrame.get(k, 1), rSegFrame.get(k, 2));
 				const vFloat = new Vector(NaN, NaN, NaN);
-				Vector.cross(vFloat, vDist, vProx);
+				Vector.cross(vDist, vProx, vFloat);
 				const vFloatNorm = Vector.norm(vFloat);
 				vFloat.x = vFloat.x / vFloatNorm;
 				vFloat.y = vFloat.y / vFloatNorm;
@@ -650,7 +649,7 @@ export class AngularVelocityStep extends AngleStep {
 			}
 			else {
 				const qdotFrame = new Vector(NaN, NaN, NaN);
-				Vector.transformMatrix(qdotFrame, omegaSegRefFrame, rResFrame);
+				Vector.transformMatrix(omegaSegRefFrame, rResFrame, qdotFrame);
 				qdot.x[frame] = qdotFrame.x * 180 / Math.PI;
 				qdot.y[frame] = qdotFrame.y * 180 / Math.PI;
 				qdot.z[frame] = qdotFrame.z * 180 / Math.PI;

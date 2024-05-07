@@ -88,7 +88,7 @@ class BaseAggregationStep extends BaseStep {
 					return (cycle.frameMap) ? cycle.frameMap[indices[0]] : indices[0];
 				}
 
-				return this.aggregation(SeriesUtil.filterNaN(v, null));
+				return v === undefined ? undefined : this.aggregation(SeriesUtil.filterNaN(v, null));
 			}));
 		}
 

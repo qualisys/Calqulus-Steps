@@ -171,7 +171,7 @@ export class BaseArithmeticStep extends BaseStep {
 			}
 		}
 
-		const operands = inputs.map(input => (input as ISequence).array).filter(a => !!a).map(a => a.length === 1 ? a[0] : a);
+		const operands = inputs.map(input => (input as ISequence).array.filter(x => x !== undefined)).filter(a => !!a).map(a => a.length === 1 ? a[0] : a);
 
 		if (!operands.length) throw new ProcessingError('No operands given.');
 

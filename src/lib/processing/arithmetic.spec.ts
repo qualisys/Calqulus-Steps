@@ -76,8 +76,13 @@ test('Arithmetic - AdditionStep (Segment)', async(t) => {
 
 	t.deepEqual(res.components, segment1.components);
 
-	for (const component of res.components) {
-		t.deepEqual(f32(...res.getComponent(component)), f32(2, 4, 6));
+	for (let i = 0; i < res.components.length; i++) {
+		if (i < 7) {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])),[2, 4, 6]);
+		}
+		else {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [NaN, NaN, NaN]);
+		}
 	}
 });
 
