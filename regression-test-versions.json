@@ -1,9 +1,9 @@
 {
 	"ci": "main",
 	"current": {
-		"engine": "main",
-		"pipelines": "main",
-		"toolbelt": "main"
+		"engine": "feature/force-plate",
+		"pipelines": "feature/fa",
+		"toolbelt": "feature/inverse-dynamics"
 	},
 	"reference": {
 		"engine": "a348dda6e2d87de93faeda5f2111dcee8cb90e92",
