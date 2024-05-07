@@ -3,6 +3,7 @@ import test from 'ava';
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { Space } from '../processing/space';
 
+import { ForcePlate } from './force-plate';
 import { Joint } from './joint';
 import { Marker } from './marker';
 import { Segment } from './segment';
@@ -27,6 +28,7 @@ const segment = new Segment('head', vecSeq, quatSeq, frameRate);
 const joint = new Joint('LeftKnee', vecSeq, vecSeq, undefined, undefined, 100);
 const joint2 = new Joint('LeftKnee', vecSeq, vecSeq, vecSeq, fakeArray, 100);
 const plane = new PlaneSequence(fakeArray, fakeArray, fakeArray, fakeArray);
+const forcePlate = new ForcePlate('test', vecSeq, vecSeq, vecSeq);
 
 // Signal variants
 const s1_uintarr = new Signal(fakeUIntArray, frameRate);
@@ -54,6 +56,8 @@ const s1_marker = new Signal(markerSeq, frameRate);
 const s2_marker = new Signal().setValue(markerSeq);
 const s1_undef = new Signal(undefined, frameRate);
 const s2_undef = new Signal().setValue(undefined);
+const s1_fp = new Signal(forcePlate, frameRate);
+const s2_fp = new Signal().setValue(forcePlate);
 
 // Example cycles
 const cycles = [{
@@ -138,6 +142,15 @@ test('Signal - Joint constructor', (t) => {
 	t.is(s1_joint.length, joint.length);
 	t.is(s1_joint.getValue(), joint);
 	t.is(s1_joint.components, joint.components);
+});
+
+test('Signal - Force Plate constructor', (t) => {
+	t.assert(s1_fp.type === s2_fp.type && s1_fp.type === SignalType.ForcePlate);
+	t.is(s1_fp.typeToString, 'ForcePlate');
+	t.is(s1_fp.frameRate, frameRate);
+	t.is(s1_fp.length, vecSeq.length);
+	t.is(s1_fp.getValue(), forcePlate);
+	t.is(s1_fp.components, forcePlate.components);
 });
 
 test('Signal - String constructor', (t) => {
@@ -246,6 +259,18 @@ test('Signal - typeFromArray', (t) => {
 		px: joint.p
 	});
 
+	t.like(Signal.typeFromArray(SignalType.ForcePlate, forcePlate.array), {
+		x: forcePlate.x,
+		y: forcePlate.y,
+		z: forcePlate.z,
+		fx: forcePlate.fx,
+		fy: forcePlate.fy,
+		fz: forcePlate.fz,
+		mx: forcePlate.mx,
+		my: forcePlate.my,
+		mz: forcePlate.mz,
+	});
+
 	t.like(Signal.typeFromArray(SignalType.Segment, segment.array), {
 		x: segment.x,
 		y: segment.y,
@@ -285,6 +310,7 @@ test('Signal - array', (t) => {
 	t.deepEqual(s1_f32arrarr.array, fakeNestedArray);
 	t.deepEqual(s1_numarr.array, [fakeArray]);
 	t.deepEqual(s1_segment.array, segment.array);
+	t.deepEqual(s1_fp.array, forcePlate.array);
 	t.deepEqual(s1_string.array, undefined);
 	t.deepEqual(s1_vecseq.array, vecSeq.array);
 	t.deepEqual(s1_marker.array, vecSeq.array);
@@ -317,6 +343,7 @@ test('Signal - getting values', (t) => {
 	t.is(s1_f32arrarr.getFloat32ArrayArrayValue(), fakeNestedArray);
 	t.deepEqual(s1_numarr.getFloat32ArrayValue(), fakeArray);
 	t.is(s1_joint.getJointValue(), joint);
+	t.is(s1_fp.getForcePlateValue(), forcePlate);
 	t.is(s1_segment.getSegmentValue(), segment);
 	t.is(s1_string.getStringValue(), testString);
 	t.is(s1_vecseq.getVectorSequenceValue(), vecSeq);
@@ -358,6 +385,16 @@ test('Signal - getComponent', (t) => {
 	t.is(s1_joint2.getComponent('mz'), fakeArray);
 	t.is(s1_joint2.getComponent('p'), fakeArray);
 
+	t.is(s1_fp.getComponent('x'), fakeArray);
+	t.is(s1_fp.getComponent('y'), fakeArray);
+	t.is(s1_fp.getComponent('z'), fakeArray);
+	t.is(s1_fp.getComponent('fx'), fakeArray);
+	t.is(s1_fp.getComponent('fy'), fakeArray);
+	t.is(s1_fp.getComponent('fz'), fakeArray);
+	t.is(s1_fp.getComponent('mx'), fakeArray);
+	t.is(s1_fp.getComponent('my'), fakeArray);
+	t.is(s1_fp.getComponent('mz'), fakeArray);
+
 	// Wrong component names
 	t.is(s1_segment.getComponent('wrong'), undefined);
 	t.is(s1_vecseq.getComponent('nonexistent'), undefined);
@@ -395,6 +432,17 @@ test('Signal - getFrames', (t) => {
 		undefined, undefined, undefined,
 		undefined
 	]);
+
+	// Force plate
+	const fpFrames = s1_fp.getFrames(frames);
+
+	// Position, force, moment.
+	t.deepEqual(fpFrames.array.map((a => a === undefined ? undefined : Array.from(a))), [
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+		Array.from(frameValueComp), Array.from(frameValueComp), Array.from(frameValueComp),
+	]);
+
 
 	// Vector
 	const vecFrames = s1_vecseq.getFrames(frames);

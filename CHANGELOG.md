@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] 2024-05-07
+
+### Added
+
+* Ability to access force plate data in pipelines. ([#47](https://github.com/qualisys/Calqulus-Steps/pull/47)) (!2706)
+
 ## [1.2.0] 2024-05-07
 
 ### Added
 
-* Inverse dynamics support.
+* Inverse dynamics support. ([#45](https://github.com/qualisys/Calqulus-Steps/pull/45))
  - Added support for joints. Segments now have a distalJoint and a proximalJoint.
  - Added various math functions.
  - Added class for calculating body segment parameters.

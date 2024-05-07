@@ -1,9 +1,7 @@
 import { zip } from 'lodash';
 
-import { Marker } from '../models/marker';
 import { PropertyType } from '../models/property';
-import { Segment } from '../models/segment';
-import { Signal, SignalType } from '../models/signal';
+import { Signal } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
 import { Aggregation } from '../utils/math/aggregation';
 import { ProcessingError } from '../utils/processing-error';
@@ -93,20 +91,17 @@ class BaseAggregationStep extends BaseStep {
 		}
 
 		const res = zip(...cycleRes);
+		const resTyped = res.map(v => Float32Array.from(v));
 
-		let returnSignal: Signal;
+		const returnSignal: Signal = sourceInput.clone(false);
 
-		switch (originalType) {
-			case SignalType.VectorSequence:
-				returnSignal = sourceInput.clone(Marker.fromArray(this.inputs[0].name, res.map(v => Float32Array.from(v))));
-				break;
-			case SignalType.Segment:
-				returnSignal = sourceInput.clone(Segment.fromArray(this.inputs[0].name, res.map(v => Float32Array.from(v))));
-				break;
+		const outValue = Signal.typeFromArray(originalType, resTyped);
+
+		if (outValue !== undefined) {
+			returnSignal.setValue(outValue);
 		}
-
-		if (!returnSignal) {
-			returnSignal = sourceInput.clone(res[0]);
+		else {
+			returnSignal.setValue(res);
 		}
 
 		// Reset cycles before returning the resulting signal.

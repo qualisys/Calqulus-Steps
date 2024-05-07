@@ -8,7 +8,8 @@ Calqulus can import the following kinds of data from your measurements:
 * Marker
 * Skeletal (accessible via *segments*)
 * EMG
-* Kinetics (accessible via *joints*).
+* Kinetics (accessible via *joints*)
+* Force plate
 
 ## Importing data
 To access data in a Calqulus pipeline you can either reference it by name
@@ -140,6 +141,16 @@ _Example of multiplying the x and y component of a marker._
 
 **Power**
 * p
+
+### Force plate
+**Center of pressure**
+* x, y, z
+
+**Force**
+* fx, fy, fz
+
+**Moment**
+* mx, my, mz
 
 ## Quick reference
 ### Segments

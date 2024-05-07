@@ -44,6 +44,7 @@ export * from './lib/utils/convert';
 export * from './lib/utils/events';
 export * from './lib/utils/expression';
 export * from './lib/utils/input-duration';
+export * from './lib/utils/interpolation';
 export * from './lib/utils/number';
 export * from './lib/utils/processing-error';
 export * from './lib/utils/reference-signal';
