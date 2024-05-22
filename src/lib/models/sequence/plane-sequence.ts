@@ -5,6 +5,7 @@ import { ISequence } from './sequence';
 import { VectorSequence } from './vector-sequence';
 
 export class PlaneSequence implements ISequence {
+	readonly typeName = 'PlaneSequence';
 	
 	array: TypedArray[];
 	components = ['a', 'b', 'c', 'd'];
@@ -155,6 +156,11 @@ export class PlaneSequence implements ISequence {
 		}
 
 		return new VectorSequence(x, y, z);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isPlaneSequence(object: any): object is PlaneSequence {
+		return object?.typeName === 'PlaneSequence';
 	}
 
 }

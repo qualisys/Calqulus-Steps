@@ -1,6 +1,8 @@
 import { IDataSequence, ISequence } from './sequence/sequence';
 
 export class Analog implements ISequence, IDataSequence {
+	readonly typeName = 'Analog';
+
 	array = [this.signal];
 	components = ['signal'];
 
@@ -19,5 +21,10 @@ export class Analog implements ISequence, IDataSequence {
 		const index = this.components.indexOf(component);
 
 		return this.array[index];
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isAnalog(object: any): object is Analog {
+		return object?.typeName === 'Analog';
 	}
 }
