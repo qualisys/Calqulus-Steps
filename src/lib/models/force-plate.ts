@@ -3,6 +3,8 @@ import { VectorSequence } from './sequence/vector-sequence';
 import { IVector } from './spatial/vector';
 
 export class ForcePlate implements ISequence, IDataSequence {
+	readonly typeName = 'ForcePlate';
+
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz'];
 
@@ -108,5 +110,10 @@ export class ForcePlate implements ISequence, IDataSequence {
 		);
 
 		return fp;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isForcePlate(object: any): object is ForcePlate {
+		return object?.typeName === 'ForcePlate';
 	}
 }

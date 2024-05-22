@@ -4,6 +4,8 @@ import { Vector } from '../spatial/vector';
 import { ISequence } from './sequence';
 
 export class VectorSequence implements ISequence {
+	typeName = 'VectorSequence';
+
 	array: TypedArray[];
 	components = ['x', 'y', 'z'];
 
@@ -377,5 +379,10 @@ export class VectorSequence implements ISequence {
 		}
 
 		return result ? result : new VectorSequence(x, y, z, this.frameRate);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isVectorSequence(object: any): object is VectorSequence {
+		return object?.typeName === 'VectorSequence';
 	}
 }
