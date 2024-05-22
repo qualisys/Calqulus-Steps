@@ -1,5 +1,7 @@
 
 export interface ISequence {
+	typeName: string;
+
 	/** The sequence components as an array. */
 	array: TypedArray[];
 	/** The sequence length */
