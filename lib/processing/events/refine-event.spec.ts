@@ -20,9 +20,6 @@ const framesX1Shuffle = ArrayTestUtil.shuffle(framesX1);
 const vs = new VectorSequence(framesA, framesA, framesA);
 const sVS = new Signal(vs);
 
-const vsShuffle = new VectorSequence(framesAShuffle, framesAShuffle, framesAShuffle);
-const sVSShuffle = new Signal(vsShuffle);
-
 const sA = new Signal(framesA);
 const sB = new Signal(framesB);
 const sC = new Signal(framesC);

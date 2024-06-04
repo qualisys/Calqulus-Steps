@@ -20,8 +20,6 @@ const e1Shuffle = new Signal(eventFrames1Shuffle, frameRate);
 const e2Shuffle = new Signal(eventFrames2Shuffle, frameRate);
 const ef1 = new Signal(eventFrames1); // No frame rate
 const ef2 = new Signal(eventFrames1); // No frame rate
-const ef1Shuffle = new Signal(eventFrames1Shuffle); // No frame rate
-const ef2Shuffle = new Signal(eventFrames2Shuffle); // No frame rate
 
 const s1 = new Signal(new VectorSequence(eventFrames1, eventFrames1, eventFrames1)); // Wrong type
 const s2 = new Signal(0.1); // Wrong type
