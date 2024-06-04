@@ -219,7 +219,10 @@ export class EventMaskStep extends BaseStep {
 		 * within the span of one of the event pairs will be returned.
 		 */
 		if (source.isEvent) {
-			const sourceFrames = (source.type === SignalType.Float32Array) ? source.getFloat32ArrayValue() : source.getUint32ArrayValue();
+			const sourceFrames = ((source.type === SignalType.Float32Array) ? source.getFloat32ArrayValue() : source.getUint32ArrayValue())
+				.slice()
+				.sort((a, b) => a - b) // Sort the frames to ensure that the pairs are in order.
+			;
 			let filteredFrames;
 
 			if (!this.keep) {

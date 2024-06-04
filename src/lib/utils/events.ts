@@ -31,8 +31,16 @@ export class EventUtil {
 	 * @param excludeFrames Frames which invalidates the sequence. Any sequence containing any of these frames will be excluded.
 	 * @param includeFrames Frames which must be present in the sequence. Only sequences that contain at least one frame from each of the frame arrays will be returned.
 	 */
-	static eventSequence(fromFrames: NumericArray, toFrames: NumericArray, excludeFrames: NumericArray[] = undefined, includeFrames: NumericArray[] = undefined): IFrameSpan[] {
+	static eventSequence(fromFramesSrc: NumericArray, toFramesSrc: NumericArray, excludeFramesSrc: NumericArray[] = undefined, includeFramesSrc: NumericArray[] = undefined): IFrameSpan[] {
 		// TODO: Use logic from web report
+
+		// Copy arrays to avoid mutation, then sort them.
+		const sortFn = (a: number, b: number) => a - b;
+
+		const fromFrames = fromFramesSrc?.slice().sort(sortFn);
+		const toFrames = toFramesSrc?.slice().sort(sortFn);
+		const excludeFrames = excludeFramesSrc ? excludeFramesSrc.map(f => f.slice().sort(sortFn)) : undefined;
+		const includeFrames = includeFramesSrc ? includeFramesSrc.map(f => f.slice().sort(sortFn)) : undefined;
 
 		// Generate event frame pairs
 		const pairs: IFrameSpan[] = [];

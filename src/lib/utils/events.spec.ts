@@ -1,5 +1,6 @@
 import test from 'ava';
 
+import { ArrayTestUtil } from '../../test-utils/array-utils';
 import { f32 } from '../../test-utils/mock-step';
 
 import { EventUtil } from './events';
@@ -16,6 +17,15 @@ test('EventUtil - eventSequence', (t) => {
 		{ start: 10, end: 12 },
 	]);
 
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle);
+
+	t.deepEqual(spansShuffle, spans);
+
+	// Test empty input
 	const spans2 = EventUtil.eventSequence(framesA, []);
 
 	t.deepEqual(spans2, []);
@@ -33,6 +43,15 @@ test('EventUtil - eventSequence - exclude single', (t) => {
 		{ start: 10, end: 14 },
 		{ start: 20, end: 24 },
 	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+	const excludeShuffle = ArrayTestUtil.shuffle(exclude);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle, [excludeShuffle]);
+
+	t.deepEqual(spansShuffle, spans);
 });
 
 test('EventUtil - eventSequence - exclude multiple', (t) => {
@@ -47,6 +66,17 @@ test('EventUtil - eventSequence - exclude multiple', (t) => {
 	t.deepEqual(spans, [
 		{ start: 10, end: 14 },
 	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+	const excludeAShuffle = ArrayTestUtil.shuffle(excludeA);
+	const excludeBShuffle = ArrayTestUtil.shuffle(excludeB);
+	const excludeCShuffle = ArrayTestUtil.shuffle(excludeC);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle, [excludeAShuffle, excludeBShuffle, excludeCShuffle]);
+
+	t.deepEqual(spansShuffle, spans);
 });
 
 test('EventUtil - eventSequence - include single', (t) => {
@@ -60,6 +90,15 @@ test('EventUtil - eventSequence - include single', (t) => {
 		{ start: 1, end: 4 },
 		{ start: 15, end: 19 },
 	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+	const includeShuffle = ArrayTestUtil.shuffle(include);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle, undefined, [includeShuffle]);
+
+	t.deepEqual(spansShuffle, spans);
 });
 
 test('EventUtil - eventSequence - include multiple', (t) => {
@@ -74,6 +113,17 @@ test('EventUtil - eventSequence - include multiple', (t) => {
 	t.deepEqual(spans, [
 		{ start: 15, end: 19 },
 	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+	const includeAShuffle = ArrayTestUtil.shuffle(includeA);
+	const includeBShuffle = ArrayTestUtil.shuffle(includeB);
+	const includeCShuffle = ArrayTestUtil.shuffle(includeC);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle, undefined, [includeAShuffle, includeBShuffle, includeCShuffle]);
+
+	t.deepEqual(spansShuffle, spans);
 });
 
 test('EventUtil - eventSequence - include and exclude - single', (t) => {
@@ -88,6 +138,16 @@ test('EventUtil - eventSequence - include and exclude - single', (t) => {
 		{ start: 5, end: 9 },
 		{ start: 10, end: 14 },
 	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+	const excludeShuffle = ArrayTestUtil.shuffle(exclude);
+	const includeShuffle = ArrayTestUtil.shuffle(include);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle, [excludeShuffle], [includeShuffle]);
+
+	t.deepEqual(spansShuffle, spans);
 });
 
 test('EventUtil - eventSequence - include and exclude - multiple', (t) => {
@@ -103,6 +163,18 @@ test('EventUtil - eventSequence - include and exclude - multiple', (t) => {
 	t.deepEqual(spans, [
 		{ start: 5, end: 9 },
 	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+	const excludeAShuffle = ArrayTestUtil.shuffle(excludeA);
+	const excludeBShuffle = ArrayTestUtil.shuffle(excludeB);
+	const includeAShuffle = ArrayTestUtil.shuffle(includeA);
+	const includeBShuffle = ArrayTestUtil.shuffle(includeB);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle, [excludeAShuffle, excludeBShuffle], [includeAShuffle, includeBShuffle]);
+
+	t.deepEqual(spansShuffle, spans);
 });
 
 
@@ -146,6 +218,46 @@ test('EventUtil - pickFromSequence', (t) => {
 	t.deepEqual(evt9, f32(6, 11));
 });
 
+test('EventUtil - pickFromSequence (shuffled order)', (t) => {
+	const framesA  = ArrayTestUtil.shuffle(f32(1, 5, 10, 15, 20));
+	const framesB1 = ArrayTestUtil.shuffle(f32(2, 6, 11, 16));
+	const framesB2 = ArrayTestUtil.shuffle(f32(2, 6,     16));
+	const framesC  = ArrayTestUtil.shuffle(f32(3, 7, 12, 17, 22));
+
+	const framesX1 = ArrayTestUtil.shuffle(f32(1.5, 16.5));
+	const framesX2 = ArrayTestUtil.shuffle(f32(6.5));
+
+	const evt1 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC]);
+	t.deepEqual(evt1, f32(1, 5, 10, 15));
+
+	const evt2 = EventUtil.pickFromSequence(framesA, [framesA, framesB2, framesC]);
+	t.deepEqual(evt2, f32(1, 5, 15));
+
+	const evt3 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC], [framesX1]);
+	t.deepEqual(evt3, f32(5, 10));
+
+	const evt4 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC], [framesX2]);
+	t.deepEqual(evt4, f32(1, 10, 15));
+
+	const evt5 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC], [framesX1, framesX2]);
+	t.deepEqual(evt5, f32(10));
+
+	// The "pick" is not in the sequence
+	const evt6 = EventUtil.pickFromSequence(framesA, [f32(1, 5, 10, 15), framesB1, framesC]);
+	t.deepEqual(evt6, f32());
+
+	// No sequence provided
+	const evt7 = EventUtil.pickFromSequence(framesA, []);
+	t.deepEqual(evt7, f32());
+
+	// The "pick" appears multiple times in the sequence
+	const evt8 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA]);
+	t.deepEqual(evt8, f32(1, 5, 10, 15));
+
+	const evt9 = EventUtil.pickFromSequence(framesB1, [framesA, framesB1, framesC, framesA, framesB1], [framesX1]);
+	t.deepEqual(evt9, f32(6, 11));
+});
+
 test('EventUtil - pickFromSequence (cyclic)', (t) => {
 	const framesA  = f32(1, 5, 10, 15, 20);
 	const framesB1 = f32(2, 6, 11, 16);
@@ -154,6 +266,34 @@ test('EventUtil - pickFromSequence (cyclic)', (t) => {
 
 	const framesX1 = f32(1.5, 16.5);
 	const framesX2 = f32(6.5);
+
+	const evt1 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], undefined, true);
+	t.deepEqual(evt1, f32(1, 5, 10, 15, 20));
+
+	const evt2 = EventUtil.pickFromSequence(framesA, [framesA, framesB2, framesC, framesA], undefined, true);
+	t.deepEqual(evt2, f32(1, 5, 10, 15, 20));
+
+	const evt3 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], [framesX1], true);
+	t.deepEqual(evt3, f32(5, 10, 15));
+
+	const evt4 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], [framesX2], true);
+	t.deepEqual(evt4, f32(1, 5, 10, 15, 20));
+
+	const evt5 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], [framesX1, framesX2]);
+	t.deepEqual(evt5, f32(10, 15));
+
+	const evt9 = EventUtil.pickFromSequence(framesB1, [framesA, framesB1, framesC, framesA, framesB1], [framesX1], true);
+	t.deepEqual(evt9, f32(6, 11, 16));
+});
+
+test('EventUtil - pickFromSequence (cyclic, shuffled order)', (t) => {
+	const framesA  = ArrayTestUtil.shuffle(f32(1, 5, 10, 15, 20));
+	const framesB1 = ArrayTestUtil.shuffle(f32(2, 6, 11, 16));
+	const framesB2 = ArrayTestUtil.shuffle(f32(2, 6,     16));
+	const framesC  = ArrayTestUtil.shuffle(f32(3, 7, 12, 17, 22));
+
+	const framesX1 = ArrayTestUtil.shuffle(f32(1.5, 16.5));
+	const framesX2 = ArrayTestUtil.shuffle(f32(6.5));
 
 	const evt1 = EventUtil.pickFromSequence(framesA, [framesA, framesB1, framesC, framesA], undefined, true);
 	t.deepEqual(evt1, f32(1, 5, 10, 15, 20));
