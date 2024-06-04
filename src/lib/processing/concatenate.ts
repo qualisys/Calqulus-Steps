@@ -1,3 +1,4 @@
+import { PropertyType } from '../models/property';
 import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
@@ -42,9 +43,40 @@ import { BaseStep } from './base-step';
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
 	],
+	options: [{
+		name: 'sort',
+		enum: ['asc', 'desc'],
+		type: 'String',
+		required: false,
+		default: 'null',
+		description: markdownFmt`
+			If defined, the resulting array(s) will be sorted by value in ascending 
+			or descending order.
+		`,
+	}],
 	output: ['Scalar', 'Series', 'Event', 'Number'],
 })
 export class ConcatenateStep extends BaseStep {
+	sortFn: (a: number, b: number) => number;
+
+	init() {
+		super.init();
+
+		const sort = this.getPropertyValue<string>('sort', PropertyType.String, false);
+
+		switch (sort) {
+			case 'asc':
+				this.sortFn = (a, b) => a - b;
+				break;
+			case 'desc':
+				this.sortFn = (a, b) => b - a;
+				break;
+			default:
+				this.sortFn = undefined;
+				break;
+		}
+	}
+
 	async process(): Promise<Signal> {
 		if (!this.inputs || this.inputs.length < 2) throw new ProcessingError(`Expected at least 2 inputs, got ${ (!this.inputs) ? 0 : this.inputs.length }.`);
 
@@ -68,6 +100,8 @@ export class ConcatenateStep extends BaseStep {
 				[...arr].concat(...arrays.map(a => [...a[index]]))
 			)
 		);
+
+		if (this.sortFn) concatArrays.forEach(a => a.sort(this.sortFn));
 
 		let targetType = this.inputs[0].type;
 		if (targetType === SignalType.Float32) {
