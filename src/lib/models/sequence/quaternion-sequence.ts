@@ -4,6 +4,8 @@ import { Vector } from '../spatial/vector';
 import { ISequence } from './sequence';
 
 export class QuaternionSequence implements ISequence {
+	readonly typeName = 'QuaternionSequence';
+
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'w'];
 
@@ -238,5 +240,10 @@ export class QuaternionSequence implements ISequence {
 		}
 
 		return result ? result : new QuaternionSequence(x, y, z, w);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isQuaternionSequence(object: any): object is QuaternionSequence {
+		return object?.typeName === 'QuaternionSequence';
 	}
 }

@@ -395,15 +395,15 @@ export class Signal implements IDataSequence {
 				this._type = SignalType.Float32Array;
 			}
 		}
-		else if (value instanceof Joint) {
+		else if (value instanceof Joint || Joint.isJoint(value)) {
 			this._value.joint = value;
 			this._type = SignalType.Joint;
 		}
-		else if (value instanceof ForcePlate) {
+		else if (value instanceof ForcePlate || ForcePlate.isForcePlate(value)) {
 			this._value.forcePlate = value;
 			this._type = SignalType.ForcePlate;
 		}
-		else if (value instanceof Segment) {
+		else if (value instanceof Segment || Segment.isSegment(value)) {
 			this._value.segment = value;
 			this._type = SignalType.Segment;
 		}
@@ -411,11 +411,11 @@ export class Signal implements IDataSequence {
 			this._value.string = value;
 			this._type = SignalType.String;
 		}
-		else if (value instanceof VectorSequence) {
+		else if (value instanceof VectorSequence || VectorSequence.isVectorSequence(value)) {
 			this._value.vectorSequence = value;
 			this._type = SignalType.VectorSequence;
 		}
-		else if (value instanceof PlaneSequence) {
+		else if (value instanceof PlaneSequence || PlaneSequence.isPlaneSequence(value)) {
 			this._value.planeSequence = value;
 			this._type = SignalType.PlaneSequence;
 		}
@@ -458,6 +458,7 @@ export class Signal implements IDataSequence {
 	getFloat32ArrayArrayValue(): Float32Array[] {
 		return this._value.numberArrayArray;
 	}
+
 	getJointValue(): Joint | null {
 		return this._value.joint;
 	}
