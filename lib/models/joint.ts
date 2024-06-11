@@ -3,6 +3,8 @@ import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 
 export class Joint implements ISequence, IDataSequence {
+	readonly typeName = 'Joint';
+
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'p'];
 	distalSegment: Segment;
@@ -92,5 +94,10 @@ export class Joint implements ISequence, IDataSequence {
 	 */
 	static fromArray(name: string, [x, y, z, fx, fy, fz, mx, my, mz, p]: TypedArray[]) {
 		return new Joint(name, new VectorSequence(x, y, z), new VectorSequence(fx, fy, fz), new VectorSequence(mx, my, mz), p as Float32Array);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isJoint(object: any): object is Joint {
+		return object?.typeName === 'Joint';
 	}
 }

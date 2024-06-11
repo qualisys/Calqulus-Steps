@@ -2,6 +2,7 @@ import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 
 export class Marker extends VectorSequence implements ISequence, IDataSequence {
+	readonly typeName = 'Marker';
 
 	/**
 	 * Creates a new Marker from the specified values.
@@ -31,5 +32,10 @@ export class Marker extends VectorSequence implements ISequence, IDataSequence {
 	 */
 	static fromArray(name: string, [x, y, z]: TypedArray[]) {
 		return new Marker(name, x, y, z);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isMarker(object: any): object is Marker {
+		return object?.typeName === 'Marker';
 	}
 }
