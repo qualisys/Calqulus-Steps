@@ -73,8 +73,8 @@ export class QuaternionSequence implements ISequence {
 			prev.w = w[i - 1];
 
 			// Method with geodesic distance
-			const prevInv = Quaternion.invert(prev, Quaternion.tmpQuat2);
-			const prevInvCur = prevInv.multiplyToRef(cur, Quaternion.tmpQuat1);
+			const prevInv = Quaternion.invert(prev, Quaternion.tmpQuat3);
+			const prevInvCur = prevInv.multiplyToRef(cur, Quaternion.tmpQuat4);
 			const theta = 2 * Math.atan2(Math.hypot(prevInvCur.x, prevInvCur.y, prevInvCur.z), prevInvCur.w);
 			const k = Vector.normalize(new Vector(prevInvCur.x, prevInvCur.y, prevInvCur.z), Vector.tmpVec1);
 			let halfKTheta = new Vector(0, 0, 0);

@@ -8,6 +8,10 @@ export class Quaternion {
 	static tmpQuat1: Quaternion = new Quaternion(0, 0, 0, 1);
 	/** Quaternion instance used for performance reasons. */
 	static tmpQuat2: Quaternion = new Quaternion(0, 0, 0, 1);
+	/** Quaternion instance used for performance reasons. */
+	static tmpQuat3: Quaternion = new Quaternion(0, 0, 0, 1);
+	/** Quaternion instance used for performance reasons. */
+	static tmpQuat4: Quaternion = new Quaternion(0, 0, 0, 1);
 
 	/**
 	 * Creates a new Quaternion from the specified values.
