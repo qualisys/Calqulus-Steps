@@ -4,6 +4,8 @@ import { Vector } from '../spatial/vector';
 import { ISequence } from './sequence';
 
 export class QuaternionSequence implements ISequence {
+	readonly typeName = 'QuaternionSequence';
+
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'w'];
 
@@ -73,8 +75,8 @@ export class QuaternionSequence implements ISequence {
 			prev.w = w[i - 1];
 
 			// Method with geodesic distance
-			const prevInv = Quaternion.invert(prev, Quaternion.tmpQuat2);
-			const prevInvCur = prevInv.multiplyToRef(cur, Quaternion.tmpQuat1);
+			const prevInv = Quaternion.invert(prev, Quaternion.tmpQuat3);
+			const prevInvCur = prevInv.multiplyToRef(cur, Quaternion.tmpQuat4);
 			const theta = 2 * Math.atan2(Math.hypot(prevInvCur.x, prevInvCur.y, prevInvCur.z), prevInvCur.w);
 			const k = Vector.normalize(new Vector(prevInvCur.x, prevInvCur.y, prevInvCur.z), Vector.tmpVec1);
 			let halfKTheta = new Vector(0, 0, 0);
@@ -238,5 +240,10 @@ export class QuaternionSequence implements ISequence {
 		}
 
 		return result ? result : new QuaternionSequence(x, y, z, w);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isQuaternionSequence(object: any): object is QuaternionSequence {
+		return object?.typeName === 'QuaternionSequence';
 	}
 }

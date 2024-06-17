@@ -1,7 +1,6 @@
 import { Marker } from '../models/marker';
 import { PropertyType } from '../models/property';
 import { Segment } from '../models/segment';
-import { ISequence } from '../models/sequence/sequence';
 import { Signal, SignalType } from '../models/signal';
 import { StepCategory, StepClass } from '../step-registry';
 import { Arithmetic, ArithmeticOp } from '../utils/math/arithmetic';
@@ -171,7 +170,7 @@ export class BaseArithmeticStep extends BaseStep {
 			}
 		}
 
-		const operands = inputs.map(input => (input as ISequence).array.filter(x => x !== undefined)).filter(a => !!a).map(a => a.length === 1 ? a[0] : a);
+		const operands = inputs.map(input => input.array.filter(x => x !== undefined)).filter(a => !!a).map(a => a.length === 1 ? a[0] : a);
 
 		if (!operands.length) throw new ProcessingError('No operands given.');
 

@@ -19,6 +19,8 @@ export type Kinematics = {
 }
 
 export class Segment implements ISequence, IDataSequence {
+	readonly typeName = 'Segment';
+
 	array: TypedArray[];
 	centerOfMass: Vector;
 	components = ['x', 'y', 'z', 'rx', 'ry', 'rz', 'rw'];
@@ -123,5 +125,10 @@ export class Segment implements ISequence, IDataSequence {
 			new QuaternionSequence(rx, ry, rz, rw),
 			undefined
 		);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static isSegment(object: any): object is Segment {
+		return object?.typeName === 'Segment';
 	}
 }
