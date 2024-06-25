@@ -1,5 +1,6 @@
 import test from 'ava';
 
+import { ArrayTestUtil } from '../../../test-utils/array-utils';
 import { f32, mockStep } from '../../../test-utils/mock-step';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Signal } from '../../models/signal';
@@ -11,6 +12,11 @@ const framesB = f32(2, 6, 11, 16);
 const framesC = f32(3, 7, 12, 17, 22);
 const framesX1 = f32(1.5, 16.5);
 
+const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+const framesCShuffle = ArrayTestUtil.shuffle(framesC);
+const framesX1Shuffle = ArrayTestUtil.shuffle(framesX1);
+
 const vs = new VectorSequence(framesA, framesA, framesA);
 const sVS = new Signal(vs);
 
@@ -18,6 +24,11 @@ const sA = new Signal(framesA);
 const sB = new Signal(framesB);
 const sC = new Signal(framesC);
 const sX = new Signal(framesX1);
+
+const sAShuffle = new Signal(framesAShuffle);
+const sBShuffle = new Signal(framesBShuffle);
+const sCShuffle = new Signal(framesCShuffle);
+const sXShuffle = new Signal(framesX1Shuffle);
 
 /** 
  * The following tests verify the *input handling*. The pattern handling is
@@ -51,26 +62,38 @@ test('RefineEventStep - Options - sequence, exclude & cyclic', async t => {
 
 test('RefineEventStep - Result - sequence only', async t => {
 	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC] }).process();
-
 	t.deepEqual(res.getValue(), f32(1, 5, 10, 15));
+
+	// Test random shuffle.
+	const resShuffle = await mockStep(RefineEventStep, [sAShuffle], { sequence: [sAShuffle, sBShuffle, sCShuffle] }).process();
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('RefineEventStep - Result - sequence & exclude', async t => {
 	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC], exclude: [sX] }).process();
-
 	t.deepEqual(res.getValue(), f32(5, 10));
+
+	// Test random shuffle.
+	const resShuffle = await mockStep(RefineEventStep, [sAShuffle], { sequence: [sAShuffle, sBShuffle, sCShuffle], exclude: [sXShuffle] }).process();
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('RefineEventStep - Result - cyclic true', async t => {
 	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC, sA], exclude: [sX], cyclic: true }).process();
-
 	t.deepEqual(res.getValue(), f32(5, 10, 15));
+
+	// Test random shuffle.
+	const resShuffle = await mockStep(RefineEventStep, [sAShuffle], { sequence: [sAShuffle, sBShuffle, sCShuffle, sAShuffle], exclude: [sXShuffle], cyclic: true }).process();
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('RefineEventStep - Result - cyclic false', async t => {
 	const res = await mockStep(RefineEventStep, [sA], { sequence: [sA, sB, sC, sA], exclude: [sX], cyclic: false }).process();
-
 	t.deepEqual(res.getValue(), f32(5, 10));
+
+	// Test random shuffle.
+	const resShuffle = await mockStep(RefineEventStep, [sAShuffle], { sequence: [sAShuffle, sBShuffle, sCShuffle, sAShuffle], exclude: [sXShuffle], cyclic: false }).process();
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('RefineEventStep - makeArray', async t => {

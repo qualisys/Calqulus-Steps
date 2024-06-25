@@ -21,6 +21,18 @@ in various ways.
 
 **Output:** `Scalar | Series | Event | Number`
 
+**Options**
+>
+> #### `sort`
+>
+> **Type:** `String`  
+> **Required:** `False`  
+> **Allowed values:** `asc | desc`  
+> **Default value:** `null`  
+>
+> If defined, the resulting array(s) will be sorted by value in ascending 
+> or descending order.
+>
 
 **Shared options**
 >

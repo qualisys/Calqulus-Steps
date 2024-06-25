@@ -1,5 +1,6 @@
 import test from 'ava';
 
+import { ArrayTestUtil } from '../../test-utils/array-utils';
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { Segment } from '../models/segment';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
@@ -132,6 +133,80 @@ test('ConcatenateStep - Multi-components (Segment)', async(t) => {
 	for (let i = 0; i < res.components.length; i++) {
 		if (i < 7) {
 			t.deepEqual(Array.from(res.getComponent(res.components[i])), [1, 2, 3, 4]);
+		}
+		else {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [NaN, NaN, NaN, NaN]);
+		}
+	}
+});
+
+test('ConcatenateStep - 1D array (sort asc) A', async(t) => {
+	const step = mockStep(ConcatenateStep, [s1, s2], { sort: 'asc' });
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(1, 2, 3, 4, 5, 6));
+});
+
+test('ConcatenateStep - 1D array (sort asc) B', async(t) => {
+	const step = mockStep(ConcatenateStep, [s2, s1], { sort: 'asc' });
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(1, 2, 3, 4, 5, 6));
+});
+
+test('ConcatenateStep - 1D array (sort asc) C', async(t) => {
+	const shuffled1 = new Signal(ArrayTestUtil.shuffle(f32(1, 2, 3)));
+	const shuffled2 = new Signal(ArrayTestUtil.shuffle(f32(4, 5, 6)));
+	
+	const step = mockStep(ConcatenateStep, [shuffled1, shuffled2], { sort: 'asc' });
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(1, 2, 3, 4, 5, 6));
+});
+
+test('ConcatenateStep - 1D array (sort desc) A', async(t) => {
+	const step = mockStep(ConcatenateStep, [s1, s2], { sort: 'desc' });
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(6, 5, 4, 3, 2, 1));
+});
+
+test('ConcatenateStep - 1D array (sort desc) B', async(t) => {
+	const step = mockStep(ConcatenateStep, [s2, s1], { sort: 'desc' });
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(6, 5, 4, 3, 2, 1));
+});
+
+test('ConcatenateStep - 1D array (sort desc) C', async(t) => {
+	const shuffled1 = new Signal(ArrayTestUtil.shuffle(f32(1, 2, 3)));
+	const shuffled2 = new Signal(ArrayTestUtil.shuffle(f32(4, 5, 6)));
+	
+	const step = mockStep(ConcatenateStep, [shuffled1, shuffled2], { sort: 'desc' });
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(6, 5, 4, 3, 2, 1));
+});
+
+test('ConcatenateStep - Multi-components (Segment) (sort asc)', async(t) => {
+	const step = mockStep(ConcatenateStep, [segment2, segment1], { sort: 'asc' });
+	const res = await step.process();
+
+	t.deepEqual(res.components, segment1.components);
+
+	for (let i = 0; i < res.components.length; i++) {
+		if (i < 7) {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [1, 2, 3, 4]);
+		}
+		else {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [NaN, NaN, NaN, NaN]);
+		}
+	}
+});
+
+test('ConcatenateStep - Multi-components (Segment) (sort desc)', async(t) => {
+	const step = mockStep(ConcatenateStep, [segment2, segment1], { sort: 'desc' });
+	const res = await step.process();
+
+	t.deepEqual(res.components, segment1.components);
+
+	for (let i = 0; i < res.components.length; i++) {
+		if (i < 7) {
+			t.deepEqual(Array.from(res.getComponent(res.components[i])), [4, 3, 2, 1]);
 		}
 		else {
 			t.deepEqual(Array.from(res.getComponent(res.components[i])), [NaN, NaN, NaN, NaN]);

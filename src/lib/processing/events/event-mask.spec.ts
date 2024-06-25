@@ -1,5 +1,6 @@
 import test from 'ava';
 
+import { ArrayTestUtil } from '../../../test-utils/array-utils';
 import { f32, i32, mockStep } from '../../../test-utils/mock-step';
 import { Segment } from '../../models/segment';
 import { QuaternionSequence } from '../../models/sequence/quaternion-sequence';
@@ -10,6 +11,8 @@ import { EventMaskStep } from './event-mask';
 
 const eventFrames1 = i32(0, 5);
 const eventFrames2 = i32(2, 8);
+const eventFrames1Shuffle = ArrayTestUtil.shuffle(eventFrames1);
+const eventFrames2Shuffle = ArrayTestUtil.shuffle(eventFrames2);
 const comp = f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 const compTruncated = f32(0, 1, 2, 5, 6, 7, 8);
 const compReplacement1 = f32(0, 1, 2, 0, 0, 5, 6, 7, 8, 0);
@@ -22,12 +25,15 @@ const frameRate = 300;
 
 const e1 = new Signal(eventFrames1, frameRate);
 const e2 = new Signal(eventFrames2, frameRate);
-e1.isEvent = e2.isEvent = true;
+const e1Shuffle = new Signal(eventFrames1Shuffle, frameRate);
+const e2Shuffle = new Signal(eventFrames2Shuffle, frameRate);
+e1.isEvent = e2.isEvent = e1Shuffle.isEvent = e2Shuffle.isEvent = true;
 
 const s1 = new Signal(vs);
 const s2 = new Signal(comp);
 const s2Event = new Signal(comp);
-s2Event.isEvent = true;
+const s2EventShuffle = new Signal(ArrayTestUtil.shuffle(comp));
+s2Event.isEvent = s2EventShuffle.isEvent = true;
 const s3 = new Signal(0.1); // Wrong type
 
 const seg1 = new Signal(
@@ -54,6 +60,14 @@ test('EventMaskStep - simple array', async(t) => {
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, cycles);
 	t.deepEqual(res.getValue(), comp);
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2, e1Shuffle, e2Shuffle]).process();
+
+	console.log(res2.cycles, cycles);
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, cycles);
+	t.deepEqual(res2.getValue(), comp);
 });
 
 test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
@@ -69,6 +83,20 @@ test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, [{ start: 0, end: 2 }, { start: 4, end: 6 }]);
 	t.deepEqual(res.getValue(), comp);
+
+	// Test random shuffle.
+	const oobEventFrames1s = ArrayTestUtil.shuffle(oobEventFrames1);
+	const oobEventFrames2s = ArrayTestUtil.shuffle(oobEventFrames2);
+
+	const oobe1s = new Signal(oobEventFrames1s, frameRate);
+	const oobe2s = new Signal(oobEventFrames2s, frameRate);
+	oobe1s.isEvent = oobe2s.isEvent = true;
+
+	const res2 = await mockStep(EventMaskStep, [s2, oobe1s, oobe2s]).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
+	t.deepEqual(res2.getValue(), comp);
 });
 
 test('EventMaskStep - simple array - negative events', async(t) => {
@@ -84,6 +112,20 @@ test('EventMaskStep - simple array - negative events', async(t) => {
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.cycles, [{ start: 4, end: 6 }, { start: 8, end: 9 }]);
 	t.deepEqual(res.getValue(), comp);
+
+	// Test random shuffle.
+	const oobEventFrames1s = ArrayTestUtil.shuffle(oobEventFrames1);
+	const oobEventFrames2s = ArrayTestUtil.shuffle(oobEventFrames2);
+
+	const oobe1s = new Signal(oobEventFrames1s, frameRate);
+	const oobe2s = new Signal(oobEventFrames2s, frameRate);
+	oobe1s.isEvent = oobe2s.isEvent = true;
+
+	const res2 = await mockStep(EventMaskStep, [s2, oobe1s, oobe2s]).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
+	t.deepEqual(res2.getValue(), comp);
 });
 
 test('EventMaskStep - event array', async(t) => {
@@ -91,6 +133,12 @@ test('EventMaskStep - event array', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(0, 1, 2, 5, 6, 7, 8));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2Event, e1Shuffle, e2Shuffle]).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(0, 1, 2, 5, 6, 7, 8));
 });
 
 test('EventMaskStep - event array - short events', async(t) => {
@@ -108,6 +156,12 @@ test('EventMaskStep - event array - keep (array)', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(1, 6, 8));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2Event, e1Shuffle, e2Shuffle], { keep: [1, 3] }).process();
+	
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(1, 6, 8));
 });
 
 test('EventMaskStep - event array - keep (array, unordered)', async(t) => {
@@ -115,6 +169,12 @@ test('EventMaskStep - event array - keep (array, unordered)', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(1, 6, 8));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: [3, 1] }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(1, 6, 8));
 });
 
 test('EventMaskStep - event array - keep (array, negative)', async(t) => {
@@ -122,6 +182,12 @@ test('EventMaskStep - event array - keep (array, negative)', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(1, 2, 6, 8));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: [1, -1] }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(1, 2, 6, 8));
 });
 
 test('EventMaskStep - event array - keep (array, negative, too large)', async(t) => {
@@ -129,6 +195,12 @@ test('EventMaskStep - event array - keep (array, negative, too large)', async(t)
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(2, 8));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: [10, -1] }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(2, 8));
 });
 
 test('EventMaskStep - event array - keep (array, negative, too negative)', async(t) => {
@@ -136,6 +208,12 @@ test('EventMaskStep - event array - keep (array, negative, too negative)', async
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(1, 6));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: [1, -10] }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(1, 6));
 });
 
 test('EventMaskStep - event array - keep (number)', async(t) => {
@@ -143,6 +221,12 @@ test('EventMaskStep - event array - keep (number)', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32(1, 6));
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: 1 }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32(1, 6));
 });
 
 test('EventMaskStep - event array - keep (number, too large)', async(t) => {
@@ -150,6 +234,12 @@ test('EventMaskStep - event array - keep (number, too large)', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32());
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: 10 }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32());
 });
 
 test('EventMaskStep - event array - keep (number, too negative)', async(t) => {
@@ -157,6 +247,12 @@ test('EventMaskStep - event array - keep (number, too negative)', async(t) => {
 	
 	t.is(res.resultType, ResultType.Scalar);
 	t.deepEqual(res.getValue(), f32());
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s2EventShuffle, e1Shuffle, e2Shuffle], { keep: -10 }).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.getValue(), f32());
 });
 
 test('EventMaskStep - VectorSequence', async(t) => {
@@ -165,6 +261,13 @@ test('EventMaskStep - VectorSequence', async(t) => {
 	t.is(res.resultType, ResultType.Series);
 	t.deepEqual(res.cycles, cycles);
 	t.deepEqual(res.getValue(), vs);
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [s1, e1Shuffle, e2Shuffle]).process();
+
+	t.is(res2.resultType, ResultType.Series);
+	t.deepEqual(res2.cycles, cycles);
+	t.deepEqual(res2.getValue(), vs);
 });
 
 test('EventMaskStep - Segment', async(t) => {
@@ -174,6 +277,12 @@ test('EventMaskStep - Segment', async(t) => {
 	t.deepEqual(res.cycles, cycles);
 	t.deepEqual(res.array, [comp, comp, comp, comp, comp, comp, comp]);
 
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [seg1, e1Shuffle, e2Shuffle]).process();
+
+	t.is(res2.resultType, ResultType.Series);
+	t.deepEqual(res2.cycles, cycles);
+	t.deepEqual(res2.array, [comp, comp, comp, comp, comp, comp, comp]);
 });
 
 test('EventMaskStep - Multidimensional array', async(t) => {
@@ -182,6 +291,13 @@ test('EventMaskStep - Multidimensional array', async(t) => {
 	t.is(res.resultType, ResultType.Series);
 	t.deepEqual(res.cycles, cycles);
 	t.deepEqual(res.array, [comp, comp, comp, comp, comp, comp, comp]);
+
+	// Test random shuffle.
+	const res2 = await mockStep(EventMaskStep, [multiDim, e1Shuffle, e2Shuffle]).process();
+
+	t.is(res2.resultType, ResultType.Series);
+	t.deepEqual(res2.cycles, cycles);
+	t.deepEqual(res2.array, [comp, comp, comp, comp, comp, comp, comp]);
 });
 
 test('EventMaskStep - VectorSequence - truncate', async(t) => {
@@ -270,6 +386,18 @@ test('EventMaskStep - exclude single', async(t) => {
 		start: 55,
 		end: 79,
 	}]);
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const excludeShuffle = new Signal(ArrayTestUtil.shuffle(exclude.getUint32ArrayValue()), 100);
+
+	const res2 = await mockStep(EventMaskStep, [signal, framesAShuffle, framesBShuffle], {
+		exclude: [excludeShuffle],
+	}).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
 });
 
 test('EventMaskStep - exclude multiple', async(t) => {
@@ -291,6 +419,19 @@ test('EventMaskStep - exclude multiple', async(t) => {
 		start: 55,
 		end: 79,
 	}]);
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const excludeAShuffle = new Signal(ArrayTestUtil.shuffle(excludeA.getUint32ArrayValue()), 100);
+	const excludeBShuffle = new Signal(ArrayTestUtil.shuffle(excludeB.getUint32ArrayValue()), 100);
+
+	const res2 = await mockStep(EventMaskStep, [signal, framesAShuffle, framesBShuffle], {
+		exclude: [excludeAShuffle, excludeBShuffle],
+	}).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
 });
 
 test('EventMaskStep - include single', async(t) => {
@@ -314,6 +455,18 @@ test('EventMaskStep - include single', async(t) => {
 		start: 55,
 		end: 79,
 	}]);
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const includeShuffle = new Signal(ArrayTestUtil.shuffle(include.getUint32ArrayValue()), 100);
+
+	const res2 = await mockStep(EventMaskStep, [signal, framesAShuffle, framesBShuffle], {
+		include: [includeShuffle],
+	}).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
 });
 
 test('EventMaskStep - include multiple', async(t) => {
@@ -335,6 +488,19 @@ test('EventMaskStep - include multiple', async(t) => {
 		start: 55,
 		end: 79,
 	}]);
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const includeAShuffle = new Signal(ArrayTestUtil.shuffle(includeA.getUint32ArrayValue()), 100);
+	const includeBShuffle = new Signal(ArrayTestUtil.shuffle(includeB.getUint32ArrayValue()), 100);
+
+	const res2 = await mockStep(EventMaskStep, [signal, framesAShuffle, framesBShuffle], {
+		include: [includeAShuffle, includeBShuffle],
+	}).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
 });
 
 test('EventMaskStep - include and exclude', async(t) => {
@@ -358,6 +524,20 @@ test('EventMaskStep - include and exclude', async(t) => {
 		start: 55,
 		end: 79,
 	}]);
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const excludeShuffle = new Signal(ArrayTestUtil.shuffle(exclude.getUint32ArrayValue()), 100);
+	const includeShuffle = new Signal(ArrayTestUtil.shuffle(include.getUint32ArrayValue()), 100);
+
+	const res2 = await mockStep(EventMaskStep, [signal, framesAShuffle, framesBShuffle], {
+		include: [includeShuffle],
+		exclude: [excludeShuffle],
+	}).process();
+
+	t.is(res2.resultType, ResultType.Scalar);
+	t.deepEqual(res2.cycles, res.cycles);
 });
 
 test('EventMaskStep - incompatible include', async(t) => {
