@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] 2024-06-25
+
+### Added
+
+* Option to sort output in concatenate step. ([#52](https://github.com/qualisys/Calqulus-Steps/pull/52)) (!2863)
+
+### Fixed
+
+* Problem in applying force filter on a pipeline node. (!2805)
+* Issue in `QuaternionSequence.ensureContinuity` method. ([#53](https://github.com/qualisys/Calqulus-Steps/pull/53))
+
+### Changed
+
+* Events are always sorted in JSON export. ([#52](https://github.com/qualisys/Calqulus-Steps/pull/52)) (!2863)
+
 ## [1.3.0] 2024-05-07
 
 ### Added
