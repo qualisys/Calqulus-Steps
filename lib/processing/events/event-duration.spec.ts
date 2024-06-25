@@ -1,5 +1,6 @@
 import test from 'ava';
 
+import { ArrayTestUtil } from '../../../test-utils/array-utils';
 import { f32, i32, mockStep } from '../../../test-utils/mock-step';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Signal } from '../../models/signal';
@@ -10,10 +11,16 @@ const eventFrames1 = i32(1, 10, 100);
 const eventFrames2 = i32(5, 50, 150);
 const frameRate = 300;
 
+const eventFrames1Shuffle = ArrayTestUtil.shuffle(eventFrames1);
+const eventFrames2Shuffle = ArrayTestUtil.shuffle(eventFrames2);
+
 const e1 = new Signal(eventFrames1, frameRate);
 const e2 = new Signal(eventFrames2, frameRate);
+const e1Shuffle = new Signal(eventFrames1Shuffle, frameRate);
+const e2Shuffle = new Signal(eventFrames2Shuffle, frameRate);
 const ef1 = new Signal(eventFrames1); // No frame rate
 const ef2 = new Signal(eventFrames1); // No frame rate
+
 const s1 = new Signal(new VectorSequence(eventFrames1, eventFrames1, eventFrames1)); // Wrong type
 const s2 = new Signal(0.1); // Wrong type
 
@@ -30,6 +37,12 @@ test('EventDurationStep', async(t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(...eventFrames1).map((f, i) => (eventFrames2[i] - f) / frameRate));
+
+	// Test random shuffle.
+	const stepShuffle = mockStep(EventDurationStep, [e1Shuffle, e2Shuffle]);
+	const resShuffle = await stepShuffle.process();
+
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('EventDurationStep - exclude single', async(t) => {
@@ -41,6 +54,16 @@ test('EventDurationStep - exclude single', async(t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(0.09, 0.14, 0.24));
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const excludeShuffle = new Signal(ArrayTestUtil.shuffle(exclude.getUint32ArrayValue()), 100);
+
+	const stepShuffle = mockStep(EventDurationStep, [framesAShuffle, framesBShuffle], { exclude: [excludeShuffle] });
+	const resShuffle = await stepShuffle.process();
+
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('EventDurationStep - exclude multiple', async(t) => {
@@ -53,6 +76,17 @@ test('EventDurationStep - exclude multiple', async(t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(0.14, 0.24));
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const excludeAShuffle = new Signal(ArrayTestUtil.shuffle(excludeA.getUint32ArrayValue()), 100);
+	const excludeBShuffle = new Signal(ArrayTestUtil.shuffle(excludeB.getUint32ArrayValue()), 100);
+
+	const stepShuffle = mockStep(EventDurationStep, [framesAShuffle, framesBShuffle], { exclude: [excludeAShuffle, excludeBShuffle] });
+	const resShuffle = await stepShuffle.process();
+
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('EventDurationStep - include single', async(t) => {
@@ -64,6 +98,16 @@ test('EventDurationStep - include single', async(t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(0.09, 0.14, 0.24));
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const includeShuffle = new Signal(ArrayTestUtil.shuffle(include.getUint32ArrayValue()), 100);
+
+	const stepShuffle = mockStep(EventDurationStep, [framesAShuffle, framesBShuffle], { include: [includeShuffle] });
+	const resShuffle = await stepShuffle.process();
+
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('EventDurationStep - include multiple', async(t) => {
@@ -76,6 +120,17 @@ test('EventDurationStep - include multiple', async(t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(0.14, 0.24));
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const includeAShuffle = new Signal(ArrayTestUtil.shuffle(includeA.getUint32ArrayValue()), 100);
+	const includeBShuffle = new Signal(ArrayTestUtil.shuffle(includeB.getUint32ArrayValue()), 100);
+
+	const stepShuffle = mockStep(EventDurationStep, [framesAShuffle, framesBShuffle], { include: [includeAShuffle, includeBShuffle] });
+	const resShuffle = await stepShuffle.process();
+
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('EventMaskStep - include and exclude', async(t) => {
@@ -85,10 +140,20 @@ test('EventMaskStep - include and exclude', async(t) => {
 	const include = new Signal(i32(12, 24, 62), 100);
 
 	const step = mockStep(EventDurationStep, [framesA, framesB], { exclude: [exclude], include: [include] });
-
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(0.09, 0.24));
+
+	// Test random shuffle.
+	const framesAShuffle = new Signal(ArrayTestUtil.shuffle(framesA.getUint32ArrayValue()), 100);
+	const framesBShuffle = new Signal(ArrayTestUtil.shuffle(framesB.getUint32ArrayValue()), 100);
+	const excludeShuffle = new Signal(ArrayTestUtil.shuffle(exclude.getUint32ArrayValue()), 100);
+	const includeShuffle = new Signal(ArrayTestUtil.shuffle(include.getUint32ArrayValue()), 100);
+
+	const stepShuffle = mockStep(EventDurationStep, [framesAShuffle, framesBShuffle], { exclude: [excludeShuffle], include: [includeShuffle] });
+	const resShuffle = await stepShuffle.process();
+
+	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
 test('EventMaskStep - incompatible include', async(t) => {
