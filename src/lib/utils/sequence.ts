@@ -39,8 +39,14 @@ export class SequenceUtil {
 				for (let i = colRowIndex[colIndex]; i < col.length; i++) {
 					if (col[i] >= currFrame) {
 						colRowIndex[colIndex] = i;
-						currFrame = col[i];
 						currRow.push(i);
+
+						if (col[i] === currFrame) {
+							currFrame++;
+						}
+						else {
+							currFrame = col[i];
+						}
 						break;
 					}
 				}
