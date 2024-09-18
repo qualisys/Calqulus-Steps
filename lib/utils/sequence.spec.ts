@@ -18,6 +18,15 @@ test('SequenceUtil - sequenceByFrameMap - 2 inputs', (t) => {
 	t.deepEqual(res.map(s => s.getValue()), [f32(1, 5, 8), f32(3, 6, 9)]);
 });
 
+test('SequenceUtil - sequenceByFrameMap - 2 inputs, some with equal indices', (t) => {
+	const res = SequenceUtil.sequenceByFrameMap(
+		s1.getFrames(i32(3, 5, 8)),
+		s1.getFrames(i32(3, 6, 7, 9)),
+	);
+
+	t.deepEqual(res.map(s => s.getValue()), [f32(3, 5, 8), f32(3, 6, 9)]);
+});
+
 test('SequenceUtil - sequenceByFrameMap - 2 inputs, reversed order', (t) => {
 	const res = SequenceUtil.sequenceByFrameMap(
 		s1.getFrames(i32(3, 6, 7, 9)),
