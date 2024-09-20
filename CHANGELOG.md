@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] 2024-09-20
+
+### Fixed
+
+* Issue in `SequenceUtil.sequenceByFrameMap`. ([#57](https://github.com/qualisys/Calqulus-Steps/pull/57))
+
 ## [1.4.0] 2024-06-25
 
 ### Added
