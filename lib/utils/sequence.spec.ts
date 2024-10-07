@@ -8,7 +8,6 @@ const f32 = (...arr: number[]) => Float32Array.from(arr);
 const i32 = (...arr: number[]) => Uint32Array.from(arr);
 
 const s1 = new Signal(f32(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-
 test('SequenceUtil - sequenceByFrameMap - 2 inputs', (t) => {
 	const res = SequenceUtil.sequenceByFrameMap(
 		s1.getFrames(i32(1, 5, 8)),
@@ -58,4 +57,13 @@ test('SequenceUtil - sequenceByFrameMap - not all signals have frames', (t) => {
 	t.is(res.length, 2);
 	t.is(res[0], s1);
 	t.is(res[1], s1Frames);
+});
+
+test('SequenceUtil - sequenceByFrameMap - 2 inputs - wrong order', (t) => {
+	const res = SequenceUtil.sequenceByFrameMap(
+		s1.getFrames(i32(3)),
+		s1.getFrames(i32(1)),
+	);
+
+	t.is(res.length, 0);
 });
