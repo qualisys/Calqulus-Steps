@@ -107,6 +107,52 @@ test('LowPassFilterStep - handle NaNs', async(t) => {
 	));
 });
 
+test('LowPassFilterStep - handle NaNs (no trailing)', async(t) => {
+	const series = new Signal(f32(undefined, undefined, undefined, 2, 1, 1, 1, 2, 1, 1, 1, 2), 300);
+	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+
+	t.is(step.filterType, FilterType.LowPass);
+
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(
+		NaN,
+		NaN,
+		NaN,
+		1.9439243078231812,
+		1.8376500606536865,
+		1.6810575723648071,
+		1.5118863582611084,
+		1.362622857093811,
+		1.2637317180633545,
+		1.2459646463394165,
+		1.336074948310852,
+		1.5503648519515991,
+	));
+});
+
+test('LowPassFilterStep - handle NaNs (no leading)', async(t) => {
+	const series = new Signal(f32(2, 1, 1, 1, 2, 1, 1, 1, 2, undefined, undefined, undefined), 300);
+	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+
+	t.is(step.filterType, FilterType.LowPass);
+
+	const res = await step.process();
+	t.deepEqual(res.getValue(), f32(
+		1.9439243078231812,
+		1.8376500606536865,
+		1.6810575723648071,
+		1.5118863582611084,
+		1.362622857093811,
+		1.2637317180633545,
+		1.2459646463394165,
+		1.336074948310852,
+		1.5503648519515991,
+		NaN,
+		NaN,
+		NaN,
+	));
+});
+
 test('LowPassFilterStep - all NaNs', async(t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, undefined, undefined, undefined), 300);
 	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });

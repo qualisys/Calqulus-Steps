@@ -121,7 +121,7 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		}
 
 		if (leadingNaNLength || trailingNaNLength) {
-			fixedSeries = fixedSeries.slice(leadingNaNLength, -trailingNaNLength);
+			fixedSeries = fixedSeries.slice(leadingNaNLength, -trailingNaNLength || undefined);
 		}
 
 		let values = [...fixedSeries];
