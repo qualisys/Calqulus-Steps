@@ -8,9 +8,10 @@ import { Signal } from '../models/signal';
 
 import { Space } from './space';
 
+// Includes null values, which should be ignored.
 const hipsTowardsX = new Segment('Hips', 
-	new VectorSequence( f32(1076.73, 1075.956), f32(324.277, 324.182), f32(1000.48, 998.467) ),
-	new QuaternionSequence( f32(-0.076565, -0.076792), f32(0.030934, 0.028671), f32(-0.720501, -0.720117), f32(0.68852, 0.688994 ) )
+	new VectorSequence( f32(1076.73, 1075.956, null), f32(324.277, null, 324.182), f32(null, 1000.48, 998.467) ),
+	new QuaternionSequence( f32(-0.076565, null, -0.076792), f32(null, 0.030934, 0.028671), f32(-0.720501, null, -0.720117), f32(0.68852, 0.688994, null) )
 );
 
 const hipsTowardsY = new Segment('Hips', 
