@@ -58,7 +58,9 @@ export class SequenceUtil {
 
 			indexRows.push(currRow);
 		}
-		
+
+		if (!indexRows.length) return [];
+
 		// Get indices by column instead of rows.
 		let [indexColumns] = indexRows;
 		indexColumns = indexColumns.map((value, column) => indexRows.map(row => row[column]));
