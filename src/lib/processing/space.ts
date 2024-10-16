@@ -101,9 +101,14 @@ export class Space extends BaseStep {
 			ez[i] = Vector.tmpVec1.z;
 		}
 
-		const exUnwrapped = AngleUtil.unwrapAngles(ex.map((v) => v * 180 / Math.PI));
-		const eyUnwrapped = AngleUtil.unwrapAngles(ey.map((v) => v * 180 / Math.PI));
-		const ezUnwrapped = AngleUtil.unwrapAngles(ez.map((v) => v * 180 / Math.PI));
+		// Remove nulls and NaNs.
+		const exFiltered = ex.filter(v => !isNaN(v) && v !== null);
+		const eyFiltered = ey.filter(v => !isNaN(v) && v !== null);
+		const ezFiltered = ez.filter(v => !isNaN(v) && v !== null);
+
+		const exUnwrapped = AngleUtil.unwrapAngles(exFiltered.map((v) => v * 180 / Math.PI));
+		const eyUnwrapped = AngleUtil.unwrapAngles(eyFiltered.map((v) => v * 180 / Math.PI));
+		const ezUnwrapped = AngleUtil.unwrapAngles(ezFiltered.map((v) => v * 180 / Math.PI));
 		const avgEulerUnwrapped = new Vector(mean(exUnwrapped), mean(eyUnwrapped), mean(ezUnwrapped));
 		const z = avgEulerUnwrapped.z;
 
