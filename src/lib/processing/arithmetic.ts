@@ -164,6 +164,8 @@ export class BaseArithmeticStep extends BaseStep {
 
 			inputs = SequenceUtil.sequenceByFrameMap(...inputs);
 
+			if (!inputs.length) throw new ProcessingError('The operands could not be processed in the specified frame sequence order.');
+
 			if (this.frameSequenceOrder === FrameSequenceOperandOrder.Reverse) {
 				// Restore input order.
 				inputs.reverse();
