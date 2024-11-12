@@ -751,6 +751,9 @@ test('Signal - clone', (t) => {
 	source.targetSpace = space;
 	source.cycles = cycles;
 	source.resultType = ResultType.Scalar;
+	source.originalSignal = source.clone();
+	source.component = 'x';
+	source.property = { name: 'test', value: 5 };
 
 	const clone = source.clone();
 
@@ -764,6 +767,9 @@ test('Signal - clone', (t) => {
 	t.is(clone.resultType, source.resultType);
 	t.is(clone.getValue(), source.getValue());
 	t.is(clone.type, source.type);
+	t.is(clone.originalSignal, source.originalSignal);
+	t.is(clone.component, source.component);
+	t.deepEqual(clone.property, source.property);
 });
 
 test('Signal - clone with no value', (t) => {
