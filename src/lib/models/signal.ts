@@ -7,7 +7,7 @@ import { Joint } from './joint';
 import { Marker } from './marker';
 import { Segment } from './segment';
 import { PlaneSequence } from './sequence/plane-sequence';
-import { IDataSequence } from './sequence/sequence';
+import { IDataSequence, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 
 /**
@@ -91,6 +91,13 @@ export class Signal implements IDataSequence {
 	 * If set, the original signal is available in [[Signal.originalSignal]].
 	 */
 	public component: string;
+
+	/**
+	 * The property of the original signal that this signal is derived from.
+	 * 
+	 * If set, the original signal is available in [[Signal.originalSignal]].
+	 */
+	public property?: ISequenceProperty;
 	/** 
 	 * Applied event cycles of this signal. This could mean that 
 	 * the data is either compacted or of its original length. 
