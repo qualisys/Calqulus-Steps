@@ -10,6 +10,7 @@ Calqulus can import the following kinds of data from your measurements:
 * EMG
 * Kinetics (accessible via *joints*)
 * Force plate
+* Events
 
 ## Importing data
 To access data in a Calqulus pipeline you can either reference it by name
@@ -142,7 +143,7 @@ _Example of multiplying the x and y component of a marker._
 **Power**
 * p
 
-### Force plate
+#### Force plate
 **Center of pressure**
 * x, y, z
 
@@ -151,6 +152,28 @@ _Example of multiplying the x and y component of a marker._
 
 **Moment**
 * mx, my, mz
+
+## Properties
+A similar concept to components are "properties". A property can be any type of data while components are series of data, where each component has the same length. Properties are not included when a signal is imported into a step and are not automatically exported, but can be explicitly imported into a pipeline.
+
+Properties are accessed in the same way as components, using the dot (.) notation.
+
+_Example of creating LON and LOFF events from the `LeftFootContact.events.on` and `LeftFootContact.events.off` properties._
+```yaml
+- event: LON
+  steps:
+   - import: LeftFootContact.events.on
+
+- event: LOFF
+  steps:
+   - import: LeftFootContact.events.off
+```
+
+### Available properties
+
+#### Joint
+* `events.on`
+* `events.off`
 
 ## Quick reference
 ### Segments

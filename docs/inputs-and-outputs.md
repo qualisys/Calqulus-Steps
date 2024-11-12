@@ -10,6 +10,7 @@
       - [EMG channels](#emg-channels)
       - [Force plates](#force-plates)
     + [Components](#components)
+    + [Properties](#properties)
   * [Mixed inputs](#mixed-inputs)
   * [Variable inputs](#variable-inputs)
     + [Static variables](#static-variables)
@@ -27,7 +28,11 @@
   * [Output immutability](#output-immutability)
   * [Output naming for reports](#output-naming-for-reports)
 - [Measurement filtering](#measurement-filtering)
-  * [Filter options](#filter-options)
+  * [Available filters](#available-filters)
+  * [Filter by measurement name](#filter-by-measurement-name)
+  * [Filter by field values](#filter-by-field-values)
+  * [Filter by force assignment](#filter-by-force-assignment)
+  * [Filter by match index](#filter-by-match-index)
   * [Output nodes for specific measurements](#output-nodes-for-specific-measurements)
 
 
@@ -136,6 +141,13 @@ For example, if you only want to use the **x** component of the Hips segment, yo
 ```yaml
 - step1: Hips.x
 ```
+For more details on how to use components, [read here](./working-with-data#components).
+
+### Properties
+
+Named signals may have properties, similar to components, that are of various types but are generally not usable in the same way as a component. You access properties in the same way as components, by typing a dot (.) followed by the name (or path) of the property.
+
+For more details on how to use properties, [read here](./working-with-data#properties).
 
 ## Mixed inputs
 
