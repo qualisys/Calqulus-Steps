@@ -1,5 +1,7 @@
 import test from 'ava';
 
+import { f32 } from '../../test-utils/mock-step';
+
 import { Joint } from './joint';
 import { VectorSequence } from './sequence/vector-sequence';
 
@@ -87,6 +89,60 @@ test('Joint - getComponent', (t) => {
 	}
 
 	t.is(joint.getComponent('wrongComponent'), undefined);
+});
+
+test('Joint - get and set properties', (t) => {
+	const joint = new Joint(
+		'test',
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		new VectorSequence(fakeArray, fakeArray, fakeArray, 300),
+		fakeArray,
+		300
+	);
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: undefined });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: undefined });
+
+	joint.setProperty('events.on', f32(1, 2, 3));
+	joint.setProperty('events.off', f32(4, 5, 6));
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: f32(1, 2, 3) });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: f32(4, 5, 6) });
+
+	joint.setProperty('events.on', f32(7, 8, 9));
+	joint.setProperty('events.off', f32(10, 11, 12));
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: f32(7, 8, 9) });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: f32(10, 11, 12) });
+
+	joint.setProperty('events.on', 'test');
+	joint.setProperty('events.off', 'test');
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: 'test' });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: 'test' });
+
+	joint.setProperty('events.on', 1);
+	joint.setProperty('events.off', 2);
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: 1 });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: 2 });
+
+	joint.setProperty('events.on', undefined);
+	joint.setProperty('events.off', undefined);
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: undefined });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: undefined });
+
+	joint.setProperty('events.on', null);
+	joint.setProperty('events.off', null);
+
+	t.deepEqual(joint.getProperty('events.on'), { name: 'events.on', value: null });
+	t.deepEqual(joint.getProperty('events.off'), { name: 'events.off', value: null });
+
+	t.throws(() => joint.setProperty('wrongProperty', 'test'));
+
+	t.is(joint.getProperty('wrongProperty'), undefined);
 });
 
 test('Joint - length', (t) => {

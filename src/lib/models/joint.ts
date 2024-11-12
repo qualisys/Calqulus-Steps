@@ -1,4 +1,3 @@
-import { PropertyType } from './property';
 import { Segment } from './segment';
 import { IDataSequence, ISequence, ISequenceDataProperties, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
