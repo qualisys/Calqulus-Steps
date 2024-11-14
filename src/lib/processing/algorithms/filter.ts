@@ -224,17 +224,18 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		required: false,
 		default: 'extrapolate',
 		description: markdownFmt`
-        	If set to ''none'', no buffering is performed.
-		
-			If set to ''extrapolate'', buffering is made by looking at the first and second values, 
-			and the last and second-to-last values, respectively. The buffer 
-			is then filled with values linearly extrapolated from these two 
-			points
+			If set to ''none'', no buffering is performed.
 
-			If set to ''reflect'', buffering is performed by taking the last number of frames specified in ''bufferFrames'',
-			creating an inverted copy, reversing this series, and then appending it to the original sequence 
-			to create a reflection
-        `,
+			If set to ''extrapolate'', buffering is made by looking at the first and second values,
+			and the last and second-to-last values, respectively. The buffer is then filled with values
+			linearly extrapolated from these two points.  
+			![Extrapolated buffer](../../images/buffer-extrapolated.png)
+
+			If set to ''reflect'', buffering is done by taking the last number of frames specified in ''bufferFrames'',
+			creating an inverted copy, reversing this series, and then appending it to the original sequence
+			to create a reflection.  
+			![Reflected buffer](../../images/buffer-reflected.png)
+		`,
 	}, {
 		name: 'iterations',
 		type: 'Number',
@@ -334,17 +335,19 @@ export class LowPassFilterStep extends BaseFilterStep {
 		required: false,
 		default: 'extrapolate',
 		description: markdownFmt`
-        	If set to ''none'', no buffering is performed.
+			If set to ''none'', no buffering is performed.
 		
 			If set to ''extrapolate'', buffering is made by looking at the first and second values, 
 			and the last and second-to-last values, respectively. The buffer 
 			is then filled with values linearly extrapolated from these two 
-			points.
+			points.  
+			![Extrapolated buffer](../../images/buffer-extrapolated.png)
 
-			If set to ''reflect'', buffering is performed by taking the last number of frames specified in ''bufferFrames'',
+			If set to ''reflect'', buffering is done by taking the last number of frames specified in ''bufferFrames'',
 			creating an inverted copy, reversing this series, and then appending it to the original sequence 
-			to create a reflection.
-        `,
+			to create a reflection.  
+			![Reflected buffer](../../images/buffer-reflected.png)
+		`,
 	}, {
 		name: 'iterations',
 		type: 'Number',
