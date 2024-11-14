@@ -10,6 +10,8 @@ export class Joint implements ISequence, IDataSequence, ISequenceDataProperties 
 	properties = [
 		{ name: 'events.on', value: undefined },
 		{ name: 'events.off', value: undefined },
+		{ name: 'events.loadStart', value: undefined },
+		{ name: 'events.loadEnd', value: undefined },
 	];
 	distalSegment: Segment;
 	proximalSegment: Segment;

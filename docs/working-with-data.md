@@ -172,8 +172,19 @@ _Example of creating LON and LOFF events from the `LeftFootContact.events.on` an
 ### Available properties
 
 #### Joint
-* `events.on`
+* `events.on` 
 * `events.off`
+
+The `on` and `off` events indicate the frames where the foot has started and stopped being assigned to a force plate. This event filters out cycles where the foot is already assigned to the force plate at the immediate beginning or end of the measurement.
+
+_*Note:* Only available on `LeftFootContact` and `RightFootContact` joints._
+
+* `events.loadStart`
+* `events.loadEnd`
+
+The `loadStart` and `loadEnd` events indicate the frames where the foot has started and stopped being assigned to a force plate. This event *includes* cycles where the foot is already assigned to the force plate at the immediate beginning or end of the measurement.
+
+_*Note:* Only available on `LeftFootContact` and `RightFootContact` joints._
 
 ## Quick reference
 ### Segments
