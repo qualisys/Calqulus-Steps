@@ -3,8 +3,10 @@ import * as Fili from 'fili/dist/fili.min.js';
 import { PropertyType } from '../../models/property';
 import { StepCategory, StepClass } from '../../step-registry';
 import { NumberUtil } from '../../utils/number';
+import { ProcessingError } from '../../utils/processing-error';
 import { SeriesBufferMethod, SeriesUtil } from '../../utils/series';
 import { markdownFmt } from '../../utils/template-literal-tags';
+import { TypeCheck } from '../../utils/type-check';
 
 import { BaseAlgorithmStep } from './base-algorithm';
 
@@ -39,7 +41,8 @@ export type IirFilter = {
 	`,
 })
 export class BaseFilterStep extends BaseAlgorithmStep {
-	extrapolate: number;
+	bufferFrames: number;
+	bufferMethod: SeriesBufferMethod;
 	iterations: number;
 	cutoffFreq: number;
 	order: number;
@@ -53,16 +56,31 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		// Use the signal frame rate as the sampling frequency of the filter function.
 		const sampleFreq = this.inputs[0]?.frameRate || 300;
 		const characteristic = 'butterworth';
-
+		
 		// Parse input parameters
+		const bufferTypeInput = this.getPropertyValue<SeriesBufferMethod>('bufferType', PropertyType.String, false);
+		this.bufferMethod =  bufferTypeInput || SeriesBufferMethod.Extrapolate;
+		this.bufferFrames = this.getPropertyValue<number>('bufferFrames', PropertyType.Number, false) || 0;
 
-		// Extrapolation - how much to add on either side of the series 
-		// useful if the filter handles the edges of the series strangely.
+		if (!TypeCheck.isValidEnumValue(SeriesBufferMethod, this.bufferMethod)) {
+			throw new ProcessingError('Unexpected type in bufferType option.');
+		}
+
+		/* DEPRECATED - Extrapolation as an option is deprecated.
+			* We keep this for backwards compatibility. 
+			* If the extrapolate option is set, we set the bufferFrames to the number input and the bufferMethod to Extrapolate.
+		* */
+		const extrapolate = this.getPropertyValue<number>('extrapolate', PropertyType.Number, false) || 0;
+		if (extrapolate && !bufferTypeInput) {
+			this.bufferFrames = extrapolate;
+			this.bufferMethod = SeriesBufferMethod.Extrapolate;
+		}
+
+		// How much to add on either side of the series useful if the filter handles the edges of the series strangely.
 		// Valid range: 0 - 1000, default: 0
-		this.extrapolate = this.getPropertyValue<number>('extrapolate', PropertyType.Number, false) || 0;
-		this.extrapolate = Math.floor(this.extrapolate);
-		this.extrapolate = Math.min(this.extrapolate, 1000);
-		this.extrapolate = Math.max(this.extrapolate, 0);
+		this.bufferFrames = Math.floor(this.bufferFrames);
+		this.bufferFrames = Math.min(this.bufferFrames, 1000);
+		this.bufferFrames = Math.max(this.bufferFrames, 0);
 
 		// Iterations - how many times to apply the filter.
 		// Valid range: 1 - 10, default: 1
@@ -127,8 +145,8 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		let values = [...fixedSeries];
 
 		// Add buffer in the beginning and end.
-		if (this.extrapolate) {
-			values = SeriesUtil.buffer(values, this.extrapolate, SeriesBufferMethod.Extrapolate);
+		if (this.bufferFrames) {
+			values = SeriesUtil.buffer(values, this.bufferFrames, this.bufferMethod);
 		}
 
 		// Apply filter repeatedly according to the iterations property.
@@ -137,8 +155,8 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		}
 
 		// Remove buffer from beginning and end.
-		if (this.extrapolate) {
-			values = values.slice(this.extrapolate, values.length - this.extrapolate);
+		if (this.bufferFrames) {
+			values = values.slice(this.bufferFrames, values.length - this.bufferFrames);
 		}
 
 		// Add the removed leading and trailing NaNs
@@ -168,7 +186,8 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 		required: false,
 		default: '0',
 		description: markdownFmt`
-			Extrapolation buffer. Defines how many frames to add on either side 
+			DEPRECATED: Use the buffer and bufferType options instead.
+			Defines how many frames to add on either side 
 			of the series, useful if the filter handles the edges of the series 
 			strangely.
 
@@ -182,6 +201,40 @@ export class BaseFilterStep extends BaseAlgorithmStep {
 			is then filled with values linearly extrapolated from these two 
 			points.
 		`,
+	}, {
+		name: 'bufferFrames',
+		type: 'Number',
+		typeComment: '(min: 0, max: 1000)',
+		required: false,
+		default: '0',
+		description: markdownFmt`
+			Defines how many frames to add on either side 
+			of the series, useful if the filter handles the edges of the series 
+			strangely.
+
+			Leading and trailing NaN values are removed before buffering, 
+			i.e., buffer begins from the first and last real value. 
+			NaN values are then re-inserted in the original places for 
+			the output.
+		`,
+	}, {
+		name: 'bufferType',
+		type: 'String',
+		enum: ['none', 'extrapolate', 'reflect'],
+		required: false,
+		default: 'extrapolate',
+		description: markdownFmt`
+        	If set to ''none'', no buffering is performed.
+		
+			If set to ''extrapolate'', buffering is made by looking at the first and second values, 
+			and the last and second-to-last values, respectively. The buffer 
+			is then filled with values linearly extrapolated from these two 
+			points
+
+			If set to ''reflect'', buffering is performed by taking the last number of frames specified in ''bufferFrames'',
+			creating an inverted copy, reversing this series, and then appending it to the original sequence 
+			to create a reflection
+        `,
 	}, {
 		name: 'iterations',
 		type: 'Number',
@@ -243,7 +296,8 @@ export class LowPassFilterStep extends BaseFilterStep {
 		required: false,
 		default: '0',
 		description: markdownFmt`
-			Extrapolation buffer. Defines how many frames to add on either side 
+			DEPRECATED: Use the buffer and bufferType options instead.
+			Defines how many frames to add on either side 
 			of the series, useful if the filter handles the edges of the series 
 			strangely.
 
@@ -257,6 +311,40 @@ export class LowPassFilterStep extends BaseFilterStep {
 			is then filled with values linearly extrapolated from these two 
 			points.
 		`,
+	}, {
+		name: 'bufferFrames',
+		type: 'Number',
+		typeComment: '(min: 0, max: 1000)',
+		required: false,
+		default: '0',
+		description: markdownFmt`
+			Defines how many frames to add on either side 
+			of the series, useful if the filter handles the edges of the series 
+			strangely.
+
+			Leading and trailing NaN values are removed before buffering, 
+			i.e., buffer begins from the first and last real value. 
+			NaN values are then re-inserted in the original places for 
+			the output.
+		`,
+	}, {
+		name: 'bufferType',
+		type: 'String',
+		enum: ['none', 'extrapolate', 'reflect'],
+		required: false,
+		default: 'extrapolate',
+		description: markdownFmt`
+        	If set to ''none'', no buffering is performed.
+		
+			If set to ''extrapolate'', buffering is made by looking at the first and second values, 
+			and the last and second-to-last values, respectively. The buffer 
+			is then filled with values linearly extrapolated from these two 
+			points.
+
+			If set to ''reflect'', buffering is performed by taking the last number of frames specified in ''bufferFrames'',
+			creating an inverted copy, reversing this series, and then appending it to the original sequence 
+			to create a reflection.
+        `,
 	}, {
 		name: 'iterations',
 		type: 'Number',
