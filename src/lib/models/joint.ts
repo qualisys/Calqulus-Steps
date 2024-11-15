@@ -1,12 +1,18 @@
 import { Segment } from './segment';
-import { IDataSequence, ISequence } from './sequence/sequence';
+import { IDataSequence, ISequence, ISequenceDataProperties, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 
-export class Joint implements ISequence, IDataSequence {
+export class Joint implements ISequence, IDataSequence, ISequenceDataProperties {
 	readonly typeName = 'Joint';
 
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'p'];
+	properties = [
+		{ name: 'events.on', value: undefined },
+		{ name: 'events.off', value: undefined },
+		{ name: 'events.loadStart', value: undefined },
+		{ name: 'events.loadEnd', value: undefined },
+	];
 	distalSegment: Segment;
 	proximalSegment: Segment;
 
@@ -85,6 +91,32 @@ export class Joint implements ISequence, IDataSequence {
 		const index = this.components.indexOf(component);
 
 		return this.array[index];
+	}
+
+	/**
+	 * Returns a [[ISequenceProperty]] from the properties array.
+	 * If the property is not found, returns undefined.
+	 * @param name 
+	 */
+	getProperty(name: string): ISequenceProperty | undefined {
+		return this.properties.find(p => p.name === name);
+	}
+
+	/**
+	 * Sets a property value in the properties array.
+	 * If the property is not found, throws an error.
+	 * @param name 
+	 * @param value
+	 */
+	setProperty(name: string, value: number | string | TypedArray): void {
+		const property = this.getProperty(name);
+
+		if (property) {
+			property.value = value;
+		}
+		else {
+			throw new Error(`Property ${name} not found.`);
+		}
 	}
 
 	/**
