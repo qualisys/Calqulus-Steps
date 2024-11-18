@@ -74,21 +74,22 @@ NaN values are re-inserted in their original places in the output.
 >
 > **Type:** `String`  
 > **Required:** `False`  
-> **Allowed values:** `none | extrapolate | reflect`  
+> **Allowed values:** `constant | extrapolate | reflect`  
 > **Default value:** `extrapolate`  
 >
-> 	If set to `none`, no buffering is performed.
+> 	If set to `constant`, the signal is buffered by extending each end with its first and last values, respectively.  
+> 	![Constant buffer](../../images/constant_buffer.png)
 >
 > 	If set to `extrapolate`, buffering is made by looking at the first and second values, 
 > 	and the last and second-to-last values, respectively. The buffer 
 > 	is then filled with values linearly extrapolated from these two 
 > 	points.  
-> 	![Extrapolated buffer](../../images/buffer-extrapolated.png)
+> 	![Extrapolated buffer](../../images/extrapolated_buffer.png)
 >
 > 	If set to `reflect`, buffering is done by taking the last number of frames specified in `bufferFrames`,
 > 	creating an inverted copy, reversing this series, and then appending it to the original sequence 
 > 	to create a reflection.  
-> 	![Reflected buffer](../../images/buffer-reflected.png)
+> 	![Reflected buffer](../../images/reflected_buffer.png)
 >
 > #### `iterations`
 >
@@ -191,20 +192,22 @@ Runs a Butterworth IIR high-pass filter over the input data.
 >
 > **Type:** `String`  
 > **Required:** `False`  
-> **Allowed values:** `none | extrapolate | reflect`  
+> **Allowed values:** `constant | extrapolate | reflect`  
 > **Default value:** `extrapolate`  
 >
-> If set to `none`, no buffering is performed.
+> 	If set to `constant`, the signal is buffered by extending each end with its first and last values, respectively.  
+> 	![Constant buffer](../../images/constant_buffer.png)
 >
-> If set to `extrapolate`, buffering is made by looking at the first and second values,
-> and the last and second-to-last values, respectively. The buffer is then filled with values
-> linearly extrapolated from these two points.  
-> ![Extrapolated buffer](../../images/buffer-extrapolated.png)
+> 	If set to `extrapolate`, buffering is made by looking at the first and second values, 
+> 	and the last and second-to-last values, respectively. The buffer 
+> 	is then filled with values linearly extrapolated from these two 
+> 	points.  
+> 	![Extrapolated buffer](../../images/extrapolated_buffer.png)
 >
-> If set to `reflect`, buffering is done by taking the last number of frames specified in `bufferFrames`,
-> creating an inverted copy, reversing this series, and then appending it to the original sequence
-> to create a reflection.  
-> ![Reflected buffer](../../images/buffer-reflected.png)
+> 	If set to `reflect`, buffering is done by taking the last number of frames specified in `bufferFrames`,
+> 	creating an inverted copy, reversing this series, and then appending it to the original sequence 
+> 	to create a reflection.  
+> 	![Reflected buffer](../../images/reflected_buffer.png)
 >
 > #### `iterations`
 >
