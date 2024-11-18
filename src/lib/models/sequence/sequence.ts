@@ -1,4 +1,3 @@
-
 export interface ISequence {
 	typeName: string;
 
@@ -11,6 +10,19 @@ export interface ISequence {
 
 	/** Returns the series for the specified component. */
 	getComponent(component: string): TypedArray;
+}
+
+export interface ISequenceProperty {
+	/** The property name, including path. */
+	name: string;
+	/** The property value. */
+	value: number | string | TypedArray;
+}
+
+export interface ISequenceDataProperties {
+	properties: ISequenceProperty[];
+	getProperty(name: string): ISequenceProperty;
+	setProperty(name: string, value: number | string | TypedArray): void;
 }
 
 export interface IDataSequence {
