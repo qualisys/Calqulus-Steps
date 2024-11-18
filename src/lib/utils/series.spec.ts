@@ -23,7 +23,7 @@ test('SeriesUtil.buffer - extrapolate', t => {
 	t.deepEqual(SeriesUtil.buffer([1, 2, 3], 0), [1, 2, 3]);
 });
 
-test('SeriesUtil.buffer - none', t => {
+test('SeriesUtil.buffer - constant', t => {
 	t.deepEqual(SeriesUtil.buffer(Int32Array.from([1, 2, 3]), 3, SeriesBufferMethod.Constant), [1, 1, 1, 1, 2, 3, 3, 3, 3]);
 
 	// Test with negative length
