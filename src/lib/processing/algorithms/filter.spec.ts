@@ -34,7 +34,7 @@ test('BaseFilterStep - "buffer type" option', async(t) => {
 	t.is(mockStep(BaseFilterStep, [f1]).bufferMethod, SeriesBufferMethod.Extrapolate);
 	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'extrapolate' }).bufferMethod, SeriesBufferMethod.Extrapolate);
 	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'reflect' }).bufferMethod, SeriesBufferMethod.Reflect);
-	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'none' }).bufferMethod, SeriesBufferMethod.None);
+	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'constant' }).bufferMethod, SeriesBufferMethod.Constant);
 	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 500, bufferFrames: 500, bufferType: 'reflect' }).bufferMethod, SeriesBufferMethod.Reflect); // Prefer bufferType over extrapolate option
 
 });

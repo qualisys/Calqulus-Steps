@@ -24,13 +24,13 @@ test('SeriesUtil.buffer - extrapolate', t => {
 });
 
 test('SeriesUtil.buffer - none', t => {
-	t.deepEqual(SeriesUtil.buffer(Int32Array.from([1, 2, 3]), 3, SeriesBufferMethod.None), [1, 1, 1, 1, 2, 3, 3, 3, 3]);
+	t.deepEqual(SeriesUtil.buffer(Int32Array.from([1, 2, 3]), 3, SeriesBufferMethod.Constant), [1, 1, 1, 1, 2, 3, 3, 3, 3]);
 
 	// Test with negative length
-	t.throws(() => SeriesUtil.buffer([1, 2, 3], -1, SeriesBufferMethod.None), { instanceOf: Error, message: 'The length must be a positive number.' });
+	t.throws(() => SeriesUtil.buffer([1, 2, 3], -1, SeriesBufferMethod.Constant), { instanceOf: Error, message: 'The length must be a positive number.' });
 
 	// Test with zero length
-	t.deepEqual(SeriesUtil.buffer([1, 2, 3], 0, SeriesBufferMethod.None), [1, 2, 3]);
+	t.deepEqual(SeriesUtil.buffer([1, 2, 3], 0, SeriesBufferMethod.Constant), [1, 2, 3]);
 });
 
 test('SeriesUtil.buffer - reflect', t => {

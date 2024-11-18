@@ -4,9 +4,7 @@ import { IFrameSpan } from '../models/signal';
  * The different supported methods to extrapolate a signal.
  */
 export enum SeriesBufferMethod {
-	/** No extrapolation. */
-	None = 'none',
-	/** The signal is extrapolated. */
+	Constant = 'constant',
 	Extrapolate = 'extrapolate',
 	Reflect = 'reflect',
 }
