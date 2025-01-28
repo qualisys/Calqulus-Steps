@@ -168,7 +168,9 @@ outputs a filtered signal with values only appearing in
 between the events.
 
 Inputs 2 and 3 will be combined into pairs from values in 
-input 2 to values in input 3.
+input 2 to values in input 3. If there are multiple frames
+in input 2 before a larger frame is found in input 3, the
+last frame in input 2 will be paired with the frame in input 3.
 
 These pairs can be used to filter the values in input 1.
 
