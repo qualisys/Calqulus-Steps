@@ -12,9 +12,61 @@ test('EventUtil - eventSequence', (t) => {
 	const spans = EventUtil.eventSequence(framesA, framesB);
 
 	t.deepEqual(spans, [
-		{ start: 2, end: 4 },
+		{ start: 3, end: 4 },
 		{ start: 7, end: 8 },
 		{ start: 10, end: 12 },
+	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+	const framesBShuffle = ArrayTestUtil.shuffle(framesB);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesBShuffle);
+
+	t.deepEqual(spansShuffle, spans);
+
+	// Test empty input
+	const spans2 = EventUtil.eventSequence(framesA, []);
+
+	t.deepEqual(spans2, []);
+});
+
+test('EventUtil - eventSequence - identical frames', (t) => {
+	const framesA = [2, 3, 7, 10, 16];
+
+	const spans = EventUtil.eventSequence(framesA, framesA);
+
+	t.deepEqual(spans, [
+		{ start: 2, end: 3 },
+		{ start: 3, end: 7 },
+		{ start: 7, end: 10 },
+		{ start: 10, end: 16 },
+	]);
+
+	// Test random shuffle
+	const framesAShuffle = ArrayTestUtil.shuffle(framesA);
+
+	const spansShuffle = EventUtil.eventSequence(framesAShuffle, framesAShuffle);
+
+	t.deepEqual(spansShuffle, spans);
+
+	// Test empty input
+	const spans2 = EventUtil.eventSequence(framesA, []);
+
+	t.deepEqual(spans2, []);
+});
+
+test('EventUtil - eventSequence - multiple start events before end event', (t) => {
+	// Should use the last start event before the end event as the start of the span.
+	const framesA = [2, 3, 7, 10, 12, 16];
+	const framesB = [4, 8, 9, 18];
+
+	const spans = EventUtil.eventSequence(framesA, framesB);
+
+	t.deepEqual(spans, [
+		{ start: 3, end: 4 },
+		{ start: 7, end: 8 },
+		{ start: 16, end: 18 },
 	]);
 
 	// Test random shuffle
