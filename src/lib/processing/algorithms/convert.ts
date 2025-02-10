@@ -14,7 +14,25 @@ import { BaseAlgorithmStep } from './base-algorithm';
 	category: 'Algorithm',
 	description: markdownFmt`
 		For each value of the input, converts it according to 
-		the units defined in the ''from'' and ''to'' options.`,
+		the units defined in the ''from'' and ''to'' options.
+		
+		For example, to convert from radians to degrees, set
+		''from'' to ''rad'' and ''to'' to ''deg''.
+		
+		<details><summary><strong>For a list of supported units, click 
+		here.</strong></summary>
+		
+		Units may generally be converted within a "type". Each unit may 
+		have one or more aliases, i.e., alternative spellings,
+		abbreviations, or synonyms.
+		
+		In addition to the following units, combination of units 
+		are also available, such as ''m/s'', ''N*m'' (alternatively
+		''N m''), ''m²'' (alternatively ''m^2'', ''m2''), etc.
+		
+		` + 
+		ConvertUtil.unitsDocMD() + markdownFmt`
+		</details>`,
 	inputs: [
 		{ type: ['Scalar', 'Series', 'Event', 'Number'] },
 	],
