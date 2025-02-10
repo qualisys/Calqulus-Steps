@@ -99,6 +99,316 @@ Outputs the absolute value for each value in the input signal.
 For each value of the input, converts it according to 
 the units defined in the `from` and `to` options.
 
+For example, to convert from radians to degrees, set
+`from` to `rad` and `to` to `deg`.
+
+<details><summary><strong>For a list of supported units, click 
+here.</strong></summary>
+
+Units may generally be converted within a "type". Each unit may 
+have one or more aliases, i.e., alternative spellings,
+abbreviations, or synonyms.
+
+In addition to the following units, combination of units 
+are also available, such as `m/s`, `N*m` (alternatively
+`N m`), `m²` (alternatively `m^2`, `m2`), etc.
+### Acceleration
+
+| Unit | Aliases |
+|------|------|
+| `Gal` |  |
+| `gee` |  |
+
+### Activity
+
+| Unit | Aliases |
+|------|------|
+| `katal` | `kat`, `Katal` |
+| `unit` | `U`, `enzUnit` |
+
+### Angle
+
+| Unit | Aliases |
+|------|------|
+| `degree` | `°`, `deg`, `degrees` |
+| `gradian` | `gon`, `grad`, `grads` |
+| `radian` | `rad`, `radians` |
+| `rotation` |  |
+
+### Angular Velocity
+
+| Unit | Aliases |
+|------|------|
+| `rpm` |  |
+
+### Area
+
+| Unit | Aliases |
+|------|------|
+| `acre` | `acres` |
+| `hectare` |  |
+| `sqft` |  |
+
+### Capacitance
+
+| Unit | Aliases |
+|------|------|
+| `farad` | `F`, `Farad` |
+
+### Charge
+
+| Unit | Aliases |
+|------|------|
+| `Ah` |  |
+| `coulomb` | `C`, `Coulomb` |
+
+### Conductance
+
+| Unit | Aliases |
+|------|------|
+| `siemens` | `S`, `Siemens` |
+
+### Currency
+
+| Unit | Aliases |
+|------|------|
+| `cents` |  |
+| `dollar` | `USD` |
+
+### Current
+
+| Unit | Aliases |
+|------|------|
+| `ampere` | `A`, `Ampere`, `amp`, `amps` |
+
+### Energy
+
+| Unit | Aliases |
+|------|------|
+| `Calorie` | `Cal`, `Calories` |
+| `Wh` |  |
+| `btu` | `BTU`, `BTUs` |
+| `calorie` | `cal`, `calories` |
+| `erg` | `ergs` |
+| `joule` | `J`, `Joule`, `joules` |
+| `therm-US` | `th`, `therm`, `therms`, `Therm` |
+
+### Force
+
+| Unit | Aliases |
+|------|------|
+| `dyne` | `dyn` |
+| `newton` | `N`, `Newton` |
+| `pound-force` | `lbf` |
+
+### Frequency
+
+| Unit | Aliases |
+|------|------|
+| `hertz` | `Hz`, `Hertz` |
+
+### Illuminance
+
+| Unit | Aliases |
+|------|------|
+| `lux` |  |
+
+### Inductance
+
+| Unit | Aliases |
+|------|------|
+| `henry` | `H`, `Henry` |
+
+### Information
+
+| Unit | Aliases |
+|------|------|
+| `bit` | `b`, `bits` |
+| `byte` | `B`, `bytes` |
+
+### Information Rate
+
+| Unit | Aliases |
+|------|------|
+| `Bps` |  |
+| `bps` |  |
+
+### Length
+
+| Unit | Aliases |
+|------|------|
+| `AU` | `astronomical-unit` |
+| `angstrom` | `ang`, `angstroms` |
+| `datamile` | `DM` |
+| `fathom` | `fathoms` |
+| `foot` | `ft`, `feet`, `'` |
+| `furlong` | `furlongs` |
+| `inch` | `in`, `inches`, `"` |
+| `league` | `leagues` |
+| `light-minute` | `lmin` |
+| `light-second` | `ls` |
+| `light-year` | `ly` |
+| `meter` | `m`, `meters`, `metre`, `metres` |
+| `mil` | `mils` |
+| `mile` | `mi`, `miles` |
+| `naut-mile` | `nmi` |
+| `parsec` | `pc`, `parsecs` |
+| `pica` | `picas` |
+| `point` | `pt`, `points` |
+| `redshift` | `z`, `red-shift` |
+| `rod` | `rd`, `rods` |
+| `yard` | `yd`, `yards` |
+
+### Luminous Power
+
+| Unit | Aliases |
+|------|------|
+| `lumen` | `lm` |
+
+### Magnetism
+
+| Unit | Aliases |
+|------|------|
+| `gauss` | `G` |
+| `maxwell` | `Mx`, `maxwells` |
+| `oersted` | `Oe`, `oersteds` |
+| `tesla` | `T`, `teslas` |
+| `weber` | `Wb`, `webers` |
+
+### Mass
+
+| Unit | Aliases |
+|------|------|
+| `AMU` | `u`, `amu` |
+| `carat` | `ct`, `carats` |
+| `dalton` | `Da`, `Dalton`, `Daltons`, `daltons` |
+| `dram` | `drams`, `dr` |
+| `grain` | `grains`, `gr` |
+| `gram` | `g`, `grams`, `gramme`, `grammes` |
+| `kilogram` | `kg`, `kilograms` |
+| `metric-ton` | `tonne` |
+| `ounce` | `oz`, `ounces` |
+| `pound` | `lbs`, `lb`, `pounds`, `#` |
+| `short-ton` | `tn`, `ton` |
+| `slug` | `slugs` |
+| `stone` | `stones`, `st` |
+
+### Potential
+
+| Unit | Aliases |
+|------|------|
+| `volt` | `V`, `Volt`, `volts` |
+
+### Power
+
+| Unit | Aliases |
+|------|------|
+| `horsepower` | `hp` |
+| `volt-ampere` | `VA` |
+| `volt-ampere-reactive` | `var`, `Var`, `VAr`, `VAR` |
+| `watt` | `W`, `watts` |
+
+### Pressure
+
+| Unit | Aliases |
+|------|------|
+| `atm` | `ATM`, `atmosphere`, `atmospheres` |
+| `bar` | `bars` |
+| `cmh2o` | `cmH2O` |
+| `inHg` |  |
+| `inh2o` | `inH2O` |
+| `mmHg` |  |
+| `pascal` | `Pa`, `Pascal` |
+| `psi` |  |
+| `torr` |  |
+
+### Radiation
+
+| Unit | Aliases |
+|------|------|
+| `becquerel` | `Bq`, `becquerels` |
+| `curie` | `Ci`, `curies` |
+| `gray` | `Gy`, `grays` |
+| `roentgen` | `R` |
+| `sievert` | `Sv`, `sieverts` |
+
+### Resistance
+
+| Unit | Aliases |
+|------|------|
+| `ohm` | `Ohm`, `Ω`, `Ω` |
+
+### Speed
+
+| Unit | Aliases |
+|------|------|
+| `fps` |  |
+| `knot` | `kt`, `kn`, `kts`, `knots` |
+| `kph` |  |
+| `mph` |  |
+
+### Substance
+
+| Unit | Aliases |
+|------|------|
+| `mole` | `mol` |
+
+### Temperature
+
+| Unit | Aliases |
+|------|------|
+| `celsius` | `°C`, `degC`, `centigrade` |
+| `fahrenheit` | `degF` |
+| `kelvin` | `degK` |
+| `rankine` | `degR` |
+| `temp-C` | `tempC` |
+| `temp-F` | `tempF` |
+| `temp-K` | `tempK` |
+| `temp-R` | `tempR` |
+
+### Time
+
+| Unit | Aliases |
+|------|------|
+| `century` | `centuries` |
+| `day` | `d`, `days` |
+| `decade` | `decades` |
+| `fortnight` | `fortnights` |
+| `hour` | `h`, `hr`, `hrs`, `hours` |
+| `minute` | `min`, `mins`, `minutes` |
+| `second` | `s`, `sec`, `secs`, `seconds` |
+| `week` | `wk`, `weeks` |
+| `year` | `y`, `yr`, `years`, `annum` |
+
+### Viscosity
+
+| Unit | Aliases |
+|------|------|
+| `poise` | `P` |
+| `stokes` | `St` |
+
+### Volume
+
+| Unit | Aliases |
+|------|------|
+| `beerbarrel` | `bl`, `bl-us`, `beerbarrels`, `beer-barrel`, `beer-barrels` |
+| `beerbarrel-imp` | `blimp`, `bl-imp`, `beerbarrels-imp`, `beer-barrel-imp`, `beer-barrels-imp` |
+| `bushel` | `bu`, `bsh`, `bushels` |
+| `cup` | `cu`, `cups` |
+| `fluid-ounce` | `floz`, `fluid-ounces` |
+| `fluid-ounce-imp` | `flozimp`, `floz-imp`, `fluid-ounces-imp` |
+| `gallon` | `gal`, `gallons` |
+| `gallon-imp` | `galimp`, `gallons-imp` |
+| `liter` | `l`, `L`, `liters`, `litre`, `litres` |
+| `oilbarrel` | `bbl`, `oilbarrels`, `oil-barrel`, `oil-barrels` |
+| `pint` | `pt`, `pints` |
+| `pint-imp` | `ptimp`, `pints-imp` |
+| `quart` | `qt`, `quarts` |
+| `tablespoon` | `tb`, `tbsp`, `tbs`, `tablespoons` |
+| `teaspoon` | `tsp`, `teaspoons` |
+
+</details>
+
 ---
 
 ### `diff`

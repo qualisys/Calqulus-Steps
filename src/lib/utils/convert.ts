@@ -1,6 +1,13 @@
 import Qty from 'js-quantities';
+import { startCase } from 'lodash';
 
 export class ConvertUtil {
+	static unitReplacements = {
+		'°': 'deg',
+		'°C': 'degC',
+		'%': 'percent',
+	};
+	
 	/**
 	 * Returns a converter function.
 	 * 
@@ -26,16 +33,9 @@ export class ConvertUtil {
 
 		unit = unit.trim();
 
-		switch (unit) {
-			case '°':
-				unit = 'deg';
-				break;
-			case '°C':
-				unit = 'degC';
-				break;
-			case '%':
-				unit = 'percent';
-				break;
+		// Replace unit replacements
+		if (unit in ConvertUtil.unitReplacements) {
+			unit = ConvertUtil.unitReplacements[unit];
 		}
 
 		// Replace superscript characters
@@ -49,5 +49,43 @@ export class ConvertUtil {
 		}
 
 		return unit;
+	}
+
+	static unitsDocMD()	{
+		let doc = '';
+		const kinds = Qty.getKinds();
+		kinds.sort();
+
+		for (const kind of kinds) {
+			const units = Qty.getUnits(kind);
+			units.sort();
+
+			if (units.length === 0) continue;
+
+			doc += `### ${ startCase(kind) }\n\n`;
+			doc += '| Unit | Aliases |\n';
+			doc += '|------|------|\n';
+
+			for (const unit of units) {
+				const aliases = Qty
+					.getAliases(unit)
+					// Remove the unit itself from the aliases
+					.filter(v => v !== unit);
+				;
+				
+				for (const replacement in ConvertUtil.unitReplacements) {
+					const searchValue = ConvertUtil.unitReplacements[replacement];
+					if (unit === searchValue || aliases.includes(searchValue)) {
+						aliases.unshift(replacement);
+					}
+				}
+
+				doc += `| \`${ unit }\` | ${ aliases.map(v => '`' + v + '`').join(', ') } |\n`;
+			}
+
+			doc += '\n';
+		}
+
+		return doc;
 	}
 }
