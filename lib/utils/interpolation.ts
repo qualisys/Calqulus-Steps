@@ -26,14 +26,14 @@ export class Interpolation {
 		return out;
 	}
 
-	public static slerp(q1: number[], q2: number[], a: number) {
+	public static slerp(q1: TypedArray, q2: TypedArray, a: number) {
 		if (q1.length !== 4 || q2.length !== 4) {
 			throw new Error('Each quaternion must have 4 components.');
 		}
 	  
 		// Compute the dot product (angle between quaternions).
 		let dot = q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2] + q1[3] * q2[3];
-	  
+
 		// If the dot product is negative, invert q2 to take the shorter path.
 		if (dot < 0) {
 			q2 = q2.map(c => -c);
@@ -68,8 +68,8 @@ export class Interpolation {
 		]);
 	}
 
-	public static slerpArray(quats: number[][], outLength: number): TypedArray[] {
-		if (quats.length < 2) {
+	public static slerpArray(quats: TypedArray[], outLength: number): TypedArray[] {
+		if (quats?.length < 2) {
 			throw new Error('Need at least two quaternions for interpolation.');
 		}
 
