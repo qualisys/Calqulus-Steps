@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] 2025-02-25
+
+## Added
+
+* Support for differing marker and skeleton frame rate. ([#66](https://github.com/qualisys/Calqulus-Steps/pull/66))
+
 ## [1.4.1] 2024-09-20
 
 ### Fixed
