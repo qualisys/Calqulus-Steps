@@ -6,6 +6,10 @@ import { Segment } from './segment';
 import { Skeleton } from './skeleton';
 
 export interface IMeasurement {
+	originalFrameRate?: {
+		marker: number;
+		segment: number;
+	};
 	analogFrameRate: number;
 	endFrame: number;
 	events: IEvent[];
