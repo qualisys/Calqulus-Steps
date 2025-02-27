@@ -164,7 +164,7 @@ specified points (`v0 -> v1`, `v1 -> v2`), in radians.
 The points can be specified as arrays or with named
 vector signals (ie markers).
 
-Given the inputs `v1`, `v2` and `v3`, the resulting angle 
+Given the inputs `v0`, `v1` and `v2`, the resulting angle 
 is given by:
 
 ``` javascript
