@@ -47,6 +47,7 @@ export class EventUtil {
 		let nextStart: number;
 		let nextToIndex = 0;
 
+		fromLoop:
 		for (let i = 0; i < fromFrames.length; i++) {
 			const currFrame = fromFrames[i];
 			if (nextStart !== undefined && currFrame < nextStart) continue;
@@ -54,6 +55,13 @@ export class EventUtil {
 
 			for (let j = nextToIndex; j < toFrames.length; j++) {
 				if (toFrames[j] > currFrame) {
+					// Check if the next start value is still smaller than the current end value.
+					if (i < fromFrames.length - 1 && fromFrames[i + 1] < toFrames[j]) {
+						// If so, skip to the next start value.
+						nextToIndex = j;
+						continue fromLoop;
+					}
+
 					pairs.push({
 						start: currFrame, 
 						end: toFrames[j]
