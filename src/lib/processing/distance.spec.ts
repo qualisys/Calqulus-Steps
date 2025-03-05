@@ -73,3 +73,16 @@ test('MagnitudeStep - VectorSequence', async(t) => {
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2.4494897427832));
 });
+
+test('DistanceStep - 1 input sequence', async(t) => {
+	const testSignal1 = new Signal(new VectorSequence(f32(0,3,6), f32(0,4,8), f32(0,0,0)));
+	const testSignal2 = new Signal(new VectorSequence(f32(1,2,3,4,5), f32(0,0,0,0,0), f32(0,0,0,0,0)));
+	const step1 = mockStep(DistanceStep, [testSignal1]);
+	const step2 = mockStep(DistanceStep, [testSignal2]);
+	
+	const res1 = await step1.process();
+	const res2 = await step2.process();
+
+	t.deepEqual(res1.getValue(), f32(5,5));
+	t.deepEqual(res2.getValue(), f32(1,1,1,1));
+});
