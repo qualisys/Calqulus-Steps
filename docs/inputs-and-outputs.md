@@ -182,6 +182,8 @@ It is possible to get information about the session or measurement by importing 
 - `$bodyMass` - returns the inferred or measured body mass (in kg) used for inverse dynamics for the session. It may come from a field or measured from a static measurement, depending on the session `Body weight mode` field.
 - `$bodyMassSource` - returns the source for the body mass above. It may have one of the following values: `From force plate`, `Entered`, or `Default`. The latter is returned when the body mass could not be derived using any of the other sources. 
 
+For more information about how Calqulus sources the body mass, [click here](./body-mass.md).
+
 #### Example
 
 ```yaml
