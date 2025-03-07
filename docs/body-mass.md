@@ -1,6 +1,7 @@
 # Body Mass
 
-The body mass (i.e., the weight of the subject) is essential for calculating inverse dynamics. During session processing, Calqulus determines the subject's body mass using one of the following sources:
+Body mass (or body weight) is crucial for calculating inverse dynamics—in Calqulus processing, these terms are used interchangeably to denote the subject’s weight in kilograms.
+During session processing, Calqulus determines the subject's body mass using one of the following sources:
 
 - Force data from force plates during a static measurement.
 - The value provided in the `Mass` or `Weight` field in QTM.
