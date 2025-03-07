@@ -11,6 +11,7 @@ Calqulus can import the following kinds of data from your measurements:
 * Kinetics (accessible via *joints*)
 * Force plate
 * Events
+* Body mass
 
 ## Importing data
 To access data in a Calqulus pipeline you can either reference it by name
