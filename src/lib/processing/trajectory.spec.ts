@@ -10,6 +10,8 @@ import { CumulativeDistanceStep } from './trajectory';
 const vs1 = new Signal(new VectorSequence(f32(0,3,6), f32(0,4,8), f32(0,0,0)));
 const vs2 = new Signal(new VectorSequence(f32(1,2,3,4,5), f32(0,0,0,0,0), f32(0,0,0,0,0)));
 const vs3 = new Signal(new VectorSequence(f32(1,2,NaN,4,5), f32(0,0,0,0,0), f32(0,0,0,0,0)));
+const vs4 = new Signal(new VectorSequence(f32(1,2,3,4,5,6,7,8,9), f32(0,0,0,0,0,0,0,0,0), f32(0,0,0,0,0,0,0,0,0)));
+vs4.cycles = [{ start: 1, end: 4 }, { start: 6, end: 8 }]; 
 
 test('CumulativeDistanceStep - Handle input errors', async(t) => {
 	const step1 = mockStep(CumulativeDistanceStep, [new Signal((f32(1,1,1), f32(0,0,0)))]); // 2 dimensional vector
@@ -39,4 +41,12 @@ test('CumulativeDistanceStep - Cumulative distances for vector sequences with Na
 	const res1 = await step1.process();
 
 	t.deepEqual(res1.getValue()[0], NaN);
+});
+
+test('CumulativeDistanceStep - Cumulative distances for vector sequences with Cycles', async(t) => {
+	const step1 = mockStep(CumulativeDistanceStep, [vs4]);
+	const res1 = await step1.process();
+
+	t.deepEqual(res1.getValue()[0], 3);
+	t.deepEqual(res1.getValue()[1], 2);
 });
