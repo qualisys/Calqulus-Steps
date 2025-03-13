@@ -10,7 +10,7 @@ import { markdownFmt } from '../utils/template-literal-tags';
 import { BaseStep } from './base-step';
 
 @StepClass({
-	name: 'trajectorydistance',
+	name: 'trajectoryDistance',
 	category: 'Geometry',
 	description: markdownFmt`
         Accepts a segment sequence and calculates the aggregate 
@@ -80,7 +80,7 @@ export class TrajectoryDistanceStep extends BaseStep {
 }
 
 @StepClass({
-	name: 'cumulativedistance',
+	name: 'cumulativeDistance',
 	category: 'Geometry',
 	description: markdownFmt`
         Accepts a segment sequence and calculates the cumulative 
