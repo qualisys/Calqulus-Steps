@@ -2,26 +2,25 @@ import { PropertyType } from '../models/property';
 import { Segment } from '../models/segment';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal, SignalType } from '../models/signal';
-import { Vector } from '../models/spatial/vector';
 import { StepClass } from '../step-registry';
+import { KinematicsUtil } from '../utils/math/kinematics';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
 
 import { BaseStep } from './base-step';
 
 @StepClass({
-	name: 'trajectoryDistance',
+	name: 'cumulativeDistance',
 	category: 'Geometry',
 	description: markdownFmt`
-        Accepts a segment sequence and calculates the aggregate 
-		distances between points of the sequence (Euclidean norm). `,
+        Accepts a segment sequence and calculates the cumulative 
+		sum of distances between points in the sequence (Euclidean norm).`,
 	inputs: [
 		{ type: ['Series (<vector> | <segment>)'] },
 	],
-	output: ['Series'],
+	output: ['Scalar'],
 })
-
-export class TrajectoryDistanceStep extends BaseStep {
+export class CumulativeDistanceStep extends BaseStep {
 	useCycles: boolean;
 	
 	init() {
@@ -41,7 +40,7 @@ export class TrajectoryDistanceStep extends BaseStep {
 		}
 		
 		const cycles = (this.useCycles && sourceInput.cycles && sourceInput.cycles.length) ? sourceInput.getSignalCycles() : [sourceInput];
-		const cycleRes: Float32Array[] = [];
+		const cycleRes: NumericArray = [];
 		
 		for (const cycle of cycles) {			
 			if (![SignalType.Segment, SignalType.VectorSequence].includes(cycle.type)) {
@@ -49,58 +48,21 @@ export class TrajectoryDistanceStep extends BaseStep {
 			}
 
 			const a = cycle.getValue() as Segment | VectorSequence;
-			const ax = a.getComponent('x');
-			const ay = a.getComponent('y');
-			const az = a.getComponent('z');
-	
-			if (ax.length !== ay.length || ax.length !== az.length) {
-				throw new ProcessingError('The input sequence must have the same length for all components.');
-			}
-	
-			const length = a.length;
-			if (length < 2) {
-				throw new ProcessingError('At least two points are required to calculate distances.');
-			}
-	
-			const d = new Vector(0, 0, 0);
-			const dist = new Float32Array(length - 1);
-	
-			for (let i = 1; i < length; i++) {
-				d.x = ax[i] - ax[i - 1];
-				d.y = ay[i] - ay[i - 1];
-				d.z = az[i] - az[i - 1];
-				dist[i - 1] = Vector.norm(d);
-			}
-
-			cycleRes.push(dist);
-		}
-
-		return this.inputs[0].clone(cycleRes);
-	}
-}
-
-@StepClass({
-	name: 'cumulativeDistance',
-	category: 'Geometry',
-	description: markdownFmt`
-        Accepts a segment sequence and calculates the cumulative 
-		sum of distances between points in the sequence (Euclidean norm).`,
-	inputs: [
-		{ type: ['Series (<vector> | <segment>)'] },
-	],
-	output: ['Series'],
-})
-export class CumulativeDistanceStep extends TrajectoryDistanceStep {
-	async process(): Promise<Signal> {
-		const cycles = await super.process();
-		const dataCycles = cycles.getValue() as Float32Array[];
-		
-		const cycleRes = [];
-		for (const data of dataCycles) {
-			const cumulative = data.reduce((prev, curr) => prev + curr);
+			const distances = KinematicsUtil.distanceBetweenPoints(a);
+			const cumulative = distances.slice(0, -1).reduce((prev, curr) => {
+				if (isNaN(prev) || isNaN(curr)) {
+					return NaN;
+				}
+				
+				return prev + curr;
+			});
+			
 			cycleRes.push(cumulative);
 		}
+
+		const returnSignal: Signal = sourceInput.clone(cycleRes);
+		returnSignal.cycles = undefined;
 			
-		return this.inputs[0].clone(cycleRes);
+		return returnSignal;
 	}
 }
