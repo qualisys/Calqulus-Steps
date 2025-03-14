@@ -58,17 +58,19 @@ export class KinematicsUtil {
 	 * The output array will be shorter than the input by 1 frame.
 	 * @param values VectorSequence or Segment
 	 */
-	static distanceBetweenPoints(values: VectorSequence | Segment): Float32Array {	
+	static distanceBetweenPoints(values: VectorSequence | Segment): Float32Array {
+		if (!values) throw new Error('The input sequence is undefined.');
+
 		const ax = values.getComponent('x');
 		const ay = values.getComponent('y');
 		const az = values.getComponent('z');
 		
 		if (ax.length !== ay.length || ax.length !== az.length) {
-			throw new ProcessingError('The input sequence must have the same length for all components.');
+			throw new Error('The input sequence must have the same length for all components.');
 		}
 	
 		if (ax.length < 2) {
-			throw new ProcessingError('At least two points are required to calculate distances.');
+			throw new Error('At least two points are required to calculate distances.');
 		}
 		
 		const d = new Vector(0, 0, 0);

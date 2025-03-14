@@ -1,7 +1,7 @@
 import { PropertyType } from '../models/property';
 import { Segment } from '../models/segment';
 import { VectorSequence } from '../models/sequence/vector-sequence';
-import { IFrameSpan, Signal } from '../models/signal';
+import { IFrameSpan, Signal, SignalType } from '../models/signal';
 import { StepClass } from '../step-registry';
 import { KinematicsUtil } from '../utils/math/kinematics';
 import { ProcessingError } from '../utils/processing-error';
@@ -70,10 +70,23 @@ export class CumulativeDistanceStep extends BaseStep {
 	}
 
 	async process(): Promise<Signal> {
-		const sourceInput = this.inputs[0];
-		
 		if (this.inputs.length !== 1) {
-			throw new ProcessingError('Only one input signal allowed.');
+			throw new ProcessingError('One input signal expected.');
+		}
+
+		const sourceInput = this.inputs[0];
+
+		if (![SignalType.Segment, SignalType.VectorSequence].includes(sourceInput.type)) {
+			throw new ProcessingError(`Unexpected type. Expected Segment or Vector, got ${ sourceInput.typeToString }.`);
+		}
+		
+		const inputArray = sourceInput.array;
+		if (inputArray[0].length !== inputArray[1].length || inputArray[0].length !== inputArray[2].length) {
+			throw new ProcessingError('The input sequence must have the same length for all components.');
+		}
+	
+		if (sourceInput.length < 2) {
+			throw new ProcessingError('At least two points are required to calculate distances.');
 		}
 		
 		const cycles = (this.useCycles && sourceInput.cycles && sourceInput.cycles.length) ? sourceInput.getSignalCycles() : [sourceInput];

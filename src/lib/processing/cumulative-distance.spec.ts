@@ -18,11 +18,15 @@ test('CumulativeDistanceStep - Handle input errors', async(t) => {
 	const step2 = mockStep(CumulativeDistanceStep, [new Signal((f32(1,1,1), f32(0,0,0), f32(1,1,1), f32(0,0,0)))]); // 4 dimensional vector
 	const step3 = mockStep(CumulativeDistanceStep, [new Signal(new VectorSequence(f32(0,3,6), f32(0,4,8), f32(0,0)))]); // inconsistent length
 	const step4 = mockStep(CumulativeDistanceStep, [new Signal(new VectorSequence(f32(0), f32(0), f32(0)))]); // single point
-
+	const step5 = mockStep(CumulativeDistanceStep, []);
+	const step6 = mockStep(CumulativeDistanceStep, [vs1, vs2]);
+	
 	await t.throwsAsync(step1.process());
 	await t.throwsAsync(step2.process());
 	await t.throwsAsync(step3.process());
 	await t.throwsAsync(step4.process());
+	await t.throwsAsync(step5.process());
+	await t.throwsAsync(step6.process());
 });
 
 test('CumulativeDistanceStep - Cumulative distances for vector sequences (scalar)', async(t) => {
