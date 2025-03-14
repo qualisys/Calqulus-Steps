@@ -133,6 +133,22 @@ export class SeriesUtil {
 	}
 
 	/**
+	 * Returns the cumulative sum of the input values.
+	 * @param values The values to sum.
+	 */
+	static cumulativeSum(values: NumericArray): NumericArray {
+		if (values === undefined) return undefined;
+
+		const result = values.slice();
+
+		for (let i = 1; i < values.length; i++) {
+			result[i] = result[i - 1] + values[i];
+		}
+
+		return result;
+	}
+
+	/**
 	 * Returns an array where the values from the beginning of the input series 
 	 * are reflected for the specified length.
 	 * 

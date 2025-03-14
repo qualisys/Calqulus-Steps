@@ -43,8 +43,8 @@ test('CumulativeDistanceStep - Cumulative distances for vector sequences (series
 	const res1 = await step1.process();
 	const res2 = await step2.process();
 
-	t.deepEqual(res1.getValue(), f32(5, 5, NaN));
-	t.deepEqual(res2.getValue(), f32(1, 1, 1, 1, NaN));
+	t.deepEqual(res1.getValue(), f32(5, 10, NaN));
+	t.deepEqual(res2.getValue(), f32(1, 2, 3, 4, NaN));
 });
 
 test('CumulativeDistanceStep - Cumulative distances for vector sequences with NaN (scalar)', async(t) => {
@@ -58,7 +58,7 @@ test('CumulativeDistanceStep - Cumulative distances for vector sequences with Na
 	const step1 = mockStep(CumulativeDistanceStep, [vs3], { scalar: false });
 	const res1 = await step1.process();
 
-	t.deepEqual(res1.getValue(), f32(1, NaN, NaN, 1, NaN));
+	t.deepEqual(res1.getValue(), f32(NaN, NaN, NaN, NaN, NaN));
 });
 
 test('CumulativeDistanceStep - Cumulative distances for vector sequences with Cycles (scalar)', async(t) => {
@@ -72,5 +72,5 @@ test('CumulativeDistanceStep - Cumulative distances for vector sequences with Cy
 	const step1 = mockStep(CumulativeDistanceStep, [vs4], { scalar: false });
 	const res1 = await step1.process();
 
-	t.deepEqual(res1.getValue(), f32(NaN, 1, 1, 1, NaN, NaN, 1, 1, NaN));
+	t.deepEqual(res1.getValue(), f32(NaN, 1, 2, 3, NaN, NaN, 1, 2, NaN));
 });

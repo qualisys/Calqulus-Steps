@@ -5,6 +5,7 @@ import { IFrameSpan, Signal } from '../models/signal';
 import { StepClass } from '../step-registry';
 import { KinematicsUtil } from '../utils/math/kinematics';
 import { ProcessingError } from '../utils/processing-error';
+import { SeriesUtil } from '../utils/series';
 import { markdownFmt } from '../utils/template-literal-tags';
 
 import { BaseStep } from './base-step';
@@ -89,7 +90,16 @@ export class CumulativeDistanceStep extends BaseStep {
 			const cycleSpan = cycleSpans[i];
 			const cycle = cycles[i].getValue() as Segment | VectorSequence;
 
-			const distances = KinematicsUtil.distanceBetweenPoints(cycle);
+			let distances: NumericArray = KinematicsUtil.distanceBetweenPoints(cycle);
+
+			if (!this.scalar) {
+				distances = SeriesUtil.cumulativeSum(distances);
+
+				// If any NaN values are present, set all values to NaN.
+				if (distances.some(isNaN)) {
+					distances = distances.map(() => NaN);
+				}
+			}
 
 			for (let j = 0; j < distances.length; j++) {
 				cycleResults[cycleSpan.start + j] = distances[j];
