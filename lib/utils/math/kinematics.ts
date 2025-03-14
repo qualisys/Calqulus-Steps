@@ -55,8 +55,7 @@ export class KinematicsUtil {
 	 * Calculates the distances between adjacent points in a 
 	 * VectorSequence or Segment.
 	 * 
-	 * The output array will maintain the same length as the 
-	 * input by appending a trailing NaN.
+	 * The output array will be shorter than the input by 1 frame.
 	 * @param values VectorSequence or Segment
 	 */
 	static distanceBetweenPoints(values: VectorSequence | Segment): Float32Array {	
@@ -73,7 +72,7 @@ export class KinematicsUtil {
 		}
 		
 		const d = new Vector(0, 0, 0);
-		const dist = new Float32Array(ax.length).fill(NaN);
+		const dist = new Float32Array(ax.length - 1);
 		
 		for (let i = 1; i < ax.length; i++) {
 			d.x = ax[i] - ax[i - 1];

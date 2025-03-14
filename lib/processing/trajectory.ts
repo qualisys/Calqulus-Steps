@@ -49,7 +49,7 @@ export class CumulativeDistanceStep extends BaseStep {
 
 			const a = cycle.getValue() as Segment | VectorSequence;
 			const distances = KinematicsUtil.distanceBetweenPoints(a);
-			const cumulative = distances.slice(0, -1).reduce((prev, curr) => {
+			const cumulative = distances.reduce((prev, curr) => {
 				if (isNaN(prev) || isNaN(curr)) {
 					return NaN;
 				}
