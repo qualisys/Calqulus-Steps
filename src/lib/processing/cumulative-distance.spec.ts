@@ -4,7 +4,7 @@ import { f32, mockStep } from '../../test-utils/mock-step';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
 
-import { CumulativeDistanceStep } from './trajectory';
+import { CumulativeDistanceStep } from './cumulative-distance';
 
 
 const vs1 = new Signal(new VectorSequence(f32(0,3,6), f32(0,4,8), f32(0,0,0)));

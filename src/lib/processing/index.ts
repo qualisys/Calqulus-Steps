@@ -98,7 +98,7 @@ export * from './algorithms/round';
 export * from './algorithms/trigonometry';
 export * from './algorithms/integral';
 export * from './dot-product';
-export * from './trajectory';
+export * from './cumulative-distance';
 
 // Logic
 export * from './logic';
