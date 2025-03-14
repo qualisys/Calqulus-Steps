@@ -94,11 +94,6 @@ export class CumulativeDistanceStep extends BaseStep {
 
 			if (!this.scalar) {
 				distances = SeriesUtil.cumulativeSum(distances);
-
-				// If any NaN values are present, set all values to NaN.
-				if (distances.some(isNaN)) {
-					distances = distances.map(() => NaN);
-				}
 			}
 
 			for (let j = 0; j < distances.length; j++) {
