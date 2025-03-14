@@ -1,7 +1,6 @@
 import { Segment } from '../../models/segment';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Vector } from '../../models/spatial/vector';
-import { ProcessingError } from '../processing-error';
 import { SeriesUtil } from '../series';
 
 export class KinematicsUtil {
