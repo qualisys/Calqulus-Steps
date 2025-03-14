@@ -1,5 +1,7 @@
 import test from 'ava';
 
+import { f32 } from '../../test-utils/mock-step';
+
 import { SeriesBufferMethod, SeriesUtil } from './series';
 
 test('SeriesUtil.buffer', t => {
@@ -188,4 +190,19 @@ test('SeriesUtil.reflectEnd', t => {
 	// Lengths longer than the series should return the extrapolated slope (for two-value arrays).
 	t.deepEqual(SeriesUtil.reflectEnd([1, 2], 10), [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 	t.deepEqual(SeriesUtil.reflectEnd([2, 1], 10), [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]);
+});
+
+test('SeriesUtil.cumulativeSum', t => {
+	// Test with empty series
+	t.is(SeriesUtil.cumulativeSum(undefined), undefined);
+	t.deepEqual(SeriesUtil.cumulativeSum(f32()), f32());
+	
+	t.deepEqual(SeriesUtil.cumulativeSum(f32(1)), f32(1));
+	t.deepEqual(SeriesUtil.cumulativeSum(f32(1, 2, 3)), f32(1, 3, 6));
+	t.deepEqual(SeriesUtil.cumulativeSum(f32(1, 2, 3, 4, 5)), f32(1, 3, 6, 10, 15));
+	t.deepEqual(SeriesUtil.cumulativeSum(f32(1, 2, 3, -4, -5)), f32(1, 3, 6, 2, -3));
+
+	// Test with NaNs
+	t.deepEqual(SeriesUtil.cumulativeSum(f32(1, NaN, 3)), f32(1, NaN, NaN));
+	t.deepEqual(SeriesUtil.cumulativeSum(f32(1, 2, NaN, 4, 5)), f32(1, 3, NaN, NaN, NaN));
 });
