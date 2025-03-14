@@ -14,7 +14,7 @@ import { BaseStep } from './base-step';
 	name: 'cumulativeDistance',
 	category: 'Geometry',
 	description: markdownFmt`
-        Accepts a segment sequence and calculates the cumulative 
+		Accepts a segment sequence and calculates the cumulative 
 		sum of distances between points in the sequence (Euclidean norm).
 		
 		By default, the step returns a scalar value for each cycle of the input signal.
