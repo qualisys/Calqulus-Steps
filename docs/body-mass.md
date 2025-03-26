@@ -41,7 +41,7 @@ When the `Body weight mode` is set to `Automatic`, Calqulus resolves the body ma
 
 ### Force Plate Mode
 
-When the `Body weight mode` is set to `From force plate`, Calqulus follows this order:
+When the `Body weight mode` is set to `From force plates`, Calqulus follows this order:
 
 1. **Force Plates:** Use force plate data if available and valid.
 2. **Default Weight:** Otherwise, use the default weight (65kg).
