@@ -1,5 +1,6 @@
 # Geometry steps
 
+- [cumulativeDistance](#cumulativedistance)
 - [distance](#distance)
 - [magnitude](#magnitude)
 - [plane](#plane)
@@ -10,6 +11,69 @@
 ---
 
 ## Steps
+
+### `cumulativeDistance`
+
+**Inputs**
+>
+> 1. `Series (<vector> | <segment>)`
+>
+
+**Output:** `Scalar`
+
+**Options**
+>
+> #### `scalar`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `True`  
+>
+> Returns the integral as a single value scalar.
+>
+> #### `useCycles`
+>
+> **Type:** `Boolean`  
+> **Required:** `False`  
+> **Default value:** `True`  
+>
+> If the signal has cycles defined, the cumulative length step will be run 
+> separately over each signal, and a list of values are returned, 
+> one for each cycle.
+>
+> To avoid this behavior, set `useCycles` to `false`.
+>
+> For information on how to set event cycles on a signal, 
+> see the [eventMask](./event-utils.md) step.
+>
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Accepts a segment sequence and calculates the cumulative 
+sum of distances between points in the sequence (Euclidean norm).
+
+By default, the step returns a scalar value for each cycle of the input signal.
+
+To return a series of values, set the `scalar` option to `false`.
+
+To ignore cycles and calculate the cumulative distance for the entire cycle, 
+set the `useCycles` option to `false`.
+
+---
 
 ### `distance`
 

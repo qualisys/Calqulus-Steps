@@ -96,7 +96,7 @@ export class IntegralStep extends BaseStep {
 					integralsPerCycle.push(integral);
 				}
 			}
-		}		
+		}
 
 		if (this.scalar) {
 			// Unpack cycles per component, summarize each cycle.
@@ -104,6 +104,8 @@ export class IntegralStep extends BaseStep {
 
 			const returnData = Signal.typeFromArray(this.inputs[0].type, scalarValues as TypedArray[]);
 			const returnSignal = this.inputs[0].clone(returnData);
+
+			returnSignal.cycles = undefined;
 			returnSignal.resultType = ResultType.Scalar;
 
 			return returnSignal;
