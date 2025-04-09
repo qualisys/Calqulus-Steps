@@ -179,6 +179,10 @@ It is possible to get information about the session or measurement by importing 
 - `$framerate` - returns the measurement (marker) frame rate in frames per second.
 - `$analogFramerate` - returns the frame rate used for analog signals (EMG, etc.) for the measurement.
 - `$length` - returns the number of (marker) frames of the measurement.
+- `$bodyMass` - returns the inferred or measured body mass (in kg) used for inverse dynamics for the session. It may come from a field or measured from a static measurement, depending on the session `Body weight mode` field.
+- `$bodyMassSource` - returns the source for the body mass above. It may have one of the following values: `From force plates`, `Entered`, or `Default`. The latter is returned when the body mass could not be derived using any of the other sources. 
+
+For more information about how Calqulus sources the body mass, [click here](./body-mass.md).
 
 #### Example
 
