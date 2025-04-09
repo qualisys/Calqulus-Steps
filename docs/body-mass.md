@@ -19,9 +19,9 @@ Force magnitudes from all active force plates are then combined frame by frame. 
 
 Subsequently, all frames where the combined force magnitude is below 50N are filtered out. If no frames exceed this threshold, the force plate data is ignored. Otherwise, the median of the remaining frames is divided by the gravitational acceleration to estimate the body mass.
 
-Finally, if the estimated body mass from the force plates exceeds 200kg, the data is deemed invalid and ignored.
+Finally, if the estimated body mass from the force plates exceeds 400kg, the data is deemed invalid and ignored.
 
-If Calqulus is unable to determine the mass using the force plates at any point in this process, it will fall back to using the weight defined in the session fields or the default weight, as specified by the `Body weight mode`.
+If Calqulus is unable to determine the mass using the force plates at any point in this process, it will not calculate the inverse dynamics for the session.
 
 ## Reading Body Mass from Fields
 
@@ -37,18 +37,18 @@ When the `Body weight mode` is set to `Automatic`, Calqulus resolves the body ma
 
 1. **Force Plates:** Use force plate data if available and valid.
 2. **Field Value:** Use the value from the `Mass` or `Weight` field if it exists and is nonzero.
-3. **Default Weight:** Otherwise, use the default weight (65kg).
+3. **Default:** Otherwise, no mass is used and inverse dynamics calculations are skipped.
 
 ### Force Plate Mode
 
 When the `Body weight mode` is set to `From force plates`, Calqulus follows this order:
 
 1. **Force Plates:** Use force plate data if available and valid.
-2. **Default Weight:** Otherwise, use the default weight (65kg).
+2. **Default:** Otherwise, skip inverse dynamics calculations.
 
 ### Entered Weight Mode
 
 When the `Body weight mode` is set to `Entered`, Calqulus follows this order:
 
 1. **Field Value:** Use the value from the `Mass` or `Weight` field if it exists and is nonzero.
-2. **Default Weight:** Otherwise, use the default weight (65kg).
+2. **Default:** Otherwise, skip inverse dynamics calculations.
