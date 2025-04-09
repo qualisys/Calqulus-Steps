@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] 2025-04-09
+
+## Added
+
+* Reading body mass from field or force plate. ([#68](https://github.com/qualisys/Calqulus-Steps/pull/68)) (!4190)
+* Step for calculating the cumulative length of a curve ([#70](https://github.com/qualisys/Calqulus-Steps/pull/70))
+* Handles different frame rates between markers and skeletons by upsampling the lower framerate signals to match. (!4205)
+
 ## [1.5.0] 2025-02-25
 
 ## Added
