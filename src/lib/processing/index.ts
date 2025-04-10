@@ -95,6 +95,7 @@ export * from './algorithms/negate';
 export * from './algorithms/power';
 export * from './algorithms/root';
 export * from './algorithms/round';
+export * from './algorithms/sort';
 export * from './algorithms/trigonometry';
 export * from './algorithms/integral';
 export * from './dot-product';
