@@ -2,18 +2,41 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../../test-utils/mock-step';
 import { Signal } from '../../models/signal';
+import { SeriesBufferMethod } from '../../utils/series';
 
 import { BaseFilterStep, FilterType, HighPassFilterStep, LowPassFilterStep } from './filter';
 
 const f1 = new Signal(32);
 const s1 = new Signal(f32(2, 1, 1, 1, 2, 1, 1, 1, 2), 300);
 
-test('BaseFilterStep - "extrapolate" option', async(t) => {
-	t.is(mockStep(BaseFilterStep, [f1]).extrapolate, 0); // Default value
-	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 500 }).extrapolate, 500);
-	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 5000 }).extrapolate, 1000); // Beyond max value
-	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: -10 }).extrapolate, 0); // Below max value
-	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 10.5 }).extrapolate, 10); // should be integer
+test('BaseFilterStep - "buffer type" option', async(t) => {
+	// Test deprecated 'extrapolate' option
+	t.is(mockStep(BaseFilterStep, [f1]).bufferFrames, 0); // Default value
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 500 }).bufferFrames, 500);
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 5000 }).bufferFrames, 1000); // Beyond max value
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: -10 }).bufferFrames, 0); // Below max value
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 10.5 }).bufferFrames, 10); // should be integer
+
+	t.is(mockStep(BaseFilterStep, [f1]).bufferMethod, SeriesBufferMethod.Extrapolate);
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 500 }).bufferMethod, SeriesBufferMethod.Extrapolate);
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 5000 }).bufferMethod, SeriesBufferMethod.Extrapolate);
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: -10 }).bufferMethod, SeriesBufferMethod.Extrapolate);
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 10.5 }).bufferMethod, SeriesBufferMethod.Extrapolate);
+
+	// Test bufferFrames and bufferType options
+	t.is(mockStep(BaseFilterStep, [f1]).bufferFrames, 0); // Default value
+	t.is(mockStep(BaseFilterStep, [f1], { bufferFrames: 500 }).bufferFrames, 500);
+	t.is(mockStep(BaseFilterStep, [f1], { bufferFrames: 5000 }).bufferFrames, 1000); // Beyond max value
+	t.is(mockStep(BaseFilterStep, [f1], { bufferFrames: -10 }).bufferFrames, 0); // Below max value
+	t.is(mockStep(BaseFilterStep, [f1], { bufferFrames: 10.5 }).bufferFrames, 10); // Should be integer
+
+	await t.throws(() => mockStep(BaseFilterStep, [f1], { bufferType: 'undefined' })); // Invalid buffer type
+	t.is(mockStep(BaseFilterStep, [f1]).bufferMethod, SeriesBufferMethod.Extrapolate);
+	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'extrapolate' }).bufferMethod, SeriesBufferMethod.Extrapolate);
+	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'reflect' }).bufferMethod, SeriesBufferMethod.Reflect);
+	t.is(mockStep(BaseFilterStep, [f1], { bufferType: 'constant' }).bufferMethod, SeriesBufferMethod.Constant);
+	t.is(mockStep(BaseFilterStep, [f1], { extrapolate: 500, bufferFrames: 500, bufferType: 'reflect' }).bufferMethod, SeriesBufferMethod.Reflect); // Prefer bufferType over extrapolate option
+
 });
 
 test('BaseFilterStep - "iterations" option', async(t) => {
@@ -41,7 +64,7 @@ test('BaseFilterStep - "order" option', async(t) => {
 });
 
 test('LowPassFilterStep - basic test', async(t) => {
-	const step = mockStep(LowPassFilterStep, [s1], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+	const step = mockStep(LowPassFilterStep, [s1], { bufferFrames: 2, bufferType: 'extrapolate', cutoff: 15, iterations: 2, order: 1 });
 
 	t.is(step.filterType, FilterType.LowPass);
 
@@ -60,9 +83,8 @@ test('LowPassFilterStep - basic test', async(t) => {
 	));
 });
 
-
 test('HighPassFilterStep - basic test', async(t) => {
-	const step = mockStep(HighPassFilterStep, [s1], { extrapolate: 100, cutoff: 40, iterations: 5, order: 3 });
+	const step = mockStep(HighPassFilterStep, [s1], { bufferFrames: 100, bufferType: 'extrapolate', cutoff: 40, iterations: 5, order: 3 });
 
 	t.is(step.filterType, FilterType.HighPass);
 
@@ -83,7 +105,7 @@ test('HighPassFilterStep - basic test', async(t) => {
 
 test('LowPassFilterStep - handle NaNs', async(t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, 2, 1, 1, 1, 2, 1, 1, 1, 2, undefined, undefined, undefined), 300);
-	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+	const step = mockStep(LowPassFilterStep, [series], { bufferFrames: 2, bufferType: 'extrapolate', cutoff: 15, iterations: 2, order: 1 });
 
 	t.is(step.filterType, FilterType.LowPass);
 
@@ -109,7 +131,7 @@ test('LowPassFilterStep - handle NaNs', async(t) => {
 
 test('LowPassFilterStep - handle NaNs (no trailing)', async(t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, 2, 1, 1, 1, 2, 1, 1, 1, 2), 300);
-	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+	const step = mockStep(LowPassFilterStep, [series], { bufferFrames: 2, bufferType: 'extrapolate', cutoff: 15, iterations: 2, order: 1 });
 
 	t.is(step.filterType, FilterType.LowPass);
 
@@ -132,7 +154,7 @@ test('LowPassFilterStep - handle NaNs (no trailing)', async(t) => {
 
 test('LowPassFilterStep - handle NaNs (no leading)', async(t) => {
 	const series = new Signal(f32(2, 1, 1, 1, 2, 1, 1, 1, 2, undefined, undefined, undefined), 300);
-	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+	const step = mockStep(LowPassFilterStep, [series], { bufferFrames: 2, bufferType: 'extrapolate', cutoff: 15, iterations: 2, order: 1 });
 
 	t.is(step.filterType, FilterType.LowPass);
 
@@ -155,7 +177,7 @@ test('LowPassFilterStep - handle NaNs (no leading)', async(t) => {
 
 test('LowPassFilterStep - all NaNs', async(t) => {
 	const series = new Signal(f32(undefined, undefined, undefined, undefined, undefined, undefined), 300);
-	const step = mockStep(LowPassFilterStep, [series], { extrapolate: 2, cutoff: 15, iterations: 2, order: 1 });
+	const step = mockStep(LowPassFilterStep, [series], { bufferFrames: 2, bufferType: 'extrapolate', cutoff: 15, iterations: 2, order: 1 });
 
 	const res = await step.process();
 
