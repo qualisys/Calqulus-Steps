@@ -10,8 +10,7 @@ import { BaseStep } from './base-step';
 @StepCategory({
 	name: 'Data structure',
 	description: markdownFmt`
-		These are steps that uses events as inputs to affect the output 
-		in various ways.
+		These are steps that create or manipulate data structures.
 	`,
 })
 @StepClass({

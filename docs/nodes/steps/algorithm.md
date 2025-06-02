@@ -11,6 +11,7 @@
 - [qbrt](#qbrt)
 - [root](#root)
 - [round](#round)
+- [sort](#sort)
 - [sqrt](#sqrt)
 
 These are steps that takes a single input (scalar / series / events /
@@ -791,6 +792,48 @@ given a certain precision:
 * Precision `2`: `1234.57`
 * Precision `3`: `1234.567`
 
+
+---
+
+### `sort`
+
+**Inputs**
+>
+> 1. `Scalar | Series | Event | Number`
+>
+
+**Output:** `Scalar | Series | Event | Number`
+
+**Options**
+>
+> #### `order`
+>
+> **Type:** `String`  
+> **Required:** `False`  
+> **Allowed values:** `asc | desc`  
+> **Default value:** `asc`  
+
+>
+
+**Shared options**
+>
+> <details><summary>Global options</summary>
+> 
+> The following options are available globally on all steps.
+>
+> * [export](./index.md#export)
+> * [output](./index.md#output)
+> * [set](./index.md#set)
+> * [space](./index.md#space)
+>
+>
+></details>
+>
+
+
+Sorts the input in the specified order. By default, the values are sorted
+in ascending order. The order can be changed by setting the `order`
+property to `desc`.
 
 ---
 
