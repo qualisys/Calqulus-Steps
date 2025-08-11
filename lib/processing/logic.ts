@@ -6,6 +6,7 @@ import { StepCategory, StepClass } from '../step-registry';
 import { parseExpressionOperands } from '../utils/expression';
 import { NumberUtil } from '../utils/number';
 import { ProcessingError } from '../utils/processing-error';
+import { StringUtil } from '../utils/string';
 import { markdownFmt } from '../utils/template-literal-tags';
 
 import { BaseStep } from './base-step';
@@ -160,17 +161,30 @@ export class IfStep extends BaseStep {
 			throw new ProcessingError(`Unexpected input length for 'else' option. Expected 1 input, got ${ elseInput.length }.`);
 		}
 
+		// This offsets the operand indices when operands are detected to be string literals.
+		// It ensures that we skip trying to map string literals to an input.
+		let operandOffset = 0;
+
 		for (let i = 0; i < operands.length; i++) {
 			const operand = operands[i];
 
 			if (!NumberUtil.isNumeric(operand.value)) {
 				let value: string | number | boolean;
 
+				// Detect string literals
+				const stringLiteral = StringUtil.parseStringLiteral(operand.originalValue as string);
+				
+				if (stringLiteral !== false) {
+					set(expressionValues, operand.value, stringLiteral);
+					operandOffset--;
+					continue;
+				}
+
 				if (operand.exists) {
-					value = this.hasValueForInput(i);
+					value = this.hasValueForInput(i + operandOffset);
 				}
 				else {
-					value = this.getValueForInput(i);
+					value = this.getValueForInput(i + operandOffset);
 				}
 
 				if (operand.empty) {
