@@ -441,60 +441,60 @@ test('IfStep (mock) - Inverted string comparison - else', async(t) => {
 });
 
 test('IfStep (mock) - String comparison with literal - then', async(t) => {
-	const step = mockStep(IfStep, [sString], {
+	const step = mockStep(IfStep, [sString, sString], {
 		then: [s10],
 		else: [s0],
-	}, 'MyString == "test"');
+	}, 'MyString == $"test"');
 
 	const res = await step.process();
 	t.is(res.getValue(), s10.getValue());
 });
 
 test('IfStep (mock) - String comparison with literal - else', async(t) => {
-	const step = mockStep(IfStep, [sString], {
+	const step = mockStep(IfStep, [sString, sString2], {
 		then: [s10],
 		else: [s0],
-	}, 'MyString == "test2"');
+	}, 'MyString == $"test2"');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());
 });
 
 test('IfStep (mock) - String comparison with multi word literal - then', async(t) => {
-	const step = mockStep(IfStep, [sString2], {
+	const step = mockStep(IfStep, [sString2, sString2], {
 		then: [s10],
 		else: [s0],
-	}, 'MyString == "test 2"');
+	}, 'MyString == $"test 2"');
 
 	const res = await step.process();
 	t.is(res.getValue(), s10.getValue());
 });
 
 test('IfStep (mock) - String comparison with multi word literal - else', async(t) => {
-	const step = mockStep(IfStep, [sString], {
+	const step = mockStep(IfStep, [sString, sString2], {
 		then: [s10],
 		else: [s0],
-	}, 'MyString == "test2"');
+	}, 'MyString == $"test 2"');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());
 });
 
 test('IfStep (mock) - String comparison with multi word literal - then - reverse order', async(t) => {
-	const step = mockStep(IfStep, [sString2], {
+	const step = mockStep(IfStep, [sString2, sString2], {
 		then: [s10],
 		else: [s0],
-	}, '"test 2" == MyString');
+	}, '$"test 2" == MyString');
 
 	const res = await step.process();
 	t.is(res.getValue(), s10.getValue());
 });
 
 test('IfStep (mock) - String comparison with multi word literal - else - reverse order', async(t) => {
-	const step = mockStep(IfStep, [sString], {
+	const step = mockStep(IfStep, [sString2, sString], {
 		then: [s10],
 		else: [s0],
-	}, '"test 2" == MyString');
+	}, '$"test 2" == MyString');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());
@@ -504,7 +504,7 @@ test('IfStep (mock) - String comparison with unmatched quotes 1 - else', async(t
 	const step = mockStep(IfStep, [sString2], {
 		then: [s10],
 		else: [s0],
-	}, '"test 2\' == MyString');
+	}, '$"test 2\' == MyString');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());
@@ -514,47 +514,47 @@ test('IfStep (mock) - String comparison with unmatched quotes 2 - else', async(t
 	const step = mockStep(IfStep, [sString2], {
 		then: [s10],
 		else: [s0],
-	}, '\'test 2" == MyString');
+	}, '$\'test 2" == MyString');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());
 });
 
 test('IfStep (mock) - String comparison with escaped quotes - then', async(t) => {
-	const step = mockStep(IfStep, [sString3], {
+	const step = mockStep(IfStep, [sString3, sString3], {
 		then: [s10],
 		else: [s0],
-	}, '"test \\"2\\"" == MyString');
+	}, '$"test \\"2\\"" == MyString');
 
 	const res = await step.process();
 	t.is(res.getValue(), s10.getValue());
 });
 
 test('IfStep (mock) - String comparison with escaped quotes - else', async(t) => {
-	const step = mockStep(IfStep, [sString2], {
+	const step = mockStep(IfStep, [sString3, sString2], {
 		then: [s10],
 		else: [s0],
-	}, '"test \\"2\\"" == MyString');
+	}, '$"test \\"2\\"" == MyString');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());
 });
 
 test('IfStep (mock) - String comparison with multi word literal - multi input - then', async(t) => {
-	const step = mockStep(IfStep, [sString2, s1, s2], {
+	const step = mockStep(IfStep, [sString2, sString2, s1, s2], {
 		then: [s10],
 		else: [s0],
-	}, 'MyString == "test 2" && MyVar1 < MyVar2');
+	}, 'MyString == $"test 2" && MyVar1 < MyVar2');
 
 	const res = await step.process();
 	t.is(res.getValue(), s10.getValue());
 });
 
 test('IfStep (mock) - String comparison with multi word literal - multi input - else', async(t) => {
-	const step = mockStep(IfStep, [sString, s1, s2], {
+	const step = mockStep(IfStep, [sString, sString2, s1, s2], {
 		then: [s10],
 		else: [s0],
-	}, 'MyString == "test2" && MyVar1 == MyVar2');
+	}, 'MyString == "test 2" && MyVar1 == MyVar2');
 
 	const res = await step.process();
 	t.is(res.getValue(), s0.getValue());

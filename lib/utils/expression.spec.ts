@@ -213,24 +213,24 @@ test('parseExpressionOperands - simple mixed', (t) => {
 });
 
 test('parseExpressionOperands - string literals', (t) => {
-	t.deepEqual(parseExpressionOperands('myVar == "Hello World"'), {
-		expression: 'myVar == operand_1_HelloWorld',
+	t.deepEqual(parseExpressionOperands('myVar == $"Hello World"'), {
+		expression: 'myVar == operand_1_$HelloWorld',
 		operands: [
 			{ value: 'myVar', originalValue: 'myVar', ...defaultResult }, 
-			{ value: 'operand_1_HelloWorld', originalValue: '"Hello World"', ...defaultResult },
+			{ value: 'operand_1_$HelloWorld', originalValue: '$"Hello World"', ...defaultResult },
 		]
 	});
-	t.deepEqual(parseExpressionOperands('"Hello World" == myVar'), {
-		expression: 'operand_0_HelloWorld == myVar',
+	t.deepEqual(parseExpressionOperands('$"Hello World" == myVar'), {
+		expression: 'operand_0_$HelloWorld == myVar',
 		operands: [
-			{ value: 'operand_0_HelloWorld', originalValue: '"Hello World"', ...defaultResult }, 
+			{ value: 'operand_0_$HelloWorld', originalValue: '$"Hello World"', ...defaultResult }, 
 			{ value: 'myVar', originalValue: 'myVar', ...defaultResult },
 		]
 	});
-	t.deepEqual(parseExpressionOperands('\'Hello World\' == myVar'), {
-		expression: 'operand_0_HelloWorld == myVar',
+	t.deepEqual(parseExpressionOperands('$\'Hello World\' == myVar'), {
+		expression: 'operand_0_$HelloWorld == myVar',
 		operands: [
-			{ value: 'operand_0_HelloWorld', originalValue: '\'Hello World\'', ...defaultResult }, 
+			{ value: 'operand_0_$HelloWorld', originalValue: '$\'Hello World\'', ...defaultResult }, 
 			{ value: 'myVar', originalValue: 'myVar', ...defaultResult },
 		]
 	});
