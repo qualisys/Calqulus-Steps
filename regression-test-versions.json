@@ -1,7 +1,7 @@
 {
 	"ci": "main",
 	"current": {
-		"engine": "feature/string-literals",
+		"engine": "main",
 		"pipelines": "main",
 		"toolbelt": "main"
 	},

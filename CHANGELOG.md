@@ -1,7 +1,15 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [1.7.0] 2025-08-14
+
+## Added
+
+* Handle string literals in inputs [#72](https://github.com/qualisys/Calqulus-Steps/pull/72) (!5297)
+
 ## [1.6.1] 2025-06-02
+
 ## Added
 
 * Step for sorting signals [#71](https://github.com/qualisys/Calqulus-Steps/pull/71)
