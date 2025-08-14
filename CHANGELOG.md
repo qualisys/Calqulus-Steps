@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.1] 2025-08-14
+
+## Fixed
+
+* Handle character sanitization in expression inputs [#73](https://github.com/qualisys/Calqulus-Steps/pull/73)
+
 ## [1.7.0] 2025-08-14
 
 ## Added
