@@ -142,19 +142,19 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 			const fieldMatches = v.match(/^\$field\((.*)\)$/);
 
 			if (fieldMatches && fieldMatches.length === 2) {
-				v = '$field_' + fieldMatches[1].split(',').join('_');
+				v = '$field_' + fieldMatches[1].split(';').join('_');
 			}
 
 			// Clean up $prev calls from the expression.
 			const prevMatches = v.match(/^\$prev\((.*)\)$/);
 
 			if (prevMatches && prevMatches.length === 2) {
-				v = '$prev_' + prevMatches[1].split(',').join('_');
+				v = '$prev_' + prevMatches[1].split(';').join('_');
 			}
 
-			// Remove any whitespace from the operands.
-			if (/\s/.test(v)) {
-				v = v.replace(/\s/g, '');
+			// Remove any reserved characters from the operands.
+			if (/[^A-Za-z0-9$_@.]/.test(v)) {
+				v = v.replace(/[^A-Za-z0-9$_@.]/g, '');
 				v = 'operand_' + index + '_' + v;
 			}
 
