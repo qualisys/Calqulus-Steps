@@ -234,6 +234,21 @@ _This example shows how to use a `Treadmill Speed` measurement field to calculat
 
 _This example shows how to use the `Subject Height` and `Subject Weight` session fields to calculate the subject BMI._
 
+## String literals
+Normally, a string used as an input will be used to look for a correspondingly named signal. However, it is possible to define a signal with a string value instead of referencing a signal by using the string literal syntax.
+
+Any string wrapped in double or single quotes, prepended by a dollar sign (\$), `$"My string value"` or `$'My string value'` is interpreted as a string value and will get exposed as a Signal with the specified value.
+
+It is especially useful when comparing a string value from a field, like so:
+
+```yaml
+- event: LON
+  steps:
+    - if: $field(Event mode) == $"Force"
+      then: LON_force
+      else: LON_kinematic
+```
+
 ## Select value at specific event
 
 For named signals, you can get an input at only the frames corresponding to an event by typing an @ sign, followed by the name of the event, like so:

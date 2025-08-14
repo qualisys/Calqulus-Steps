@@ -158,6 +158,9 @@ export const parseExpressionOperands = (exp: string): { operands: IExpressionOpe
 				v = 'operand_' + index + '_' + v;
 			}
 
+			// Remove any quotes from the operands.
+			v = v.replace(/['"]/g, '');
+
 			return {
 				originalValue: originalValue,
 				value: v,

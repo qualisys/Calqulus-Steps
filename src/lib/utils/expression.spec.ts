@@ -212,6 +212,30 @@ test('parseExpressionOperands - simple mixed', (t) => {
 	});
 });
 
+test('parseExpressionOperands - string literals', (t) => {
+	t.deepEqual(parseExpressionOperands('myVar == $"Hello World"'), {
+		expression: 'myVar == operand_1_$HelloWorld',
+		operands: [
+			{ value: 'myVar', originalValue: 'myVar', ...defaultResult }, 
+			{ value: 'operand_1_$HelloWorld', originalValue: '$"Hello World"', ...defaultResult },
+		]
+	});
+	t.deepEqual(parseExpressionOperands('$"Hello World" == myVar'), {
+		expression: 'operand_0_$HelloWorld == myVar',
+		operands: [
+			{ value: 'operand_0_$HelloWorld', originalValue: '$"Hello World"', ...defaultResult }, 
+			{ value: 'myVar', originalValue: 'myVar', ...defaultResult },
+		]
+	});
+	t.deepEqual(parseExpressionOperands('$\'Hello World\' == myVar'), {
+		expression: 'operand_0_$HelloWorld == myVar',
+		operands: [
+			{ value: 'operand_0_$HelloWorld', originalValue: '$\'Hello World\'', ...defaultResult }, 
+			{ value: 'myVar', originalValue: 'myVar', ...defaultResult },
+		]
+	});
+});
+
 test('parseExpressionOperands - chained numeric', (t) => {
 	t.deepEqual(parseExpressionOperands('1 > 2 && 3 < 4'), {
 		expression: '1 > 2 && 3 < 4',

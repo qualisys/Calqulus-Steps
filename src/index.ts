@@ -50,6 +50,7 @@ export * from './lib/utils/processing-error';
 export * from './lib/utils/reference-signal';
 export * from './lib/utils/sequence';
 export * from './lib/utils/series';
+export * from './lib/utils/string';
 export * from './lib/utils/template-literal-tags';
 export * from './lib/utils/type-check';
 export * from './lib/utils/vector-input-parser';
