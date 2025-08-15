@@ -2,7 +2,7 @@
 	"ci": "main",
 	"current": {
 		"engine": "main",
-		"pipelines": "main",
+		"pipelines": "release/2.0.1",
 		"toolbelt": "main"
 	},
 	"reference": {
