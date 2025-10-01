@@ -18,6 +18,7 @@ export * from './lib/models/inputs';
 export * from './lib/models/joint';
 export * from './lib/models/marker';
 export * from './lib/models/measurement';
+export * from './lib/models/phase';
 export * from './lib/models/node-interface';
 export * from './lib/models/property';
 export * from './lib/models/segment';

@@ -36,6 +36,11 @@ export interface INode {
 	getPropertyValue<T>(key: string, expectedTypes: PropertyType | PropertyType[], required?: boolean, defaultValue?: T): T;
 }
 
+export interface IPhaseNode extends INode {
+	/** Array of all imports to this step node. */
+	in: (string | number | (string | number)[])[];
+}
+
 export interface IStepNode extends INode {
 	/** Array of all imports to this step node. */
 	in: (string | number | (string | number)[])[];
