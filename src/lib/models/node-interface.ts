@@ -37,8 +37,14 @@ export interface INode {
 }
 
 export interface IPhaseNode extends INode {
-	/** Array of all imports to this step node. */
-	in: (string | number | (string | number)[])[];
+	/** The description of the phase. */
+	description: string;
+	/** The display name of the phase. */
+	displayName: string;
+	/** The end event of the phase. */
+	end: string;
+	/** The start event of the phase. */
+	start: string;
 }
 
 export interface IStepNode extends INode {
