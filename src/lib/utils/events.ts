@@ -12,7 +12,7 @@ export class EventUtil {
 	 * Returns an array of [[IFrameSpan]] objects, where the start frames
 	 * are defined by events in `fromFrames` and the end frames from `toFrames`.
 	 * 
-	 * It starts by tsking the first frame in `fromFrames`, then finds the next
+	 * It starts by taking the first frame in `fromFrames`, then finds the next
 	 * frame in `toFrames` which is higher than the start frame.
 	 * 
 	 * It continues to find the next frame in `fromFrames` which is equal to 
