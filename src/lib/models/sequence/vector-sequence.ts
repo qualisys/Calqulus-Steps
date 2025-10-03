@@ -33,6 +33,10 @@ export class VectorSequence implements ISequence {
 		this.array = [this.x, this.y, this.z];
 	}
 
+	clone(): VectorSequence {
+		return new VectorSequence(this.x.slice(), this.y.slice(), this.z.slice(), this.frameRate);
+	}
+
 	/**
 	 * Adds a vector from each vector in the current [[VectorSequence]].
 	 *

@@ -12,6 +12,17 @@ export class Analog implements ISequence, IDataSequence {
 		public frameRate?: number
 	) {}
 
+	/**
+	 * Creates a clone of this analog signal.
+	 */
+	clone(): Analog {
+		return new Analog(
+			this.name,
+			this.signal.slice(),
+			this.frameRate
+		);
+	}
+
 	get length() {
 		if (!this.signal) return 0;
 		return this.signal.length;

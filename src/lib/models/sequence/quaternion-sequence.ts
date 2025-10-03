@@ -38,6 +38,21 @@ export class QuaternionSequence implements ISequence {
 	}
 
 	/**
+	 * Creates a clone of this quaternion sequence.
+	 * 
+	 * @returns A new QuaternionSequence with the same x, y, z, w values.
+	 */
+	clone(): QuaternionSequence {
+		return new QuaternionSequence(
+			this.x.slice(),
+			this.y.slice(),
+			this.z.slice(),
+			this.w.slice(),
+			this.frameRate
+		);
+	}
+
+	/**
 	 * Ensures that the quaternion sequence is continuous. 
 	 *
 	 * @param result The quaternion sequence to store the result in.
