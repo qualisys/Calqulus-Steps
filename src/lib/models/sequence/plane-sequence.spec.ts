@@ -21,6 +21,26 @@ test('PlaneSequence - constructor', (t) => {
 	});
 });
 
+test('PlaneSequence - clone', (t) => {
+	const a = f32(1, 2, 3);
+	const b = f32(4, 5, 6);
+	const c = f32(7, 8, 9);
+	const d = f32(10, 11, 12);
+
+	const original = new PlaneSequence(a, b, c, d);
+	const clone = original.clone();
+
+	t.not(clone, original, 'Clone should be a different instance');
+	t.deepEqual(clone.a, original.a);
+	t.deepEqual(clone.b, original.b);
+	t.deepEqual(clone.c, original.c);
+	t.deepEqual(clone.d, original.d);
+
+	// Mutate clone and check original is not affected.
+	clone.a[0] = 100;
+	t.not(clone.a[0], original.a[0], 'Mutating clone should not affect original');
+});
+
 test('PlaneSequence - fromArray', (t) => {
 	const pSeq = PlaneSequence.fromArray([fakeArray, fakeArray, fakeArray, fakeArray]);
 

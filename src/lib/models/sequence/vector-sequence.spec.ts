@@ -18,6 +18,26 @@ test('VectorSequence - constructor', (t) => {
 	});
 });
 
+test('VectorSequence - clone', (t) => {
+	const x = Float32Array.from([1, 2, 3]);
+	const y = Float32Array.from([4, 5, 6]);
+	const z = Float32Array.from([7, 8, 9]);
+	const frameRate = 120;
+
+	const original = new VectorSequence(x, y, z, frameRate);
+	const cloned = original.clone();
+
+	t.not(cloned, original, 'Cloned instance should not be the same reference as original');
+	t.deepEqual(Array.from(cloned.x), Array.from(original.x), 'Cloned x array should match original');
+	t.deepEqual(Array.from(cloned.y), Array.from(original.y), 'Cloned y array should match original');
+	t.deepEqual(Array.from(cloned.z), Array.from(original.z), 'Cloned z array should match original');
+	t.is(cloned.frameRate, original.frameRate, 'Cloned frameRate should match original');
+
+	// Mutate original and ensure clone does not change.
+	original.x[0] = 99;
+	t.not(cloned.x[0], original.x[0], 'Cloned x array should not be affected by changes to original');
+});
+
 test('VectorSequence - cross', (t) => {
 	const x1 = Float32Array.from([1, 1, 0]);
 	const y1 = Float32Array.from([0, 0, 1]);

@@ -31,6 +31,18 @@ export class Matrix {
 	}
 
 	/**
+	 * Creates a clone of this matrix.
+	 * @returns A new Matrix with the same values.
+	 */
+	clone(): Matrix {
+		const cloned = new Matrix();
+		cloned._m.set(this._m);
+		cloned.fractionDigits = this.fractionDigits;
+
+		return cloned;
+	}
+
+	/**
 	 * Copy all components from the specified matrix.
 	 * 
 	 * @param m The matrix to copy values from.

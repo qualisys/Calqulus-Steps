@@ -553,7 +553,7 @@ test('Signal - convertToTargetSpace - Float32Array from a VectorSequence', (t) =
 
 	t.is(s1_vecseq3.targetSpace, undefined);
 	t.is(s1_vecseq3.space, space);
-	t.deepEqual(s1_vecseq3.getFloat32ArrayValue(), Float32Array.from([1, 2, 3]));
+	t.deepEqual(Array.from(s1_vecseq3.getFloat32ArrayValue()), [1, 2, 3]);
 });
 
 test('Signal - convertToTargetSpace - Float32Array from a Segment', (t) => {
@@ -762,10 +762,10 @@ test('Signal - clone', (t) => {
 	t.is(clone.frameRate, source.frameRate);
 	t.is(clone.set, source.set);
 	t.is(clone.space, source.space);
-	t.is(clone.targetSpace, source.targetSpace);
-	t.is(clone.cycles, source.cycles);
+	t.deepEqual(clone.targetSpace, source.targetSpace);
+	t.deepEqual(clone.cycles, source.cycles);
 	t.is(clone.resultType, source.resultType);
-	t.is(clone.getValue(), source.getValue());
+	t.deepEqual(clone.getValue(), source.getValue());
 	t.is(clone.type, source.type);
 	t.is(clone.originalSignal, source.originalSignal);
 	t.is(clone.component, source.component);
@@ -790,7 +790,7 @@ test('Signal - clone with no value', (t) => {
 	t.is(clone.set, source.set);
 	t.is(clone.space, source.space);
 	t.is(clone.targetSpace, source.targetSpace);
-	t.is(clone.cycles, source.cycles);
+	t.deepEqual(clone.cycles, source.cycles);
 	t.is(clone.resultType, source.resultType);
 
 	t.is(clone.getValue(), undefined); // Should have no value
@@ -815,7 +815,7 @@ test('Signal - clone with a new value', (t) => {
 	t.is(clone.set, source.set);
 	t.is(clone.space, source.space);
 	t.is(clone.targetSpace, source.targetSpace);
-	t.is(clone.cycles, source.cycles);
+	t.deepEqual(clone.cycles, source.cycles);
 	t.is(clone.resultType, source.resultType);
 
 	t.is(clone.getValue(), fakeArray); // Should be our new array

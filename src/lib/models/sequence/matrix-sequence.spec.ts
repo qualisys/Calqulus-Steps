@@ -36,6 +36,26 @@ test('MatrixSequence - constructor', (t) => {
 	t.is(mSeq.length, 3);
 });
 
+test('MatrixSequence - clone', (t) => {
+	const original = MatrixSequence.identity(2);
+	const cloned = original.clone();
+
+	// Should not be the same reference.
+	t.not(cloned, original);
+
+	// All arrays should not be the same reference.
+	t.not(cloned.m00, original.m00);
+	t.not(cloned.m11, original.m11);
+
+	// But values should be equal
+	t.deepEqual(Array.from(cloned.getMatrixAtFrame(1)._m), Array.from(original.getMatrixAtFrame(1)._m));
+	t.deepEqual(Array.from(cloned.getMatrixAtFrame(2)._m), Array.from(original.getMatrixAtFrame(2)._m));
+
+	// Changing the clone should not affect the original.
+	cloned.m00[0] = 42;
+	t.not(cloned.m00[0], original.m00[0]);
+});
+
 test('MatrixSequence - getMatrixAtFrame', (t) => {
 	const matrix = mSeq.getMatrixAtFrame(2);
 

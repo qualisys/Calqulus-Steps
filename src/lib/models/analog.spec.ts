@@ -18,6 +18,23 @@ test('Analog - constructor', (t) => {
 	});
 });
 
+test('Analog - clone', (t) => {
+	const a = new Analog(
+		'test',
+		fakeArray,
+		300
+	);
+
+	const clone = a.clone();
+
+	t.not(clone, a, 'Clone should be a different instance');
+	t.deepEqual(clone.signal, a.signal, 'Signal arrays should be equal in content');
+	t.not(clone.signal, a.signal, 'Signal arrays should not be the same reference');
+	t.is(clone.name, a.name, 'Names should be equal');
+	t.is(clone.frameRate, a.frameRate, 'Frame rates should be equal');
+	t.true(Analog.isAnalog(clone), 'Clone should be recognized as Analog');
+});
+
 test('Analog - length', (t) => {
 	const a = new Analog(
 		'test',

@@ -39,6 +39,59 @@ test('Joint - constructor', (t) => {
 	t.is(joint.power?.length, undefined);
 });
 
+test('Joint - clone', (t) => {
+	const fakeArray1 = Float32Array.from([1, 2, 3]);
+	const fakeArray2 = Float32Array.from([4, 5, 6]);
+	const position = new VectorSequence(fakeArray1, fakeArray1, fakeArray1, 300);
+	const force = new VectorSequence(fakeArray2, fakeArray2, fakeArray2, 300);
+	const moment = new VectorSequence(fakeArray1, fakeArray2, fakeArray1, 300);
+	const power = Float32Array.from([7, 8, 9]);
+	const joint = new Joint(
+		'testClone',
+		position,
+		force,
+		moment,
+		power,
+		300
+	);
+
+	// Set segments and properties.
+	const distalSegment = { id: 'distal' } as any;
+	const proximalSegment = { id: 'proximal' } as any;
+	joint.distalSegment = distalSegment;
+	joint.proximalSegment = proximalSegment;
+	joint.setProperty('events.on', 'onValue');
+	joint.setProperty('events.off', 'offValue');
+
+	const cloned = joint.clone();
+
+	t.not(cloned, joint);
+	t.is(cloned.name, joint.name);
+	t.is(cloned.frameRate, joint.frameRate);
+
+	// Check segments are copied by reference.
+	t.is(cloned.distalSegment, distalSegment);
+	t.is(cloned.proximalSegment, proximalSegment);
+
+	// Check deep clone of properties.
+	t.deepEqual(cloned.properties, joint.properties);
+	t.not(cloned.properties, joint.properties);
+
+	// Check deep clone of arrays.
+	t.deepEqual(Array.from(cloned.x), Array.from(joint.x));
+	t.deepEqual(Array.from(cloned.fx), Array.from(joint.fx));
+	t.deepEqual(Array.from(cloned.mx), Array.from(joint.mx));
+	t.deepEqual(Array.from(cloned.p), Array.from(joint.p));
+
+	// Changing original's property does not affect clone.
+	joint.setProperty('events.on', 'changed');
+	t.not(cloned.getProperty('events.on').value, joint.getProperty('events.on').value);
+
+	// Changing original's power does not affect clone.
+	joint.power[0] = 100;
+	t.not(cloned.power[0], joint.power[0]);
+});
+
 test('Joint - fromArray', (t) => {
 	const joint = Joint.fromArray(
 		'test',

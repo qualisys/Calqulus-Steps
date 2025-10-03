@@ -35,6 +35,18 @@ export class PlaneSequence implements ISequence {
 	}
 
 	/**
+	 * Creates a clone of this plane sequence.
+	 */
+	clone(): PlaneSequence {
+		return new PlaneSequence(
+			this.a.slice(),
+			this.b.slice(),
+			this.c.slice(),
+			this.d.slice()
+		);
+	}
+
+	/**
 	 * Get the number of elements in this sequence.
 	 */
 	get length() { return this.a.length; };
