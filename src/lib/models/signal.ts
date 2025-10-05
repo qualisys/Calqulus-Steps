@@ -749,11 +749,20 @@ export class Signal implements IDataSequence {
 		out.isEvent = this.isEvent;
 		out.originalSignal = this.originalSignal;
 		out.component = this.component;
-		out.property = structuredClone(this.property);
 
 		if (this._resultType) {
 			out.resultType = this._resultType;
 		}
+
+		const cloneValue = (value) => {
+			if (TypeCheck.isArrayLike(value)) {
+				return value.slice();
+			}
+			else if (value instanceof VectorSequence || value instanceof Segment || value instanceof Joint || value instanceof ForcePlate || value instanceof PlaneSequence) {
+				return value.clone();
+			}
+			return value;
+		};
 
 		if (overrideValue !== undefined) {
 			// If the overrideValue argument is `false`, then skip setting the value.
@@ -762,18 +771,13 @@ export class Signal implements IDataSequence {
 			}
 		}
 		else {
-			const value = this.getValue();
-
-			if (TypeCheck.isArrayLike(value)) {
-				out.setValue(value.slice(), this.frameMap);
-			}
-			else if (value instanceof VectorSequence || value instanceof Segment || value instanceof Joint || value instanceof ForcePlate || value instanceof PlaneSequence) {
-				out.setValue(value.clone(), this.frameMap);
-			}
-			else if (typeof value === 'string' || typeof value === 'number') {
-				out.setValue(value, this.frameMap);
-			}
+			out.setValue(cloneValue(this.getValue()), this.frameMap);
 		}
+
+		out.property = {
+			name: this.property.name,
+			value: cloneValue(this.property.value),
+		};
 
 		return out;
 	}
