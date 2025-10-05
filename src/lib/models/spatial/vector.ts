@@ -91,6 +91,14 @@ export class Vector implements IVector {
 	}
 
 	/**
+	 * Creates a clone of this vector.
+	 * @returns A new Vector with the same x, y, z values.
+	 */
+	clone(): Vector {
+		return new Vector(this.x, this.y, this.z);
+	}
+
+	/**
 	 * Computes the cross product of two vectors.
 	 *
 	 * @param a The first operand.

@@ -1,6 +1,7 @@
 import { range } from 'lodash';
 
 import { Space } from '../processing/space';
+import { TypeCheck } from '../utils/type-check';
 
 import { ForcePlate } from './force-plate';
 import { Joint } from './joint';
@@ -744,15 +745,24 @@ export class Signal implements IDataSequence {
 		out.space = this.space;
 		out.targetSpace = this.targetSpace;
 		out.frameRate = this.frameRate;
-		out.cycles = this.cycles;
+		out.cycles = this.cycles ? Array.from(this.cycles) : undefined;
 		out.isEvent = this.isEvent;
 		out.originalSignal = this.originalSignal;
 		out.component = this.component;
-		out.property = this.property;
 
 		if (this._resultType) {
 			out.resultType = this._resultType;
 		}
+
+		const cloneValue = (value) => {
+			if (TypeCheck.isArrayLike(value)) {
+				return value.slice();
+			}
+			else if (value instanceof VectorSequence || value instanceof Segment || value instanceof Joint || value instanceof ForcePlate || value instanceof PlaneSequence) {
+				return value.clone();
+			}
+			return value;
+		};
 
 		if (overrideValue !== undefined) {
 			// If the overrideValue argument is `false`, then skip setting the value.
@@ -761,8 +771,13 @@ export class Signal implements IDataSequence {
 			}
 		}
 		else {
-			out.setValue(this.getValue(), this.frameMap);
+			out.setValue(cloneValue(this.getValue()), this.frameMap);
 		}
+
+		out.property = {
+			name: this.property.name,
+			value: cloneValue(this.property.value),
+		};
 
 		return out;
 	}

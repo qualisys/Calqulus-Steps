@@ -20,6 +20,29 @@ test('QuaternionSequence - constructor', (t) => {
 	});
 });
 
+test('QuaternionSequence - clone', (t) => {
+	const original = new QuaternionSequence(
+		Float32Array.from([1, 2, 3]),
+		Float32Array.from([4, 5, 6]),
+		Float32Array.from([7, 8, 9]),
+		Float32Array.from([10, 11, 12]),
+		100
+	);
+
+	const cloned = original.clone();
+
+	t.not(cloned, original, 'Cloned instance should not be the same object as original');
+	t.deepEqual(Array.from(cloned.x), Array.from(original.x), 'x arrays should be equal');
+	t.deepEqual(Array.from(cloned.y), Array.from(original.y), 'y arrays should be equal');
+	t.deepEqual(Array.from(cloned.z), Array.from(original.z), 'z arrays should be equal');
+	t.deepEqual(Array.from(cloned.w), Array.from(original.w), 'w arrays should be equal');
+	t.is(cloned.frameRate, original.frameRate, 'frameRate should be equal');
+
+	// Mutate original and check clone is unaffected.
+	original.x[0] = 99;
+	t.not(cloned.x[0], original.x[0], 'Cloned x array should not be affected by changes to original');
+});
+
 test('QuaternionSequence - fromArray', (t) => {
 	const qSeq = QuaternionSequence.fromArray([fakeArray, fakeArray, fakeArray, fakeArray]);
 

@@ -24,6 +24,19 @@ export class Marker extends VectorSequence implements ISequence, IDataSequence {
 	}
 
 	/**
+	 * Creates a clone of this marker.
+	 */
+	clone(): Marker {
+		return new Marker(
+			this.name,
+			this.x.slice(),
+			this.y.slice(),
+			this.z.slice(),
+			this.frameRate
+		);
+	}
+
+	/**
 	 * Returns a [[Marker]] from an array, where 
 	 * `x`, `y`, and `z` are included.
 	 * 
