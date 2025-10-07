@@ -40,7 +40,8 @@ NaN values are re-inserted in their original places in the output.
 > **Required:** `False`  
 > **Default value:** `0`  
 >
-> Extrapolation buffer. Defines how many frames to add on either side 
+> DEPRECATED: Use the buffer and bufferType options instead.
+> Defines how many frames to add on either side 
 > of the series, useful if the filter handles the edges of the series 
 > strangely.
 >
@@ -53,6 +54,42 @@ NaN values are re-inserted in their original places in the output.
 > and the last and second-to-last values, respectively. The buffer 
 > is then filled with values linearly extrapolated from these two 
 > points.
+>
+> #### `bufferFrames`
+>
+> **Type:** `Number`  
+> **Required:** `False`  
+> **Default value:** `0`  
+>
+> Defines how many frames to add on either side 
+> of the series, useful if the filter handles the edges of the series 
+> strangely.
+>
+> Leading and trailing NaN values are removed before buffering, 
+> i.e., buffer begins from the first and last real value. 
+> NaN values are then re-inserted in the original places for 
+> the output.
+>
+> #### `bufferType`
+>
+> **Type:** `String`  
+> **Required:** `False`  
+> **Allowed values:** `constant | extrapolate | reflect`  
+> **Default value:** `extrapolate`  
+>
+> 	If set to `constant`, the signal is buffered by extending each end with its first and last values, respectively.  
+> 	![Constant buffer](../../images/constant_buffer.png)
+>
+> 	If set to `extrapolate`, buffering is made by looking at the first and second values, 
+> 	and the last and second-to-last values, respectively. The buffer 
+> 	is then filled with values linearly extrapolated from these two 
+> 	points.  
+> 	![Extrapolated buffer](../../images/extrapolated_buffer.png)
+>
+> 	If set to `reflect`, buffering is done by taking the last number of frames specified in `bufferFrames`,
+> 	creating an inverted copy, reversing this series, and then appending it to the original sequence 
+> 	to create a reflection.  
+> 	![Reflected buffer](../../images/reflected_buffer.png)
 >
 > #### `iterations`
 >
@@ -121,7 +158,8 @@ Runs a Butterworth IIR high-pass filter over the input data.
 > **Required:** `False`  
 > **Default value:** `0`  
 >
-> Extrapolation buffer. Defines how many frames to add on either side 
+> DEPRECATED: Use the buffer and bufferType options instead.
+> Defines how many frames to add on either side 
 > of the series, useful if the filter handles the edges of the series 
 > strangely.
 >
@@ -134,6 +172,42 @@ Runs a Butterworth IIR high-pass filter over the input data.
 > and the last and second-to-last values, respectively. The buffer 
 > is then filled with values linearly extrapolated from these two 
 > points.
+>
+> #### `bufferFrames`
+>
+> **Type:** `Number`  
+> **Required:** `False`  
+> **Default value:** `0`  
+>
+> Defines how many frames to add on either side 
+> of the series, useful if the filter handles the edges of the series 
+> strangely.
+>
+> Leading and trailing NaN values are removed before buffering, 
+> i.e., buffer begins from the first and last real value. 
+> NaN values are then re-inserted in the original places for 
+> the output.
+>
+> #### `bufferType`
+>
+> **Type:** `String`  
+> **Required:** `False`  
+> **Allowed values:** `constant | extrapolate | reflect`  
+> **Default value:** `extrapolate`  
+>
+> 	If set to `constant`, the signal is buffered by extending each end with its first and last values, respectively.  
+> 	![Constant buffer](../../images/constant_buffer.png)
+>
+> 	If set to `extrapolate`, buffering is made by looking at the first and second values, 
+> 	and the last and second-to-last values, respectively. The buffer 
+> 	is then filled with values linearly extrapolated from these two 
+> 	points.  
+> 	![Extrapolated buffer](../../images/extrapolated_buffer.png)
+>
+> 	If set to `reflect`, buffering is done by taking the last number of frames specified in `bufferFrames`,
+> 	creating an inverted copy, reversing this series, and then appending it to the original sequence 
+> 	to create a reflection.  
+> 	![Reflected buffer](../../images/reflected_buffer.png)
 >
 > #### `iterations`
 >

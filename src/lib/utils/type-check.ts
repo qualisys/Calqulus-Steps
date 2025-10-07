@@ -25,4 +25,13 @@ export class TypeCheck {
 	static isArrayLike(value): value is NumericArray {
 		return TypeCheck.isArray(value) || TypeCheck.isTypedArray(value);
 	}
+
+	/**
+	 * Returns true if the input is a valid enum value.
+	 * @param enumObj Enum object.
+	 * @param value	Value to check.
+	 */
+	static isValidEnumValue<T>(enumObj: T, value: unknown): boolean {
+		return Object.values(enumObj).includes(value as T[keyof T]); 
+	}
 }

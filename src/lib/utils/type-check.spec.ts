@@ -24,3 +24,17 @@ test('TypeCheck.isArrayLike', t => {
 	t.is(TypeCheck.isArrayLike('test'), false);
 	t.is(TypeCheck.isArrayLike(1), false);
 });
+
+test('TypeCheck.isValidEnumValue', t => {
+	enum TestEnum {
+		One = 1,
+		Two = 'two',
+	}
+
+	t.is(TypeCheck.isValidEnumValue(TestEnum, 1), true);
+	t.is(TypeCheck.isValidEnumValue(TestEnum, '1'), false);
+	t.is(TypeCheck.isValidEnumValue(TestEnum, 2), false);
+	t.is(TypeCheck.isValidEnumValue(TestEnum, 'two'), true);
+	t.is(TypeCheck.isValidEnumValue(TestEnum, 3), false);
+	t.is(TypeCheck.isValidEnumValue(TestEnum, 'three'), false);
+});
