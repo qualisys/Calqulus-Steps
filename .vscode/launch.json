@@ -1,0 +1,45 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+		{
+			"name": "Run test: signal.spec.ts",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceFolder}/node_modules/.bin/ava",
+			"args": ["--verbose", "src/lib/models/signal.spec.ts"],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"sourceMaps": true,
+			"resolveSourceMapLocations": [
+				"${workspaceFolder}/**",
+				"!**/node_modules/**"
+			],
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**"
+			],
+			"autoAttachChildProcesses": true,
+			"smartStep": true
+		},
+		{
+			"name": "Run test: segment.spec.ts",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceFolder}/node_modules/.bin/ava",
+			"args": ["--verbose", "src/lib/models/segment.spec.ts"],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"sourceMaps": true,
+			"resolveSourceMapLocations": [
+				"${workspaceFolder}/**",
+				"!**/node_modules/**"
+			],
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**"
+			],
+			"autoAttachChildProcesses": true,
+			"smartStep": true
+		}
+	]
+}
