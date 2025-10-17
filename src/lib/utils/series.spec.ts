@@ -89,6 +89,13 @@ test('SeriesUtil.filterNaN', t => {
 	t.deepEqual(SeriesUtil.filterNaN([undefined, 2, 3, 4, NaN], null), [null, 2, 3, 4, null]);
 });
 
+test('SeriesUtil.filterNonNumeric', t => {
+	t.deepEqual(SeriesUtil.filterNonNumeric([]), []);
+	t.deepEqual(SeriesUtil.filterNonNumeric([0, NaN, undefined, 1, 'a', {}, []]), [0, 1]);
+	t.deepEqual(SeriesUtil.filterNonNumeric([null, undefined, NaN, 'string', true]), []);
+	t.deepEqual(SeriesUtil.filterNonNumeric([1, 2, 3, 4, NaN, '5']), [1, 2, 3, 4]);
+});
+
 test('SeriesUtil.createNumericArrayOfSameType', t => {
 	const arr = [1, 2, 3];
 	const float32 = Float32Array.from(arr);

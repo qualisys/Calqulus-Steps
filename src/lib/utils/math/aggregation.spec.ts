@@ -85,3 +85,22 @@ test('Aggregation - Sum', (t) => {
 	const c = Aggregation.sum([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 	t.is(c, 45);
 });
+
+/**
+ * Test how each aggregation handles nulls/undefined values
+ */
+
+test('Aggregation - Null/undefined handling', (t) => {
+	const data = [3, 1, NaN, 2, null, 4, undefined, 5];
+	
+	t.is(Aggregation.count(data), 8);
+	t.is(Aggregation.max(data), 5);
+	t.deepEqual(Aggregation.maxIndices(data), [7]);
+	t.is(Aggregation.mean(data), 3);
+	t.is(Aggregation.median(data), 3);
+	t.is(Aggregation.min(data), 1);
+	t.deepEqual(Aggregation.minIndices(data), [1]);
+	t.is(Aggregation.range(data), 4);
+	t.is(Aggregation.standardDeviation(data), 1.5811388300841898);
+	t.is(Aggregation.sum(data), 15);
+});
