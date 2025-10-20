@@ -117,6 +117,10 @@ export class SeriesUtil {
 		return series.filter(v => !isNaN(v));
 	}
 
+	static filterNonNumeric(series: NumericArray | unknown[]): NumericArray {
+		return (series as number[]).filter(v => typeof v === 'number' && !isNaN(v)) as NumericArray;
+	}
+
 	/**
 	 * Returns the values of the numeric array (`values`) in the same type as
 	 * the array instance (`classInstance`).

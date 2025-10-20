@@ -1,5 +1,7 @@
 import { max, mean, min, sum } from 'lodash';
 
+import { SeriesUtil } from '../series';
+
 export class Aggregation {
 	/**
 	 * Returns the number of items in the input array.
@@ -30,7 +32,7 @@ export class Aggregation {
 	 * @param values 
 	 */
 	static mean(values: NumericArray): number {
-		return mean(values);
+		return mean(SeriesUtil.filterNonNumeric(values));
 	}
 
 	/**
@@ -91,7 +93,7 @@ export class Aggregation {
 		}
 
 		// Remove nulls
-		const opValues = values.filter(value => value !== null);
+		const opValues = SeriesUtil.filterNonNumeric(values);
 
 		if (opValues.length <= 1) {
 			return 0;
@@ -110,7 +112,7 @@ export class Aggregation {
 	 * @param values 
 	 */
 	static sum(values: NumericArray): number {
-		return sum(values);
+		return sum(SeriesUtil.filterNonNumeric(values));
 	}
 
 	/**
