@@ -3,14 +3,16 @@ import { IDataSequence, ISequence } from './sequence/sequence';
 export class Analog implements ISequence, IDataSequence {
 	readonly typeName = 'Analog';
 
-	array = [this.signal];
+	array: TypedArray[];
 	components = ['signal'];
 
 	constructor(
 		public name: string,
 		public signal: TypedArray,
 		public frameRate?: number
-	) {}
+	) {
+		this.array = [this.signal];
+	}
 
 	get length() {
 		if (!this.signal) return 0;
