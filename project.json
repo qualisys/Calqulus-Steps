@@ -9,7 +9,12 @@
       "options": {
         "command": "node bin/build-metadata.js",
         "cwd": "{workspaceRoot}"
-      }
+      },
+      "outputs": [
+        "{projectRoot}/build-metadata.ts",
+        "{workspaceRoot}/libs/calqulus/build-metadata.ts"
+      ],
+      "cache": false
     },
     "build": {
       "executor": "nx:run-commands",
@@ -21,6 +26,7 @@
         "parallel": false
       },
       "outputs": ["{projectRoot}/build"],
+      "cache": true,
       "dependsOn": ["build-metadata"]
     },
     "build:main": {
