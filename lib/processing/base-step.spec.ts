@@ -17,13 +17,13 @@ const segment1 = new Signal(seg1);
 const num1 = new Signal(5);
 
 
-test('BaseStep - constructor', async(t) => {
+test('BaseStep - constructor', async (t) => {
 	const step = mockStep(BaseStep, [s1, s2]);
 	t.deepEqual(step.inputs, [s1, s2]);
 	t.is(step.name, 'BaseStep');
 });
 
-test('BaseStep - getPropertySignalValue - input series', async(t) => {
+test('BaseStep - getPropertySignalValue - input series', async (t) => {
 	const step = mockStep(BaseStep, [], { test: [s1] });
 	t.throws(() => step.getPropertySignalValue('test', PropertyType.Number));
 	t.throws(() => step.getPropertySignalValue('test', PropertyType.Boolean));
@@ -50,7 +50,7 @@ test('BaseStep - getPropertySignalValue - input series', async(t) => {
 	]), [s1]);
 });
 
-test('BaseStep - getPropertySignalValue - input segment', async(t) => {
+test('BaseStep - getPropertySignalValue - input segment', async (t) => {
 	const step = mockStep(BaseStep, [], { test: [segment1] });
 	t.throws(() => step.getPropertySignalValue('test', PropertyType.Number));
 	t.throws(() => step.getPropertySignalValue('test', PropertyType.Boolean));
@@ -70,7 +70,7 @@ test('BaseStep - getPropertySignalValue - input segment', async(t) => {
 	t.deepEqual(step.getPropertySignalValue('test', PropertyType.Any), [segment1]);
 });
 
-test('BaseStep - getPropertySignalValue - input number', async(t) => {
+test('BaseStep - getPropertySignalValue - input number', async (t) => {
 	const step = mockStep(BaseStep, [], { test: [num1] });
 	t.throws(() => step.getPropertySignalValue('test', PropertyType.Array));
 	t.throws(() => step.getPropertySignalValue('test', PropertyType.Boolean));
@@ -97,7 +97,7 @@ test('BaseStep - getPropertySignalValue - input number', async(t) => {
 	]), [num1]);
 });
 
-test('BaseStep - getPropertySignalValue - input series of length 1, expected number', async(t) => {
+test('BaseStep - getPropertySignalValue - input series of length 1, expected number', async (t) => {
 	const step = mockStep(BaseStep, [], { test: [sNum1] });
 
 	// Only if we specifically ask for a number do we get it, otherwise we'll get an array.
@@ -114,7 +114,7 @@ test('BaseStep - getPropertySignalValue - input series of length 1, expected num
 	]), [sNum1]);
 });
 
-test('BaseStep - getPropertySignalValue - input series of length > 1, expected number', async(t) => {
+test('BaseStep - getPropertySignalValue - input series of length > 1, expected number', async (t) => {
 	const step = mockStep(BaseStep, [], { test: [s1] });
 
 	// Only if we specifically ask for a number do we get it, otherwise we'll get an array.
@@ -131,7 +131,7 @@ test('BaseStep - getPropertySignalValue - input series of length > 1, expected n
 	]), [s1]);
 });
 
-test('BaseStep - getPropertyValue - from signal', async(t) => {
+test('BaseStep - getPropertyValue - from signal', async (t) => {
 	t.is(mockStep(BaseStep, [], { test: [num1] }).getPropertyValue('test', PropertyType.Number), 5);
 	t.deepEqual(mockStep(BaseStep, [], { test: [s1] }).getPropertyValue('test', PropertyType.Array), [f32(1, 2, 3)]);
 	t.deepEqual(mockStep(BaseStep, [], { test: [s1] }).getPropertyValue('test', PropertyType.Any), f32(1, 2, 3));
@@ -144,7 +144,7 @@ test('BaseStep - getPropertyValue - from signal', async(t) => {
 	t.is(mockStep(BaseStep, [], { test: [num1] }).getPropertyValue('test', PropertyType.Array), undefined);
 });
 
-test('BaseStep - getPropertyValue - from property value', async(t) => {
+test('BaseStep - getPropertyValue - from property value', async (t) => {
 	t.is(mockStep(BaseStep, [], { test: 5 }).getPropertyValue('test', PropertyType.Number), 5);
 	t.deepEqual(mockStep(BaseStep, [], { test: [1, 2 ,3] }).getPropertyValue('test', PropertyType.Array), [f32(1, 2, 3)]);
 	t.deepEqual(mockStep(BaseStep, [], { test: [1, 2 ,3] }).getPropertyValue('test', PropertyType.Any), f32(1, 2, 3));

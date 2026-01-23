@@ -242,7 +242,7 @@ export class QuaternionSequence implements ISequence {
 		return result ? result : new QuaternionSequence(x, y, z, w);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	static isQuaternionSequence(object: any): object is QuaternionSequence {
 		return object?.typeName === 'QuaternionSequence';
 	}

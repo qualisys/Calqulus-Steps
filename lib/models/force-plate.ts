@@ -112,7 +112,7 @@ export class ForcePlate implements ISequence, IDataSequence {
 		return fp;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	static isForcePlate(object: any): object is ForcePlate {
 		return object?.typeName === 'ForcePlate';
 	}

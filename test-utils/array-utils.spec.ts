@@ -3,12 +3,12 @@ import test from 'ava';
 import { ArrayTestUtil } from './array-utils';
 import { f32 } from './mock-step';
 
-test('ArrayUtil.shuffle - input errors', async(t) => {
+test('ArrayUtil.shuffle - input errors', async (t) => {
 	t.throws(() => ArrayTestUtil.shuffle(undefined));
 	t.throws(() => ArrayTestUtil.shuffle(null));
 });
 
-test('ArrayUtil.shuffle - empty input', async(t) => {
+test('ArrayUtil.shuffle - empty input', async (t) => {
 	const empty1 = [];
 	t.deepEqual(ArrayTestUtil.shuffle(empty1), empty1);
 	t.not(ArrayTestUtil.shuffle(empty1), empty1);
@@ -19,7 +19,7 @@ test('ArrayUtil.shuffle - empty input', async(t) => {
 
 });
 
-test('ArrayUtil.shuffle - single length input', async(t) => {
+test('ArrayUtil.shuffle - single length input', async (t) => {
 	const single1 = [1];
 	t.deepEqual(ArrayTestUtil.shuffle(single1), single1);
 	t.not(ArrayTestUtil.shuffle(single1), single1);
@@ -29,7 +29,7 @@ test('ArrayUtil.shuffle - single length input', async(t) => {
 	t.not(ArrayTestUtil.shuffle(single2), single2);
 });
 
-test('ArrayUtil.shuffle - multi length input', async(t) => {
+test('ArrayUtil.shuffle - multi length input', async (t) => {
 	const multi1 = [1, 2, 3, 4, 5];
 	t.notDeepEqual(ArrayTestUtil.shuffle(multi1), multi1);
 	t.not(ArrayTestUtil.shuffle(multi1), multi1);
@@ -39,7 +39,7 @@ test('ArrayUtil.shuffle - multi length input', async(t) => {
 	t.not(ArrayTestUtil.shuffle(multi2), multi2);
 });
 
-test('ArrayUtil.shuffle - length 2', async(t) => {
+test('ArrayUtil.shuffle - length 2', async (t) => {
 	// Arrays should always be different, if there are only 2 elements
 	// there is only one possible shuffle.
 	const multi1 = [1, 2];
@@ -51,7 +51,7 @@ test('ArrayUtil.shuffle - length 2', async(t) => {
 	t.not(ArrayTestUtil.shuffle(multi2), multi2);
 });
 
-test('ArrayUtil.shuffle - same values', async(t) => {
+test('ArrayUtil.shuffle - same values', async (t) => {
 	// If all values are the same, the array will look the same.
 	const multi1 = [5, 5, 5, 5, 5];
 	t.deepEqual(ArrayTestUtil.shuffle(multi1), multi1);

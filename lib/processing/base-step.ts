@@ -131,7 +131,7 @@ export class BaseStep {
 			
 			return result as unknown as T;
 		}
-		catch (e) {
+		catch (_e) {
 			return this.node.getPropertyValue<T>(key, expectedTypes, required, defaultValue);
 		}
 	}

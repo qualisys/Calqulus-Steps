@@ -128,7 +128,7 @@ export class Joint implements ISequence, IDataSequence, ISequenceDataProperties 
 		return new Joint(name, new VectorSequence(x, y, z), new VectorSequence(fx, fy, fz), new VectorSequence(mx, my, mz), p as Float32Array);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	static isJoint(object: any): object is Joint {
 		return object?.typeName === 'Joint';
 	}

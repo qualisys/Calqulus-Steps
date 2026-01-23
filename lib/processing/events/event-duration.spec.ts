@@ -24,7 +24,7 @@ const ef2 = new Signal(eventFrames1); // No frame rate
 const s1 = new Signal(new VectorSequence(eventFrames1, eventFrames1, eventFrames1)); // Wrong type
 const s2 = new Signal(0.1); // Wrong type
 
-test('EventDurationStep - Wrong input signals', async(t) => {
+test('EventDurationStep - Wrong input signals', async (t) => {
 	await t.throwsAsync(mockStep(EventDurationStep, [ef1, ef2, ef2]).process()); // Too many inputs
 	await t.throwsAsync(mockStep(EventDurationStep, [ef1, ef2]).process()); // No frame rate
 	await t.throwsAsync(mockStep(EventDurationStep, [s1, s2]).process()); // Wrong type
@@ -32,7 +32,7 @@ test('EventDurationStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventDurationStep).process()); // No inputs
 });
 
-test('EventDurationStep', async(t) => {
+test('EventDurationStep', async (t) => {
 	const step = mockStep(EventDurationStep, [e1, e2]);
 	const res = await step.process();
 
@@ -45,7 +45,7 @@ test('EventDurationStep', async(t) => {
 	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
-test('EventDurationStep - exclude single', async(t) => {
+test('EventDurationStep - exclude single', async (t) => {
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
 	const exclude = new Signal(i32(2, 3, 32), 100);
@@ -66,7 +66,7 @@ test('EventDurationStep - exclude single', async(t) => {
 	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
-test('EventDurationStep - exclude multiple', async(t) => {
+test('EventDurationStep - exclude multiple', async (t) => {
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
 	const excludeA = new Signal(i32(2, 3, 32), 100);
@@ -89,7 +89,7 @@ test('EventDurationStep - exclude multiple', async(t) => {
 	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
-test('EventDurationStep - include single', async(t) => {
+test('EventDurationStep - include single', async (t) => {
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
 	const include = new Signal(i32(12, 24, 62), 100);
@@ -110,7 +110,7 @@ test('EventDurationStep - include single', async(t) => {
 	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
-test('EventDurationStep - include multiple', async(t) => {
+test('EventDurationStep - include multiple', async (t) => {
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
 	const includeA = new Signal(i32(12, 24, 62), 100);
@@ -133,7 +133,7 @@ test('EventDurationStep - include multiple', async(t) => {
 	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
-test('EventMaskStep - include and exclude', async(t) => {
+test('EventMaskStep - include and exclude', async (t) => {
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
 	const exclude = new Signal(i32(22, 32), 100);
@@ -156,12 +156,12 @@ test('EventMaskStep - include and exclude', async(t) => {
 	t.deepEqual(resShuffle.getValue(), res.getValue());
 });
 
-test('EventMaskStep - incompatible include', async(t) => {
+test('EventMaskStep - incompatible include', async (t) => {
 	await t.throwsAsync(mockStep(EventDurationStep, [e1, e2], { include: [new Signal('My string')]}).process());
 	await t.throwsAsync(mockStep(EventDurationStep, [e1, e2], { include: [s1]}).process());
 });
 
-test('EventMaskStep - incompatible exclude', async(t) => {
+test('EventMaskStep - incompatible exclude', async (t) => {
 	await t.throwsAsync(mockStep(EventDurationStep, [e1, e2], { exclude: [new Signal('My string')]}).process());
 	await t.throwsAsync(mockStep(EventDurationStep, [e1, e2], { exclude: [s1]}).process());
 });

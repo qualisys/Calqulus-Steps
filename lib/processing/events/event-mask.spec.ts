@@ -46,7 +46,7 @@ const seg1 = new Signal(
 
 const multiDim = new Signal(seg1.array);
 
-test('EventMaskStep - Wrong input signals', async(t) => {
+test('EventMaskStep - Wrong input signals', async (t) => {
 	await t.throwsAsync(mockStep(EventMaskStep).process()); // No inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, e1, e2, e2]).process()); // Too many inputs
 	await t.throwsAsync(mockStep(EventMaskStep, [e1, e2]).process()); // Too few inputs
@@ -54,7 +54,7 @@ test('EventMaskStep - Wrong input signals', async(t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [s1, s1, s1]).process()); // Wrong type for events
 });
 
-test('EventMaskStep - simple array', async(t) => {
+test('EventMaskStep - simple array', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -70,7 +70,7 @@ test('EventMaskStep - simple array', async(t) => {
 	t.deepEqual(res2.getValue(), comp);
 });
 
-test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
+test('EventMaskStep - simple array - out-of-bounds events', async (t) => {
 	const oobEventFrames1 = i32(0, 4, 8);
 	const oobEventFrames2 = i32(2, 6, 15); // 15 is out-of-bounds, the 8-15 cycle should be ignored.
 
@@ -99,7 +99,7 @@ test('EventMaskStep - simple array - out-of-bounds events', async(t) => {
 	t.deepEqual(res2.getValue(), comp);
 });
 
-test('EventMaskStep - simple array - negative events', async(t) => {
+test('EventMaskStep - simple array - negative events', async (t) => {
 	const oobEventFrames1 = i32(-1, 4, 8); // -1 is out-of-bounds, the -1-2 cycle should be ignored.
 	const oobEventFrames2 = i32(2, 6, 9); 
 
@@ -128,7 +128,7 @@ test('EventMaskStep - simple array - negative events', async(t) => {
 	t.deepEqual(res2.getValue(), comp);
 });
 
-test('EventMaskStep - event array', async(t) => {
+test('EventMaskStep - event array', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -141,7 +141,7 @@ test('EventMaskStep - event array', async(t) => {
 	t.deepEqual(res2.getValue(), f32(0, 1, 2, 5, 6, 7, 8));
 });
 
-test('EventMaskStep - event array - short events', async(t) => {
+test('EventMaskStep - event array - short events', async (t) => {
 	const shortEvent = new Signal(i32(6), frameRate);
 	shortEvent.isEvent = true;
 
@@ -151,7 +151,7 @@ test('EventMaskStep - event array - short events', async(t) => {
 	t.deepEqual(res.getValue(), i32(6));
 });
 
-test('EventMaskStep - event array - keep (array)', async(t) => {
+test('EventMaskStep - event array - keep (array)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, 3] }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -164,7 +164,7 @@ test('EventMaskStep - event array - keep (array)', async(t) => {
 	t.deepEqual(res2.getValue(), f32(1, 6, 8));
 });
 
-test('EventMaskStep - event array - keep (array, unordered)', async(t) => {
+test('EventMaskStep - event array - keep (array, unordered)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [3, 1] }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -177,7 +177,7 @@ test('EventMaskStep - event array - keep (array, unordered)', async(t) => {
 	t.deepEqual(res2.getValue(), f32(1, 6, 8));
 });
 
-test('EventMaskStep - event array - keep (array, negative)', async(t) => {
+test('EventMaskStep - event array - keep (array, negative)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, -1] }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -190,7 +190,7 @@ test('EventMaskStep - event array - keep (array, negative)', async(t) => {
 	t.deepEqual(res2.getValue(), f32(1, 2, 6, 8));
 });
 
-test('EventMaskStep - event array - keep (array, negative, too large)', async(t) => {
+test('EventMaskStep - event array - keep (array, negative, too large)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [10, -1] }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -203,7 +203,7 @@ test('EventMaskStep - event array - keep (array, negative, too large)', async(t)
 	t.deepEqual(res2.getValue(), f32(2, 8));
 });
 
-test('EventMaskStep - event array - keep (array, negative, too negative)', async(t) => {
+test('EventMaskStep - event array - keep (array, negative, too negative)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: [1, -10] }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -216,7 +216,7 @@ test('EventMaskStep - event array - keep (array, negative, too negative)', async
 	t.deepEqual(res2.getValue(), f32(1, 6));
 });
 
-test('EventMaskStep - event array - keep (number)', async(t) => {
+test('EventMaskStep - event array - keep (number)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: 1 }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -229,7 +229,7 @@ test('EventMaskStep - event array - keep (number)', async(t) => {
 	t.deepEqual(res2.getValue(), f32(1, 6));
 });
 
-test('EventMaskStep - event array - keep (number, too large)', async(t) => {
+test('EventMaskStep - event array - keep (number, too large)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: 10 }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -242,7 +242,7 @@ test('EventMaskStep - event array - keep (number, too large)', async(t) => {
 	t.deepEqual(res2.getValue(), f32());
 });
 
-test('EventMaskStep - event array - keep (number, too negative)', async(t) => {
+test('EventMaskStep - event array - keep (number, too negative)', async (t) => {
 	const res = await mockStep(EventMaskStep, [s2Event, e1, e2], { keep: -10 }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -255,7 +255,7 @@ test('EventMaskStep - event array - keep (number, too negative)', async(t) => {
 	t.deepEqual(res2.getValue(), f32());
 });
 
-test('EventMaskStep - VectorSequence', async(t) => {
+test('EventMaskStep - VectorSequence', async (t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -270,7 +270,7 @@ test('EventMaskStep - VectorSequence', async(t) => {
 	t.deepEqual(res2.getValue(), vs);
 });
 
-test('EventMaskStep - Segment', async(t) => {
+test('EventMaskStep - Segment', async (t) => {
 	const res = await mockStep(EventMaskStep, [seg1, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -285,7 +285,7 @@ test('EventMaskStep - Segment', async(t) => {
 	t.deepEqual(res2.array, [comp, comp, comp, comp, comp, comp, comp]);
 });
 
-test('EventMaskStep - Multidimensional array', async(t) => {
+test('EventMaskStep - Multidimensional array', async (t) => {
 	const res = await mockStep(EventMaskStep, [multiDim, e1, e2]).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -300,7 +300,7 @@ test('EventMaskStep - Multidimensional array', async(t) => {
 	t.deepEqual(res2.array, [comp, comp, comp, comp, comp, comp, comp]);
 });
 
-test('EventMaskStep - VectorSequence - truncate', async(t) => {
+test('EventMaskStep - VectorSequence - truncate', async (t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { truncate: true }).process();
 	
 	t.is(res.resultType, ResultType.Scalar);
@@ -308,7 +308,7 @@ test('EventMaskStep - VectorSequence - truncate', async(t) => {
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated]);
 });
 
-test('EventMaskStep - VectorSequence - replacement value 0', async(t) => {
+test('EventMaskStep - VectorSequence - replacement value 0', async (t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { replacement: 0 }).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -316,7 +316,7 @@ test('EventMaskStep - VectorSequence - replacement value 0', async(t) => {
 	t.deepEqual(res.array, [compReplacement1, compReplacement1, compReplacement1]);
 });
 
-test('EventMaskStep - VectorSequence - replacement value NaN', async(t) => {
+test('EventMaskStep - VectorSequence - replacement value NaN', async (t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { replacement: NaN }).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -324,7 +324,7 @@ test('EventMaskStep - VectorSequence - replacement value NaN', async(t) => {
 	t.deepEqual(res.array, [compReplacement2, compReplacement2, compReplacement2]);
 });
 
-test('EventMaskStep - VectorSequence - replacement value null', async(t) => {
+test('EventMaskStep - VectorSequence - replacement value null', async (t) => {
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], { replacement: null }).process();
 	
 	t.is(res.resultType, ResultType.Series);
@@ -332,7 +332,7 @@ test('EventMaskStep - VectorSequence - replacement value null', async(t) => {
 	t.deepEqual(res.array, [compReplacement2, compReplacement2, compReplacement2]);
 });
 
-test('EventMaskStep - VectorSequence - truncate and replacement value NaN', async(t) => {
+test('EventMaskStep - VectorSequence - truncate and replacement value NaN', async (t) => {
 	// Replacement value should not have any effect.
 	const res = await mockStep(EventMaskStep, [s1, e1, e2], {
 		replacement: NaN,
@@ -344,7 +344,7 @@ test('EventMaskStep - VectorSequence - truncate and replacement value NaN', asyn
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated]);
 });
 
-test('EventMaskStep - Segment - truncate', async(t) => {
+test('EventMaskStep - Segment - truncate', async (t) => {
 	const res = await mockStep(EventMaskStep, [seg1, e1, e2], {
 		truncate: true,
 	}).process();
@@ -355,7 +355,7 @@ test('EventMaskStep - Segment - truncate', async(t) => {
 
 });
 
-test('EventMaskStep - Multidimensional array - truncate', async(t) => {
+test('EventMaskStep - Multidimensional array - truncate', async (t) => {
 	const res = await mockStep(EventMaskStep, [multiDim, e1, e2], {
 		truncate: true,
 	}).process();
@@ -365,7 +365,7 @@ test('EventMaskStep - Multidimensional array - truncate', async(t) => {
 	t.deepEqual(res.array, [compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated, compTruncated]);
 });
 
-test('EventMaskStep - exclude single', async(t) => {
+test('EventMaskStep - exclude single', async (t) => {
 	const signal = new Signal(new Float32Array(100).fill(50), 100);
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
@@ -400,7 +400,7 @@ test('EventMaskStep - exclude single', async(t) => {
 	t.deepEqual(res2.cycles, res.cycles);
 });
 
-test('EventMaskStep - exclude multiple', async(t) => {
+test('EventMaskStep - exclude multiple', async (t) => {
 	const signal = new Signal(new Float32Array(100).fill(50), 100);
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
@@ -434,7 +434,7 @@ test('EventMaskStep - exclude multiple', async(t) => {
 	t.deepEqual(res2.cycles, res.cycles);
 });
 
-test('EventMaskStep - include single', async(t) => {
+test('EventMaskStep - include single', async (t) => {
 	const signal = new Signal(new Float32Array(100).fill(50), 100);
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
@@ -469,7 +469,7 @@ test('EventMaskStep - include single', async(t) => {
 	t.deepEqual(res2.cycles, res.cycles);
 });
 
-test('EventMaskStep - include multiple', async(t) => {
+test('EventMaskStep - include multiple', async (t) => {
 	const signal = new Signal(new Float32Array(100).fill(50), 100);
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
@@ -503,7 +503,7 @@ test('EventMaskStep - include multiple', async(t) => {
 	t.deepEqual(res2.cycles, res.cycles);
 });
 
-test('EventMaskStep - include and exclude', async(t) => {
+test('EventMaskStep - include and exclude', async (t) => {
 	const signal = new Signal(new Float32Array(100).fill(50), 100);
 	const framesA = new Signal(i32(1, 5, 15, 30, 55), 100);
 	const framesB = new Signal(i32(4, 14, 29, 54, 79), 100);
@@ -540,12 +540,12 @@ test('EventMaskStep - include and exclude', async(t) => {
 	t.deepEqual(res2.cycles, res.cycles);
 });
 
-test('EventMaskStep - incompatible include', async(t) => {
+test('EventMaskStep - incompatible include', async (t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { include: [new Signal('My string')]}).process());
 	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { include: [new Signal(vs)]}).process());
 });
 
-test('EventMaskStep - incompatible exclude', async(t) => {
+test('EventMaskStep - incompatible exclude', async (t) => {
 	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { exclude: [new Signal('My string')]}).process());
 	await t.throwsAsync(mockStep(EventMaskStep, [s2, e1, e2], { exclude: [new Signal(vs)]}).process());
 });

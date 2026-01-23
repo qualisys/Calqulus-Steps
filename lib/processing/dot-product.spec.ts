@@ -15,7 +15,7 @@ const vs5 = new Signal(new VectorSequence(f32(1), f32(2), f32(3)));
 const s = new Signal([1,2,3]);
 
 
-test('dotProductStep - Input errors ', async(t) => {
+test('dotProductStep - Input errors ', async (t) => {
 	// No input
 	const step1 = mockStep(DotProductStep, []);
 	await t.throwsAsync(step1.process());
@@ -33,19 +33,19 @@ test('dotProductStep - Input errors ', async(t) => {
 	await  t.throwsAsync(step4.process());
 });
 
-test('dotProductStep - length 1 vs length 1', async(t) => {
+test('dotProductStep - length 1 vs length 1', async (t) => {
 	const step = mockStep(DotProductStep, [vs3, vs5]);
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(14));
 });
-test('dotProductStep - length n vs length n', async(t) => {
+test('dotProductStep - length n vs length n', async (t) => {
 	const step = mockStep(DotProductStep, [vs1, vs2]);
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(22,28));
 });
-test('dotProductStep - length n vs length 1', async(t) => {
+test('dotProductStep - length n vs length 1', async (t) => {
 	const step = mockStep(DotProductStep, [vs1, vs3]);
 	const res = await step.process();
 

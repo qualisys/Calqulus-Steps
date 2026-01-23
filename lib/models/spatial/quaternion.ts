@@ -21,7 +21,7 @@ export class Quaternion {
 	 * @param w The w component.
 	 */
 	constructor(
-		 /** The x component of this Quaternion. */
+		/** The x component of this Quaternion. */
 		public x: number,
 
 		/** The y component. */

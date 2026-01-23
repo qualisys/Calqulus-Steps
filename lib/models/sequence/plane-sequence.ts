@@ -158,7 +158,7 @@ export class PlaneSequence implements ISequence {
 		return new VectorSequence(x, y, z);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	static isPlaneSequence(object: any): object is PlaneSequence {
 		return object?.typeName === 'PlaneSequence';
 	}

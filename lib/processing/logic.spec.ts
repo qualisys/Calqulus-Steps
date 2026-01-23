@@ -31,7 +31,7 @@ const sString3 = new Signal('test "2"');
 const segment1 = new Signal(new Segment('test 1', new VectorSequence(f32(1, 2, 3), f32(2, 2, 2), f32(6, 5, 4)), new QuaternionSequence(f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3), f32(1, 2, 3))));
 
 
-test('IfStep (mock) - Missing "then"', async(t) => {
+test('IfStep (mock) - Missing "then"', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		else: [s10],
 	}, '1 > 2');
@@ -39,7 +39,7 @@ test('IfStep (mock) - Missing "then"', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Missing "else"', async(t) => {
+test('IfStep (mock) - Missing "else"', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s10],
 	}, '1 > 2');
@@ -47,7 +47,7 @@ test('IfStep (mock) - Missing "else"', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - String then', async(t) => {
+test('IfStep (mock) - String then', async (t) => {
 	// Not a problem if the 'then' is empty, as long as the then is not and is chosen.
 	const step1 = mockStep(IfStep, [s1, s2], {
 		then: [new Signal('test')],
@@ -66,7 +66,7 @@ test('IfStep (mock) - String then', async(t) => {
 	await t.throwsAsync(step2.process());
 });
 
-test('IfStep (mock) - String else', async(t) => {
+test('IfStep (mock) - String else', async (t) => {
 	// Not a problem if the 'then' is empty, as long as the then is not and is chosen.
 	const step1 = mockStep(IfStep, [s1, s2], {
 		then: [s10],
@@ -85,7 +85,7 @@ test('IfStep (mock) - String else', async(t) => {
 	await t.throwsAsync(step2.process());
 });
 
-test('IfStep (mock) - Empty else', async(t) => {
+test('IfStep (mock) - Empty else', async (t) => {
 	// Not a problem if the 'else' is empty, as long as the then is not and is chosen.
 	const step1 = mockStep(IfStep, [s1, s2], {
 		then: [s10],
@@ -104,7 +104,7 @@ test('IfStep (mock) - Empty else', async(t) => {
 	await t.throwsAsync(step2.process());
 });
 
-test('IfStep (mock) - Empty then', async(t) => {
+test('IfStep (mock) - Empty then', async (t) => {
 	// Not a problem if the 'then' is empty, as long as the then is not and is chosen.
 	const step1 = mockStep(IfStep, [s1, s2], {
 		then: [undefined],
@@ -123,7 +123,7 @@ test('IfStep (mock) - Empty then', async(t) => {
 	await t.throwsAsync(step2.process());
 });
 
-test('IfStep (mock) - More than one input to "then" option', async(t) => {
+test('IfStep (mock) - More than one input to "then" option', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s1, s2],
 		else: [s10],
@@ -132,7 +132,7 @@ test('IfStep (mock) - More than one input to "then" option', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - More than one input to "else" option', async(t) => {
+test('IfStep (mock) - More than one input to "else" option', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s0, s1],
 		else: [s1, s2],
@@ -141,7 +141,7 @@ test('IfStep (mock) - More than one input to "else" option', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - More than one input to both "then" and "else" options', async(t) => {
+test('IfStep (mock) - More than one input to both "then" and "else" options', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s1, s2],
 		else: [s1, s2],
@@ -150,7 +150,7 @@ test('IfStep (mock) - More than one input to both "then" and "else" options', as
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Bad parentheses', async(t) => {
+test('IfStep (mock) - Bad parentheses', async (t) => {
 	const step = mockStep(IfStep, [s2, s1], {
 		then: [s10],
 		else: [s10, s0],
@@ -159,7 +159,7 @@ test('IfStep (mock) - Bad parentheses', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Unsupported comparison - string and number', async(t) => {
+test('IfStep (mock) - Unsupported comparison - string and number', async (t) => {
 	const step = mockStep(IfStep, [sString], {
 		then: [s10],
 		else: [s0],
@@ -168,7 +168,7 @@ test('IfStep (mock) - Unsupported comparison - string and number', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Unsupported type - segment', async(t) => {
+test('IfStep (mock) - Unsupported type - segment', async (t) => {
 	const step = mockStep(IfStep, [segment1], {
 		then: [s10],
 		else: [s0],
@@ -177,7 +177,7 @@ test('IfStep (mock) - Unsupported type - segment', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Not enough input signals', async(t) => {
+test('IfStep (mock) - Not enough input signals', async (t) => {
 	const step = mockStep(IfStep, [], {
 		then: [s10],
 		else: [s0],
@@ -186,7 +186,7 @@ test('IfStep (mock) - Not enough input signals', async(t) => {
 	await t.throwsAsync(step.process());
 });
 
-test('IfStep (mock) - Array of length 1 support', async(t) => {
+test('IfStep (mock) - Array of length 1 support', async (t) => {
 	const step1 = mockStep(IfStep, [sArray2, s1], {
 		then: [s10],
 		else: [s0],
@@ -204,7 +204,7 @@ test('IfStep (mock) - Array of length 1 support', async(t) => {
 	t.is(res2.getValue(), 0);
 });
 
-test('IfStep (mock) - Array of length n support', async(t) => {
+test('IfStep (mock) - Array of length n support', async (t) => {
 	const step1 = mockStep(IfStep, [sArray, s1], {
 		then: [s10],
 		else: [s0],
@@ -222,7 +222,7 @@ test('IfStep (mock) - Array of length n support', async(t) => {
 	t.is(res2.getValue(), 0);
 });
 
-test('IfStep (mock) - Numeric input, simple - then', async(t) => {
+test('IfStep (mock) - Numeric input, simple - then', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s10],
 		else: [s0],
@@ -232,7 +232,7 @@ test('IfStep (mock) - Numeric input, simple - then', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Numeric input, simple - else', async(t) => {
+test('IfStep (mock) - Numeric input, simple - else', async (t) => {
 	const step = mockStep(IfStep, [s1, s2], {
 		then: [s10],
 		else: [s0],
@@ -242,7 +242,7 @@ test('IfStep (mock) - Numeric input, simple - else', async(t) => {
 	t.is(res.getValue(), 0);
 });
 
-test('IfStep (mock) - Numeric input, advanced - then', async(t) => {
+test('IfStep (mock) - Numeric input, advanced - then', async (t) => {
 	const step = mockStep(IfStep, [s1, s2, s10], {
 		then: [s10],
 		else: [s0],
@@ -252,7 +252,7 @@ test('IfStep (mock) - Numeric input, advanced - then', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Numeric input, advanced - else', async(t) => {
+test('IfStep (mock) - Numeric input, advanced - else', async (t) => {
 	const step = mockStep(IfStep, [s1, s2, s10], {
 		then: [s10],
 		else: [s0],
@@ -262,7 +262,7 @@ test('IfStep (mock) - Numeric input, advanced - else', async(t) => {
 	t.is(res.getValue(), 0);
 });
 
-test('IfStep (mock) - Mixed input, simple - then', async(t) => {
+test('IfStep (mock) - Mixed input, simple - then', async (t) => {
 	const step = mockStep(IfStep, [s1, s1], {
 		then: [s10],
 		else: [s0],
@@ -272,7 +272,7 @@ test('IfStep (mock) - Mixed input, simple - then', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Operands with special characters - dot - then', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot - then', async (t) => {
 	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
@@ -282,7 +282,7 @@ test('IfStep (mock) - Operands with special characters - dot - then', async(t) =
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Operands with special characters - dot - else', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot - else', async (t) => {
 	const step = mockStep(IfStep, [new Signal(2), s10], {
 		then: [s10],
 		else: [s0],
@@ -292,7 +292,7 @@ test('IfStep (mock) - Operands with special characters - dot - else', async(t) =
 	t.is(res.getValue(), 0);
 });
 
-test('IfStep (mock) - Operands with special characters - @ - then', async(t) => {
+test('IfStep (mock) - Operands with special characters - @ - then', async (t) => {
 	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
@@ -302,7 +302,7 @@ test('IfStep (mock) - Operands with special characters - @ - then', async(t) => 
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Operands with special characters - @ - else', async(t) => {
+test('IfStep (mock) - Operands with special characters - @ - else', async (t) => {
 	const step = mockStep(IfStep, [new Signal(2), s10], {
 		then: [s10],
 		else: [s0],
@@ -312,7 +312,7 @@ test('IfStep (mock) - Operands with special characters - @ - else', async(t) => 
 	t.is(res.getValue(), 0);
 });
 
-test('IfStep (mock) - Operands with special characters - dot and @ - then', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot and @ - then', async (t) => {
 	const step = mockStep(IfStep, [new Signal(2), s1], {
 		then: [s10],
 		else: [s0],
@@ -322,7 +322,7 @@ test('IfStep (mock) - Operands with special characters - dot and @ - then', asyn
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - Operands with special characters - dot and @ - else', async(t) => {
+test('IfStep (mock) - Operands with special characters - dot and @ - else', async (t) => {
 	const step = mockStep(IfStep, [new Signal(2), s10], {
 		then: [s10],
 		else: [s0],
@@ -332,7 +332,7 @@ test('IfStep (mock) - Operands with special characters - dot and @ - else', asyn
 	t.is(res.getValue(), 0);
 });
 
-test('IfStep (mock) - Operands with spaces', async(t) => {
+test('IfStep (mock) - Operands with spaces', async (t) => {
 	const positive1 = await mockStep(IfStep, 
 		[s2, s1], { then: [s10], else: [s0] }, 
 		'2 > My Special Value'
@@ -362,7 +362,7 @@ test('IfStep (mock) - Operands with spaces', async(t) => {
 	t.is(negative2.getValue(), 0);
 });
 
-test('IfStep (mock) - One input, check existing values - else', async(t) => {
+test('IfStep (mock) - One input, check existing values - else', async (t) => {
 	const step = mockStep(IfStep, [sArray4], {
 		then: [s2],
 		else: [s10],
@@ -372,7 +372,7 @@ test('IfStep (mock) - One input, check existing values - else', async(t) => {
 	t.is(res.getValue(), 10);
 });
 
-test('IfStep (mock) - One input, check existing values - then', async(t) => {
+test('IfStep (mock) - One input, check existing values - then', async (t) => {
 	const step = mockStep(IfStep, [sArray3], {
 		then: [s2],
 		else: [s10],
@@ -382,7 +382,7 @@ test('IfStep (mock) - One input, check existing values - then', async(t) => {
 	t.is(res.getValue(), 2);
 });
 
-test('IfStep (mock) - One input - else', async(t) => {
+test('IfStep (mock) - One input - else', async (t) => {
 	const step1 = mockStep(IfStep, [sNaN], {
 		then: [s2],
 		else: [s10],
@@ -400,7 +400,7 @@ test('IfStep (mock) - One input - else', async(t) => {
 	t.is(res2.getValue(), 10);
 });
 
-test('IfStep (mock) - String comparison - then', async(t) => {
+test('IfStep (mock) - String comparison - then', async (t) => {
 	const step = mockStep(IfStep, [sString, sString], {
 		then: [s10],
 		else: [s0],
@@ -410,7 +410,7 @@ test('IfStep (mock) - String comparison - then', async(t) => {
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - String comparison - else', async(t) => {
+test('IfStep (mock) - String comparison - else', async (t) => {
 	const step = mockStep(IfStep, [sString, sString2], {
 		then: [s10],
 		else: [s0],
@@ -420,7 +420,7 @@ test('IfStep (mock) - String comparison - else', async(t) => {
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - Inverted string comparison - then', async(t) => {
+test('IfStep (mock) - Inverted string comparison - then', async (t) => {
 	const step = mockStep(IfStep, [sString, sString2], {
 		then: [s10],
 		else: [s0],
@@ -430,7 +430,7 @@ test('IfStep (mock) - Inverted string comparison - then', async(t) => {
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - Inverted string comparison - else', async(t) => {
+test('IfStep (mock) - Inverted string comparison - else', async (t) => {
 	const step = mockStep(IfStep, [sString, sString], {
 		then: [s10],
 		else: [s0],
@@ -440,7 +440,7 @@ test('IfStep (mock) - Inverted string comparison - else', async(t) => {
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with literal - then', async(t) => {
+test('IfStep (mock) - String comparison with literal - then', async (t) => {
 	const step = mockStep(IfStep, [sString, sString], {
 		then: [s10],
 		else: [s0],
@@ -450,7 +450,7 @@ test('IfStep (mock) - String comparison with literal - then', async(t) => {
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - String comparison with literal - else', async(t) => {
+test('IfStep (mock) - String comparison with literal - else', async (t) => {
 	const step = mockStep(IfStep, [sString, sString2], {
 		then: [s10],
 		else: [s0],
@@ -460,7 +460,7 @@ test('IfStep (mock) - String comparison with literal - else', async(t) => {
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with multi word literal - then', async(t) => {
+test('IfStep (mock) - String comparison with multi word literal - then', async (t) => {
 	const step = mockStep(IfStep, [sString2, sString2], {
 		then: [s10],
 		else: [s0],
@@ -470,7 +470,7 @@ test('IfStep (mock) - String comparison with multi word literal - then', async(t
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - String comparison with multi word literal - else', async(t) => {
+test('IfStep (mock) - String comparison with multi word literal - else', async (t) => {
 	const step = mockStep(IfStep, [sString, sString2], {
 		then: [s10],
 		else: [s0],
@@ -480,7 +480,7 @@ test('IfStep (mock) - String comparison with multi word literal - else', async(t
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with multi word literal - then - reverse order', async(t) => {
+test('IfStep (mock) - String comparison with multi word literal - then - reverse order', async (t) => {
 	const step = mockStep(IfStep, [sString2, sString2], {
 		then: [s10],
 		else: [s0],
@@ -490,7 +490,7 @@ test('IfStep (mock) - String comparison with multi word literal - then - reverse
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - String comparison with multi word literal - else - reverse order', async(t) => {
+test('IfStep (mock) - String comparison with multi word literal - else - reverse order', async (t) => {
 	const step = mockStep(IfStep, [sString2, sString], {
 		then: [s10],
 		else: [s0],
@@ -500,7 +500,7 @@ test('IfStep (mock) - String comparison with multi word literal - else - reverse
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with unmatched quotes 1 - else', async(t) => {
+test('IfStep (mock) - String comparison with unmatched quotes 1 - else', async (t) => {
 	const step = mockStep(IfStep, [sString2], {
 		then: [s10],
 		else: [s0],
@@ -510,7 +510,7 @@ test('IfStep (mock) - String comparison with unmatched quotes 1 - else', async(t
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with unmatched quotes 2 - else', async(t) => {
+test('IfStep (mock) - String comparison with unmatched quotes 2 - else', async (t) => {
 	const step = mockStep(IfStep, [sString2], {
 		then: [s10],
 		else: [s0],
@@ -520,7 +520,7 @@ test('IfStep (mock) - String comparison with unmatched quotes 2 - else', async(t
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with escaped quotes - then', async(t) => {
+test('IfStep (mock) - String comparison with escaped quotes - then', async (t) => {
 	const step = mockStep(IfStep, [sString3, sString3], {
 		then: [s10],
 		else: [s0],
@@ -530,7 +530,7 @@ test('IfStep (mock) - String comparison with escaped quotes - then', async(t) =>
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - String comparison with escaped quotes - else', async(t) => {
+test('IfStep (mock) - String comparison with escaped quotes - else', async (t) => {
 	const step = mockStep(IfStep, [sString3, sString2], {
 		then: [s10],
 		else: [s0],
@@ -540,7 +540,7 @@ test('IfStep (mock) - String comparison with escaped quotes - else', async(t) =>
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - String comparison with multi word literal - multi input - then', async(t) => {
+test('IfStep (mock) - String comparison with multi word literal - multi input - then', async (t) => {
 	const step = mockStep(IfStep, [sString2, sString2, s1, s2], {
 		then: [s10],
 		else: [s0],
@@ -550,7 +550,7 @@ test('IfStep (mock) - String comparison with multi word literal - multi input - 
 	t.is(res.getValue(), s10.getValue());
 });
 
-test('IfStep (mock) - String comparison with multi word literal - multi input - else', async(t) => {
+test('IfStep (mock) - String comparison with multi word literal - multi input - else', async (t) => {
 	const step = mockStep(IfStep, [sString, sString2, s1, s2], {
 		then: [s10],
 		else: [s0],
@@ -560,7 +560,7 @@ test('IfStep (mock) - String comparison with multi word literal - multi input - 
 	t.is(res.getValue(), s0.getValue());
 });
 
-test('IfStep (mock) - One input, int array (3)', async(t) => {
+test('IfStep (mock) - One input, int array (3)', async (t) => {
 	const positive = await mockStep(IfStep, [new Signal(i32(1, 2, 3))], { 
 		then: [s2],
 		else: [s10], 
@@ -576,7 +576,7 @@ test('IfStep (mock) - One input, int array (3)', async(t) => {
 	t.is(negative.getValue(), 10);
 });
 
-test('IfStep (mock) - One input, inverted', async(t) => {
+test('IfStep (mock) - One input, inverted', async (t) => {
 	const positive = await mockStep(IfStep, [undefined], { 
 		then: [s2],
 		else: [s10], 
@@ -592,7 +592,7 @@ test('IfStep (mock) - One input, inverted', async(t) => {
 	t.is(negative.getValue(), 10);
 });
 
-test('IfStep (mock) - One input - int array (1)', async(t) => {
+test('IfStep (mock) - One input - int array (1)', async (t) => {
 	const step = mockStep(IfStep, [new Signal(i32(1, 2, 3))], {
 		then: [s2],
 		else: [s10],
@@ -602,7 +602,7 @@ test('IfStep (mock) - One input - int array (1)', async(t) => {
 	t.is(res.getValue(), 2);
 });
 
-test('IfStep (mock) - One input - float array', async(t) => {
+test('IfStep (mock) - One input - float array', async (t) => {
 	const step = mockStep(IfStep, [new Signal(i32(1, 2, 3))], {
 		then: [s2],
 		else: [s10],
@@ -612,7 +612,7 @@ test('IfStep (mock) - One input - float array', async(t) => {
 	t.is(res.getValue(), 2);
 });
 
-test('IfStep (mock) - One input, function - exists', async(t) => {
+test('IfStep (mock) - One input, function - exists', async (t) => {
 	const positive = await mockStep(IfStep, 
 		[new Signal(i32(1, 2, 3))], { then: [s2], else: [s10] }, 
 		'exists(MyValue)'
@@ -629,7 +629,7 @@ test('IfStep (mock) - One input, function - exists', async(t) => {
 	t.is(negative.getValue(), 10);
 });
 
-test('IfStep (mock) - Complex input, function - exists', async(t) => {
+test('IfStep (mock) - Complex input, function - exists', async (t) => {
 	const component = f32(1, 2, 3);
 	const v = new VectorSequence(component, component, component, 10);
 	const q = new QuaternionSequence(component, component, component, component, 10);
@@ -658,7 +658,7 @@ test('IfStep (mock) - Complex input, function - exists', async(t) => {
 	t.is(step3.getValue(), 2);
 });
 
-test('IfStep (mock) - Two inputs, function - exists', async(t) => {
+test('IfStep (mock) - Two inputs, function - exists', async (t) => {
 	const positive = await mockStep(IfStep, 
 		[new Signal(i32(1, 2, 3)), new Signal(5)], { then: [s2], else: [s10] }, 
 		'exists(MyValue) && exists(MyValue2)'
@@ -681,7 +681,7 @@ test('IfStep (mock) - Two inputs, function - exists', async(t) => {
 	t.is(negative2.getValue(), 10);
 });
 
-test('IfStep (mock) - One input, function - empty', async(t) => {
+test('IfStep (mock) - One input, function - empty', async (t) => {
 	// 0 is not empty
 	const positive1 = await mockStep(IfStep, 
 		[new Signal(0)], { then: [s2], else: [s10] }, 
@@ -756,7 +756,7 @@ test('IfStep (mock) - One input, function - empty', async(t) => {
 	t.is(negative5.getValue(), 10);
 });
 
-test('IfStep (mock) - field variable', async(t) => {
+test('IfStep (mock) - field variable', async (t) => {
 	const positive1 = await mockStep(IfStep, 
 		[new Signal(3)], { then: [s2], else: [s10] }, 
 		'$field(MyValue, My Measurement, numeric) > 2'
@@ -814,7 +814,7 @@ test('IfStep (mock) - field variable', async(t) => {
 	t.is(negative4.getValue(), 10);
 });
 
-test('IfStep (mock) - $prev variable', async(t) => {
+test('IfStep (mock) - $prev variable', async (t) => {
 	const positive1 = await mockStep(IfStep, 
 		[new Signal(3)], { then: [s2], else: [s10] }, 
 		'$prev > 2'

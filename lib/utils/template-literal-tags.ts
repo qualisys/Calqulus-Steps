@@ -8,7 +8,7 @@
  * @param templateStrings 
  * @param values 
  */
-export function markdownFmt(templateStrings: TemplateStringsArray|string, ...values: []) {
+export function markdownFmt(templateStrings: TemplateStringsArray | string, ...values: []) {
 	let string = dedent(templateStrings, ...values);
 
 	string = string.replace(/'''/g, '```');
@@ -26,7 +26,7 @@ export function markdownFmt(templateStrings: TemplateStringsArray|string, ...val
  * @param templateStrings 
  * @param values 
  */
-export function dedent(templateStrings: TemplateStringsArray|string, ...values: []) {
+export function dedent(templateStrings: TemplateStringsArray | string, ...values: []) {
 	const matches = [];
 	const strings = typeof templateStrings === 'string' ? [ templateStrings ] : templateStrings.slice();
 

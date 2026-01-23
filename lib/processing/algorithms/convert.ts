@@ -65,7 +65,7 @@ export class ConvertStep extends BaseAlgorithmStep {
 		try {
 			this.converter = ConvertUtil.getConverter(from, to);
 		}
-		catch (e) {
+		catch (_e) {
 			throw new ProcessingError(`Could not create a converter from '${ from }' to '${ to }'.`);
 		}
 	}

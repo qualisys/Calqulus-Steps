@@ -97,7 +97,7 @@ export class InputDuration {
 					this.seconds = converted.scalar;
 				}
 			}
-			catch (e) {
+			catch (_e) {
 				// Could not convert input to seconds
 			}
 		}

@@ -162,10 +162,10 @@ test('Joint - length', (t) => {
 
 	t.is(joint.length, 3);
 
-	joint.force = new VectorSequence(fourElements, fourElements, fourElements, 300),
+	joint.force = new VectorSequence(fourElements, fourElements, fourElements, 300);
 	t.is(joint.length, 4);
 
-	joint.force = new VectorSequence(fiveElements, fiveElements, fiveElements, 300),
+	joint.force = new VectorSequence(fiveElements, fiveElements, fiveElements, 300);
 	t.is(joint.length, 5);
 
 	joint.force = undefined;

@@ -34,7 +34,7 @@ export class Marker extends VectorSequence implements ISequence, IDataSequence {
 		return new Marker(name, x, y, z);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	static isMarker(object: any): object is Marker {
 		return object?.typeName === 'Marker';
 	}

@@ -15,7 +15,7 @@ export enum FilterType {
 
 export type IirFilter = {
 	filtfilt: (input: number[], overwrite: boolean) => number[],
-}
+};
 
 // This class should not be used directly since it does not define its
 // filterType member - it's meant to be subclassed.

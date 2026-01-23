@@ -16,7 +16,7 @@ export type Kinematics = {
 	angularVelocity: VectorSequence,
 	linearAcceleration: VectorSequence,
 	linearVelocity: VectorSequence,
-}
+};
 
 export class Segment implements ISequence, IDataSequence {
 	readonly typeName = 'Segment';
@@ -127,7 +127,7 @@ export class Segment implements ISequence, IDataSequence {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	static isSegment(object: any): object is Segment {
 		return object?.typeName === 'Segment';
 	}
