@@ -15,30 +15,33 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "node ../../node_modules/typescript/bin/tsc -p tsconfig.json",
-          "node ../../node_modules/typescript/bin/tsc -p tsconfig.module.json"
+          "nx run calqulus-steps:build:main",
+          "nx run calqulus-steps:build:module"
         ],
-        "parallel": false,
-        "cwd": "{projectRoot}"
+        "parallel": false
       },
       "outputs": ["{projectRoot}/build"],
       "dependsOn": ["build-metadata"]
     },
     "build:main": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "node ../../node_modules/typescript/bin/tsc -p tsconfig.json",
-        "cwd": "{projectRoot}"
-      },
-      "outputs": ["{projectRoot}/build/main"]
+        "outputPath": "{projectRoot}/build/main",
+        "main": "{projectRoot}/index.ts",
+        "tsConfig": "{projectRoot}/tsconfig.json",
+        "assets": []
+      }
     },
     "build:module": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "node ../../node_modules/typescript/bin/tsc -p tsconfig.module.json",
-        "cwd": "{projectRoot}"
+        "outputPath": "{projectRoot}/build/module",
+        "main": "{projectRoot}/index.ts",
+        "tsConfig": "{projectRoot}/tsconfig.module.json",
+        "assets": []
       },
-      "outputs": ["{projectRoot}/build/module"],
       "dependsOn": ["build:main"]
     },
     "test:unit": {
