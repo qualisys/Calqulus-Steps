@@ -57,6 +57,31 @@
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["build:main"]
+    },
+    "cov:html": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/nyc report --reporter=html",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/coverage"],
+      "dependsOn": ["test:unit"]
+    },
+    "cov:lcov": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/nyc report --reporter=lcov",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "cov:open": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "open {projectRoot}/coverage/index.html",
+        "cwd": "{workspaceRoot}"
+      },
+      "dependsOn": ["cov:html"]
     }
   },
   "tags": []
