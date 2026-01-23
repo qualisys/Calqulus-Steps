@@ -1,0 +1,16 @@
+{
+  "ava": {
+    "failFast": true,
+    "timeout": "60s",
+    "files": [
+      "build/main/**/*.spec.js",
+      "!build/module/**"
+    ]
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "exclude": [
+      "**/*.spec.js"
+    ]
+  }
+}
