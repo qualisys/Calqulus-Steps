@@ -13,7 +13,7 @@
       "outputs": [
         "{projectRoot}/build-metadata.ts",
         "{workspaceRoot}/libs/calqulus/build-metadata.ts",
-        "{workspaceRoot}/apps/calqulus-toolbelt/build-metadata.ts"
+        "{workspaceRoot}/apps/toolbelt/build-metadata.ts"
       ],
       "cache": false
     },
