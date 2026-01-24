@@ -7,12 +7,13 @@
     "build-metadata": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node bin/build-metadata.js",
+        "command": "node bin/build-metadata.js --production",
         "cwd": "{workspaceRoot}"
       },
       "outputs": [
         "{projectRoot}/build-metadata.ts",
-        "{workspaceRoot}/libs/calqulus/build-metadata.ts"
+        "{workspaceRoot}/libs/calqulus/build-metadata.ts",
+        "{workspaceRoot}/apps/calqulus-toolbelt/build-metadata.ts"
       ],
       "cache": false
     },
@@ -27,7 +28,6 @@
       },
       "outputs": ["{projectRoot}/build"],
       "cache": true,
-      "dependsOn": ["build-metadata"]
     },
     "build:main": {
       "executor": "@nx/js:tsc",
@@ -73,7 +73,8 @@
         "command": "../../node_modules/.bin/nyc report --reporter=lcov",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/coverage"]
+      "outputs": ["{projectRoot}/coverage"],
+      "dependsOn": ["test:unit"]
     },
     "cov:open": {
       "executor": "nx:run-commands",
