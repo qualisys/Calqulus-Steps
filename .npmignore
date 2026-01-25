@@ -1,0 +1,15 @@
+# Exclude source maps from published package
+**/*.map
+
+# Exclude test files
+**/*.spec.js
+**/*.spec.d.ts
+
+# Exclude TypeScript config
+tsconfig*.json
+
+# Exclude coverage
+coverage/
+
+# Exclude test setup
+test-setup.js
