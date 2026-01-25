@@ -18,6 +18,7 @@
       "cache": false
     },
     "build": {
+      "dependsOn": ["build-metadata"],
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -27,9 +28,10 @@
         "parallel": false
       },
       "outputs": ["{projectRoot}/build"],
-      "cache": true,
+      "cache": true
     },
     "build:main": {
+      "dependsOn": ["build-metadata"],
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
