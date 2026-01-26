@@ -30,8 +30,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "nx run calqulus-steps:build:main",
-          "nx run calqulus-steps:build:module"
+          "nx run calqulus-steps:build:main:production",
+          "nx run calqulus-steps:build:module:production"
         ],
         "parallel": false
       },
@@ -46,7 +46,13 @@
         "outputPath": "{projectRoot}/build/main",
         "main": "{projectRoot}/index.ts",
         "tsConfig": "{projectRoot}/tsconfig.json",
-        "assets": []
+        "assets": [],
+        "clean": false
+      },
+      "configurations": {
+        "production": {
+          "clean": true
+        }
       }
     },
     "build:module": {
@@ -56,7 +62,13 @@
         "outputPath": "{projectRoot}/build/module",
         "main": "{projectRoot}/index.ts",
         "tsConfig": "{projectRoot}/tsconfig.module.json",
-        "assets": []
+        "assets": [],
+        "clean": false
+      },
+      "configurations": {
+        "production": {
+          "clean": true
+        }
       },
       "dependsOn": ["build:main"]
     },
