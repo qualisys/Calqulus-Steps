@@ -4,6 +4,14 @@
   "sourceRoot": "libs/calqulus-steps",
   "projectType": "library",
   "targets": {
+    "check-test-data": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node bin/check-test-data.js",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false
+    },
     "build-metadata": {
       "executor": "nx:run-commands",
       "options": {
@@ -58,7 +66,7 @@
         "command": "../../node_modules/.bin/nyc --silent ../../node_modules/.bin/ava",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": ["build:main"]
+      "dependsOn": ["check-test-data", "build:main"]
     },
     "cov:html": {
       "executor": "nx:run-commands",
