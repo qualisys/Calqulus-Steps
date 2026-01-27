@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"incremental": true,
 		"outDir": "build/main",
@@ -12,22 +12,22 @@
 		"inlineSources": false,
 		"esModuleInterop": true,
 		"allowJs": true,
-    "resolveJsonModule": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true
-  },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules/**",
-    "build/**",
-    "test.ts"
-  ]
+		"resolveJsonModule": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"lib": ["es2017", "dom"],
+		"skipLibCheck": true
+	},
+	"include": [
+		"**/*.ts"
+	],
+	"exclude": [
+		"node_modules/**",
+		"build/**",
+		"test.ts"
+	]
 }
