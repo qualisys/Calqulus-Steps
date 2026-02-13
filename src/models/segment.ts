@@ -43,6 +43,39 @@ export class Segment implements ISequence, IDataSequence {
 		this.emptyValues = new Float32Array(this._position.x.length).fill(NaN);
 	}
 
+	/**
+	 * Creates a clone of this segment.
+	 */
+	clone(): Segment {
+		const cloned = new Segment(
+			this.name,
+			this._position.clone(),
+			this._rotation.clone(),
+			this.frameRate
+		);
+
+		cloned.components = [...this.components];
+
+		if (this.kinematics) {
+			cloned.kinematics = {
+				angularAcceleration: this.kinematics.angularAcceleration?.clone(),
+				angularVelocity: this.kinematics.angularVelocity?.clone(),
+				linearAcceleration: this.kinematics.linearAcceleration?.clone(),
+				linearVelocity: this.kinematics.linearVelocity?.clone(),
+			};
+		}
+
+		if (this.centerOfMass) { cloned.centerOfMass = this.centerOfMass.clone(); }
+		if (this.inertia) { cloned.inertia = this.inertia.clone(); }
+		if (this.mass !== undefined) { cloned.mass = this.mass; }
+		if (this.parent) { cloned.parent = this.parent; }
+		if (this.contactJoint) { cloned.contactJoint = this.contactJoint; }
+		if (this.distalJoint) { cloned.distalJoint = this.distalJoint; }
+		if (this.proximalJoint) { cloned.proximalJoint = this.proximalJoint; }
+
+		return cloned;
+	}
+
 	get position(): VectorSequence { return this._position; }
 	set position(value: VectorSequence) {
 		this._position = value;

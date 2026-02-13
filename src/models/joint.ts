@@ -31,6 +31,26 @@ export class Joint implements ISequence, IDataSequence, ISequenceDataProperties 
 		];
 	}
 
+	/**
+	 * Creates a clone of this joint.
+	 */
+	clone(): Joint {
+		const cloned = new Joint(
+			this.name,
+			this._position?.clone(),
+			this._force?.clone(),
+			this._moment?.clone(),
+			this._power ? this._power.slice() : undefined,
+			this.frameRate
+		);
+
+		cloned.distalSegment = this.distalSegment;
+		cloned.proximalSegment = this.proximalSegment;
+		cloned.properties = this.properties.map(p => ({ ...p }));
+
+		return cloned;
+	}
+
 	get force(): VectorSequence { return this._force; }
 	set force(value: VectorSequence) {
 		this._force = value;

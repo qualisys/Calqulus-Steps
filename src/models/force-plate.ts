@@ -35,6 +35,32 @@ export class ForcePlate implements ISequence, IDataSequence {
 		];
 	}
 
+	/**
+	 * Creates a clone of this force plate.
+	 */
+	clone(): ForcePlate {
+		const cloned = new ForcePlate(
+			this.name,
+			this._centerOfPressure.clone(),
+			this._force.clone(),
+			this._moment.clone()
+		);
+
+		cloned.corners = this.corners ? this.corners.map(c => ({ ...c })) : undefined;
+		cloned.dimensions = this.dimensions ? { ...this.dimensions } : undefined;
+		cloned.offset = this.offset ? { ...this.offset } : undefined;
+		cloned.copLevelZ = this.copLevelZ;
+		cloned.copFilter = this.copFilter;
+		cloned.originalName = this.originalName;
+		cloned.amplifierSerial = this.amplifierSerial;
+		cloned.coordinateSystem = this.coordinateSystem;
+		cloned.model = this.model;
+		cloned.serial = this.serial;
+		cloned.type = this.type;
+
+		return cloned;
+	}
+
 	get length() {
 		return this.force.length;
 	}
