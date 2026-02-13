@@ -71,6 +71,12 @@ export interface IFrameSpan {
  * It is the main class used for all input / output for steps.
  */
 export class Signal implements IDataSequence {
+	/** Whether the signal should be marked for aggregation. */
+	public aggregate?: boolean | string;
+	/** An optional signal description. */
+	public description?: string;
+	/** An optional signal display name. */
+	public displayName?: string;
 	/** The signal name. */
 	public name: string;
 	/** The signal frame rate. */
@@ -739,6 +745,9 @@ export class Signal implements IDataSequence {
 	 */
 	clone(overrideValue?): Signal {
 		const out = new Signal();
+		out.aggregate = this.aggregate;
+		out.description = this.description;
+		out.displayName = this.displayName;
 		out.name = this.name;
 		out.set = this.set;
 		out.space = this.space;
