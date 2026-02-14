@@ -43,6 +43,8 @@ export interface IPhaseNode extends INode {
 	displayName: string;
 	/** The end event of the phase. */
 	end: string;
+	/** Whether to accept phases without a start or end event at the beginning or end of the measurement. */
+	partial: boolean;
 	/** The start event of the phase. */
 	start: string;
 }
