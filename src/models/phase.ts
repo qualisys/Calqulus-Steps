@@ -4,12 +4,19 @@ import { IPhaseNode } from './node-interface';
 import { IDataSequence, ISequence } from './sequence/sequence';
 import { IFrameSpan } from './signal';
 
+interface IPhaseFrameSpan extends IFrameSpan {
+	partial?: boolean;
+}
+
 export class Phase implements ISequence, IDataSequence {
 	private _description: string;
 	private _displayName: string;
 	private _end: string;
+	private _frameCount?: number;
+	private _intervals: IPhaseFrameSpan[];
 	private _partial: boolean = false;
-	private _intervals: IFrameSpan[];
+	private _hasImputedEndFrame: boolean = false;
+	private _hasImputedStartFrame: boolean = false;
 	private _start: string;
 	array: TypedArray[];
 	components = ['intervals'];
@@ -65,7 +72,7 @@ export class Phase implements ISequence, IDataSequence {
 			this._start = arg2 as string;
 			this._end = arg3 as string;
 
-			this._intervals = arg4 as IFrameSpan[];
+			this._intervals = arg4 as IPhaseFrameSpan[];
 		}
 		else if (arg4 && arg5 && arg6) {
 			frameCount = arg6 as number;
@@ -92,6 +99,7 @@ export class Phase implements ISequence, IDataSequence {
 			endValues = arg3 as NumericArray;
 		}
 
+		this._frameCount = frameCount;
 		this._intervals = this._intervals
 			? this._intervals
 			: this.createIntervals(startValues, endValues, frameCount);
@@ -112,6 +120,7 @@ export class Phase implements ISequence, IDataSequence {
 				// start at the beginning of the measurement by injecting the
 				// first frame into the start array.
 				startValues = new Float32Array([1, ...startValues]);
+				this._hasImputedStartFrame = true;
 			}
 
 			if (startValues.length > 0 && endValues.length > 0 && endValues[endValues.length - 1] < startValues[startValues.length - 1]
@@ -120,6 +129,7 @@ export class Phase implements ISequence, IDataSequence {
 				// end at the end of the measurement by injecting the last frame
 				// into the end array.
 				endValues = new Float32Array([...endValues, frameCount]);
+				this._hasImputedEndFrame = true;
 			}
 		}
 
@@ -149,7 +159,23 @@ export class Phase implements ISequence, IDataSequence {
 		return this.array[index];
 	}
 
-	get intervals(): IFrameSpan[] { return this._intervals; }
+	get intervals(): IPhaseFrameSpan[] {
+		if (!this.partial) {
+			return this._intervals;	
+		}
+
+		for (const value of this._intervals) {
+			if (value.start === 1 && this._hasImputedStartFrame) {
+				value.partial = true;
+			}
+
+			if (value.end === this._frameCount && this._hasImputedEndFrame) {
+				value.partial = true;
+			}
+		}
+
+		return this._intervals;
+	}
 
 	static isPhase(object: any): object is Phase {
 		return object?.typeName === 'Phase';
