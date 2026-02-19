@@ -79,25 +79,23 @@ Filter for measurements where this node should be calculated. Read more in the [
     - eventStep: Input.x
 ```
 
-### `aggregate`
+### `summarize`
 
 > **Type:** `Boolean`  
 > **Required:** `False`  
 > **Default value:** `True`
 
-Indicates whether this event should be used by the aggregation engine.  
-If set to `true`, all occurrences of this event will be subject to the
-following calculations: `min`, `max`, `average`, `median` and
-`standard deviation`.
+Indicates whether this event should be summarized. If set to `true`, all
+occurrences of this event will be subject to the following calculations: `min`,
+`max`, `average`, `median` and `standard deviation`.
 
 Unlike the parameter node, the event node only accepts a boolean value.
 
 ## Examples
 ```yaml
 - event: MyEvent
-  aggregate: false
+  summarize: false
   steps:
     ...
 ```
-Using `aggregate: false` will prevent this event from being used by the
-aggregation engine.
+Using `summarize: false` will prevent this event from being summarized.

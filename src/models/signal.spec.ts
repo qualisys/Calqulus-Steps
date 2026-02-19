@@ -748,7 +748,7 @@ test('Signal - clone', (t) => {
 	source.name = 'test';
 	source.displayName = 'Test';
 	source.description = 'A test signal';
-	source.aggregate = true;
+	source.summarize = true;
 	source.set = 'left';
 	source.space = space;
 	source.targetSpace = space;
@@ -764,7 +764,7 @@ test('Signal - clone', (t) => {
 	t.is(clone.name, source.name);
 	t.is(clone.displayName, source.displayName);
 	t.is(clone.description, source.description);
-	t.is(clone.aggregate, source.aggregate);
+	t.is(clone.summarize, source.summarize);
 	t.is(clone.frameRate, source.frameRate);
 	t.is(clone.set, source.set);
 	t.is(clone.space, source.space);

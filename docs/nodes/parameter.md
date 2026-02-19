@@ -80,35 +80,34 @@ Filter for measurements where this node should be calculated. Read more in the [
     - parameterStep: Input.x
 ```
 
-### `aggregate`
+### `summarize`
 
 > **Type:** `Boolean | String`  
 > **Required:** `False`  
 > **Default value:** `False`
 
-Indicates whether this parameter should be processed by the aggregation engine.
-When set to `true`, the parameter is aggregated using the default method.  
-When a string is provided, it allows you to specify the aggregation behavior with greater control.  
-The expected string is a comma-separated list of events and/or phases to define the aggregation.
+Indicates whether this parameter should be summarized by the engine.
+When set to `true`, the parameter is summarized using the default method.  
+When a string is provided, it allows you to specify the summarization behavior with greater control.  
+The expected string is a comma-separated list of events and/or phases to define the summarization.
 
 ## Examples
 ```yaml
 - parameter: MyParam
-  aggregate: true
+  summarize: true
   steps:
     ...
 ```
-Setting `aggregate: true` enables aggregation of this parameter across all
+Setting `summarize: true` enables summarization of this parameter across all
 enabled events and phases. Individual events or phases can be excluded from
-being processed by the aggregation engine by specifying `aggregate: false` on
+being processed by the engine by specifying `summarize: false` on
 the corresponding event or phase node.
-
 
 ```yaml
 - parameter: MyParam
-  aggregate: SwingPhase, LFS, LFO
+  summarize: SwingPhase, LFS, LFO
   steps:
     ...
 ```
-Using `aggregate: SwingPhase, LFS, LFO` will only enable aggregation using the
+Using `summarize: SwingPhase, LFS, LFO` will only enable summarization using the
 phase `SwingPhase`, as well as the events `LFS` and `LFO`.

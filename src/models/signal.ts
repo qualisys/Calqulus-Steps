@@ -72,7 +72,7 @@ export interface IFrameSpan {
  */
 export class Signal implements IDataSequence {
 	/** Whether the signal should be marked for aggregation. */
-	public aggregate?: boolean | string;
+	public summarize?: boolean | string;
 	/** An optional signal description. */
 	public description?: string;
 	/** An optional signal display name. */
@@ -745,7 +745,7 @@ export class Signal implements IDataSequence {
 	 */
 	clone(overrideValue?): Signal {
 		const out = new Signal();
-		out.aggregate = this.aggregate;
+		out.summarize = this.summarize;
 		out.description = this.description;
 		out.displayName = this.displayName;
 		out.name = this.name;
