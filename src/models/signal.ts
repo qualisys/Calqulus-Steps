@@ -774,10 +774,12 @@ export class Signal implements IDataSequence {
 			out.setValue(cloneValue(this.getValue()), this.frameMap);
 		}
 
-		out.property = {
-			name: this.property.name,
-			value: cloneValue(this.property.value),
-		};
+		if (this.property) {
+			out.property = {
+				name: this.property.name,
+				value: cloneValue(this.property.value),
+			};
+		}
 
 		return out;
 	}
