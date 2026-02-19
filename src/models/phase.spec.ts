@@ -166,7 +166,7 @@ test('Phase - partial phase with imputed start frame', (t) => {
 
 	const intervals = phase.intervals;
 	t.is(intervals.length, 2);
-	t.is(intervals[0].start, 1);
+	t.is(intervals[0].start, 0);
 	t.is(intervals[0].end, 30);
 	t.is(intervals[0].partial, true);
 	t.is(intervals[1].start, 50);
@@ -195,7 +195,7 @@ test('Phase - partial phase with imputed end frame', (t) => {
 	t.is(intervals[0].end, 20);
 	t.is(intervals[0].partial, undefined);
 	t.is(intervals[1].start, 50);
-	t.is(intervals[1].end, frameCount);
+	t.is(intervals[1].end, frameCount - 1);
 	t.is(intervals[1].partial, true);
 });
 
@@ -216,14 +216,14 @@ test('Phase - partial phase with both imputed start and end frames', (t) => {
 
 	const intervals = phase.intervals;
 	t.is(intervals.length, 3);
-	t.is(intervals[0].start, 1);
+	t.is(intervals[0].start, 0);
 	t.is(intervals[0].end, 20);
 	t.is(intervals[0].partial, true);
 	t.is(intervals[1].start, 30);
 	t.is(intervals[1].end, 50);
 	t.is(intervals[1].partial, undefined);
 	t.is(intervals[2].start, 60);
-	t.is(intervals[2].end, frameCount);
+	t.is(intervals[2].end, frameCount - 1);
 	t.is(intervals[2].partial, true);
 });
 
@@ -244,7 +244,7 @@ test('Phase - partial phase with empty start values', (t) => {
 
 	const intervals = phase.intervals;
 	t.is(intervals.length, 1);
-	t.is(intervals[0].start, 1);
+	t.is(intervals[0].start, 0);
 	t.is(intervals[0].end, 30);
 	t.is(intervals[0].partial, true);
 });
@@ -267,7 +267,7 @@ test('Phase - partial phase with empty end values', (t) => {
 	const intervals = phase.intervals;
 	t.is(intervals.length, 1);
 	t.is(intervals[0].start, 30);
-	t.is(intervals[0].end, frameCount);
+	t.is(intervals[0].end, frameCount - 1);
 	t.is(intervals[0].partial, true);
 });
 

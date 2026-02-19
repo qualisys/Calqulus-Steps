@@ -119,7 +119,7 @@ export class Phase implements ISequence, IDataSequence {
 				// The first interval is only partially defined. Make the phase
 				// start at the beginning of the measurement by injecting the
 				// first frame into the start array.
-				startValues = new Float32Array([1, ...startValues]);
+				startValues = new Float32Array([0, ...startValues]);
 				this._hasImputedStartFrame = true;
 			}
 
@@ -128,7 +128,7 @@ export class Phase implements ISequence, IDataSequence {
 				// The last interval is only partially defined. Make the phase
 				// end at the end of the measurement by injecting the last frame
 				// into the end array.
-				endValues = new Float32Array([...endValues, frameCount]);
+				endValues = new Float32Array([...endValues, frameCount - 1]);
 				this._hasImputedEndFrame = true;
 			}
 		}
@@ -165,11 +165,11 @@ export class Phase implements ISequence, IDataSequence {
 		}
 
 		for (const value of this._intervals) {
-			if (value.start === 1 && this._hasImputedStartFrame) {
+			if (value.start === 0 && this._hasImputedStartFrame) {
 				value.partial = true;
 			}
 
-			if (value.end === this._frameCount && this._hasImputedEndFrame) {
+			if (value.end === (this._frameCount - 1) && this._hasImputedEndFrame) {
 				value.partial = true;
 			}
 		}
