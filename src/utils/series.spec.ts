@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { f32 } from '../../test-utils/mock-step';
+import { f32 } from '../test-utils/mock-step';
 
 import { SeriesBufferMethod, SeriesUtil } from './series';
 
