@@ -1,4 +1,4 @@
-import { range } from 'lodash';
+import { isEqual, range } from 'lodash';
 
 import { Space } from '../processing/space';
 import { TypeCheck } from '../utils/type-check';
@@ -810,23 +810,9 @@ export class Signal implements IDataSequence {
 				return a === b;
 			case SignalType.Uint32Array:
 			case SignalType.Float32Array:
-				return Signal.typedArrayEquals(a as TypedArray, b as TypedArray);
-			case SignalType.Float32ArrayArray: {
-				const aa = a as Float32Array[];
-				const ab = b as Float32Array[];
-
-				if (aa.length !== ab.length) {
-					return false;
-				}
-
-				for (let i = 0; i < aa.length; i++) {
-					if (!Signal.typedArrayEquals(aa[i], ab[i])) {
-						return false;
-					}
-				}
-
-				return true;
-			}
+				return isEqual(a, b);
+			case SignalType.Float32ArrayArray:
+				return isEqual(a, b);
 			case SignalType.Joint:
 				return (a as Joint).equals(b as Joint);
 			case SignalType.ForcePlate:
@@ -840,19 +826,5 @@ export class Signal implements IDataSequence {
 			default:
 				return false;
 		}
-	}
-
-	private static typedArrayEquals(a: TypedArray, b: TypedArray): boolean {
-		if (a.length !== b.length) {
-			return false;
-		}
-
-		for (let i = 0; i < a.length; i++) {
-			if (a[i] !== b[i]) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 }

@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { TypeCheck } from '../../utils/type-check';
 import { Vector } from '../spatial/vector';
 
@@ -45,26 +47,7 @@ export class VectorSequence implements ISequence {
 			return false;
 		}
 
-		if (this.array.length !== other.array.length) {
-			return false;
-		}
-
-		for (let i = 0; i < this.array.length; i++) {
-			const a = this.array[i];
-			const b = other.array[i];
-
-			if (a.length !== b.length) {
-				return false;
-			}
-
-			for (let j = 0; j < a.length; j++) {
-				if (a[j] !== b[j]) {
-					return false;
-				}
-			}
-		}
-
-		return true;
+		return isEqual(this.array, other.array);
 	}
 
 	/**

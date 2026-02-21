@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { Segment } from './segment';
 import { IDataSequence, ISequence, ISequenceDataProperties, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
@@ -59,33 +61,7 @@ export class Joint implements ISequence, IDataSequence, ISequenceDataProperties 
 			return false;
 		}
 
-		if (this.array.length !== other.array.length) {
-			return false;
-		}
-
-		for (let i = 0; i < this.array.length; i++) {
-			const a = this.array[i];
-			const b = other.array[i];
-
-			if (a == null || b == null) {
-				if (a !== b) {
-					return false;
-				}
-				continue;
-			}
-
-			if (a.length !== b.length) {
-				return false;
-			}
-
-			for (let j = 0; j < a.length; j++) {
-				if (a[j] !== b[j]) {
-					return false;
-				}
-			}
-		}
-
-		return true;
+		return isEqual(this.array, other.array);
 	}
 
 	get force(): VectorSequence { return this._force; }

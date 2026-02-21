@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { Joint } from './joint';
 import { QuaternionSequence } from './sequence/quaternion-sequence';
 import { IDataSequence, ISequence } from './sequence/sequence';
@@ -84,26 +86,7 @@ export class Segment implements ISequence, IDataSequence {
 			return false;
 		}
 
-		if (this.array.length !== other.array.length) {
-			return false;
-		}
-
-		for (let i = 0; i < this.array.length; i++) {
-			const a = this.array[i];
-			const b = other.array[i];
-
-			if (a.length !== b.length) {
-				return false;
-			}
-
-			for (let j = 0; j < a.length; j++) {
-				if (a[j] !== b[j]) {
-					return false;
-				}
-			}
-		}
-
-		return true;
+		return isEqual(this.array, other.array);
 	}
 
 	get position(): VectorSequence { return this._position; }
