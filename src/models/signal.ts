@@ -783,4 +783,76 @@ export class Signal implements IDataSequence {
 
 		return out;
 	}
+
+	/**
+	 * Returns true if this signal's value equals the other signal's value (same type, same elements).
+	 */
+	equals(other: Signal): boolean {
+		if (!other) {
+			return false;
+		}
+
+		const a = this.getValue();
+		const b = other.getValue();
+
+		if (this._type !== other.type) {
+			return false;
+		}
+
+		if (a == null || b == null) {
+			return a === b;
+		}
+
+		switch (this._type) {
+			case SignalType.Float32:
+				return a === b;
+			case SignalType.String:
+				return a === b;
+			case SignalType.Uint32Array:
+			case SignalType.Float32Array:
+				return Signal.typedArrayEquals(a as TypedArray, b as TypedArray);
+			case SignalType.Float32ArrayArray: {
+				const aa = a as Float32Array[];
+				const ab = b as Float32Array[];
+
+				if (aa.length !== ab.length) {
+					return false;
+				}
+
+				for (let i = 0; i < aa.length; i++) {
+					if (!Signal.typedArrayEquals(aa[i], ab[i])) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+			case SignalType.Joint:
+				return (a as Joint).equals(b as Joint);
+			case SignalType.ForcePlate:
+				return (a as ForcePlate).equals(b as ForcePlate);
+			case SignalType.Segment:
+				return (a as Segment).equals(b as Segment);
+			case SignalType.VectorSequence:
+				return (a as VectorSequence).equals(b as VectorSequence);
+			case SignalType.PlaneSequence:
+				return (a as PlaneSequence).equals(b as PlaneSequence);
+			default:
+				return false;
+		}
+	}
+
+	private static typedArrayEquals(a: TypedArray, b: TypedArray): boolean {
+		if (a.length !== b.length) {
+			return false;
+		}
+
+		for (let i = 0; i < a.length; i++) {
+			if (a[i] !== b[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

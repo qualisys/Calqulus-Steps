@@ -61,6 +61,36 @@ export class ForcePlate implements ISequence, IDataSequence {
 		return cloned;
 	}
 
+	/**
+	 * Returns true if this force plate has the same array data as the other.
+	 */
+	equals(other: ForcePlate): boolean {
+		if (!other || !ForcePlate.isForcePlate(other)) {
+			return false;
+		}
+
+		if (this.array.length !== other.array.length) {
+			return false;
+		}
+
+		for (let i = 0; i < this.array.length; i++) {
+			const a = this.array[i];
+			const b = other.array[i];
+
+			if (a.length !== b.length) {
+				return false;
+			}
+
+			for (let j = 0; j < a.length; j++) {
+				if (a[j] !== b[j]) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 	get length() {
 		return this.force.length;
 	}

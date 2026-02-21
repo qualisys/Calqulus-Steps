@@ -51,6 +51,43 @@ export class Joint implements ISequence, IDataSequence, ISequenceDataProperties 
 		return cloned;
 	}
 
+	/**
+	 * Returns true if this joint has the same array data as the other.
+	 */
+	equals(other: Joint): boolean {
+		if (!other || !Joint.isJoint(other)) {
+			return false;
+		}
+
+		if (this.array.length !== other.array.length) {
+			return false;
+		}
+
+		for (let i = 0; i < this.array.length; i++) {
+			const a = this.array[i];
+			const b = other.array[i];
+
+			if (a == null || b == null) {
+				if (a !== b) {
+					return false;
+				}
+				continue;
+			}
+
+			if (a.length !== b.length) {
+				return false;
+			}
+
+			for (let j = 0; j < a.length; j++) {
+				if (a[j] !== b[j]) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 	get force(): VectorSequence { return this._force; }
 	set force(value: VectorSequence) {
 		this._force = value;

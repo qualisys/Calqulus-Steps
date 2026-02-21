@@ -47,6 +47,36 @@ export class PlaneSequence implements ISequence {
 	}
 
 	/**
+	 * Returns true if this sequence has the same length and element values as the other.
+	 */
+	equals(other: PlaneSequence): boolean {
+		if (!other || other.typeName !== 'PlaneSequence') {
+			return false;
+		}
+
+		if (this.array.length !== other.array.length) {
+			return false;
+		}
+
+		for (let i = 0; i < this.array.length; i++) {
+			const a = this.array[i];
+			const b = other.array[i];
+
+			if (a.length !== b.length) {
+				return false;
+			}
+
+			for (let j = 0; j < a.length; j++) {
+				if (a[j] !== b[j]) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Get the number of elements in this sequence.
 	 */
 	get length() { return this.a.length; };

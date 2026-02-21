@@ -38,6 +38,36 @@ export class VectorSequence implements ISequence {
 	}
 
 	/**
+	 * Returns true if this sequence has the same length and element values as the other.
+	 */
+	equals(other: VectorSequence): boolean {
+		if (!other || other.typeName !== 'VectorSequence') {
+			return false;
+		}
+
+		if (this.array.length !== other.array.length) {
+			return false;
+		}
+
+		for (let i = 0; i < this.array.length; i++) {
+			const a = this.array[i];
+			const b = other.array[i];
+
+			if (a.length !== b.length) {
+				return false;
+			}
+
+			for (let j = 0; j < a.length; j++) {
+				if (a[j] !== b[j]) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Adds a vector from each vector in the current [[VectorSequence]].
 	 *
 	 * If the `result` parameter is passed, this method will update and return
