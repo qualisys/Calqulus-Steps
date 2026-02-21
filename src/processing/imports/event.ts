@@ -19,7 +19,7 @@ import { BaseImportStep } from './base-import';
 })
 export class EventStep extends BaseImportStep {
 	async process() {
-		const event = this.inputs[0].clone();
+		const event = this.inputs[0].shallowCopy();
 
 		if (!event.isEventLike) throw new ProcessingError('The imported event does not appear to be event-like.');
 

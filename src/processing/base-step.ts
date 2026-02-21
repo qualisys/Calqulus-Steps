@@ -76,7 +76,7 @@ export class BaseStep {
 								convertedSignals.push(signal);
 							}
 							else if (signal?.type === SignalType.Float32Array && signal.length === 1) {
-								const value = signal.clone(signal.getValue()[0]);
+								const value = signal.shallowCopy(false).setValue(signal.getValue()[0]);
 								convertedSignals.push(value);
 							}
 						}

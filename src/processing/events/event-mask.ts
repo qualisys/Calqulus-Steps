@@ -287,13 +287,13 @@ export class EventMaskStep extends BaseStep {
 				filteredFrames = SeriesUtil.createNumericArrayOfSameType(sourceFrames, filteredFrames);
 			}
 
-			const returnSignal = source.clone(filteredFrames);
+			const returnSignal = source.shallowCopy(false).setValue(filteredFrames);
 			returnSignal.resultType = ResultType.Scalar;
 
 			return returnSignal;
 		}
 
-		const returnSignal = source.clone(false);
+		const returnSignal = source.shallowCopy(false);
 
 		if (!this.truncate && this.replacementValue === undefined) {
 			// Apply the event pairs as the signal cycles.

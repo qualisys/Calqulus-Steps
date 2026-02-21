@@ -262,7 +262,7 @@ export class PeakFinderStep extends BaseStep {
 			throw new ProcessingError('The PeakFinder step expects a single array as input.');
 		}
 
-		const result: Signal = this.inputs[0].clone(false);
+		const result: Signal = this.inputs[0].shallowCopy(false);
 
 		const config = {
 			height: this.height,

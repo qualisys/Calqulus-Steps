@@ -629,7 +629,7 @@ export class Signal implements IDataSequence {
 		// Generate a new signal and set its result type to 
 		// Scalar and reset its frame rate to undefined
 		// since it's no longer a continuous series.
-		const returnSignal = this.clone(false);
+		const returnSignal = this.shallowCopy(false);
 		returnSignal.resultType = ResultType.Scalar;
 
 		switch (this.type) {
@@ -730,30 +730,12 @@ export class Signal implements IDataSequence {
 	}
 
 	/**
-	 * Creates a new [[Signal]] instance with the same properties
-	 * as the current signal.
-	 * 
-	 * If `overrideValue` is set, the clone will use it as its signal value.
-	 * 
-	 * If `overrideValue` is set to `false`, the clone will not set any value.
-	 * @param overrideValue 
+	 * Creates a deep copy of this [[Signal]]: a new instance with the same
+	 * metadata and deep-copied value, cycles, and property.
+	 *
+	 * For a shallow copy or to set a different value, use [[Signal.shallowCopy]].
 	 */
-	clone(overrideValue?): Signal {
-		const out = new Signal();
-		out.name = this.name;
-		out.set = this.set;
-		out.space = this.space;
-		out.targetSpace = this.targetSpace;
-		out.frameRate = this.frameRate;
-		out.cycles = this.cycles ? Array.from(this.cycles) : undefined;
-		out.isEvent = this.isEvent;
-		out.originalSignal = this.originalSignal;
-		out.component = this.component;
-
-		if (this._resultType) {
-			out.resultType = this._resultType;
-		}
-
+	clone(): Signal {
 		const cloneValue = (value) => {
 			if (TypeCheck.isArrayLike(value)) {
 				return value.slice();
@@ -764,21 +746,48 @@ export class Signal implements IDataSequence {
 			return value;
 		};
 
-		if (overrideValue !== undefined) {
-			// If the overrideValue argument is `false`, then skip setting the value.
-			if (overrideValue !== false) {
-				out.setValue(overrideValue);
-			}
-		}
-		else {
-			out.setValue(cloneValue(this.getValue()), this.frameMap);
-		}
+		const out = this.shallowCopy(false);
+
+		out.cycles = this.cycles ? Array.from(this.cycles) : undefined;
+		out.setValue(cloneValue(this.getValue()), this.frameMap);
 
 		if (this.property) {
 			out.property = {
 				name: this.property.name,
 				value: cloneValue(this.property.value),
 			};
+		}
+
+		return out;
+	}
+
+	/**
+	 * Creates a shallow copy of this [[Signal]]: a new instance with the same
+	 * metadata and shared references for value, frameMap, cycles, and property.
+	 *
+	 * When `keepValue` is true (default), the copy's value is set to this signal's value.
+	 * When false, the copy has no value (caller should use setValue).
+	 * @param keepValue
+	 */
+	shallowCopy(keepValue = true): Signal {
+		const out = new Signal();
+		out.name = this.name;
+		out.set = this.set;
+		out.space = this.space;
+		out.targetSpace = this.targetSpace;
+		out.frameRate = this.frameRate;
+		out.cycles = this.cycles;
+		out.isEvent = this.isEvent;
+		out.originalSignal = this.originalSignal;
+		out.component = this.component;
+		out.property = this.property;
+
+		if (this._resultType) {
+			out.resultType = this._resultType;
+		}
+
+		if (keepValue) {
+			out.setValue(this.getValue(), this.frameMap);
 		}
 
 		return out;

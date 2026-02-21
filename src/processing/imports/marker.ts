@@ -57,7 +57,7 @@ export class MarkerStep extends BaseImportStep {
 				referenceSignal = getReferenceSignal(this.inputs, [SignalType.Segment, SignalType.VectorSequence], true);
 			}
 
-			const out = referenceSignal ? referenceSignal.clone(false) : new Signal();
+			const out = referenceSignal ? referenceSignal.shallowCopy(false) : new Signal();
 			out.setValue(Marker.fromArray(referenceSignal ? referenceSignal.name : '', [origin.x, origin.y, origin.z]));
 
 			return out;

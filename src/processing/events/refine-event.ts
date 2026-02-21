@@ -155,7 +155,7 @@ export class RefineEventStep extends BaseStep {
 			this.cyclic,
 		);
 
-		const result: Signal = referenceSignal.clone(refinedEvent);
+		const result: Signal = referenceSignal.shallowCopy(false).setValue(refinedEvent);
 
 		result.isEvent = true;
 		result.resultType = ResultType.Scalar;
