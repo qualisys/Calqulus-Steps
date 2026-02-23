@@ -71,8 +71,6 @@ export interface IFrameSpan {
  * It is the main class used for all input / output for steps.
  */
 export class Signal implements IDataSequence {
-	/** Whether the signal should be marked for aggregation. */
-	public summarize?: boolean | string;
 	/** An optional signal description. */
 	public description?: string;
 	/** An optional signal display name. */
@@ -87,6 +85,8 @@ export class Signal implements IDataSequence {
 	public set: string;
 	/** The currently applied space. */
 	public space: Space;
+	/** Whether the signal should be marked for aggregation. */
+	public summarize?: boolean | string;
 	/** The space which the signal will be converted into. */
 	public targetSpace: Space;
 
