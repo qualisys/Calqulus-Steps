@@ -40,7 +40,7 @@ export class BaseAlgorithmStep extends BaseStep {
 		const res = set.map((v, index) => {
 			return this.function(v, index);
 		});
-		const out = this.inputs[0].clone(false);
+		const out = this.inputs[0].shallowCopy(false);
 		const originalType = this.inputs[0].type;
 
 		const outValue = Signal.typeFromArray(originalType, res);

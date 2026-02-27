@@ -1,6 +1,7 @@
-import { range } from 'lodash';
+import { isEqual, range } from 'lodash';
 
 import { Space } from '../processing/space';
+import { TypeCheck } from '../utils/type-check';
 
 import { ForcePlate } from './force-plate';
 import { Joint } from './joint';
@@ -655,7 +656,7 @@ export class Signal implements IDataSequence {
 		// Generate a new signal and set its result type to 
 		// Scalar and reset its frame rate to undefined
 		// since it's no longer a continuous series.
-		const returnSignal = this.clone(false);
+		const returnSignal = this.shallowCopy(false);
 		returnSignal.resultType = ResultType.Scalar;
 
 		switch (this.type) {
@@ -756,15 +757,46 @@ export class Signal implements IDataSequence {
 	}
 
 	/**
-	 * Creates a new [[Signal]] instance with the same properties
-	 * as the current signal.
-	 * 
-	 * If `overrideValue` is set, the clone will use it as its signal value.
-	 * 
-	 * If `overrideValue` is set to `false`, the clone will not set any value.
-	 * @param overrideValue 
+	 * Creates a deep copy of this [[Signal]]: a new instance with the same
+	 * metadata and deep-copied value, cycles, and property.
+	 *
+	 * For a shallow copy or to set a different value, use [[Signal.shallowCopy]].
 	 */
-	clone(overrideValue?): Signal {
+	clone(): Signal {
+		const cloneValue = (value) => {
+			if (TypeCheck.isArrayLike(value)) {
+				return value.slice();
+			}
+			else if (value instanceof VectorSequence || value instanceof Segment || value instanceof Joint || value instanceof ForcePlate || value instanceof PlaneSequence) {
+				return value.clone();
+			}
+			return value;
+		};
+
+		const out = this.shallowCopy(false);
+
+		out.cycles = this.cycles ? Array.from(this.cycles) : undefined;
+		out.setValue(cloneValue(this.getValue()), this.frameMap);
+
+		if (this.property) {
+			out.property = {
+				name: this.property.name,
+				value: cloneValue(this.property.value),
+			};
+		}
+
+		return out;
+	}
+
+	/**
+	 * Creates a shallow copy of this [[Signal]]: a new instance with the same
+	 * metadata and shared references for value, frameMap, cycles, and property.
+	 *
+	 * When `keepValue` is true (default), the copy's value is set to this signal's value.
+	 * When false, the copy has no value (caller should use setValue).
+	 * @param keepValue
+	 */
+	shallowCopy(keepValue = true): Signal {
 		const out = new Signal();
 		out.name = this.name;
 		out.set = this.set;
@@ -781,16 +813,54 @@ export class Signal implements IDataSequence {
 			out.resultType = this._resultType;
 		}
 
-		if (overrideValue !== undefined) {
-			// If the overrideValue argument is `false`, then skip setting the value.
-			if (overrideValue !== false) {
-				out.setValue(overrideValue);
-			}
-		}
-		else {
+		if (keepValue) {
 			out.setValue(this.getValue(), this.frameMap);
 		}
 
 		return out;
+	}
+
+	/**
+	 * Returns true if this signal's value equals the other signal's value (same type, same elements).
+	 */
+	equals(other: Signal): boolean {
+		if (!other) {
+			return false;
+		}
+
+		const a = this.getValue();
+		const b = other.getValue();
+
+		if (this._type !== other.type) {
+			return false;
+		}
+
+		if (a == null || b == null) {
+			return a === b;
+		}
+
+		switch (this._type) {
+			case SignalType.Float32:
+				return a === b;
+			case SignalType.String:
+				return a === b;
+			case SignalType.Uint32Array:
+			case SignalType.Float32Array:
+				return isEqual(a, b);
+			case SignalType.Float32ArrayArray:
+				return isEqual(a, b);
+			case SignalType.Joint:
+				return (a as Joint).equals(b as Joint);
+			case SignalType.ForcePlate:
+				return (a as ForcePlate).equals(b as ForcePlate);
+			case SignalType.Segment:
+				return (a as Segment).equals(b as Segment);
+			case SignalType.VectorSequence:
+				return (a as VectorSequence).equals(b as VectorSequence);
+			case SignalType.PlaneSequence:
+				return (a as PlaneSequence).equals(b as PlaneSequence);
+			default:
+				return false;
+		}
 	}
 }

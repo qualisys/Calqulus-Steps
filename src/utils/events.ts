@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { IFrameSpan } from '../models/signal';
 
 import { SeriesUtil } from './series';
@@ -112,10 +114,8 @@ export class EventUtil {
 	 * In order for this algorithm to return any values, the "pick" 
 	 * array must be present in the "sequence" array.
 	 * 
-	 * The pick array is identified using its instance, therefore,
-	 * you always need to send the exact same instance if the pick 
-	 * array both as the "pick" argument, as well as in the 
-	 * "sequence" argument. 
+	 * The pick array is matched by deep equality of its contents,
+	 * so it does not need to be the same instance as in the sequence. 
 	 * 
 	 * @param pick Event frames to pick from.
 	 * @param sequence Array of event frames, forming a sequence of events to happen in order.
@@ -156,9 +156,11 @@ export class EventUtil {
 				const currIndex = i + p;
 				const currItem = fullSequence[currIndex];
 
-				if (currItem.from !== sequence[p]) break;
+				if (!isEqual(currItem.from, sequence[p])) {
+					break;
+				}
 
-				if (currItem.from === pick) {
+				if (isEqual(currItem.from, pick)) {
 					currPicks.push(currIndex);
 				}
 

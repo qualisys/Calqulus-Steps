@@ -103,7 +103,7 @@ export class IntegralStep extends BaseStep {
 			const scalarValues = perCycleResults.map(comp => Float32Array.from(comp.map(c => c.pop())));
 
 			const returnData = Signal.typeFromArray(this.inputs[0].type, scalarValues as TypedArray[]);
-			const returnSignal = this.inputs[0].clone(returnData);
+			const returnSignal = this.inputs[0].shallowCopy(false).setValue(returnData);
 
 			returnSignal.cycles = undefined;
 			returnSignal.resultType = ResultType.Scalar;
@@ -112,6 +112,6 @@ export class IntegralStep extends BaseStep {
 		}
 		
 		const returnData = Signal.typeFromArray(this.inputs[0].type, cycleResults as TypedArray[]);
-		return this.inputs[0].clone(returnData);
+		return this.inputs[0].shallowCopy(false).setValue(returnData);
 	}
 }

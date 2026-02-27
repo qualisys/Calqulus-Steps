@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.2] 2025-10-20
+
+## Fixed
+
+* Issue in handling non-numeric values in mean aggregation step [#77](https://github.com/qualisys/Calqulus-Steps/pull/77)
+
 ## [1.7.1] 2025-08-14
 
 ## Fixed

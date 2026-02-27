@@ -114,7 +114,7 @@ export class CumulativeDistanceStep extends BaseStep {
 			}
 		}
 
-		const returnSignal: Signal = sourceInput.clone(cycleResults);
+		const returnSignal: Signal = sourceInput.shallowCopy(false).setValue(cycleResults);
 
 		if (!this.scalar) {
 			return returnSignal;
@@ -142,7 +142,7 @@ export class CumulativeDistanceStep extends BaseStep {
 			return sum;
 		});
 
-		const returnSignalScalar: Signal = sourceInput.clone(scalarValues);
+		const returnSignalScalar: Signal = sourceInput.shallowCopy(false).setValue(scalarValues);
 		returnSignalScalar.cycles = undefined;
 
 		return returnSignalScalar;

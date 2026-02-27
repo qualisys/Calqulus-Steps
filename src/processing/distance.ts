@@ -58,7 +58,7 @@ export class DistanceStep extends BaseStep {
 			dist[i] = Vector.norm(d);
 		}
 
-		return this.inputs[0].clone(dist);
+		return this.inputs[0].shallowCopy(false).setValue(dist);
 	}
 }
 

@@ -206,7 +206,7 @@ export class IfStep extends BaseStep {
 					throw new Error(`Could not resolve signal '${ thenInput[0].getStringValue() }' for 'then' option.`);
 				}
 
-				return thenInput[0].clone();
+				return thenInput[0].shallowCopy();
 			}
 
 			// Handle falsy evaluation.
@@ -219,7 +219,7 @@ export class IfStep extends BaseStep {
 				throw new Error(`Could not resolve signal '${ elseInput[0].getStringValue() }' for 'else' option.`);
 			}
 
-			return elseInput[0].clone();
+			return elseInput[0].shallowCopy();
 		}
 		catch (err) {
 			throw new ProcessingError('Evaluating expression failed: ' + err.message);

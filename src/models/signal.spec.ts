@@ -544,7 +544,7 @@ test('Signal - convertToTargetSpace - Float32Array from a VectorSequence', (t) =
 	const s1_vecseq3 = new Signal(vecSeq3, frameRate);
 
 	// Get "y" component, like it's done by DataStore
-	s1_vecseq3.originalSignal = s1_vecseq3.clone();
+	s1_vecseq3.originalSignal = s1_vecseq3.shallowCopy();
 	s1_vecseq3.setValue(s1_vecseq3.getComponent('y'));
 	s1_vecseq3.component = 'y';
 
@@ -553,7 +553,7 @@ test('Signal - convertToTargetSpace - Float32Array from a VectorSequence', (t) =
 
 	t.is(s1_vecseq3.targetSpace, undefined);
 	t.is(s1_vecseq3.space, space);
-	t.deepEqual(s1_vecseq3.getFloat32ArrayValue(), Float32Array.from([1, 2, 3]));
+	t.deepEqual(Array.from(s1_vecseq3.getFloat32ArrayValue()), [1, 2, 3]);
 });
 
 test('Signal - convertToTargetSpace - Float32Array from a Segment', (t) => {
@@ -562,7 +562,7 @@ test('Signal - convertToTargetSpace - Float32Array from a Segment', (t) => {
 	const s1_segment2 = new Signal(segment2, frameRate);
 
 	// Get "y" component, like it's done by DataStore
-	s1_segment2.originalSignal = s1_segment2.clone();
+	s1_segment2.originalSignal = s1_segment2.shallowCopy();
 	s1_segment2.setValue(s1_segment2.getComponent('y'));
 	s1_segment2.component = 'y';
 
@@ -742,7 +742,7 @@ test('Signal - getEventArrayValue', (t) => {
 	t.is(s1.getEventArrayValue(), undefined);
 });
 
-test('Signal - clone', (t) => {
+test('Signal - shallowCopy', (t) => {
 	// Create all propped-up signal
 	const source = new Signal(segment, frameRate);
 	source.name = 'test';
@@ -751,29 +751,29 @@ test('Signal - clone', (t) => {
 	source.targetSpace = space;
 	source.cycles = cycles;
 	source.resultType = ResultType.Scalar;
-	source.originalSignal = source.clone();
+	source.originalSignal = source.shallowCopy();
 	source.component = 'x';
 	source.property = { name: 'test', value: 5 };
 
-	const clone = source.clone();
+	const copy = source.shallowCopy();
 
-	// Test all properties
-	t.is(clone.name, source.name);
-	t.is(clone.frameRate, source.frameRate);
-	t.is(clone.set, source.set);
-	t.is(clone.space, source.space);
-	t.is(clone.targetSpace, source.targetSpace);
-	t.is(clone.cycles, source.cycles);
-	t.is(clone.resultType, source.resultType);
-	t.is(clone.getValue(), source.getValue());
-	t.is(clone.type, source.type);
-	t.is(clone.originalSignal, source.originalSignal);
-	t.is(clone.component, source.component);
-	t.deepEqual(clone.property, source.property);
+	// Test all properties (shallow: shared references for value, cycles, property)
+	t.is(copy.name, source.name);
+	t.is(copy.frameRate, source.frameRate);
+	t.is(copy.set, source.set);
+	t.is(copy.space, source.space);
+	t.deepEqual(copy.targetSpace, source.targetSpace);
+	t.deepEqual(copy.cycles, source.cycles);
+	t.is(copy.resultType, source.resultType);
+	t.deepEqual(copy.getValue(), source.getValue());
+	t.is(copy.type, source.type);
+	t.is(copy.originalSignal, source.originalSignal);
+	t.is(copy.component, source.component);
+	t.deepEqual(copy.property, source.property);
 });
 
-test('Signal - clone with no value', (t) => {
-	// Test clone with no value
+test('Signal - shallowCopy with no value', (t) => {
+	// Test shallowCopy with no value
 	const source = new Signal(segment, frameRate);
 	source.name = 'test';
 	source.set = 'left';
@@ -782,23 +782,23 @@ test('Signal - clone with no value', (t) => {
 	source.cycles = cycles;
 	source.resultType = ResultType.Scalar;
 
-	const clone = source.clone(false);
+	const copy = source.shallowCopy(false);
 
 	// Test all properties
-	t.is(clone.name, source.name);
-	t.is(clone.frameRate, source.frameRate);
-	t.is(clone.set, source.set);
-	t.is(clone.space, source.space);
-	t.is(clone.targetSpace, source.targetSpace);
-	t.is(clone.cycles, source.cycles);
-	t.is(clone.resultType, source.resultType);
+	t.is(copy.name, source.name);
+	t.is(copy.frameRate, source.frameRate);
+	t.is(copy.set, source.set);
+	t.is(copy.space, source.space);
+	t.is(copy.targetSpace, source.targetSpace);
+	t.deepEqual(copy.cycles, source.cycles);
+	t.is(copy.resultType, source.resultType);
 
-	t.is(clone.getValue(), undefined); // Should have no value
-	t.is(clone.type, undefined);
+	t.is(copy.getValue(), undefined); // Should have no value
+	t.is(copy.type, undefined);
 });
 
-test('Signal - clone with a new value', (t) => {
-	// Test clone with new value
+test('Signal - shallowCopy with a new value', (t) => {
+	// Test shallowCopy with new value
 	const source = new Signal(segment, frameRate);
 	source.name = 'test';
 	source.set = 'left';
@@ -807,19 +807,39 @@ test('Signal - clone with a new value', (t) => {
 	source.cycles = cycles;
 	source.resultType = ResultType.Scalar;
 
-	const clone = source.clone(fakeArray);
+	const copy = source.shallowCopy(false).setValue(fakeArray);
 
 	// Test all properties
-	t.is(clone.name, source.name);
-	t.is(clone.frameRate, source.frameRate);
-	t.is(clone.set, source.set);
-	t.is(clone.space, source.space);
-	t.is(clone.targetSpace, source.targetSpace);
-	t.is(clone.cycles, source.cycles);
-	t.is(clone.resultType, source.resultType);
+	t.is(copy.name, source.name);
+	t.is(copy.frameRate, source.frameRate);
+	t.is(copy.set, source.set);
+	t.is(copy.space, source.space);
+	t.is(copy.targetSpace, source.targetSpace);
+	t.deepEqual(copy.cycles, source.cycles);
+	t.is(copy.resultType, source.resultType);
 
-	t.is(clone.getValue(), fakeArray); // Should be our new array
-	t.is(clone.type, SignalType.Float32Array);
+	t.is(copy.getValue(), fakeArray); // Should be our new array
+	t.is(copy.type, SignalType.Float32Array);
+});
+
+test('Signal - clone (deep copy)', (t) => {
+	const source = new Signal(fakeArray, frameRate);
+	source.name = 'test';
+	source.cycles = cycles;
+
+	const deep = source.clone();
+
+	t.is(deep.name, source.name);
+	t.deepEqual(deep.getValue(), source.getValue());
+	t.not(deep.getValue(), source.getValue()); // Different reference
+	t.not(deep.cycles, source.cycles); // Different array reference
+	t.deepEqual(deep.cycles, source.cycles);
+
+	// Mutating clone value does not affect source
+	const deepArr = deep.getValue() as Float32Array;
+	deepArr[0] = 999;
+	t.is((source.getValue() as Float32Array)[0], 1);
+	t.is(deepArr[0], 999);
 });
 
 // Getters and setters

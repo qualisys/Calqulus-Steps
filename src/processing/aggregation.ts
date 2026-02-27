@@ -93,7 +93,7 @@ class BaseAggregationStep extends BaseStep {
 		const res = zip(...cycleRes);
 		const resTyped = res.map(v => Float32Array.from(v));
 
-		const returnSignal: Signal = sourceInput.clone(false);
+		const returnSignal: Signal = sourceInput.shallowCopy(false);
 
 		const outValue = Signal.typeFromArray(originalType, resTyped);
 

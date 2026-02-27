@@ -93,7 +93,7 @@ export class ThresholdStep extends BaseStep {
 			throw new ProcessingError('The Threshold step expects a single array as input.');
 		}
 
-		const result: Signal = this.inputs[0].clone(false);
+		const result: Signal = this.inputs[0].shallowCopy(false);
 
 		const intersections = Threshold.getCrossingPoints(this.inputs[0].getFloat32ArrayValue(), this.threshold, this.direction);
 

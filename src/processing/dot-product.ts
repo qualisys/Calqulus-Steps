@@ -51,6 +51,6 @@ export class DotProductStep extends BaseStep {
 
 		const dotProduct = VectorSequence.dot(va, vb);
 		
-		return this.inputs[0].clone(dotProduct);
+		return this.inputs[0].shallowCopy(false).setValue(dotProduct);
 	}
 }
