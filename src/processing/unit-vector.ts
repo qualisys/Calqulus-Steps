@@ -47,6 +47,6 @@ export class UnitVectorStep extends BaseStep {
 
 		const out = new VectorSequence(outx, outy, outz, input.frameRate);
 
-		return input.clone(out);
+		return input.shallowCopy(false).setValue(out);
 	}
 }

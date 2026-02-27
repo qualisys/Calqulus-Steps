@@ -34,6 +34,18 @@ export class MatrixSequence {
 	}
 
 	/**
+	 * Creates a clone of this matrix sequence.
+	 */
+	clone(): MatrixSequence {
+		return new MatrixSequence(
+			this.m00.slice(), this.m01.slice(), this.m02.slice(), this.m03.slice(),
+			this.m10.slice(), this.m11.slice(), this.m12.slice(), this.m13.slice(),
+			this.m20.slice(), this.m21.slice(), this.m22.slice(), this.m23.slice(),
+			this.m30.slice(), this.m31.slice(), this.m32.slice(), this.m33.slice()
+		);
+	}
+
+	/**
 	 * Create a Matrix sequence filled with NaNs of the specified
 	 * length .
 	 *

@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { Joint } from './joint';
 import { QuaternionSequence } from './sequence/quaternion-sequence';
 import { IDataSequence, ISequence } from './sequence/sequence';
@@ -41,6 +43,50 @@ export class Segment implements ISequence, IDataSequence {
 	) {
 		this.array = [...this._position.array, ...this._rotation.array];
 		this.emptyValues = new Float32Array(this._position.x.length).fill(NaN);
+	}
+
+	/**
+	 * Creates a clone of this segment.
+	 */
+	clone(): Segment {
+		const cloned = new Segment(
+			this.name,
+			this._position.clone(),
+			this._rotation.clone(),
+			this.frameRate
+		);
+
+		cloned.components = [...this.components];
+
+		if (this.kinematics) {
+			cloned.kinematics = {
+				angularAcceleration: this.kinematics.angularAcceleration?.clone(),
+				angularVelocity: this.kinematics.angularVelocity?.clone(),
+				linearAcceleration: this.kinematics.linearAcceleration?.clone(),
+				linearVelocity: this.kinematics.linearVelocity?.clone(),
+			};
+		}
+
+		if (this.centerOfMass) { cloned.centerOfMass = this.centerOfMass.clone(); }
+		if (this.inertia) { cloned.inertia = this.inertia.clone(); }
+		if (this.mass !== undefined) { cloned.mass = this.mass; }
+		if (this.parent) { cloned.parent = this.parent; }
+		if (this.contactJoint) { cloned.contactJoint = this.contactJoint; }
+		if (this.distalJoint) { cloned.distalJoint = this.distalJoint; }
+		if (this.proximalJoint) { cloned.proximalJoint = this.proximalJoint; }
+
+		return cloned;
+	}
+
+	/**
+	 * Returns true if this segment has the same array data as the other.
+	 */
+	equals(other: Segment): boolean {
+		if (!other || !Segment.isSegment(other)) {
+			return false;
+		}
+
+		return isEqual(this.array, other.array);
 	}
 
 	get position(): VectorSequence { return this._position; }

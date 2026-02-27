@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { Segment } from './segment';
 import { IDataSequence, ISequence, ISequenceDataProperties, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
@@ -29,6 +31,37 @@ export class Joint implements ISequence, IDataSequence, ISequenceDataProperties 
 			this._moment?.array[0], this._moment?.array[1], this._moment?.array[2],
 			this._power
 		];
+	}
+
+	/**
+	 * Creates a clone of this joint.
+	 */
+	clone(): Joint {
+		const cloned = new Joint(
+			this.name,
+			this._position?.clone(),
+			this._force?.clone(),
+			this._moment?.clone(),
+			this._power ? this._power.slice() : undefined,
+			this.frameRate
+		);
+
+		cloned.distalSegment = this.distalSegment;
+		cloned.proximalSegment = this.proximalSegment;
+		cloned.properties = this.properties.map(p => ({ ...p }));
+
+		return cloned;
+	}
+
+	/**
+	 * Returns true if this joint has the same array data as the other.
+	 */
+	equals(other: Joint): boolean {
+		if (!other || !Joint.isJoint(other)) {
+			return false;
+		}
+
+		return isEqual(this.array, other.array);
 	}
 
 	get force(): VectorSequence { return this._force; }

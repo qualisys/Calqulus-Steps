@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { Plane } from '../spatial/plane';
 import { Vector } from '../spatial/vector';
 
@@ -32,6 +34,29 @@ export class PlaneSequence implements ISequence {
 		public d: TypedArray,
 	) {
 		this.array = [this.a, this.b, this.c, this.d];
+	}
+
+	/**
+	 * Creates a clone of this plane sequence.
+	 */
+	clone(): PlaneSequence {
+		return new PlaneSequence(
+			this.a.slice(),
+			this.b.slice(),
+			this.c.slice(),
+			this.d.slice()
+		);
+	}
+
+	/**
+	 * Returns true if this sequence has the same length and element values as the other.
+	 */
+	equals(other: PlaneSequence): boolean {
+		if (!other || other.typeName !== 'PlaneSequence') {
+			return false;
+		}
+
+		return isEqual(this.array, other.array);
 	}
 
 	/**

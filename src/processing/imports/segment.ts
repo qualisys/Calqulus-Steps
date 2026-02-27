@@ -82,7 +82,7 @@ export class SegmentStep extends BaseImportStep {
 			quats.w[i] = quatTmp.w;
 		}
 
-		const out = referenceSignal ? referenceSignal.clone(false) : new Signal();
+		const out = referenceSignal ? referenceSignal.shallowCopy(false) : new Signal();
 		out.setValue(Segment.fromArray(referenceSignal ? referenceSignal.name : '', [origin.x, origin.y, origin.z, quats.x, quats.y, quats.z, quats.w]));
 
 		return out;

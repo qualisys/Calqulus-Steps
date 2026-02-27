@@ -110,6 +110,6 @@ export class ConcatenateStep extends BaseStep {
 		// Create a new instance of the same type as the input.
 		const returnData = Signal.typeFromArray(targetType, concatArrays as TypedArray[]);
 
-		return this.inputs[0].clone(returnData);
+		return this.inputs[0].shallowCopy(false).setValue(returnData);
 	}
 }

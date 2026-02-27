@@ -43,9 +43,9 @@ export class ProjectStep extends BaseStep {
 		if (point.type === SignalType.Segment) {
 			const src = point.getSegmentValue();
 
-			return point.clone(new Segment(src.name, res, src.rotation, src.frameRate));
+			return point.shallowCopy(false).setValue(new Segment(src.name, res, src.rotation, src.frameRate));
 		}
 
-		return point.clone(res);
+		return point.shallowCopy(false).setValue(res);
 	}
 }

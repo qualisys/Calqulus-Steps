@@ -56,6 +56,52 @@ test('ForcePlate - constructor', (t) => {
 	t.is(fp.mz, moment.z);
 });
 
+test('ForcePlate - clone', (t) => {
+	const fpClone = fp.clone();
+
+	// Basic properties
+	t.not(fpClone, fp);
+	t.is(fpClone.name, fp.name);
+
+	// Sequences should be deep clones.
+	t.not(fpClone.centerOfPressure, fp.centerOfPressure);
+	t.not(fpClone.force, fp.force);
+	t.not(fpClone.moment, fp.moment);
+
+	t.deepEqual(fpClone.centerOfPressure, fp.centerOfPressure);
+	t.deepEqual(fpClone.force, fp.force);
+	t.deepEqual(fpClone.moment, fp.moment);
+
+	// Array contents should be equal but not the same reference.
+	t.deepEqual(fpClone.array, fp.array);
+	t.not(fpClone.array, fp.array);
+
+	// Corners, dimensions, offset should be deep cloned.
+	if (fp.corners) {
+		t.deepEqual(fpClone.corners, fp.corners);
+		t.not(fpClone.corners, fp.corners);
+	}
+	if (fp.dimensions) {
+		t.deepEqual(fpClone.dimensions, fp.dimensions);
+		t.not(fpClone.dimensions, fp.dimensions);
+	}
+	if (fp.offset) {
+		t.deepEqual(fpClone.offset, fp.offset);
+		t.not(fpClone.offset, fp.offset);
+	}
+
+	t.is(fpClone.copLevelZ, fp.copLevelZ);
+	t.is(fpClone.copFilter, fp.copFilter);
+
+	// Metadata
+	t.is(fpClone.originalName, fp.originalName);
+	t.is(fpClone.amplifierSerial, fp.amplifierSerial);
+	t.is(fpClone.coordinateSystem, fp.coordinateSystem);
+	t.is(fpClone.model, fp.model);
+	t.is(fpClone.serial, fp.serial);
+	t.is(fpClone.type, fp.type);
+});
+
 test('ForcePlate - setMetadata', (t) => {
 	t.is(fp.amplifierSerial, null);
 	t.is(fp.serial, null);

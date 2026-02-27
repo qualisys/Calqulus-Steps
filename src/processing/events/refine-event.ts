@@ -140,10 +140,10 @@ export class RefineEventStep extends BaseStep {
 		}
 
 		// Verify that the reference signal is found in the sequence option.
-		if (!this.sequence.find(s => s.getValue() === referenceSignal.getValue())) throw new ProcessingError('The reference event signal was not found in the "sequence" option.');
+		if (!this.sequence.find(s => s.equals(referenceSignal))) throw new ProcessingError('The reference event signal was not found in the "sequence" option.');
 
 		// Verify that the any of the sequence signals are NOT found in the exclude option.
-		if (this.exclude && this.exclude.find(s => this.sequence.find(v => v.getValue() === s.getValue()))) throw new ProcessingError('The "exclude" option cannot contain any signals from the "sequence" option.');
+		if (this.exclude && this.exclude.find(s => this.sequence.find(v => v.equals(s)))) throw new ProcessingError('The "exclude" option cannot contain any signals from the "sequence" option.');
 
 		const seqValues = this.sequence.map(s => RefineEventStep.makeArray(s.getValue()));
 		const excludeValues = (this.exclude) ? this.exclude.map(s => RefineEventStep.makeArray(s.getValue())) : undefined;
@@ -155,7 +155,7 @@ export class RefineEventStep extends BaseStep {
 			this.cyclic,
 		);
 
-		const result: Signal = referenceSignal.clone(refinedEvent);
+		const result: Signal = referenceSignal.shallowCopy(false).setValue(refinedEvent);
 
 		result.isEvent = true;
 		result.resultType = ResultType.Scalar;

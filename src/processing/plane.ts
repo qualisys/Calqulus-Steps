@@ -41,6 +41,6 @@ export class PlaneStep extends BaseStep {
 
 		const plane = PlaneSequence.fromVectorSequence(a, b, c);
 
-		return this.inputs[0].clone(plane);
+		return this.inputs[0].shallowCopy(false).setValue(plane);
 	}
 }

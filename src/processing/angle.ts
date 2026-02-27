@@ -267,7 +267,7 @@ export class AngleStep extends BaseStep {
 			throw new ProcessingError('No valid inputs.');
 		}
 
-		const result: Signal = this.inputs[0].clone(false);
+		const result: Signal = this.inputs[0].shallowCopy(false);
 
 		if (this.inputs.length === 1) {
 			if (this.inputs[0].type === SignalType.Segment) {
@@ -656,7 +656,7 @@ export class AngularVelocityStep extends AngleStep {
 			}
 		}
 
-		const result: Signal = this.inputs[0].clone(false);
+		const result: Signal = this.inputs[0].shallowCopy(false);
 		result.setValue<VectorSequence>(qdot);
 		return result;
 	}

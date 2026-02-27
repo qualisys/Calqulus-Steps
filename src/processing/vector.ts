@@ -57,7 +57,7 @@ export class VectorStep extends BaseStep {
 			const components = firstInput.components;
 			componentInputs = new Array(3)
 				.fill(undefined)
-				.map((_, i) => firstInput.clone(firstInput.getComponent(components[i])))
+				.map((_, i) => firstInput.shallowCopy(false).setValue(firstInput.getComponent(components[i])))
 			;
 		}
 
@@ -88,7 +88,7 @@ export class VectorStep extends BaseStep {
 		if (!refInput) refInput = componentInputs.find(i => i.frameRate);
 		if (!refInput) refInput = componentInputs[0];
 
-		return refInput.clone(out);
+		return refInput.shallowCopy(false).setValue(out);
 	}
 
 	protected generateComponent(reference: Float32Array, length: number): Float32Array {

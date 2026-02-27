@@ -50,7 +50,7 @@ export class EventTimeStep extends BaseStep {
 		const frames = this.inputs[0].getValue() as TypedArray;
 		const times = Float32Array.from([...frames].map(frame => frame / frameRate));
 
-		const returnSignal = this.inputs[0].clone(times);
+		const returnSignal = this.inputs[0].shallowCopy(false).setValue(times);
 		returnSignal.resultType = ResultType.Scalar;
 		returnSignal.isEvent = false;
 

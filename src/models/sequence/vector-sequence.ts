@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { TypeCheck } from '../../utils/type-check';
 import { Vector } from '../spatial/vector';
 
@@ -31,6 +33,21 @@ export class VectorSequence implements ISequence {
 		public frameRate?: number
 	) {
 		this.array = [this.x, this.y, this.z];
+	}
+
+	clone(): VectorSequence {
+		return new VectorSequence(this.x.slice(), this.y.slice(), this.z.slice(), this.frameRate);
+	}
+
+	/**
+	 * Returns true if this sequence has the same length and element values as the other.
+	 */
+	equals(other: VectorSequence): boolean {
+		if (!other || other.typeName !== 'VectorSequence') {
+			return false;
+		}
+
+		return isEqual(this.array, other.array);
 	}
 
 	/**

@@ -57,6 +57,59 @@ test('Segment - constructor', (t) => {
 	});
 });
 
+test('Segment - clone', (t) => {
+	const positionSeq = new VectorSequence(fakeArray2, fakeArray3, fakeArray4, 300);
+	const rotationSeq = new QuaternionSequence(fakeArray, fakeArray, fakeArray, fakeArray);
+	const segment = new Segment(
+		'original',
+		positionSeq,
+		rotationSeq,
+		300
+	);
+
+	// Add additional properties.
+	segment.centerOfMass = new Vector(1, 2, 3);
+	segment.inertia = { clone: () => ({ cloned: true }) } as any;
+	segment.mass = 42;
+	segment.kinematics = {
+		angularAcceleration: { clone: () => 'aa' } as any,
+		angularVelocity: { clone: () => 'av' } as any,
+		linearAcceleration: { clone: () => 'la' } as any,
+		linearVelocity: { clone: () => 'lv' } as any,
+	};
+	segment.parent = new Segment('parent', positionSeq, rotationSeq, 300);
+	segment.contactJoint = { name: 'contact' } as any;
+	segment.distalJoint = { name: 'distal' } as any;
+	segment.proximalJoint = { name: 'proximal' } as any;
+
+	const cloned = segment.clone();
+
+	t.not(cloned, segment);
+	t.is(cloned.name, segment.name);
+	t.deepEqual(cloned.components, segment.components);
+	t.not(cloned.position, segment.position);
+	t.not(cloned.rotation, segment.rotation);
+	t.deepEqual(cloned.position, segment.position);
+	t.deepEqual(cloned.rotation, segment.rotation);
+	t.is(cloned.frameRate, segment.frameRate);
+
+	// Check kinematics are cloned.
+	t.deepEqual(cloned.kinematics.angularAcceleration as unknown as string, 'aa');
+	t.deepEqual(cloned.kinematics.angularVelocity as unknown as string, 'av');
+	t.deepEqual(cloned.kinematics.linearAcceleration as unknown as string, 'la');
+	t.deepEqual(cloned.kinematics.linearVelocity as unknown as string, 'lv');
+
+	// Check centerOfMass, inertia, mass, parent, joints.
+	t.not(cloned.centerOfMass, undefined);
+	t.deepEqual(cloned.centerOfMass, segment.centerOfMass);
+	t.deepEqual(cloned.inertia as unknown as { cloned: boolean }, { cloned: true });
+	t.is(cloned.mass, 42);
+	t.is(cloned.parent, segment.parent);
+	t.is(cloned.contactJoint, segment.contactJoint);
+	t.is(cloned.distalJoint, segment.distalJoint);
+	t.is(cloned.proximalJoint, segment.proximalJoint);
+});
+
 test('Segment - fromArray', (t) => {
 	const segment = Segment.fromArray(
 		'test',
