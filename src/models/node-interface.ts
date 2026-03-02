@@ -36,6 +36,19 @@ export interface INode {
 	getPropertyValue<T>(key: string, expectedTypes: PropertyType | PropertyType[], required?: boolean, defaultValue?: T): T;
 }
 
+export interface IPhaseNode extends INode {
+	/** The description of the phase. */
+	description: string;
+	/** The display name of the phase. */
+	displayName: string;
+	/** The end event of the phase. */
+	end: string;
+	/** Whether to accept phases without a start or end event at the beginning or end of the measurement. */
+	partial: boolean;
+	/** The start event of the phase. */
+	start: string;
+}
+
 export interface IStepNode extends INode {
 	/** Array of all imports to this step node. */
 	in: (string | number | (string | number)[])[];

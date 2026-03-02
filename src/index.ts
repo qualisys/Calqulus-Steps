@@ -19,6 +19,7 @@ export * from './models/joint';
 export * from './models/marker';
 export * from './models/measurement';
 export * from './models/node-interface';
+export * from './models/phase';
 export * from './models/property';
 export * from './models/segment';
 export * from './models/signal';

@@ -3,5 +3,6 @@ export enum DataCollection {
 	Joints = 'joint',
 	Markers = 'marker',
 	Parameters = 'parameter',
+	Phases = 'phase',
 	Segments = 'segment',
 }

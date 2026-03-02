@@ -6,6 +6,7 @@ import { TypeCheck } from '../utils/type-check';
 import { ForcePlate } from './force-plate';
 import { Joint } from './joint';
 import { Marker } from './marker';
+import { Phase } from './phase';
 import { Segment } from './segment';
 import { PlaneSequence } from './sequence/plane-sequence';
 import { IDataSequence, ISequenceProperty } from './sequence/sequence';
@@ -19,6 +20,7 @@ class SignalValue {
 	uint32Array: Uint32Array = new Uint32Array(0);
 	numberArray: Float32Array = new Float32Array(0);
 	numberArrayArray: Float32Array[] = [];
+	phase: Phase | null;
 	joint: Joint | null;
 	forcePlate: ForcePlate | null;
 	segment: Segment | null;
@@ -35,6 +37,7 @@ export enum SignalType {
 	Float32,
 	Float32Array,
 	Float32ArrayArray,
+	Phase,
 	Joint,
 	ForcePlate,
 	Segment,
@@ -78,6 +81,8 @@ export class Signal implements IDataSequence {
 	public displayName?: string;
 	/** The signal name. */
 	public name: string;
+	public displayName?: string;
+	public description?: string;
 	/** The signal frame rate. */
 	public frameRate: number;
 	/** Flag used to mark a signal that represents an event */
@@ -160,6 +165,8 @@ export class Signal implements IDataSequence {
 				return 'Float32Array';
 			case SignalType.Float32ArrayArray:
 				return 'Float32Array[]';
+			case SignalType.Phase:
+				return 'Phase';
 			case SignalType.Joint:
 				return 'Joint';
 			case SignalType.ForcePlate:
@@ -186,6 +193,7 @@ export class Signal implements IDataSequence {
 			case SignalType.Uint32Array:
 			case SignalType.Float32:
 			case SignalType.Float32Array:
+			case SignalType.Phase:
 				return ResultType.Scalar;
 
 			case SignalType.Float32ArrayArray:
@@ -221,6 +229,9 @@ export class Signal implements IDataSequence {
 				return [this.getFloat32ArrayValue()];
 			case SignalType.Float32ArrayArray:
 				return this.getFloat32ArrayArrayValue();
+			case SignalType.Phase: {
+				return this._value.phase.array;
+			}
 			case SignalType.Joint:
 				return this._value.joint.array;
 			case SignalType.ForcePlate:
@@ -265,6 +276,8 @@ export class Signal implements IDataSequence {
 			case SignalType.VectorSequence:
 			case SignalType.PlaneSequence:
 				return this.array.every(arr => arr.every(v => v >= 0));
+			case SignalType.Phase:
+				return true;
 			default:
 				return undefined;
 		}
@@ -285,6 +298,9 @@ export class Signal implements IDataSequence {
 				return array[0];
 			case SignalType.Float32ArrayArray:
 				return array;
+			case SignalType.Phase:{
+				return Phase.fromArray(undefined, undefined, undefined, array);
+			}
 			case SignalType.Joint:
 				return Joint.fromArray(undefined, array);
 			case SignalType.ForcePlate:
@@ -311,9 +327,9 @@ export class Signal implements IDataSequence {
 			case SignalType.Float32:
 			case SignalType.Uint32Array:
 			case SignalType.Float32Array:
-			case SignalType.Float32ArrayArray: {
-				const arr = this.array;
-				return arr[0].length;
+			case SignalType.Float32ArrayArray: 
+			case SignalType.Phase: {
+				return this.array[0].length;
 			}
 			case SignalType.Joint:
 				return this._value.joint.length;
@@ -417,6 +433,10 @@ export class Signal implements IDataSequence {
 			this._value.forcePlate = value;
 			this._type = SignalType.ForcePlate;
 		}
+		else if (value instanceof Phase || Phase.isPhase(value)) {
+			this._value.phase = value;
+			this._type = SignalType.Phase;
+		}
 		else if (value instanceof Segment || Segment.isSegment(value)) {
 			this._value.segment = value;
 			this._type = SignalType.Segment;
@@ -439,6 +459,7 @@ export class Signal implements IDataSequence {
 		if (this._type !== SignalType.Uint32Array) this._value.uint32Array = new Uint32Array(0);
 		if (this._type !== SignalType.Float32Array) this._value.numberArray = new Float32Array(0);
 		if (this._type !== SignalType.Float32ArrayArray) this._value.numberArrayArray = [];
+		if (this._type !== SignalType.Phase) this._value.phase = undefined;
 		if (this._type !== SignalType.Joint) this._value.joint = undefined;
 		if (this._type !== SignalType.ForcePlate) this._value.forcePlate = undefined;
 		if (this._type !== SignalType.Segment) this._value.segment = undefined;
@@ -471,6 +492,10 @@ export class Signal implements IDataSequence {
 
 	getFloat32ArrayArrayValue(): Float32Array[] {
 		return this._value.numberArrayArray;
+	}
+
+	getPhaseValue(): Phase {
+		return this._value.phase;
 	}
 
 	getJointValue(): Joint | null {
@@ -565,6 +590,8 @@ export class Signal implements IDataSequence {
 				return this.getJointValue();
 			case SignalType.ForcePlate:
 				return this.getForcePlateValue();
+			case SignalType.Phase:
+				return this.getPhaseValue();
 			case SignalType.Segment:
 				return this.getSegmentValue();
 			case SignalType.String:
