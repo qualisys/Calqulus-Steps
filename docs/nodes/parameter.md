@@ -7,6 +7,25 @@ resulting JSON file.
 
 ## Options
 
+### `displayName`
+
+> **Type:** `String`  
+> **Required:** `False`  
+> **Default value:** `null`
+
+Give this parameter a **human-readable name** that will be shown in UIs, logs,
+or reports instead of the raw identifier.
+
+### `description`
+
+> **Type:** `String`  
+> **Required:** `False`  
+> **Default value:** `null`
+
+Provide a **short explanation of what the parameter does or represents**,
+including any important context or usage notes to help users understand its
+purpose.
+
 ### `export`
 
 > **Type:** `Boolean`  
@@ -60,3 +79,35 @@ Filter for measurements where this node should be calculated. Read more in the [
   steps:
     - parameterStep: Input.x
 ```
+
+### `summarize`
+
+> **Type:** `Boolean | String`  
+> **Required:** `False`  
+> **Default value:** `False`
+
+Indicates whether this parameter should be summarized by the engine.
+When set to `true`, the parameter is summarized using the default method.  
+When a string is provided, it allows you to specify the summarization behavior with greater control.  
+The expected string is a comma-separated list of events and/or phases to define the summarization.
+
+## Examples
+```yaml
+- parameter: MyParam
+  summarize: true
+  steps:
+    ...
+```
+Setting `summarize: true` enables summarization of this parameter across all
+enabled events and phases. Individual events or phases can be excluded from
+being processed by the engine by specifying `summarize: false` on
+the corresponding event or phase node.
+
+```yaml
+- parameter: MyParam
+  summarize: SwingPhase, LFS, LFO
+  steps:
+    ...
+```
+Using `summarize: SwingPhase, LFS, LFO` will only enable summarization using the
+phase `SwingPhase`, as well as the events `LFS` and `LFO`.

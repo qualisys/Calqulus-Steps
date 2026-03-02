@@ -75,10 +75,12 @@ export interface IFrameSpan {
  * It is the main class used for all input / output for steps.
  */
 export class Signal implements IDataSequence {
+	/** An optional signal description. */
+	public description?: string;
+	/** An optional signal display name. */
+	public displayName?: string;
 	/** The signal name. */
 	public name: string;
-	public displayName?: string;
-	public description?: string;
 	/** The signal frame rate. */
 	public frameRate: number;
 	/** Flag used to mark a signal that represents an event */
@@ -87,6 +89,8 @@ export class Signal implements IDataSequence {
 	public set: string;
 	/** The currently applied space. */
 	public space: Space;
+	/** Whether the signal should be marked for aggregation. */
+	public summarize?: boolean | string;
 	/** The space which the signal will be converted into. */
 	public targetSpace: Space;
 
@@ -798,6 +802,9 @@ export class Signal implements IDataSequence {
 	 */
 	shallowCopy(keepValue = true): Signal {
 		const out = new Signal();
+		out.summarize = this.summarize;
+		out.description = this.description;
+		out.displayName = this.displayName;
 		out.name = this.name;
 		out.set = this.set;
 		out.space = this.space;

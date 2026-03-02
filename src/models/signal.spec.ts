@@ -746,6 +746,9 @@ test('Signal - shallowCopy', (t) => {
 	// Create all propped-up signal
 	const source = new Signal(segment, frameRate);
 	source.name = 'test';
+	source.displayName = 'Test';
+	source.description = 'A test signal';
+	source.summarize = true;
 	source.set = 'left';
 	source.space = space;
 	source.targetSpace = space;
@@ -758,6 +761,9 @@ test('Signal - shallowCopy', (t) => {
 	const copy = source.shallowCopy();
 
 	// Test all properties (shallow: shared references for value, cycles, property)
+	t.is(copy.displayName, source.displayName);
+	t.is(copy.description, source.description);
+	t.is(copy.summarize, source.summarize);
 	t.is(copy.name, source.name);
 	t.is(copy.frameRate, source.frameRate);
 	t.is(copy.set, source.set);
