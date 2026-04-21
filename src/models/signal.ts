@@ -11,6 +11,7 @@ import { Segment } from './segment';
 import { PlaneSequence } from './sequence/plane-sequence';
 import { IDataSequence, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
+import { Unit } from './unit';
 
 /**
  * Holds the value of a specific type for a [[Signal]].
@@ -93,6 +94,14 @@ export class Signal implements IDataSequence {
 	public summarize?: boolean | string;
 	/** The space which the signal will be converted into. */
 	public targetSpace: Space;
+	/**
+	 * The physical unit of the signal values, e.g. `mm`, `rad`, `N`, `Nmm`.
+	 *
+	 * Set by readers for source data and propagated through steps via the
+	 * [[Units]] helper. May be `undefined` when the unit is unknown or
+	 * the signal holds a compound payload (e.g. a `Segment` or `Joint`).
+	 */
+	public unit?: Unit;
 
 	/** 
 	 * The current signal component. Used when this signal stems 
@@ -815,6 +824,7 @@ export class Signal implements IDataSequence {
 		out.originalSignal = this.originalSignal;
 		out.component = this.component;
 		out.property = this.property;
+		out.unit = this.unit;
 
 		if (this._resultType) {
 			out.resultType = this._resultType;

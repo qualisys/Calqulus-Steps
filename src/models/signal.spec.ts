@@ -11,6 +11,7 @@ import { PlaneSequence } from './sequence/plane-sequence';
 import { QuaternionSequence } from './sequence/quaternion-sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 import { ResultType, Signal, SignalType } from './signal';
+import { Units } from './unit';
 
 // Various test data
 const floatVal = 0.123;
@@ -757,6 +758,7 @@ test('Signal - shallowCopy', (t) => {
 	source.originalSignal = source.shallowCopy();
 	source.component = 'x';
 	source.property = { name: 'test', value: 5 };
+	source.unit = Units.fromName('mm');
 
 	const copy = source.shallowCopy();
 
@@ -776,6 +778,7 @@ test('Signal - shallowCopy', (t) => {
 	t.is(copy.originalSignal, source.originalSignal);
 	t.is(copy.component, source.component);
 	t.deepEqual(copy.property, source.property);
+	t.is(copy.unit, source.unit);
 });
 
 test('Signal - shallowCopy with no value', (t) => {
@@ -832,6 +835,7 @@ test('Signal - clone (deep copy)', (t) => {
 	const source = new Signal(fakeArray, frameRate);
 	source.name = 'test';
 	source.cycles = cycles;
+	source.unit = Units.fromName('mm');
 
 	const deep = source.clone();
 
@@ -840,12 +844,27 @@ test('Signal - clone (deep copy)', (t) => {
 	t.not(deep.getValue(), source.getValue()); // Different reference
 	t.not(deep.cycles, source.cycles); // Different array reference
 	t.deepEqual(deep.cycles, source.cycles);
+	t.is(deep.unit, source.unit);
 
 	// Mutating clone value does not affect source
 	const deepArr = deep.getValue() as Float32Array;
 	deepArr[0] = 999;
 	t.is((source.getValue() as Float32Array)[0], 1);
 	t.is(deepArr[0], 999);
+});
+
+test('Signal - unit - default is undefined', (t) => {
+	const s = new Signal(fakeArray, frameRate);
+
+	t.is(s.unit, undefined);
+});
+
+test('Signal - unit - can be assigned', (t) => {
+	const s = new Signal(fakeArray, frameRate);
+	s.unit = Units.fromName('N');
+
+	t.is(s.unit?.name, 'N');
+	t.is(s.unit?.quantity, 'force');
 });
 
 // Getters and setters
