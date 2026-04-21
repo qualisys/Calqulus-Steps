@@ -5,6 +5,7 @@ import { Segment } from '../models/segment';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal, SignalType } from '../models/signal';
+import { Units } from '../models/unit';
 
 import { AdditionStep, DivisionStep, FrameSequenceOperandOrder, MultiplyStep, SubtractionStep } from './arithmetic';
 
@@ -143,4 +144,97 @@ test('Arithmetic - Sequence order: invalid', async (t) => {
 	t.throws(() => mockStep(AdditionStep, [frameSignal1, frameSignal2], {
 		frameSequenceOrder: 'test'
 	}));
+});
+
+// Unit propagation.
+
+test('Arithmetic - AdditionStep propagates matching unit', async (t) => {
+	const mm1 = new Signal(f32(1, 2, 3));
+	mm1.unit = Units.fromName('mm');
+	const mm2 = new Signal(f32(4, 5, 6));
+	mm2.unit = Units.fromName('mm');
+
+	const step = mockStep(AdditionStep, [mm1, mm2]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'mm');
+});
+
+test('Arithmetic - AdditionStep with mismatching units yields undefined', async (t) => {
+	const mm = new Signal(f32(1, 2, 3));
+	mm.unit = Units.fromName('mm');
+	const n = new Signal(f32(4, 5, 6));
+	n.unit = Units.fromName('N');
+
+	const step = mockStep(AdditionStep, [mm, n]);
+	const res = await step.process();
+
+	t.is(res.unit, undefined);
+});
+
+test('Arithmetic - SubtractionStep - mixed with literal keeps known unit', async (t) => {
+	const mm = new Signal(f32(5, 6, 7));
+	mm.unit = Units.fromName('mm');
+	const literal = new Signal(f32(1, 1, 1));
+
+	const step = mockStep(SubtractionStep, [mm, literal]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'mm');
+});
+
+test('Arithmetic - MultiplyStep - force x length = moment', async (t) => {
+	const force = new Signal(f32(1, 2, 3));
+	force.unit = Units.fromName('N');
+	const length = new Signal(f32(4, 5, 6));
+	length.unit = Units.fromName('mm');
+
+	const step = mockStep(MultiplyStep, [force, length]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'Nmm');
+	t.is(res.unit?.quantity, 'moment');
+});
+
+test('Arithmetic - MultiplyStep - literal treated as unitless', async (t) => {
+	const mm = new Signal(f32(1, 2, 3));
+	mm.unit = Units.fromName('mm');
+	const two = new Signal(f32(2, 2, 2));
+
+	const step = mockStep(MultiplyStep, [mm, two]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'mm');
+});
+
+test('Arithmetic - DivisionStep - length / time = velocity', async (t) => {
+	const length = new Signal(f32(10, 20, 30));
+	length.unit = Units.fromName('mm');
+	const time = new Signal(f32(1, 2, 3));
+	time.unit = Units.fromName('s');
+
+	const step = mockStep(DivisionStep, [length, time]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'mm/s');
+	t.is(res.unit?.quantity, 'velocity');
+});
+
+test('Arithmetic - DivisionStep - matching units cancel to unitless', async (t) => {
+	const a = new Signal(f32(1, 2, 3));
+	a.unit = Units.fromName('mm');
+	const b = new Signal(f32(1, 2, 3));
+	b.unit = Units.fromName('mm');
+
+	const step = mockStep(DivisionStep, [a, b]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'unitless');
+});
+
+test('Arithmetic - All inputs missing units yields undefined', async (t) => {
+	const step = mockStep(AdditionStep, [s1, s2]);
+	const res = await step.process();
+
+	t.is(res.unit, undefined);
 });
