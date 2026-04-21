@@ -34,3 +34,16 @@ test('ConvertStep - Simple conversion', async (t) => {
 
 	t.is(res.getValue(), 32000);
 });
+
+test('ConvertStep - unit is set from "to" option', async (t) => {
+	const res = await mockStep(ConvertStep, [f1], stepOptions('rad', 'deg')).process();
+
+	t.is(res.unit?.name, 'deg');
+});
+
+test('ConvertStep - unit reflects target regardless of input unit', async (t) => {
+	const input = new Signal(32);
+	const res = await mockStep(ConvertStep, [input], stepOptions('m', 'mm')).process();
+
+	t.is(res.unit?.name, 'mm');
+});

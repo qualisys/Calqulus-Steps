@@ -2,6 +2,7 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { QbrtStep, RootStep, SqrtStep } from './root';
 
@@ -109,4 +110,23 @@ test('QbrtStep - single value, default index', async (t) => {
 	const root = result.getNumberValue();
 
 	t.deepEqual(root, 3);
+});
+
+test('SqrtStep - unit propagation (mm^2 → mm)', async (t) => {
+	const input = new Signal(f32(0, 1, 4, 9, 16), 200);
+	input.unit = Units.fromName('mm^2');
+
+	const step = mockStep(SqrtStep, [input]);
+	const result = await step.process();
+
+	t.is(result.unit?.name, 'mm');
+});
+
+test('RootStep - unit propagation (undefined stays undefined)', async (t) => {
+	const input = new Signal(f32(0, 1, 4, 9, 16), 200);
+
+	const step = mockStep(RootStep, [input]);
+	const result = await step.process();
+
+	t.is(result.unit, undefined);
 });

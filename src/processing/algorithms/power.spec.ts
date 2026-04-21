@@ -2,6 +2,7 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { PowStep } from './power';
 
@@ -44,4 +45,33 @@ test('PowStep - single value, exponent 4', async (t) => {
 	const pow = result.getNumberValue();
 
 	t.deepEqual(pow, 81);
+});
+
+test('PowStep - unit propagation (mm ^ 2 = mm^2)', async (t) => {
+	const input = new Signal(f32(1, 2, 3));
+	input.unit = Units.fromName('mm');
+
+	const step = mockStep(PowStep, [input], { exponent: 2 });
+	const result = await step.process();
+
+	t.is(result.unit?.name, 'mm^2');
+});
+
+test('PowStep - unit propagation (s ^ -1 = Hz-like)', async (t) => {
+	const input = new Signal(f32(1, 2, 3));
+	input.unit = Units.fromName('s');
+
+	const step = mockStep(PowStep, [input], { exponent: -1 });
+	const result = await step.process();
+
+	t.deepEqual(result.unit?.exponents, { s: -1 });
+});
+
+test('PowStep - unit propagation (undefined stays undefined)', async (t) => {
+	const input = new Signal(f32(1, 2, 3));
+
+	const step = mockStep(PowStep, [input], { exponent: 2 });
+	const result = await step.process();
+
+	t.is(result.unit, undefined);
 });

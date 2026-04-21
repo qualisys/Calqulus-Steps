@@ -1,4 +1,5 @@
 import { Signal } from '../../models/signal';
+import { Unit } from '../../models/unit';
 import { StepCategory } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
@@ -52,6 +53,21 @@ export class BaseAlgorithmStep extends BaseStep {
 			out.setValue(res);
 		}
 
+		out.unit = this.resultUnit(this.inputs[0].unit);
+
 		return out;
+	}
+
+	/**
+	 * Returns the unit of the step's output given its primary input unit.
+	 *
+	 * Subclasses should override this when the operation transforms units
+	 * (e.g. `power` → input^n, `sin` → unitless). The default
+	 * implementation returns the input unit unchanged so that most
+	 * algorithm steps (abs, negate, round, sort, filter, ...) inherit
+	 * the input unit automatically.
+	 */
+	resultUnit(inputUnit: Unit | undefined): Unit | undefined {
+		return inputUnit;
 	}
 }

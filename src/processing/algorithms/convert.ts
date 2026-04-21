@@ -1,6 +1,7 @@
 import Qty from 'js-quantities';
 
 import { PropertyType } from '../../models/property';
+import { Unit, Units } from '../../models/unit';
 import { StepClass } from '../../step-registry';
 import { ConvertUtil } from '../../utils/convert';
 import { ProcessingError } from '../../utils/processing-error';
@@ -55,6 +56,7 @@ import { BaseAlgorithmStep } from './base-algorithm';
 })
 export class ConvertStep extends BaseAlgorithmStep {
 	converter: Qty.Converter;
+	toUnit: Unit | undefined;
 
 	init() {
 		super.init();
@@ -68,6 +70,12 @@ export class ConvertStep extends BaseAlgorithmStep {
 		catch (_e) {
 			throw new ProcessingError(`Could not create a converter from '${ from }' to '${ to }'.`);
 		}
+
+		this.toUnit = Units.fromName(to);
+	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return this.toUnit;
 	}
 
 	function(a: TypedArray): TypedArray {

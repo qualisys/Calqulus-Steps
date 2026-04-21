@@ -1,4 +1,5 @@
 import { PropertyType } from '../../models/property';
+import { Unit, Units } from '../../models/unit';
 import { StepClass } from '../../step-registry';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
@@ -48,6 +49,10 @@ export class RootStep extends BaseAlgorithmStep {
 		this.name = 'RootStep';
 
 		this.index = this.getPropertyValue<number>('index', PropertyType.Number, false) || 2;
+	}
+
+	resultUnit(inputUnit: Unit | undefined): Unit | undefined {
+		return Units.power(inputUnit, 1 / this.index);
 	}
 }
 

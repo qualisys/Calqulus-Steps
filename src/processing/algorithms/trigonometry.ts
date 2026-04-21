@@ -1,9 +1,13 @@
 import { Signal } from '../../models/signal';
+import { Unit, Units } from '../../models/unit';
 import { StepCategory, StepClass } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';
+
+const dimensionless = (): Unit => new Unit({});
+const angleRad = (): Unit => Units.fromName('rad');
 
 @StepCategory({
 	name: 'Trigonometry',
@@ -36,6 +40,10 @@ export class CosStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.cos(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
+	}
 }
 
 @StepClass({
@@ -59,6 +67,10 @@ export class ACosStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.acos(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return angleRad();
+	}
 }
 
 @StepClass({
@@ -81,6 +93,10 @@ export class CoshStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.cosh(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
+	}
 }
 
 @StepClass({
@@ -102,6 +118,10 @@ export class SinStep extends BaseAlgorithmStep {
 
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.sin(a));
+	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
 	}
 }
 
@@ -126,6 +146,10 @@ export class ASinStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.asin(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return angleRad();
+	}
 }
 
 @StepClass({
@@ -148,6 +172,10 @@ export class SinhStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.sinh(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
+	}
 }
 
 @StepClass({
@@ -169,6 +197,10 @@ export class TanStep extends BaseAlgorithmStep {
 
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.tan(a));
+	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
 	}
 }
 
@@ -193,6 +225,10 @@ export class ATanStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.atan(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return angleRad();
+	}
 }
 
 @StepClass({
@@ -215,6 +251,10 @@ export class TanhStep extends BaseAlgorithmStep {
 	function(a: TypedArray): TypedArray {
 		return a.map(a => Math.tanh(a));
 	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
+	}
 }
 
 @StepClass({
@@ -236,6 +276,10 @@ export class CotanStep extends BaseAlgorithmStep {
 
 	function(a: TypedArray): TypedArray {
 		return a.map(a => 1 / Math.tan(a));
+	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return dimensionless();
 	}
 }
 
@@ -283,5 +327,9 @@ export class ATan2Step extends BaseAlgorithmStep {
 		const xComp = this.xCompSet[index];
 
 		return yComp.map((y, i) => Math.atan2(y, xComp[i]));
+	}
+
+	resultUnit(_inputUnit: Unit | undefined): Unit | undefined {
+		return angleRad();
 	}
 }

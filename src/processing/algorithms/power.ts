@@ -1,4 +1,5 @@
 import { PropertyType } from '../../models/property';
+import { Unit, Units } from '../../models/unit';
 import { StepClass } from '../../step-registry';
 import { markdownFmt } from '../../utils/template-literal-tags';
 
@@ -40,5 +41,9 @@ export class PowStep extends BaseAlgorithmStep {
 		this.name = 'PowStep';
 
 		this.exponent = this.getPropertyValue<number>('exponent', PropertyType.Number, false) || 2;
+	}
+
+	resultUnit(inputUnit: Unit | undefined): Unit | undefined {
+		return Units.power(inputUnit, this.exponent);
 	}
 }

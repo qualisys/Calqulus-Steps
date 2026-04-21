@@ -2,6 +2,7 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { ACosStep, ASinStep, ATan2Step, ATanStep, CoshStep, CosStep, CotanStep, SinhStep, SinStep, TanhStep, TanStep } from './trigonometry';
 
@@ -108,4 +109,36 @@ test('Trigonometry - ATan2Step', async (t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(...a1.map((v, i) => Math.atan2(v, a2[i]))));
+});
+
+test('Trigonometry - unit - sin/cos/tan produce unitless', async (t) => {
+	const input = new Signal(f32(0.1, 0.2, 0.3));
+	input.unit = Units.fromName('rad');
+
+	const sinRes = await mockStep(SinStep, [input]).process();
+	const cosRes = await mockStep(CosStep, [input]).process();
+	const tanRes = await mockStep(TanStep, [input]).process();
+
+	t.true(Units.isDimensionless(sinRes.unit));
+	t.true(Units.isDimensionless(cosRes.unit));
+	t.true(Units.isDimensionless(tanRes.unit));
+});
+
+test('Trigonometry - unit - asin/acos/atan produce rad', async (t) => {
+	const input = new Signal(f32(0.1, 0.2, 0.3));
+
+	const asinRes = await mockStep(ASinStep, [input]).process();
+	const acosRes = await mockStep(ACosStep, [input]).process();
+	const atanRes = await mockStep(ATanStep, [input]).process();
+
+	t.is(asinRes.unit?.name, 'rad');
+	t.is(acosRes.unit?.name, 'rad');
+	t.is(atanRes.unit?.name, 'rad');
+});
+
+test('Trigonometry - unit - atan2 produces rad', async (t) => {
+	const step = mockStep(ATan2Step, [s1, s2]);
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'rad');
 });
