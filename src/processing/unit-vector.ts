@@ -2,6 +2,7 @@ import { Segment } from '../models/segment';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal, SignalType } from '../models/signal';
 import { Vector } from '../models/spatial/vector';
+import { Unit } from '../models/unit';
 import { StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
@@ -46,7 +47,10 @@ export class UnitVectorStep extends BaseStep {
 		}
 
 		const out = new VectorSequence(outx, outy, outz, input.frameRate);
+		const returnSignal = input.shallowCopy(false).setValue(out);
 
-		return input.shallowCopy(false).setValue(out);
+		returnSignal.unit = new Unit({});
+
+		return returnSignal;
 	}
 }

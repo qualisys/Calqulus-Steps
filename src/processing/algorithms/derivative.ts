@@ -1,4 +1,5 @@
 import { SignalType } from '../../models/signal';
+import { Unit, Units } from '../../models/unit';
 import { StepCategory, StepClass } from '../../step-registry';
 import { KinematicsUtil } from '../../utils/math/kinematics';
 import { ProcessingError } from '../../utils/processing-error';
@@ -43,21 +44,12 @@ export class DerivativeStep extends BaseAlgorithmStep {
 
 	function(a: TypedArray): TypedArray {
 		const dataSet = a;
-		let order = 1;
 
 		if (!this.frameRate) {
 			throw new ProcessingError('The input signal does not indicate a frame rate.');
 		}
 
-		if (this.orderOverride) {
-			order = this.orderOverride;
-		}
-		else if (this.inputs.length > 1 && this.inputs[1].type === SignalType.Float32) {
-			const orderArg = this.inputs[1].getNumberValue();
-
-			order = Number.isInteger(orderArg) ? orderArg : 1;
-		}
-
+		const order = this.effectiveOrder();
 		const splitCollection = SeriesSplitUtil.splitOnNaN(dataSet);
 
 		for (const split of splitCollection.splits) {
@@ -74,6 +66,27 @@ export class DerivativeStep extends BaseAlgorithmStep {
 
 		// Get the frame rate from the input.
 		this.frameRate = (this.inputs[0]) ? this.inputs[0].frameRate : undefined;
+	}
+
+	resultUnit(inputUnit: Unit | undefined): Unit | undefined {
+		const order = this.effectiveOrder();
+		const perS = Units.power(Units.fromName('s'), -order);
+
+		return Units.multiply(inputUnit, perS);
+	}
+
+	protected effectiveOrder(): number {
+		if (this.orderOverride) {
+			return this.orderOverride;
+		}
+
+		if (this.inputs.length > 1 && this.inputs[1]?.type === SignalType.Float32) {
+			const orderArg = this.inputs[1].getNumberValue();
+
+			return Number.isInteger(orderArg) ? orderArg : 1;
+		}
+
+		return 1;
 	}
 }
 

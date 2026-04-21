@@ -2,6 +2,7 @@ import { Segment } from '../models/segment';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal, SignalType } from '../models/signal';
 import { Vector } from '../models/spatial/vector';
+import { Units } from '../models/unit';
 import { StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
@@ -58,7 +59,18 @@ export class DistanceStep extends BaseStep {
 			dist[i] = Vector.norm(d);
 		}
 
-		return this.inputs[0].shallowCopy(false).setValue(dist);
+		const out = this.inputs[0].shallowCopy(false).setValue(dist);
+		const aUnit = this.inputs[0]?.unit;
+		const bUnit = this.inputs[1]?.unit;
+
+		if (aUnit && bUnit && !Units.equals(aUnit, bUnit)) {
+			out.unit = undefined;
+		}
+		else {
+			out.unit = aUnit ?? bUnit;
+		}
+
+		return out;
 	}
 }
 

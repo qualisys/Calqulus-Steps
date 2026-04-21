@@ -2,6 +2,7 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { IntegralStep } from './integral';
 
@@ -71,4 +72,24 @@ test('IntegralStep - integral series, without cycles', async (t) => {
 	const res = await step.process();
 
 	t.assert(res.getFloat32ArrayValue().every((r, i) => veryNear(r, signalRes[i])));
+});
+
+test('IntegralStep - unit propagation (mm/s → mm) scalar', async (t) => {
+	const input = new Signal(f32(1, 2, 3, 4, 5), 0.5);
+	input.unit = Units.fromName('mm/s');
+
+	const step = mockStep(IntegralStep, [input], { scalar: true, useCycles: false });
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'mm');
+});
+
+test('IntegralStep - unit propagation (mm/s → mm) series', async (t) => {
+	const input = new Signal(f32(1, 2, 3, 4, 5), 0.5);
+	input.unit = Units.fromName('mm/s');
+
+	const step = mockStep(IntegralStep, [input], { useCycles: false });
+	const res = await step.process();
+
+	t.is(res.unit?.name, 'mm');
 });

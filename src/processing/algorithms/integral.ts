@@ -1,6 +1,7 @@
 import { Signal } from '../../models/signal';
 import { PropertyType } from '../../models/property';
 import { ResultType } from '../../models/signal';
+import { Units } from '../../models/unit';
 import { StepClass } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
@@ -98,6 +99,8 @@ export class IntegralStep extends BaseStep {
 			}
 		}
 
+		const integratedUnit = Units.timesSecond(this.inputs[0].unit);
+
 		if (this.scalar) {
 			// Unpack cycles per component, summarize each cycle.
 			const scalarValues = perCycleResults.map(comp => Float32Array.from(comp.map(c => c.pop())));
@@ -107,11 +110,16 @@ export class IntegralStep extends BaseStep {
 
 			returnSignal.cycles = undefined;
 			returnSignal.resultType = ResultType.Scalar;
+			returnSignal.unit = integratedUnit;
 
 			return returnSignal;
 		}
-		
+
 		const returnData = Signal.typeFromArray(this.inputs[0].type, cycleResults as TypedArray[]);
-		return this.inputs[0].shallowCopy(false).setValue(returnData);
+		const returnSignal = this.inputs[0].shallowCopy(false).setValue(returnData);
+
+		returnSignal.unit = integratedUnit;
+
+		return returnSignal;
 	}
 }

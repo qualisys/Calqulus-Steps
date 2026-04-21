@@ -5,6 +5,7 @@ import { Segment } from '../models/segment';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
+import { Units } from '../models/unit';
 
 import { DistanceStep, MagnitudeStep } from './distance';
 
@@ -72,4 +73,37 @@ test('MagnitudeStep - VectorSequence', async (t) => {
 
 	const res = await step.process();
 	t.deepEqual(res.getValue(), f32(2.4494897427832));
+});
+
+test('DistanceStep - unit propagation (matching units propagate)', async (t) => {
+	const a = new Signal(new VectorSequence(f32(1, 2, 3), f32(2, 2, 2), f32(6, 5, 4)));
+	const b = new Signal(new VectorSequence(f32(2, 3, 4), f32(2, 2, 3), f32(4, 5, 6)));
+
+	a.unit = Units.fromName('mm');
+	b.unit = Units.fromName('mm');
+
+	const res = await mockStep(DistanceStep, [a, b]).process();
+
+	t.is(res.unit?.name, 'mm');
+});
+
+test('DistanceStep - unit propagation (mismatched units yield undefined)', async (t) => {
+	const a = new Signal(new VectorSequence(f32(1, 2, 3), f32(2, 2, 2), f32(6, 5, 4)));
+	const b = new Signal(new VectorSequence(f32(2, 3, 4), f32(2, 2, 3), f32(4, 5, 6)));
+
+	a.unit = Units.fromName('mm');
+	b.unit = Units.fromName('N');
+
+	const res = await mockStep(DistanceStep, [a, b]).process();
+
+	t.is(res.unit, undefined);
+});
+
+test('MagnitudeStep - unit propagation (preserves input unit)', async (t) => {
+	const v = new Signal(new VectorSequence(f32(1), f32(1), f32(2)));
+	v.unit = Units.fromName('N');
+
+	const res = await mockStep(MagnitudeStep, [v]).process();
+
+	t.is(res.unit?.name, 'N');
 });

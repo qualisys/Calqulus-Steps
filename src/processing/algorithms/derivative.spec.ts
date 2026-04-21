@@ -2,6 +2,7 @@ import test from 'ava';
 
 import { f32, mockStep } from '../../test-utils/mock-step';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { AccelerationStep, DerivativeStep, VelocityStep } from './derivative';
 
@@ -103,4 +104,34 @@ test('AccelerationStep (order = 2)', async (t) => {
 	const derivative = result.getFloat32ArrayValue();
 
 	t.deepEqual(derivative, Float32Array.from([NaN, 0, 0, 0, 0, 1, 0, 2, 0, 0, 4, NaN]));
+});
+
+test('DerivativeStep - unit propagation (mm → mm/s)', async (t) => {
+	const input = new Signal(f32(1, 2, 3, 4, 5, 6), 1);
+	input.unit = Units.fromName('mm');
+
+	const step = mockStep(DerivativeStep, [input]);
+	const result = await step.process();
+
+	t.is(result.unit?.name, 'mm/s');
+});
+
+test('VelocityStep - unit propagation (mm → mm/s)', async (t) => {
+	const input = new Signal(f32(1, 2, 3, 4, 5, 6), 1);
+	input.unit = Units.fromName('mm');
+
+	const step = mockStep(VelocityStep, [input]);
+	const result = await step.process();
+
+	t.is(result.unit?.name, 'mm/s');
+});
+
+test('AccelerationStep - unit propagation (mm → mm/s^2)', async (t) => {
+	const input = new Signal(f32(1, 2, 3, 4, 5, 6, 7, 8), 1);
+	input.unit = Units.fromName('mm');
+
+	const step = mockStep(AccelerationStep, [input]);
+	const result = await step.process();
+
+	t.is(result.unit?.name, 'mm/s^2');
 });

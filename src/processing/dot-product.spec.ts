@@ -3,6 +3,7 @@ import test from 'ava';
 import { f32, mockStep } from '../test-utils/mock-step';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
+import { Units } from '../models/unit';
 
 import { DotProductStep } from './dot-product';
 
@@ -50,4 +51,27 @@ test('dotProductStep - length n vs length 1', async (t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(14,14));
+});
+
+test('dotProductStep - unit propagation (N · mm = Nmm)', async (t) => {
+	const force = new Signal(new VectorSequence(f32(1, 1), f32(2, 2), f32(3, 3)));
+	const lever = new Signal(new VectorSequence(f32(1, 2), f32(3, 4), f32(5, 6)));
+
+	force.unit = Units.fromName('N');
+	lever.unit = Units.fromName('mm');
+
+	const res = await mockStep(DotProductStep, [force, lever]).process();
+
+	t.is(res.unit?.name, 'Nmm');
+});
+
+test('dotProductStep - unit propagation (undefined × unit = undefined)', async (t) => {
+	const a = new Signal(new VectorSequence(f32(1, 1), f32(2, 2), f32(3, 3)));
+	const b = new Signal(new VectorSequence(f32(1, 2), f32(3, 4), f32(5, 6)));
+
+	b.unit = Units.fromName('mm');
+
+	const res = await mockStep(DotProductStep, [a, b]).process();
+
+	t.is(res.unit, undefined);
 });

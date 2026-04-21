@@ -5,6 +5,7 @@ import { Segment } from '../models/segment';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
+import { Units } from '../models/unit';
 
 import { UnitVectorStep } from './unit-vector';
 
@@ -37,4 +38,13 @@ test('UnitvectorStep - Segment', async (t) => {
 	const step = mockStep(UnitVectorStep, [segment1]);
 	const res = await step.process();
 	t.deepEqual(res.getValue(), segment1unit);
+});
+
+test('UnitVectorStep - unit is dimensionless', async (t) => {
+	const input = new Signal(new VectorSequence(f32(1, 1, 0), f32(1, 1, 0), f32(2, 1, 0.5)));
+	input.unit = Units.fromName('mm');
+
+	const res = await mockStep(UnitVectorStep, [input]).process();
+
+	t.true(Units.isDimensionless(res.unit));
 });

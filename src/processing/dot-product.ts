@@ -1,5 +1,6 @@
 import { Signal, SignalType } from '../models/signal';
 import { VectorSequence } from '../models/sequence/vector-sequence';
+import { Units } from '../models/unit';
 import { StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
 import { markdownFmt } from '../utils/template-literal-tags';
@@ -50,7 +51,10 @@ export class DotProductStep extends BaseStep {
 		const vb = b.getVectorSequenceValue();
 
 		const dotProduct = VectorSequence.dot(va, vb);
-		
-		return this.inputs[0].shallowCopy(false).setValue(dotProduct);
+		const out = this.inputs[0].shallowCopy(false).setValue(dotProduct);
+
+		out.unit = Units.multiply(a.unit, b.unit);
+
+		return out;
 	}
 }

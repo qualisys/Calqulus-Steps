@@ -2,6 +2,7 @@ import { zip } from 'lodash';
 
 import { PropertyType } from '../models/property';
 import { Signal } from '../models/signal';
+import { Unit } from '../models/unit';
 import { StepCategory, StepClass } from '../step-registry';
 import { Aggregation } from '../utils/math/aggregation';
 import { ProcessingError } from '../utils/processing-error';
@@ -110,6 +111,13 @@ class BaseAggregationStep extends BaseStep {
 		// Set event status.
 		const isRetuningFrames = this.returnFrames && !!this.indexAggregation;
 		returnSignal.isEvent = !this.summaryOperation && (returnSignal.isEvent || isRetuningFrames);
+
+		if (isRetuningFrames) {
+			returnSignal.unit = new Unit({ frames: 1 });
+		}
+		else if (this.summaryOperation) {
+			returnSignal.unit = new Unit({});
+		}
 
 		return returnSignal;
 	}

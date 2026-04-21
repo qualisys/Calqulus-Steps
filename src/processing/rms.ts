@@ -2,6 +2,7 @@ import { zip } from 'lodash';
 
 import { PropertyType } from '../models/property';
 import { Signal } from '../models/signal';
+import { Units } from '../models/unit';
 import { StepClass } from '../step-registry';
 import { ProcessingError } from '../utils/processing-error';
 import { SeriesUtil } from '../utils/series';
@@ -82,7 +83,15 @@ export class RmsStep extends BaseStep {
 		
 		// Create a new instance of the same type as the input.
 		const returnData = Signal.typeFromArray(this.inputs[0].type, res as TypedArray[]);
-		
-		return this.inputs[0].shallowCopy(false).setValue(returnData);
+		const out = this.inputs[0].shallowCopy(false).setValue(returnData);
+
+		if (a.unit && b.unit && !Units.equals(a.unit, b.unit)) {
+			out.unit = undefined;
+		}
+		else {
+			out.unit = a.unit ?? b.unit;
+		}
+
+		return out;
 	}
 }
