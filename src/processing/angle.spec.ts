@@ -6,6 +6,7 @@ import { PlaneSequence } from '../models/sequence/plane-sequence';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
+import { Units } from '../models/unit';
 
 import { AngleStep, AngularVelocityStep, JointAngleStep } from './angle';
 import { PlaneStep } from './plane';
@@ -536,4 +537,44 @@ test('AngleStep - unwrap - event with multiple instances', async (t) => {
 
 test('AngleStep - unwrap - invalid input', async (t) => {
 	t.throws(() => { mockStep(AngleStep, [segWrap1], { unwrap: 'test' }); });
+});
+
+test('AngleStep - unit - segment input tagged as deg', async (t) => {
+	const res = await mockStep(AngleStep, [seg1]).process();
+
+	t.is(res.unit?.name, 'deg');
+});
+
+test('AngleStep - unit - segment vs segment tagged as deg', async (t) => {
+	const res = await mockStep(AngleStep, [seg1, seg2]).process();
+
+	t.is(res.unit?.name, 'deg');
+});
+
+test('AngleStep - unit - vector vs vector tagged as rad', async (t) => {
+	const res = await mockStep(AngleStep, [vs1x, vs2x]).process();
+
+	t.is(res.unit?.name, 'rad');
+});
+
+test('AngleStep - unit - three vectors tagged as rad', async (t) => {
+	const res = await mockStep(AngleStep, [vs1x, vs2x, vs3x]).process();
+
+	t.is(res.unit?.name, 'rad');
+});
+
+test('AngularVelocityStep - unit tagged as deg/s', async (t) => {
+	seg4.frameRate = seg5.frameRate = seg6.frameRate = seg7.frameRate = 300;
+
+	const res = await mockStep(AngularVelocityStep, [seg4, seg5, seg6, seg7], {
+		useRotationOrder: false,
+	}).process();
+
+	t.is(res.unit?.name, 'deg/s');
+});
+
+test('JointAngleStep - unit tagged as deg', async (t) => {
+	const res = await mockStep(JointAngleStep, [seg1]).process();
+
+	t.is(res.unit?.name, 'deg');
 });

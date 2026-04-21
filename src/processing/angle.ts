@@ -8,6 +8,7 @@ import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal, SignalType } from '../models/signal';
 import { Matrix } from '../models/spatial/matrix';
 import { Vector } from '../models/spatial/vector';
+import { Units } from '../models/unit';
 import { StepCategory, StepClass } from '../step-registry';
 import { AngleUtil } from '../utils/math/angle';
 import { Euler, RotationOrder } from '../utils/math/euler';
@@ -382,7 +383,9 @@ export class AngleStep extends BaseStep {
 
 			result.setValue(Signal.typeFromArray(result.type, signalArray));
 		}
-		
+
+		result.unit = (this.exportUnit === ExportUnit.Degrees) ? Units.fromName('deg') : Units.fromName('rad');
+
 		return result;
 	}
 
@@ -657,7 +660,10 @@ export class AngularVelocityStep extends AngleStep {
 		}
 
 		const result: Signal = this.inputs[0].shallowCopy(false);
+
 		result.setValue<VectorSequence>(qdot);
+		result.unit = Units.fromName('deg/s');
+
 		return result;
 	}
 }
