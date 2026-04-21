@@ -36,7 +36,7 @@ export type UnitExponents = Readonly<Record<string, number>>;
  *
  * Unit algebra is performed via [[Units]] helper functions. Values are
  * never auto-converted (no mm↔m scaling); conversions are explicit
- * (via the `convert` step or the JSON exporter's `angleUnit` option).
+ * (via the `convert` step).
  */
 export class Unit {
 	public readonly exponents: UnitExponents;
