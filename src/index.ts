@@ -24,6 +24,7 @@ export * from './models/property';
 export * from './models/segment';
 export * from './models/signal';
 export * from './models/skeleton';
+export * from './models/unit';
 
 export * from './processing';
 export * from './processing/base-step';

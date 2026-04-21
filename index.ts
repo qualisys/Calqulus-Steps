@@ -23,6 +23,7 @@ export * from './src/models/property';
 export * from './src/models/segment';
 export * from './src/models/signal';
 export * from './src/models/skeleton';
+export * from './src/models/unit';
 
 export * from './src/processing';
 export * from './src/processing/base-step';
