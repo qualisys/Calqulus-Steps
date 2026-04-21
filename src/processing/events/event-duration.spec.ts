@@ -4,6 +4,7 @@ import { ArrayTestUtil } from '../../test-utils/array-utils';
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { EventDurationStep } from './event-duration';
 
@@ -164,4 +165,11 @@ test('EventMaskStep - incompatible include', async (t) => {
 test('EventMaskStep - incompatible exclude', async (t) => {
 	await t.throwsAsync(mockStep(EventDurationStep, [e1, e2], { exclude: [new Signal('My string')]}).process());
 	await t.throwsAsync(mockStep(EventDurationStep, [e1, e2], { exclude: [s1]}).process());
+});
+
+test('EventDurationStep - unit tagged as seconds', async (t) => {
+	const step = mockStep(EventDurationStep, [e1, e2]);
+	const res = await step.process();
+
+	t.deepEqual(res.unit, Units.fromName('s'));
 });

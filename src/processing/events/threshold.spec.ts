@@ -3,6 +3,7 @@ import test from 'ava';
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 import { CrossDirection } from '../../utils/math/threshold';
 
 import { ThresholdStep } from './threshold';
@@ -59,4 +60,10 @@ test('PeakFinderStep - direction down', async (t) => {
 	t.deepEqual((await mockStep(ThresholdStep, [s1], { direction: 'down', value: 5 }).process()).getValue(), i32());
 	t.deepEqual((await mockStep(ThresholdStep, [s2], { direction: 'down', value: 0 }).process()).getValue(), i32(18));
 	t.deepEqual((await mockStep(ThresholdStep, [s2], { direction: 'down', value: 5 }).process()).getValue(), i32(13));
+});
+
+test('ThresholdStep - unit tagged as frames', async (t) => {
+	const res = await mockStep(ThresholdStep, [s1], { direction: 'both', value: 0 }).process();
+
+	t.deepEqual(res.unit, Units.fromName('frames'));
 });

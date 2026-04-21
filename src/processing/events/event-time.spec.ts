@@ -3,6 +3,7 @@ import test from 'ava';
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { EventTimeStep } from './event-time';
 
@@ -32,4 +33,11 @@ test('EventTimeStep', async (t) => {
 	const res = await step.process();
 
 	t.deepEqual(res.getValue(), f32(...a1).map(f => f / frameRate));
+});
+
+test('EventTimeStep - unit tagged as seconds', async (t) => {
+	const step = mockStep(EventTimeStep, [s1]);
+	const res = await step.process();
+
+	t.deepEqual(res.unit, Units.fromName('s'));
 });

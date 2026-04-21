@@ -1,5 +1,6 @@
 import { PropertyType } from '../../models/property';
 import { ResultType, Signal, SignalType } from '../../models/signal';
+import { Units } from '../../models/unit';
 import { StepClass } from '../../step-registry';
 import { CrossDirection, Threshold } from '../../utils/math/threshold';
 import { ProcessingError } from '../../utils/processing-error';
@@ -102,6 +103,7 @@ export class ThresholdStep extends BaseStep {
 
 		result.isEvent = true;
 		result.resultType = ResultType.Scalar;
+		result.unit = Units.fromName('frames');
 
 		return result;
 	}

@@ -1,5 +1,6 @@
 import { PropertyType } from '../../models/property';
 import { ResultType, Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 import { StepCategory, StepClass } from '../../step-registry';
 import { EventUtil } from '../../utils/events';
 import { ProcessingError } from '../../utils/processing-error';
@@ -124,6 +125,7 @@ export class EventDurationStep extends BaseStep {
 		returnSignal.frameRate = frameRate;
 		returnSignal.isEvent = false;
 		returnSignal.resultType = ResultType.Scalar;
+		returnSignal.unit = Units.fromName('s');
 
 		return returnSignal;
 	}

@@ -3,6 +3,7 @@ import test from 'ava';
 import { f32, i32, mockStep } from '../../test-utils/mock-step';
 import { VectorSequence } from '../../models/sequence/vector-sequence';
 import { Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 
 import { PeakFinderStep } from './peak-finder';
 
@@ -67,4 +68,10 @@ test('PeakFinderStep - Options - sequence', async (t) => {
 test('PeakFinderStep - simple test', async (t) => {
 	const res = await mockStep(PeakFinderStep, [s1]).process();
 	t.deepEqual(res.getValue(), i32(9));
+});
+
+test('PeakFinderStep - unit tagged as frames', async (t) => {
+	const res = await mockStep(PeakFinderStep, [s1]).process();
+
+	t.deepEqual(res.unit, Units.fromName('frames'));
 });

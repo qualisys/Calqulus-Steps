@@ -1,4 +1,5 @@
 import { ResultType, Signal } from '../../models/signal';
+import { Units } from '../../models/unit';
 import { StepClass } from '../../step-registry';
 import { ProcessingError } from '../../utils/processing-error';
 import { markdownFmt } from '../../utils/template-literal-tags';
@@ -53,6 +54,7 @@ export class EventTimeStep extends BaseStep {
 		const returnSignal = this.inputs[0].shallowCopy(false).setValue(times);
 		returnSignal.resultType = ResultType.Scalar;
 		returnSignal.isEvent = false;
+		returnSignal.unit = Units.fromName('s');
 
 		return returnSignal;
 	}

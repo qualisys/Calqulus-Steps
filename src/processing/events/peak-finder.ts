@@ -1,5 +1,6 @@
 import { PropertyType } from '../../models/property';
 import { ResultType, Signal, SignalType } from '../../models/signal';
+import { Units } from '../../models/unit';
 import { StepCategory, StepClass } from '../../step-registry';
 import { ISequenceOptions, IValueRange, PeakFinder } from '../../utils/math/peak-finder';
 import { ProcessingError } from '../../utils/processing-error';
@@ -279,6 +280,7 @@ export class PeakFinderStep extends BaseStep {
 		
 		result.isEvent = true;
 		result.resultType = ResultType.Scalar;
+		result.unit = Units.fromName('frames');
 
 		return result;
 	}
