@@ -11,6 +11,15 @@ export type BodySegmentParameterResult = {
 };
 
 export class BodySegmentParameters {
+	// Maps alternative segment names to the original segment name used in the constants
+	static segmentAliasMap = new Map<string, string>([
+		['LeftShank', 'LeftLeg'],
+		['LeftFemur', 'LeftUpLeg'],
+		['RightShank', 'RightLeg'],
+		['RightFemur', 'RightUpLeg'],
+		['Pelvis', 'Hips'],
+	]);
+
 	static centerOfMassConstants = new Map<string, Vector>([
 		['LeftToeBase', undefined],
 		['LeftFoot', new Vector(-0.034, 0.502, -0.199)],
