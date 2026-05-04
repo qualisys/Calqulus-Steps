@@ -172,15 +172,71 @@ export class BodySegmentParameters {
 		return BodySegmentParameters.centerOfMassConstants.get(segment.name)?.multiply(segmentLength);
 	}
 
-	static calculateSegmentLength(segment: IPoseSegment, segments: IPoseSegment[]): number {
-		const childSegment = segment.name === 'Hips' ? undefined : Array.from(segments).filter((s) => s.parent === segment.name)[0];
+	private static getTranslation(matrix: Matrix): Vector {
+		const pos = new Vector(0, 0, 0);
+		matrix.decompose(new Quaternion(0, 0, 0, 1), pos, new Vector(1, 1, 1));
+		return pos;
+	}
 
+	/**
+	 * Computes the world-space transform for a named segment by walking
+	 * up the parent chain, resolving the root segment first then 
+	 * accumulating local transforms for all the children down to the target segment.
+	 * 
+	 * @param segmentName the name of the segment to compute the transform for
+	 * @param segmentsMap a map of all segments in the skeleton, keyed by segment name
+	 * @param result a matrix to store the resulting world-space transform in
+	 * @returns true if the segment was found and the transform was computed successfully, false otherwise
+	 */
+	private static getAbsoluteMatrix(segmentName: string, segmentsMap: Map<string, IPoseSegment>, result: Matrix): boolean {
+		const seg = segmentsMap.get(segmentName);
+		if (!seg) return false;
+
+		// Get the local transform for this segment
+		const [x, y, z, qx, qy, qz, qw] = seg.transform;
+		const localMatrix = Matrix.compose(new Quaternion(qx, qy, qz, qw), new Vector(x, y, z));
+
+		if (seg.parent) {
+			if (!BodySegmentParameters.getAbsoluteMatrix(seg.parent, segmentsMap, result)) {
+				return false;
+			}
+			Matrix.multiply(result, localMatrix, result);
+		}
+		else {
+			result.copyFrom(localMatrix);
+		}
+
+		return true;
+	}
+
+	static calculateSegmentLength(segment: IPoseSegment, segments: IPoseSegment[]): number {
+		const rootName = BodySegmentParameters.segmentAliasMap.get(segment.name) ?? segment.name;
+		const childSegment = rootName === 'Hips' ? undefined : Array.from(segments).filter((s) => s.parent === segment.name)[0];
+		
+		// If the segment has no children, estimate the segment length using anatomical landmarks.
 		if (!childSegment) {
+			if (segment.name === 'LeftFoot' || segment.name === 'RightFoot') {
+				const side = segment.name === 'LeftFoot' ? 'Left' : 'Right';
+				const segmentsMap = new Map(segments.map(s => [s.name, s]));
+
+				// Compute the world-space transform matrices for the two anatomical landmarks
+				const mHindfoot = new Matrix();
+				const mHallux = new Matrix();
+				const hasHindfoot = BodySegmentParameters.getAbsoluteMatrix(`${side}Hindfoot`, segmentsMap, mHindfoot);
+				const hasHallux = BodySegmentParameters.getAbsoluteMatrix(`${side}Hallux`, segmentsMap, mHallux);
+
+				if (hasHindfoot && hasHallux) {
+					const hindfootPos = BodySegmentParameters.getTranslation(mHindfoot);
+					const halluxPos = BodySegmentParameters.getTranslation(mHallux);
+
+					return halluxPos.subtract(hindfootPos).length();
+				}
+			}
 			return undefined;
 		}
 
+		// If the segment has a child, use the distance between the segment and its child as the segment length
 		const distalPosition = new Vector(childSegment.transform[0], childSegment.transform[1], childSegment.transform[2]);
-		
 		return distalPosition.length();
 	}
 
