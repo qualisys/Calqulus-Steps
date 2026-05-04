@@ -1,6 +1,7 @@
 import { Segment } from './segment';
 import { IPoseSegment } from './skeleton';
 import { Matrix } from './spatial/matrix';
+import { Quaternion } from './spatial/quaternion';
 import { Vector } from './spatial/vector';
 
 export type BodySegmentParameterResult = {
@@ -147,7 +148,6 @@ export class BodySegmentParameters {
 
 	static calculate(pose: IPoseSegment[], bodyMass: number): Map<string, BodySegmentParameterResult> {
 		const result = new Map();
-
 		for (const segment of pose) {
 			const segmentLength = BodySegmentParameters.calculateSegmentLength(segment, pose) * 0.001;
 			const segmentMass = BodySegmentParameters.calculateSegmentMass(segment, bodyMass);
@@ -169,7 +169,8 @@ export class BodySegmentParameters {
 	}
 
 	static calculateCenterOfMass(segment: IPoseSegment, segmentLength: number): Vector {
-		return BodySegmentParameters.centerOfMassConstants.get(segment.name)?.multiply(segmentLength);
+		const name = BodySegmentParameters.segmentAliasMap.get(segment.name) ?? segment.name;
+		return BodySegmentParameters.centerOfMassConstants.get(name)?.multiply(segmentLength);
 	}
 
 	private static getTranslation(matrix: Matrix): Vector {
@@ -241,11 +242,13 @@ export class BodySegmentParameters {
 	}
 
 	static calculateSegmentMass(segment: IPoseSegment, bodyMass: number): number {
-		return bodyMass * BodySegmentParameters.massConstants.get(segment.name);
+		const name = BodySegmentParameters.segmentAliasMap.get(segment.name) ?? segment.name;
+		return bodyMass * BodySegmentParameters.massConstants.get(name);
 	}
 
 	static calculateInertia(segment: IPoseSegment, segmentMass: number, segmentLength: number): Matrix {
-		const matrixArray = BodySegmentParameters.inertiaConstants.get(segment.name)?.map(v => segmentMass * Math.pow(segmentLength * v, 2));
+		const name = BodySegmentParameters.segmentAliasMap.get(segment.name) ?? segment.name;
+		const matrixArray = BodySegmentParameters.inertiaConstants.get(name)?.map(v => segmentMass * Math.pow(segmentLength * v, 2));
 
 		return matrixArray ? Matrix.fromArray(matrixArray) : undefined;
 	}
