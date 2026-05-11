@@ -1,4 +1,4 @@
-const remMarkdown = require('remove-markdown');
+import remMarkdown from 'remove-markdown';
 
 const stripMarkdown = (text) => {
 	text = remMarkdown(text);
@@ -7,7 +7,7 @@ const stripMarkdown = (text) => {
 	text = text.replace(/([^\n])\n([^\n*-\d])/g, '$1 $2');
 
 	return text;
-}
+};
 
 /**
  * Render JSON Schema for a Step (main property) 
@@ -32,12 +32,12 @@ const renderStepProperty = (option, title) => {
 		// to the corresponding JSON/YAML types.
 
 		// Strings are always supported.
-		let types = ['string']; 
-		let optionTypes = (Array.isArray(option.type)) ? option.type : [option.type];
+		let types = ['string'];
+		const optionTypes = (Array.isArray(option.type)) ? option.type : [option.type];
 
 		for (const type of optionTypes) {
 			if (type.endsWith('[]')) {
-				types.push('array')
+				types.push('array');
 			}
 
 			switch (type.toLowerCase()) {
@@ -69,7 +69,7 @@ const renderStepProperty = (option, title) => {
 
 		if (types && types.length) {
 			// Remove duplicates
-			types = types.filter(function (value, index, array) { 
+			types = types.filter(function(value, index, array) { 
 				return array.indexOf(value) === index;
 			});
 
@@ -104,7 +104,9 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 	// Make a list of all category options.
 	const categoryOptions = {};
 	categories.forEach((category) => {
-		if (!category.options) return;
+		if (!category.options) {
+			return;
+		}
 
 		for (const option of category.options) {
 			const key = 'categoryOption ' + category.name + ' ' + option.name;
@@ -124,7 +126,8 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 				for (const alias of curr.alias) {
 					all.push([alias, curr]);
 				}
-			} else {
+			}
+			else {
 				all.push([curr.alias, curr]);
 			}
 		}
@@ -195,23 +198,23 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 	 * steps and their options are generated.
 	 */
 	const doc = {
-		$schema: "https://json-schema.org/draft/2020-12/schema",
-		line_endings: "unix",
-		$id: "https://qualisys.com/schemas/calqulus-pipeline",
-		title: "Qualisys Calqulus Pipeline",
-		description: "A document describing calculations to be done on biomechanical data for presentation in a report.",
-		type: "array",
+		$schema: 'https://json-schema.org/draft/2020-12/schema',
+		line_endings: 'unix',
+		$id: 'https://qualisys.com/schemas/calqulus-pipeline',
+		title: 'Qualisys Calqulus Pipeline',
+		description: 'A document describing calculations to be done on biomechanical data for presentation in a report.',
+		type: 'array',
 
 		// Top-level items in the array should be one of 
 		// the object types referenced below.
 		items: {
 			oneOf: [
-				{ "$ref": "#/$defs/Parameter Node" },
-				{ "$ref": "#/$defs/Space Node" },
-				{ "$ref": "#/$defs/Event Node" },
-				{ "$ref": "#/$defs/Marker Node" },
-				{ "$ref": "#/$defs/Segment Node" },
-				{ "$ref": "#/$defs/Template Node" },
+				{ '$ref': '#/$defs/Parameter Node' },
+				{ '$ref': '#/$defs/Space Node' },
+				{ '$ref': '#/$defs/Event Node' },
+				{ '$ref': '#/$defs/Marker Node' },
+				{ '$ref': '#/$defs/Segment Node' },
+				{ '$ref': '#/$defs/Template Node' },
 			],
 		},
 
@@ -223,44 +226,44 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 			 * Top-level node properties
 			 */
 			parameter: {
-				title: "Parameter node",
-				description: "A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.",
-				type: "string",
+				title: 'Parameter node',
+				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'string',
 			},
 			space: {
-				title: "Space node",
-				description: "A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.",
-				type: "string",
+				title: 'Space node',
+				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'string',
 			},
 			event: {
-				title: "Event node",
-				description: "A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.",
-				type: "string",
+				title: 'Event node',
+				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'string',
 			},
 			marker: {
-				title: "Marker node",
-				description: "A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.",
-				type: "string",
+				title: 'Marker node',
+				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'string',
 			},
 			segment: {
-				title: "Marker node",
-				description: "A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.",
-				type: "string",
+				title: 'Marker node',
+				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'string',
 			},
 			template: {
-				title: "Template node",
-				description: "A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.",
-				type: "string",
+				title: 'Template node',
+				description: 'A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.',
+				type: 'string',
 			},
 			export: {
-				title: "Export results",
-				description: "Toggle export on/off for this node. Defaults to true.",
-				type: "boolean"
+				title: 'Export results',
+				description: 'Toggle export on/off for this node. Defaults to true.',
+				type: 'boolean'
 			},
 			steps: {
-				title: "Node steps",
-				description: "A step node takes an input and some options and outputs a value.",
-				type: "array",
+				title: 'Node steps',
+				description: 'A step node takes an input and some options and outputs a value.',
+				type: 'array',
 				additionalItems: false,
 
 				items: {
@@ -268,75 +271,75 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 				},
 			},
 			where: {
-				title: "Measurement filtering",
-				description: "When importing a signal or defining an output node, you can specify a measurement from which the signal should be imported – or for which measurement an output node should run.\n\nYou can filter measurements by name and by field values and you can use wildcard characters `*` to formulate patterns to match partial values. The matching of values is case-insensitive.\n\nWhen using a measurement filter, a list of matching measurements is created. By specifying the `index` option, you can define which of the matching measurements should apply.",
-				type: "object",
+				title: 'Measurement filtering',
+				description: 'When importing a signal or defining an output node, you can specify a measurement from which the signal should be imported – or for which measurement an output node should run.\n\nYou can filter measurements by name and by field values and you can use wildcard characters `*` to formulate patterns to match partial values. The matching of values is case-insensitive.\n\nWhen using a measurement filter, a list of matching measurements is created. By specifying the `index` option, you can define which of the matching measurements should apply.',
+				type: 'object',
 				properties: {
 					name: {
-						title: "Name filter",
-						description: "Target a measurement by name",
-						type: "string",
+						title: 'Name filter',
+						description: 'Target a measurement by name',
+						type: 'string',
 					},
 					index: {
-						title: "Index filter",
-						description: "Out of a number of matching measurements, pick the nth match. Either a 1-based index, or the values `first` or `last` to select the first or last match, respectively.",
-						type: ["integer", "string"],
+						title: 'Index filter',
+						description: 'Out of a number of matching measurements, pick the nth match. Either a 1-based index, or the values `first` or `last` to select the first or last match, respectively.',
+						type: ['integer', 'string'],
 
 						if: {
-							type: "string"
+							type: 'string'
 						},
 						then: {
-							enum: ["first", "last"]
+							enum: ['first', 'last']
 						}
 					},
 					fields: {
-						title: "Field filter",
-						description: "Target a measurement by a field value.",
-						type: "object",
+						title: 'Field filter',
+						description: 'Target a measurement by a field value.',
+						type: 'object',
 						additionalProperties: {
-							title: "Field to match against",
-							type: "string",
+							title: 'Field to match against',
+							type: 'string',
 						}
 					},
 					force: {
-						title: "Force filter",
-						description: "Target a measurement by a the existence of forces.",
-						type: "string",
-						enum: ["any", "both", "left", "none", "right"]
+						title: 'Force filter',
+						description: 'Target a measurement by a the existence of forces.',
+						type: 'string',
+						enum: ['any', 'both', 'left', 'none', 'right']
 					}
 				},
 				additionalProperties: false,
 			},
 			set: {
-				title: "Output set",
-				description: "Used to specify which _set_ the exported parameter will use. In most cases, this will be either `left` or `right`.\n\nIf not set, the JSON output will use set: null.",
-				type: "string",
+				title: 'Output set',
+				description: 'Used to specify which _set_ the exported parameter will use. In most cases, this will be either `left` or `right`.\n\nIf not set, the JSON output will use set: null.',
+				type: 'string',
 			},
 
 			/**
 			 * Space node properties
 			 */
 			spaceOrigin: {
-				title: "Origin",
-				description: "Sets the origin of a custom coordinate system.",
+				title: 'Origin',
+				description: 'Sets the origin of a custom coordinate system.',
 				type: ['string', 'array'],
 			},
 			spacePrimaryAxis: {
-				title: "Primary axis",
+				title: 'Primary axis',
 				description: `Sets the primary axis of a custom coordinate system. The primary axis of the custom coordinate system will always be a unit vector with the same direction as this vector.
 				
 If more than one vectors is given, for example [myMarker1, myMarker2], the vector difference between the first two vectors is used as the primary axis.`,
 				type: ['string', 'array'],
 			},
 			spaceSecondaryAxis: {
-				title: "Secondary axis",
+				title: 'Secondary axis',
 				description: `Sets the secondary axis of a custom coordinate system. The actual secondary axis of the custom coordinate system might differ from the vector specified, since the secondary axis must be a unit vector perpendicular to the primary axis.
 				
 If more than one vectors is given, for example [myMarker1, myMarker2], the vector difference between the first two vectors is used as the secondary axis.`,
 				type: ['string', 'array'],
 			},
 			spaceOrder: {
-				title: "Order",
+				title: 'Order',
 				description: `Defines what axis the primary and secondary axis corresponds to. The first letter defines the name of the primary axis, and the second letter defines the name of the secondary axis.
 				
 Possible values:
@@ -355,14 +358,14 @@ zy - Primary axis: z, secondary axis: y`,
 				]
 			},
 			spaceAlignWithSegment: {
-				title: "Align with segment",
+				title: 'Align with segment',
 				description: `Used to create a space that aligns with the specified segment. The resulting space will be rotated in 90 degree increments relative to the world space.
 
 The rotation is based on the average orientation of the segment during a measurement.`,
 				type: ['object'],
 				properties: {
 					segment: {
-						title: "Segment to align to",
+						title: 'Segment to align to',
 						description: `Used to create a space that aligns with the specified segment. The resulting space will be rotated in 90 degree increments relative to the world space.
 
 The rotation is based on the average orientation of the segment during a measurement.`,
@@ -375,32 +378,32 @@ The rotation is based on the average orientation of the segment during a measure
 			/**
 			 * Top-level node objects
 			 */
-			"Parameter Node": {
-				title: "Parameter node",
-				description: `A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.`,
-				type: "object",
+			'Parameter Node': {
+				title: 'Parameter node',
+				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'object',
 				properties: {
-					export: { "$ref": "#/$defs/export" },
-					parameter: { "$ref": "#/$defs/parameter" },
-					steps: { "$ref": "#/$defs/steps" },
-					where: { "$ref": "#/$defs/where" },
-					set: { "$ref": "#/$defs/set" },
+					export: { '$ref': '#/$defs/export' },
+					parameter: { '$ref': '#/$defs/parameter' },
+					steps: { '$ref': '#/$defs/steps' },
+					where: { '$ref': '#/$defs/where' },
+					set: { '$ref': '#/$defs/set' },
 				},
 				required: ['parameter', 'steps'],
 				additionalProperties: false,
 			},
-			"Space Node": {
-				type: "object",
+			'Space Node': {
+				type: 'object',
 				properties: {
-					space: { "$ref": "#/$defs/space" },
-					origin: { "$ref": "#/$defs/spaceOrigin" },
-					primaryAxis: { "$ref": "#/$defs/spacePrimaryAxis" },
-					secondaryAxis: { "$ref": "#/$defs/spaceSecondaryAxis" },
-					order: { "$ref": "#/$defs/spaceOrder" },
-					alignWithSegment: { "$ref": "#/$defs/spaceAlignWithSegment" },
-					steps: { "$ref": "#/$defs/steps" },
-					where: { "$ref": "#/$defs/where" },
-					set: { "$ref": "#/$defs/set" },
+					space: { '$ref': '#/$defs/space' },
+					origin: { '$ref': '#/$defs/spaceOrigin' },
+					primaryAxis: { '$ref': '#/$defs/spacePrimaryAxis' },
+					secondaryAxis: { '$ref': '#/$defs/spaceSecondaryAxis' },
+					order: { '$ref': '#/$defs/spaceOrder' },
+					alignWithSegment: { '$ref': '#/$defs/spaceAlignWithSegment' },
+					steps: { '$ref': '#/$defs/steps' },
+					where: { '$ref': '#/$defs/where' },
+					set: { '$ref': '#/$defs/set' },
 				},
 				oneOf: [
 					{ required: ['space', 'alignWithSegment'] },
@@ -408,49 +411,49 @@ The rotation is based on the average orientation of the segment during a measure
 				],
 				additionalProperties: false,
 			},
-			"Event Node": {
-				type: "object",
+			'Event Node': {
+				type: 'object',
 				properties: {
-					event: { "$ref": "#/$defs/event" },
-					export: { "$ref": "#/$defs/export" },
-					steps: { "$ref": "#/$defs/steps" },
-					where: { "$ref": "#/$defs/where" },
-					set: { "$ref": "#/$defs/set" },
+					event: { '$ref': '#/$defs/event' },
+					export: { '$ref': '#/$defs/export' },
+					steps: { '$ref': '#/$defs/steps' },
+					where: { '$ref': '#/$defs/where' },
+					set: { '$ref': '#/$defs/set' },
 				},
 				required: ['event', 'steps'],
 				additionalProperties: false,
 			},
-			"Marker Node": {
-				type: "object",
+			'Marker Node': {
+				type: 'object',
 				properties: {
-					export: { "$ref": "#/$defs/export" },
-					marker: { "$ref": "#/$defs/marker" },
-					steps: { "$ref": "#/$defs/steps" },
-					where: { "$ref": "#/$defs/where" },
-					set: { "$ref": "#/$defs/set" },
+					export: { '$ref': '#/$defs/export' },
+					marker: { '$ref': '#/$defs/marker' },
+					steps: { '$ref': '#/$defs/steps' },
+					where: { '$ref': '#/$defs/where' },
+					set: { '$ref': '#/$defs/set' },
 				},
 				required: ['marker', 'steps'],
 				additionalProperties: false,
 			},
-			"Segment Node": {
-				type: "object",
+			'Segment Node': {
+				type: 'object',
 				properties: {
-					export: { "$ref": "#/$defs/export" },
-					segment: { "$ref": "#/$defs/segment" },
-					steps: { "$ref": "#/$defs/steps" },
-					where: { "$ref": "#/$defs/where" },
-					set: { "$ref": "#/$defs/set" },
+					export: { '$ref': '#/$defs/export' },
+					segment: { '$ref': '#/$defs/segment' },
+					steps: { '$ref': '#/$defs/steps' },
+					where: { '$ref': '#/$defs/where' },
+					set: { '$ref': '#/$defs/set' },
 				},
 				required: ['segment', 'steps'],
 				additionalProperties: false,
 			},
-			"Template Node": {
-				title: "Template node",
-				description: `A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.`,
-				type: "object",
+			'Template Node': {
+				title: 'Template node',
+				description: 'A template node imports a separate Calqulus pipeline file into the current pipeline. This enables, for example, splitting a pipeline up into parts that can be reused in multiple pipelines, or to make the pipelines more readable.',
+				type: 'object',
 				properties: {
-					template: { "$ref": "#/$defs/template" },
-					where: { "$ref": "#/$defs/where" },
+					template: { '$ref': '#/$defs/template' },
+					where: { '$ref': '#/$defs/where' },
 				},
 				required: ['template'],
 				additionalProperties: false,
@@ -469,8 +472,6 @@ The rotation is based on the average orientation of the segment during a measure
 	};
 
 	return doc;
-}
+};
 
-module.exports = {
-	renderJsonSchema,
-}
+export { renderJsonSchema };

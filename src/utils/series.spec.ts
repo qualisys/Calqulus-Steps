@@ -135,7 +135,7 @@ test('SeriesUtil.reflectBeginning', t => {
 	// Test with uneven intervals
 	t.deepEqual(SeriesUtil.reflectBeginning([10, 15, 17, 5, 3], 4), [17, 15, 3, 5]);
 	t.deepEqual(SeriesUtil.reflectBeginning([50, 20, 10, 5, 1], 4), [99, 95, 90, 80]);
-	4;
+
 	// Test lengths longer than the series
 	t.deepEqual(SeriesUtil.reflectBeginning([5, 4, 3, 2, 1], 10), [15, 14, 13, 12, 11, 10, 9, 8, 7, 6]);
 	t.deepEqual(SeriesUtil.reflectBeginning([1, 2, 3, 4, 5], 10), [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0]);
