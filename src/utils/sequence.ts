@@ -17,6 +17,8 @@ export class SequenceUtil {
 		const maps = signals.map(s => s.frameMap);
 		const maxFrame = Math.max(...maps.map(m => Math.max(...m)));
 
+		if (maps.every(m => m.length === 0) || maxFrame === -Infinity) return signals;
+
 		// Collect rows of indices for each input, where each index
 		// represents a frame that's equal to or greater than the previous value.
 		const indexRows = [];
