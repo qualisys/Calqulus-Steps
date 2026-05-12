@@ -493,6 +493,24 @@ test('Signal - getFrames', (t) => {
 	t.is(s1_undef.getFrames(new Uint32Array()), undefined);
 });
 
+test('Signal - getFrames - NaN in Float32Array is filtered out', (t) => {
+	const sig = new Signal(Float32Array.from([10, 20, 30, 40, 50]));
+
+	// NaN values in a Float32Array input fail the `f < maxLength && f >= 0`
+	// guard and are silently dropped; only valid frame indices are used.
+	const res = sig.getFrames(Float32Array.from([NaN, 1, NaN, 3]));
+	t.deepEqual(res.getValue(), Float32Array.from([20, 40]));
+});
+
+test('Signal - getFrames - NaN in Uint32Array coerces to 0', (t) => {
+	const sig = new Signal(Float32Array.from([10, 20, 30, 40, 50]));
+
+	// Uint32Array cannot hold NaN; Uint32Array.from([NaN]) silently converts
+	// each NaN to 0, so frame 0 gets selected as if it were a valid index.
+	const res = sig.getFrames(Uint32Array.from([NaN as unknown as number, 2]));
+	t.deepEqual(res.getValue(), Float32Array.from([10, 30]));
+});
+
 test('Signal - getSignalCycles', (t) => {
 	const sig = new Signal(Float32Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
 

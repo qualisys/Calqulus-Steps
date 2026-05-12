@@ -67,3 +67,26 @@ test('SequenceUtil - sequenceByFrameMap - 2 inputs - wrong order', (t) => {
 
 	t.is(res.length, 0);
 });
+
+test('SequenceUtil - sequenceByFrameMap - all frameMaps empty - returns signals unchanged', (t) => {
+	// Both signals have a frameMap set but it is empty, triggering the
+	// `maps.every(m => m.length === 0)` branch.
+	const sig1 = s1.shallowCopy();
+	sig1.frameMap = i32();
+	const sig2 = s1.shallowCopy();
+	sig2.frameMap = i32();
+
+	const res = SequenceUtil.sequenceByFrameMap(sig1, sig2);
+
+	t.is(res.length, 2);
+	t.is(res[0], sig1);
+	t.is(res[1], sig2);
+});
+
+test('SequenceUtil - sequenceByFrameMap - maxFrame is -Infinity - returns empty array', (t) => {
+	// With no signals, maps = [] and Math.max(...[]) === -Infinity,
+	// triggering the `maxFrame === -Infinity` branch and returning signals (empty).
+	const res = SequenceUtil.sequenceByFrameMap();
+
+	t.is(res.length, 0);
+});
