@@ -52,6 +52,25 @@ test('Phase - constructor with start and end value arrays', (t) => {
 	t.is(intervals[2].end, 60);
 });
 
+test('Phase - constructor with scalar start and end frame numbers', (t) => {
+	const phase = new Phase(testName, startEventName, endEventName, 10, 25, frameCount);
+
+	t.is(phase.length, 1);
+
+	const intervals = phase.intervals;
+
+	t.is(intervals[0].start, 10);
+	t.is(intervals[0].end, 25);
+});
+
+test('Phase - constructor with scalar frame 0 as start', (t) => {
+	const phase = new Phase(testName, startEventName, endEventName, 0, 20, frameCount);
+
+	t.is(phase.length, 1);
+	t.is(phase.intervals[0].start, 0);
+	t.is(phase.intervals[0].end, 20);
+});
+
 test('Phase - constructor with IPhaseNode', (t) => {
 	const phaseNode = {
 		name: testName,

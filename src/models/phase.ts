@@ -8,6 +8,10 @@ interface IPhaseFrameSpan extends IFrameSpan {
 	partial?: boolean;
 }
 
+function isPhaseEventFramesInput(value: unknown): value is NumericArray | number {
+	return typeof value === 'number' || Array.isArray(value) || ArrayBuffer.isView(value);
+}
+
 export class Phase implements ISequence, IDataSequence {
 	private _description: string;
 	private _displayName: string;
@@ -42,11 +46,11 @@ export class Phase implements ISequence, IDataSequence {
 	 * @param name The name of the phase.
 	 * @param start The name of the event that marks the start of the phase.
 	 * @param end The name of the event that marks the end of the phase.
-	 * @param startValues Array of frame numbers representing start events.
-	 * @param endValues Array of frame numbers representing end events.
+	 * @param startValues Frame numbers for start events (array, typed array, or a single number).
+	 * @param endValues Frame numbers for end events (array, typed array, or a single number).
 	 * @param frameCount The total number of frames in the measurement.
 	 */
-	constructor(name: string, start: string, end: string, startValues: NumericArray, endValues: NumericArray, frameCount?: number);
+	constructor(name: string, start: string, end: string, startValues: NumericArray | number, endValues: NumericArray | number, frameCount?: number);
 	/**
 	 * Creates a new phase from a phase node by calculating intervals from start and end event arrays.
 	 * 
@@ -55,15 +59,15 @@ export class Phase implements ISequence, IDataSequence {
 	 * using [[EventUtil.eventSequence]].
 	 * 
 	 * @param phaseNode The phase node containing phase metadata (name, start, end, description, displayName).
-	 * @param startValues Array of frame numbers representing start events.
-	 * @param endValues Array of frame numbers representing end events.
+	 * @param startValues Frame numbers for start events (array, typed array, or a single number).
+	 * @param endValues Frame numbers for end events (array, typed array, or a single number).
 	 * @param frameCount The total number of frames in the measurement.
 	 */
-	constructor(phaseNode: IPhaseNode, startValues: NumericArray, endValues: NumericArray, frameCount?: number);
-	constructor(arg1: string | IPhaseNode, arg2: string | NumericArray, arg3: string | NumericArray, arg4?: IFrameSpan[] | NumericArray | number, arg5?: NumericArray | number, arg6?: number) {
+	constructor(phaseNode: IPhaseNode, startValues: NumericArray | number, endValues: NumericArray | number, frameCount?: number);
+	constructor(arg1: string | IPhaseNode, arg2: string | NumericArray | number, arg3: string | NumericArray | number, arg4?: IFrameSpan[] | NumericArray | number, arg5?: NumericArray | number, arg6?: number) {
 		let frameCount: number;
-		let startValues: NumericArray;
-		let endValues: NumericArray;
+		let startValues: NumericArray | number;
+		let endValues: NumericArray | number;
 
 		if (Array.isArray(arg4) && !arg5) {
 			frameCount = arg5 as number;
@@ -74,15 +78,22 @@ export class Phase implements ISequence, IDataSequence {
 
 			this._intervals = arg4 as IPhaseFrameSpan[];
 		}
-		else if (arg4 && arg5 && arg6) {
-			frameCount = arg6 as number;
+		else if (
+			typeof arg1 === 'string'
+			&& typeof arg2 === 'string'
+			&& typeof arg3 === 'string'
+			&& typeof arg6 === 'number'
+			&& isPhaseEventFramesInput(arg4)
+			&& isPhaseEventFramesInput(arg5)
+		) {
+			frameCount = arg6;
 
-			this.name = arg1 as string;
-			this._start = arg2 as string;
-			this._end = arg3 as string;
+			this.name = arg1;
+			this._start = arg2;
+			this._end = arg3;
 
-			startValues = arg4 as NumericArray;
-			endValues = arg5 as NumericArray;
+			startValues = arg4;
+			endValues = arg5;
 		}
 		else if ((arg1 as IPhaseNode)?.name) {
 			const phaseNode = arg1 as IPhaseNode;
@@ -106,13 +117,13 @@ export class Phase implements ISequence, IDataSequence {
 		this.array = [Float32Array.from([].concat(...this._intervals.map(({ start, end }) => [start, end])))];
 	}
 
-	private createIntervals(start: NumericArray, end: NumericArray, frameCount?: number): IFrameSpan[] {
-		let startValues = start;
-		let endValues = end;
+	private createIntervals(start: NumericArray | number, end: NumericArray | number, frameCount?: number): IFrameSpan[] {
+		let startValues = Phase.normalizeEventFrames(start);
+		let endValues = Phase.normalizeEventFrames(end);
 
 		if (this._partial && !isNaN(frameCount)) {
-			startValues = Float32Array.from(start as NumericArray);
-			endValues = Float32Array.from(end as NumericArray);
+			startValues = Float32Array.from(startValues);
+			endValues = Float32Array.from(endValues);
 			
 			if (startValues.length > 0 && endValues.length > 0 && startValues[0] > endValues[0]
 						|| startValues.length < 1 && endValues.length > 0) {
@@ -185,6 +196,14 @@ export class Phase implements ISequence, IDataSequence {
 		if (!this._intervals) return 0;
 		return this._intervals.length;
 	};
+
+	private static normalizeEventFrames(value: NumericArray | number): NumericArray {
+		if (typeof value === 'number') {
+			return Float32Array.of(value);
+		}
+
+		return value;
+	}
 
 	get partial(): boolean { return this._partial; }
 
