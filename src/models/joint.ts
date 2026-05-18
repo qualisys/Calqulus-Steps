@@ -3,9 +3,28 @@ import { isEqual } from 'lodash';
 import { Segment } from './segment';
 import { IDataSequence, ISequence, ISequenceDataProperties, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
+import { Unit, Units } from './unit';
+
+const mm = Units.fromName('mm')!;
+const n = Units.fromName('N')!;
+const nmm = Units.fromName('Nmm')!;
+const w = Units.fromName('W')!;
 
 export class Joint implements ISequence, IDataSequence, ISequenceDataProperties {
 	readonly typeName = 'Joint';
+
+	static readonly componentUnits: Readonly<Record<string, Unit>> = {
+		x: mm,
+		y: mm,
+		z: mm,
+		fx: n,
+		fy: n,
+		fz: n,
+		mx: nmm,
+		my: nmm,
+		mz: nmm,
+		p: w,
+	};
 
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz', 'p'];

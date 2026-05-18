@@ -7,6 +7,10 @@ import { VectorSequence } from './sequence/vector-sequence';
 import { Matrix } from './spatial/matrix';
 import { Quaternion } from './spatial/quaternion';
 import { Vector } from './spatial/vector';
+import { Unit, Units } from './unit';
+
+const mm = Units.fromName('mm')!;
+const unitless = Units.fromName('unitless')!;
 
 export interface ISegment {
 	position: Vector,
@@ -22,6 +26,16 @@ export type Kinematics = {
 
 export class Segment implements ISequence, IDataSequence {
 	readonly typeName = 'Segment';
+
+	static readonly componentUnits: Readonly<Record<string, Unit>> = {
+		x: mm,
+		y: mm,
+		z: mm,
+		rx: unitless,
+		ry: unitless,
+		rz: unitless,
+		rw: unitless,
+	};
 
 	array: TypedArray[];
 	centerOfMass: Vector;

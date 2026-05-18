@@ -946,3 +946,48 @@ test('Signal - isPositive', (t) => {
 
 	t.is(new Signal('test').isPositive, undefined);
 });
+
+test('Signal.sourceUnit - Marker', (t) => {
+	const marker = new Marker('m1', fakeArray, fakeArray, fakeArray, frameRate);
+	const sig = new Signal(marker, frameRate);
+
+	t.deepEqual(sig.sourceUnit(), Units.fromName('mm'));
+	t.deepEqual(sig.sourceUnit('x'), Units.fromName('mm'));
+	t.deepEqual(sig.sourceUnit('Z'), Units.fromName('mm'));
+});
+
+test('Signal.sourceUnit - Segment component', (t) => {
+	const sig = new Signal(segment, frameRate);
+
+	t.is(sig.sourceUnit(), undefined);
+	t.deepEqual(sig.sourceUnit('x'), Units.fromName('mm'));
+	t.deepEqual(sig.sourceUnit('rx'), Units.fromName('unitless'));
+});
+
+test('Signal.sourceUnit - Joint component', (t) => {
+	const sig = new Signal(joint2, frameRate);
+
+	t.deepEqual(sig.sourceUnit('fx'), Units.fromName('N'));
+	t.deepEqual(sig.sourceUnit('mx'), Units.fromName('Nmm'));
+	t.deepEqual(sig.sourceUnit('p'), Units.fromName('W'));
+});
+
+test('Signal.sourceUnit - ForcePlate component', (t) => {
+	const sig = new Signal(forcePlate, frameRate);
+
+	t.deepEqual(sig.sourceUnit('mz'), Units.fromName('Nmm'));
+});
+
+test('Signal.sourceUnit - PlaneSequence component', (t) => {
+	const sig = new Signal(plane, frameRate);
+
+	t.deepEqual(sig.sourceUnit('d'), Units.fromName('mm'));
+	t.deepEqual(sig.sourceUnit('a'), Units.fromName('unitless'));
+});
+
+test('Signal.sourceUnit - no model metadata', (t) => {
+	const sig = new Signal(vecSeq, frameRate);
+
+	t.is(sig.sourceUnit(), undefined);
+	t.is(sig.sourceUnit('x'), undefined);
+});

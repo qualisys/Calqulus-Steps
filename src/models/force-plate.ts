@@ -3,9 +3,26 @@ import { isEqual } from 'lodash';
 import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
 import { IVector } from './spatial/vector';
+import { Unit, Units } from './unit';
+
+const mm = Units.fromName('mm')!;
+const n = Units.fromName('N')!;
+const nmm = Units.fromName('Nmm')!;
 
 export class ForcePlate implements ISequence, IDataSequence {
 	readonly typeName = 'ForcePlate';
+
+	static readonly componentUnits: Readonly<Record<string, Unit>> = {
+		x: mm,
+		y: mm,
+		z: mm,
+		fx: n,
+		fy: n,
+		fz: n,
+		mx: nmm,
+		my: nmm,
+		mz: nmm,
+	};
 
 	array: TypedArray[];
 	components = ['x', 'y', 'z', 'fx', 'fy', 'fz', 'mx', 'my', 'mz'];

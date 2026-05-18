@@ -613,6 +613,29 @@ export class Signal implements IDataSequence {
 	}
 
 	/**
+	 * Returns the native source unit for the wrapped model value, or for a
+	 * named component when the value exposes [[componentUnits]] on its class.
+	 */
+	sourceUnit(component?: string): Unit | undefined {
+		const value = this.getValue();
+
+		if (!value || typeof value !== 'object') {
+			return undefined;
+		}
+
+		const ctor = value.constructor as {
+			signalUnit?: Unit;
+			componentUnits?: Readonly<Record<string, Unit>>;
+		};
+
+		if (component) {
+			return ctor.componentUnits?.[component.toLowerCase()];
+		}
+
+		return ctor.signalUnit;
+	}
+
+	/**
 	 * Returns a list of components if the signal value is a [[IDataSequence]],
 	 * otherwise returns `undefined`.
 	 */

@@ -1,7 +1,10 @@
 import { IDataSequence, ISequence } from './sequence/sequence';
+import { Unit, Units } from './unit';
 
 export class Analog implements ISequence, IDataSequence {
 	readonly typeName = 'Analog';
+
+	static readonly signalUnit: Unit = Units.fromName('V')!;
 
 	array: TypedArray[];
 	components = ['signal'];

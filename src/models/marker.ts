@@ -1,8 +1,18 @@
 import { IDataSequence, ISequence } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
+import { Unit, Units } from './unit';
+
+const mm = Units.fromName('mm')!;
 
 export class Marker extends VectorSequence implements ISequence, IDataSequence {
 	readonly typeName = 'Marker';
+
+	static readonly signalUnit: Unit = mm;
+	static readonly componentUnits: Readonly<Record<string, Unit>> = {
+		x: mm,
+		y: mm,
+		z: mm,
+	};
 
 	/**
 	 * Creates a new Marker from the specified values.

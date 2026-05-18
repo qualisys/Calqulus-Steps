@@ -3,12 +3,24 @@ import { isEqual } from 'lodash';
 import { Plane } from '../spatial/plane';
 import { Vector } from '../spatial/vector';
 
+import { Unit, Units } from '../unit';
+
 import { ISequence } from './sequence';
 import { VectorSequence } from './vector-sequence';
 
+const mm = Units.fromName('mm')!;
+const unitless = Units.fromName('unitless')!;
+
 export class PlaneSequence implements ISequence {
 	readonly typeName = 'PlaneSequence';
-	
+
+	static readonly componentUnits: Readonly<Record<string, Unit>> = {
+		a: unitless,
+		b: unitless,
+		c: unitless,
+		d: mm,
+	};
+
 	array: TypedArray[];
 	components = ['a', 'b', 'c', 'd'];
 
