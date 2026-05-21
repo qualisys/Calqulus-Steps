@@ -131,6 +131,8 @@ are also available, such as `m/s`, `N*m` (alternatively
 
 | Unit | Aliases |
 |------|------|
+| `arcminute` | `arcmin`, `arcminutes` |
+| `arcsecond` | `arcsec`, `arcseconds` |
 | `degree` | `°`, `deg`, `degrees` |
 | `gradian` | `gon`, `grad`, `grads` |
 | `radian` | `rad`, `radians` |
@@ -190,8 +192,9 @@ are also available, such as `m/s`, `N*m` (alternatively
 | `Wh` |  |
 | `btu` | `BTU`, `BTUs` |
 | `calorie` | `cal`, `calories` |
+| `electronvolt` | `eV`, `electronvolts` |
 | `erg` | `ergs` |
-| `joule` | `J`, `Joule`, `joules` |
+| `joule` | `J`, `Joule`, `joules`, `Joules` |
 | `therm-US` | `th`, `therm`, `therms`, `Therm` |
 
 ### Force
@@ -287,12 +290,19 @@ are also available, such as `m/s`, `N*m` (alternatively
 | `grain` | `grains`, `gr` |
 | `gram` | `g`, `grams`, `gramme`, `grammes` |
 | `kilogram` | `kg`, `kilograms` |
-| `metric-ton` | `tonne` |
+| `metric-ton` | `t`, `tonne` |
 | `ounce` | `oz`, `ounces` |
 | `pound` | `lbs`, `lb`, `pounds`, `#` |
 | `short-ton` | `tn`, `ton` |
 | `slug` | `slugs` |
 | `stone` | `stones`, `st` |
+
+### Molar Concentration
+
+| Unit | Aliases |
+|------|------|
+| `molar` | `M` |
+| `wtpercent` | `wt%` |
 
 ### Potential
 
