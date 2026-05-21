@@ -4,8 +4,8 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import '../build/main/index.js';
-import { StepRegistry } from '../build/main/lib/step-registry.js';
+import '../../calqulus/build/main/index.js';
+import { StepRegistry } from '../../calqulus/build/main/src/steps/step-registry.js';
 
 import { renderJsonSchema } from './docs-render/json-schema-render.mts';
 import { kebabCase, renderStepCategoryPage, renderStepIndexPage } from './docs-render/step-category-md-render.mts';

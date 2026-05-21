@@ -3,6 +3,58 @@
   "name": "calqulus-steps",
   "sourceRoot": "libs/calqulus-steps",
   "projectType": "library",
-  "targets": { },
+  "targets": {
+    "doc:steps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node bin/build-step-docs.mts",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": [
+        {
+          "projects": ["calqulus"],
+          "target": "build-main"
+        }
+      ],
+      "outputs": [
+        "{projectRoot}/docs/nodes/steps",
+        "{projectRoot}/build/schema"
+      ],
+      "cache": true
+    },
+    "doc:html": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/typedoc src/ --exclude **/*.spec.ts --out build/docs --tsconfig tsconfig.docs.json",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": [
+        "{projectRoot}/build/docs"
+      ],
+      "cache": true
+    },
+    "doc:json": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/typedoc src/ --exclude **/*.spec.ts --json build/docs/typedoc.json --tsconfig tsconfig.docs.json",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": [
+        "{projectRoot}/build/docs/typedoc.json"
+      ],
+      "cache": true
+    },
+    "doc": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run calqulus-steps:doc:html",
+          "node_modules/.bin/open-cli libs/calqulus-steps/build/docs/index.html"
+        ],
+        "parallel": false,
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  },
   "tags": []
 }
