@@ -1,0 +1,23 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"module": "commonjs",
+		"esModuleInterop": true,
+		"declaration": false,
+		"noEmit": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"lib": ["es2019", "dom"],
+		"skipLibCheck": true,
+		"baseUrl": "../../"
+	},
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"**/*.spec.ts",
+		"node_modules/**",
+		"build/**"
+	]
+}
