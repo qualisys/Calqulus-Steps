@@ -189,7 +189,7 @@ test('AngleStep - Input errors - Invalid rotation order', async (t) => {
 
 // One segment
 test('AngleStep - One segment (default XYZ)', async (t) => {
-	const res = await mockStep(AngleStep, [seg1]).process();
+	const res = await mockStep(AngleStep, [seg1], { exportUnit: 'degrees' }).process();
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [-3.530592203140259]);
@@ -198,7 +198,7 @@ test('AngleStep - One segment (default XYZ)', async (t) => {
 });
 
 test('AngleStep - One segment (ZXY)', async (t) => {
-	const res = await mockStep(AngleStep, [seg1], { rotationOrder: 'ZXY' }).process();
+	const res = await mockStep(AngleStep, [seg1], { rotationOrder: 'ZXY', exportUnit: 'degrees' }).process();
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [8.627449035644531]);
@@ -208,7 +208,7 @@ test('AngleStep - One segment (ZXY)', async (t) => {
 
 test('AngleStep - One segment (yxz)', async (t) => {
 	// Also test that the rotation order option is case insensitive.
-	const res = await mockStep(AngleStep, [seg1], { rotationOrder: 'yxz' }).process();
+	const res = await mockStep(AngleStep, [seg1], { rotationOrder: 'yxz', exportUnit: 'degrees' }).process();
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [-3.489011526107788]);
@@ -250,7 +250,7 @@ test('AngleStep - Two vectors - planar angle', async (t) => {
 
 // Two segments
 test('AngleStep - Two segments (default XYZ)', async (t) => {
-	const res = await mockStep(AngleStep, [seg1, seg2]).process();
+	const res = await mockStep(AngleStep, [seg1, seg2], { exportUnit: 'degrees' }).process();
 	t.like(res.getValue(), {
 		x: f32(-12.617937088012695),
 		y: f32(2.5293166637420654),
@@ -259,7 +259,7 @@ test('AngleStep - Two segments (default XYZ)', async (t) => {
 });
 
 test('AngleStep - Two segments (ZYX)', async (t) => {
-	const res = await mockStep(AngleStep, [seg1, seg2], { rotationOrder: 'ZYX' }).process();
+	const res = await mockStep(AngleStep, [seg1, seg2], { rotationOrder: 'ZYX', exportUnit: 'degrees' }).process();
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [-12.558980941772461]);
@@ -342,7 +342,7 @@ test('JointAngleStep - Input errors - Too many inputs', async (t) => {
 
 test('JointAngleStep - One segment (ZXY)', async (t) => {
 	// Copied from AngleStep - One segment (ZXY) - should be same exact answer
-	const res = await mockStep(JointAngleStep, [seg1], { rotationOrder: 'ZXY' }).process();
+	const res = await mockStep(JointAngleStep, [seg1], { rotationOrder: 'ZXY', exportUnit: 'degrees' }).process();
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [8.627449035644531]);
@@ -353,7 +353,7 @@ test('JointAngleStep - One segment (ZXY)', async (t) => {
 // Two segments
 test('JointAngleStep - Two segments (ZYX)', async (t) => {
 	// Copied from AngleStep - Two segments (ZYX) - should be same exact answer
-	const res = await mockStep(JointAngleStep, [seg1, seg2], { rotationOrder: 'ZYX' }).process();
+	const res = await mockStep(JointAngleStep, [seg1, seg2], { rotationOrder: 'ZYX', exportUnit: 'degrees' }).process();
 	const vs = res.getVectorSequenceValue();
 
 	t.deepEqual(Array.from(vs.x), [-12.558980941772461]);
@@ -468,7 +468,7 @@ test('AngularVelocityStep - useRotationOrder: true, rotationOrder: zyz', async (
 // *************************************************
 
 test('AngleStep - unwrap - true', async (t) => {
-	const res = await mockStep(AngleStep, [segWrap1], { unwrap: true }).process();
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: true, exportUnit: 'degrees' }).process();
 
 	const anglesX = res.getVectorSequenceValue().x;
 	t.is(anglesX.length, segWrapXAngles.length);
@@ -479,7 +479,7 @@ test('AngleStep - unwrap - true', async (t) => {
 });
 
 test('AngleStep - unwrap - 0', async (t) => {
-	const res = await mockStep(AngleStep, [segWrap1], { unwrap: 0 }).process();
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: 0, exportUnit: 'degrees' }).process();
 
 	const anglesX = res.getVectorSequenceValue().x;
 	t.is(anglesX.length, segWrapXAngles.length);
@@ -490,7 +490,7 @@ test('AngleStep - unwrap - 0', async (t) => {
 });
 
 test('AngleStep - unwrap - 4', async (t) => {
-	const res = await mockStep(AngleStep, [segWrap1], { unwrap: 4 }).process();
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: 4, exportUnit: 'degrees' }).process();
 
 	const anglesX = res.getVectorSequenceValue().x;
 	t.is(anglesX.length, segWrapXAngles.length);
@@ -506,7 +506,7 @@ test('AngleStep - unwrap - event', async (t) => {
 	const event = new Signal(i32(4));
 	event.isEvent = true;
 
-	const res = await mockStep(AngleStep, [segWrap1], { unwrap: [event] }).process();
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: [event], exportUnit: 'degrees' }).process();
 
 	const anglesX = res.getVectorSequenceValue().x;
 	t.is(anglesX.length, segWrapXAngles.length);
@@ -523,7 +523,7 @@ test('AngleStep - unwrap - event with multiple instances', async (t) => {
 	const event = new Signal(i32(4, 6, 8));
 	event.isEvent = true;
 
-	const res = await mockStep(AngleStep, [segWrap1], { unwrap: [event] }).process();
+	const res = await mockStep(AngleStep, [segWrap1], { unwrap: [event], exportUnit: 'degrees' }).process();
 
 	const anglesX = res.getVectorSequenceValue().x;
 	t.is(anglesX.length, segWrapXAngles.length);
@@ -539,16 +539,22 @@ test('AngleStep - unwrap - invalid input', async (t) => {
 	t.throws(() => { mockStep(AngleStep, [segWrap1], { unwrap: 'test' }); });
 });
 
-test('AngleStep - unit - segment input tagged as deg', async (t) => {
+test('AngleStep - unit - segment input defaults to rad', async (t) => {
 	const res = await mockStep(AngleStep, [seg1]).process();
+
+	t.is(res.unit?.name, 'rad');
+});
+
+test('AngleStep - unit - segment input with exportUnit degrees tagged as deg', async (t) => {
+	const res = await mockStep(AngleStep, [seg1], { exportUnit: 'degrees' }).process();
 
 	t.is(res.unit?.name, 'deg');
 });
 
-test('AngleStep - unit - segment vs segment tagged as deg', async (t) => {
+test('AngleStep - unit - segment vs segment defaults to rad', async (t) => {
 	const res = await mockStep(AngleStep, [seg1, seg2]).process();
 
-	t.is(res.unit?.name, 'deg');
+	t.is(res.unit?.name, 'rad');
 });
 
 test('AngleStep - unit - vector vs vector tagged as rad', async (t) => {
@@ -573,8 +579,17 @@ test('AngularVelocityStep - unit tagged as deg/s', async (t) => {
 	t.is(res.unit?.name, 'deg/s');
 });
 
-test('JointAngleStep - unit tagged as deg', async (t) => {
+test('JointAngleStep - unit defaults to rad', async (t) => {
 	const res = await mockStep(JointAngleStep, [seg1]).process();
 
-	t.is(res.unit?.name, 'deg');
+	t.is(res.unit?.name, 'rad');
+});
+
+test('AngleStep - segment euler values are radians by default', async (t) => {
+	const resDeg = await mockStep(AngleStep, [seg1], { exportUnit: 'degrees' }).process();
+	const resRad = await mockStep(AngleStep, [seg1]).process();
+	const degToRad = Math.PI / 180;
+
+	t.is(resRad.unit?.name, 'rad');
+	t.assert(eqish(resDeg.getVectorSequenceValue().x[0] * degToRad, resRad.getVectorSequenceValue().x[0], 1 / 10000));
 });

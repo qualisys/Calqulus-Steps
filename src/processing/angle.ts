@@ -118,6 +118,19 @@ export enum ExportUnit {
 			introduce unexpected artifacts. Please consider filtering the signal(s) 
 			before calculating its angle using unwrap._
 		`,
+	}, {
+		name: 'exportUnit',
+		enum: ['radians', 'degrees'],
+		type: 'String',
+		required: false,
+		default: 'radians',
+		description: markdownFmt`
+			Unit for exported angle values. Defaults to ''radians''.
+
+			Segment and segment–segment Euler angles are computed in degrees
+			internally; they are converted to radians when this option is
+			''radians''. Vector-based angles are always computed in radians.
+		`,
 	}],
 })
 @StepClass({
@@ -132,11 +145,12 @@ export enum ExportUnit {
 		last value will be repeated for the shorter inputs to fill the gap._
 		
 		**One input**: ''<segment>''   
-		Computes the euler angle of the specified segment, in degrees.
+		Computes the euler angle of the specified segment. Use ''exportUnit''
+		to choose radians (default) or degrees in the result.
 		
 		**Two inputs**: ''(<segment>, <segment>) | (<vector>, <vector>)''   
 		Given two segments: Computes the relative (euler) angle between 
-		the specified segments, in degrees.
+		the specified segments. Use ''exportUnit'' for radians or degrees.
 		
 		Given two vectors: Computes relative angle between the 
 		specified vectors, in radians.
@@ -181,10 +195,28 @@ export class AngleStep extends BaseStep {
 	rotationOrder: RotationOrder;
 	unwrapIndex: number;
 
-	exportUnit: ExportUnit = ExportUnit.Degrees;
+	exportUnit: ExportUnit;
 
 	init() {
 		super.init();
+
+		this.exportUnit = ExportUnit.Radians;
+
+		const exportUnitInput = this.getPropertyValue<string>('exportUnit', PropertyType.String, false);
+
+		if (exportUnitInput) {
+			const normalized = exportUnitInput.toLowerCase();
+
+			if (normalized === 'degrees' || normalized === 'deg') {
+				this.exportUnit = ExportUnit.Degrees;
+			}
+			else if (normalized === 'radians' || normalized === 'rad') {
+				this.exportUnit = ExportUnit.Radians;
+			}
+			else {
+				throw new ProcessingError(`Unrecognized value for exportUnit: ${ exportUnitInput }.`);
+			}
+		}
 
 		// Handle 'rotationOrder' input
 		const rotOrderInput = this.getPropertyValue<string>('rotationOrder', PropertyType.String, false);
@@ -269,13 +301,14 @@ export class AngleStep extends BaseStep {
 		}
 
 		const result: Signal = this.inputs[0].shallowCopy(false);
+		let computedInDegrees = false;
 
 		if (this.inputs.length === 1) {
 			if (this.inputs[0].type === SignalType.Segment) {
 				const segment: Segment = this.inputs[0].getSegmentValue();
 				const angles: VectorSequence = AngleUtil.computeEulerAngle(segment.rotation, this.rotationOrder);
-				
-				this.exportUnit = ExportUnit.Degrees;
+
+				computedInDegrees = true;
 				result.setValue<VectorSequence>(angles);
 			}
 			else {
@@ -291,7 +324,7 @@ export class AngleStep extends BaseStep {
 				const segment2: Segment = this.inputs[1].getSegmentValue();
 				const angles: VectorSequence = AngleUtil.computeRelativeEulerAngle(segment1.rotation, segment2.rotation, this.rotationOrder);
 
-				this.exportUnit = ExportUnit.Degrees;
+				computedInDegrees = true;
 				result.setValue<VectorSequence>(angles);
 			}
 			// Compute relative angle between two vectors.
@@ -319,7 +352,6 @@ export class AngleStep extends BaseStep {
 				;
 
 				const angle = AngleUtil.computeAngleBetweenVectors(inputs[0], inputs[1])[0];
-				this.exportUnit = ExportUnit.Radians;
 
 				result.setValue<number>(angle);
 			}
@@ -352,8 +384,6 @@ export class AngleStep extends BaseStep {
 				.map(vs => this.applyProjection(vs))
 			;
 
-			this.exportUnit = ExportUnit.Radians;
-
 			if (this.inputs.length === 3) {
 				const v1 = inputs[1].subtract(inputs[0]);
 				const v2 = inputs[1].subtract(inputs[2]);
@@ -384,9 +414,17 @@ export class AngleStep extends BaseStep {
 			result.setValue(Signal.typeFromArray(result.type, signalArray));
 		}
 
-		result.unit = (this.exportUnit === ExportUnit.Degrees) ? Units.fromName('deg') : Units.fromName('rad');
+		this.applyExportUnitToResult(result, computedInDegrees);
 
 		return result;
+	}
+
+	applyExportUnitToResult(result: Signal, computedInDegrees: boolean) {
+		if (computedInDegrees && this.exportUnit === ExportUnit.Radians) {
+			this.convertAngleValuesToRadians(result);
+		}
+
+		result.unit = (this.exportUnit === ExportUnit.Degrees) ? Units.fromName('deg') : Units.fromName('rad');
 	}
 
 	applyProjection(vector: VectorSequence) {
@@ -407,6 +445,30 @@ export class AngleStep extends BaseStep {
 				return new VectorSequence(vector.x, replacement, vector.z);
 			case CoordinatePlane.YZ:
 				return new VectorSequence(replacement, vector.y, vector.z);
+		}
+	}
+
+	convertAngleValuesToRadians(result: Signal) {
+		const degToRad = Math.PI / 180;
+
+		if (result.type === SignalType.Float32Array) {
+			const arr = result.getFloat32ArrayValue();
+
+			for (let i = 0; i < arr.length; i++) {
+				arr[i] *= degToRad;
+			}
+		}
+		else if (result.type === SignalType.Float32) {
+			result.setValue((result.getValue() as number) * degToRad);
+		}
+		else if (result.type === SignalType.VectorSequence) {
+			const vs = result.getVectorSequenceValue();
+
+			for (let i = 0; i < vs.length; i++) {
+				vs.x[i] *= degToRad;
+				vs.y[i] *= degToRad;
+				vs.z[i] *= degToRad;
+			}
 		}
 	}
 }
