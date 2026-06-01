@@ -210,6 +210,7 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 		items: {
 			oneOf: [
 				{ '$ref': '#/$defs/Parameter Node' },
+				{ '$ref': '#/$defs/Phase Node' },
 				{ '$ref': '#/$defs/Space Node' },
 				{ '$ref': '#/$defs/Event Node' },
 				{ '$ref': '#/$defs/Marker Node' },
@@ -225,6 +226,16 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 			/**
 			 * Top-level node properties
 			 */
+			displayName: {
+				title: 'Display name',
+				description: 'The display name of the node.',
+				type: 'string',
+			},
+			description: {
+				title: 'Description',
+				description: 'The description of the node.',
+				type: 'string',
+			},
 			parameter: {
 				title: 'Parameter node',
 				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
@@ -243,6 +254,11 @@ const renderJsonSchema = (globalProps, categories, steps) => {
 			marker: {
 				title: 'Marker node',
 				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
+				type: 'string',
+			},
+			phase: {
+				title: 'Phase node',
+				description: 'A phase defines a time period defined by a start and end event.',
 				type: 'string',
 			},
 			segment: {
@@ -374,6 +390,21 @@ The rotation is based on the average orientation of the segment during a measure
 				},
 				required: ['segment'],
 			},
+			startEvent: {
+				title: 'Start event',
+				description: 'The event that marks the start of the phase.',
+				type: 'string',
+			},
+			endEvent: {
+				title: 'End event',
+				description: 'The event that marks the end of the phase.',
+				type: 'string',
+			},
+			partial: {
+				title: 'Partial phase',
+				description: 'Whether to accept phases without a start or end event at the beginning or end of the measurement.',
+				type: 'boolean',
+			},
 			
 			/**
 			 * Top-level node objects
@@ -383,6 +414,8 @@ The rotation is based on the average orientation of the segment during a measure
 				description: 'A parameter node defines steps used to calculate a value or a sequence of values. The result is exported to the global scope and exported in the resulting JSON file.',
 				type: 'object',
 				properties: {
+					description: { '$ref': '#/$defs/description' },
+					displayName: { '$ref': '#/$defs/displayName' },
 					export: { '$ref': '#/$defs/export' },
 					parameter: { '$ref': '#/$defs/parameter' },
 					steps: { '$ref': '#/$defs/steps' },
@@ -390,6 +423,21 @@ The rotation is based on the average orientation of the segment during a measure
 					set: { '$ref': '#/$defs/set' },
 				},
 				required: ['parameter', 'steps'],
+				additionalProperties: false,
+			},
+			'Phase Node': {
+				title: 'Phase node',
+				description: 'A phase defines a time period defined by a start and end event.',
+				type: 'object',
+				properties: {
+					description: { '$ref': '#/$defs/description' },
+					displayName: { '$ref': '#/$defs/displayName' },
+					phase: { '$ref': '#/$defs/phase' },
+					start: { $ref: '#/$defs/startEvent' },
+					end: { $ref: '#/$defs/endEvent' },
+					partial: { $ref: '#/$defs/partial' },
+				},
+				required: ['phase', 'start', 'end'],
 				additionalProperties: false,
 			},
 			'Space Node': {
@@ -414,6 +462,8 @@ The rotation is based on the average orientation of the segment during a measure
 			'Event Node': {
 				type: 'object',
 				properties: {
+					description: { '$ref': '#/$defs/description' },
+					displayName: { '$ref': '#/$defs/displayName' },
 					event: { '$ref': '#/$defs/event' },
 					export: { '$ref': '#/$defs/export' },
 					steps: { '$ref': '#/$defs/steps' },
@@ -426,6 +476,8 @@ The rotation is based on the average orientation of the segment during a measure
 			'Marker Node': {
 				type: 'object',
 				properties: {
+					description: { '$ref': '#/$defs/description' },
+					displayName: { '$ref': '#/$defs/displayName'},
 					export: { '$ref': '#/$defs/export' },
 					marker: { '$ref': '#/$defs/marker' },
 					steps: { '$ref': '#/$defs/steps' },
@@ -438,6 +490,8 @@ The rotation is based on the average orientation of the segment during a measure
 			'Segment Node': {
 				type: 'object',
 				properties: {
+					description: { '$ref': '#/$defs/description' },
+					displayName: { '$ref': '#/$defs/displayName'},
 					export: { '$ref': '#/$defs/export' },
 					segment: { '$ref': '#/$defs/segment' },
 					steps: { '$ref': '#/$defs/steps' },

@@ -26,28 +26,37 @@ export class Skeleton {
 	 * 
 	 * @returns all extremities of the skeleton.
 	 */
-	getExtremities(ignoreSegments: string[] = []): Segment[] {
-		const parentNames = [];
+	getExtremities(ignoreSegments: string[] = [], preferSegments: string[] = []): Segment[] {
+		// Collect all segment names that are parents of other segments.
+		const parentNames = new Set(
+			Array.from(this._segments.values())
+				.filter(s => s.parent)
+				.map(s => s.parent.name)
+		);
 
-		for (const segment of this._segments.values()) {
-			if (segment.parent) {
-				parentNames.push(segment.parent.name);
-			}
-		}
+		// Find all segment leaves (i.e. segments that are not a parent of any other segment).
+		const leaves = Array.from(this._segments.values()).filter(s => !parentNames.has(s.name));
 
-		const extremities = Array.from(this._segments.values()).filter(s => !parentNames.includes(s.name));
+		// Walk each segment leaf up until we land on a non-ignored segment, these are extremity candidates.
+		const candidates = leaves.map(leaf => {
+			let s = leaf;
+			while (s && ignoreSegments.includes(s.name)) s = s.parent;
+			return s;
+		}).filter(Boolean);
 
-		if (ignoreSegments.length > 0) {
-			for (const extrimity of extremities) {
-				for (const ignoreSegment of ignoreSegments) {
-					if (extrimity.name === ignoreSegment) {
-						extremities.splice(extremities.indexOf(extrimity), 1, extrimity.parent);
-					}
-				}
-			}
-		}
+		if (preferSegments.length === 0) return candidates;
 
-		return extremities;
+		// For both left and right side if any preferred segment is present keep only that one and drop all other candidates
+		return candidates.filter(candidate => {
+			const side = candidate.name.startsWith('Left') ? 'Left'
+				: candidate.name.startsWith('Right') ? 'Right'
+					: null;
+			if (!side) return true;
+
+			const preferred = preferSegments.find(name => name.startsWith(side) && candidates.some(s => s.name === name));
+
+			return !preferred || candidate.name === preferred;
+		});
 	}
 
 	get pose() {
