@@ -88,7 +88,12 @@ export class VectorStep extends BaseStep {
 		if (!refInput) refInput = componentInputs.find(i => i.frameRate);
 		if (!refInput) refInput = componentInputs[0];
 
-		return refInput.shallowCopy(false).setValue(out);
+		const returnSignal = refInput.shallowCopy(false).setValue(out);
+
+		// Assign units to the output signal based on the input units.
+		returnSignal.setUnits([componentInputs[0].getUnit(), componentInputs[1].getUnit(), componentInputs[2].getUnit()]);
+		
+		return returnSignal;
 	}
 
 	protected generateComponent(reference: Float32Array, length: number): Float32Array {
