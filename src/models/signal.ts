@@ -131,6 +131,12 @@ export class Signal implements IDataSequence {
 	private _type: SignalType;
 	private _resultType: ResultType;
 	private _originalSignal: Signal;
+	/**
+	 * Flag to indicate that this signal is a shallow copy of another signal 
+	 * without a value. This is used to determine whether units should be 
+	 * inherited from the original signal or not when setting a value on this signal.
+	 */
+	private _isShallowCopyWithoutValue = false;
 
 	/**
 	 * Generates a Signal with (optional) value, frame rate, and name.
@@ -475,6 +481,9 @@ export class Signal implements IDataSequence {
 
 		// Clear frame map unless new a frame map is set
 		this.frameMap = frameMap;
+
+		// Reset shallow copy flag when setting a new value.
+		this._isShallowCopyWithoutValue = false;
 
 		return this;
 	}
@@ -986,6 +995,9 @@ export class Signal implements IDataSequence {
 		if (keepValue) {
 			out.setValue(this.getValue(), this.frameMap);
 		}
+		else {
+			out._isShallowCopyWithoutValue = true;
+		}
 
 		out.setUnits([...this._units]);
 
@@ -1020,6 +1032,10 @@ export class Signal implements IDataSequence {
 	}
 
 	private syncUnitsLength(): void {
+		if (this._isShallowCopyWithoutValue && this.getValue() === undefined) {
+			return;
+		}
+
 		const length = this.array?.length ?? 0;
 
 		while (this._units.length < length) {
