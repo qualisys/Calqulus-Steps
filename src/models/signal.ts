@@ -11,7 +11,7 @@ import { Segment } from './segment';
 import { PlaneSequence } from './sequence/plane-sequence';
 import { IDataSequence, ISequenceProperty } from './sequence/sequence';
 import { VectorSequence } from './sequence/vector-sequence';
-import { Unit } from './unit';
+import { Unit, Units } from './unit';
 
 /**
  * Holds the value of a specific type for a [[Signal]].
@@ -94,14 +94,8 @@ export class Signal implements IDataSequence {
 	public summarize?: boolean | string;
 	/** The space which the signal will be converted into. */
 	public targetSpace: Space;
-	/**
-	 * The physical unit of the signal values, e.g. `mm`, `rad`, `N`, `Nmm`.
-	 *
-	 * Set by readers for source data and propagated through steps via the
-	 * [[Units]] helper. May be `undefined` when the unit is unknown or
-	 * the signal holds a compound payload (e.g. a `Segment` or `Joint`).
-	 */
-	public unit?: Unit;
+	/** Canonical per-component unit storage, aligned with [[Signal.array]] length. */
+	private _units: (Unit | undefined)[] = [];
 
 	/** 
 	 * The current signal component. Used when this signal stems 
@@ -616,6 +610,142 @@ export class Signal implements IDataSequence {
 	 * Returns the native source unit for the wrapped model value, or for a
 	 * named component when the value exposes [[componentUnits]] on its class.
 	 */
+	/**
+	 * Compatibility facade over [[Signal.getUnit]] / [[Signal.setUnit]].
+	 */
+	get unit(): Unit | undefined {
+		return this.getUnit();
+	}
+
+	set unit(unit: Unit | undefined) {
+		this.setUnit(unit);
+	}
+
+	/**
+	 * Clears all stored units on this signal.
+	 */
+	clearUnits(): this {
+		this._units = [];
+
+		return this;
+	}
+
+	/**
+	 * Returns stored units for each array component, falling back to
+	 * [[Signal.sourceUnit]] when a slot has no explicit unit.
+	 */
+	getUnits(): (Unit | undefined)[] {
+		this.syncUnitsLength();
+
+		return this._units.map((stored, index) => {
+			if (stored !== undefined) {
+				return stored;
+			}
+
+			const component = this.components?.[index];
+
+			if (component) {
+				return this.sourceUnit(component);
+			}
+
+			return this.sourceUnit();
+		});
+	}
+
+	/**
+	 * Returns the unit for one component, or the common unit when all
+	 * components share the same unit.
+	 */
+	getUnit(component?: string | number): Unit | undefined {
+		this.syncUnitsLength();
+
+		const index = this.resolveComponentIndex(component);
+
+		if (index !== undefined) {
+			const stored = this._units[index];
+
+			if (stored !== undefined) {
+				return stored;
+			}
+
+			if (typeof component === 'string') {
+				return this.sourceUnit(component);
+			}
+
+			const name = this.components?.[index];
+
+			if (name) {
+				return this.sourceUnit(name);
+			}
+
+			return this.sourceUnit();
+		}
+
+		const resolved = this.getUnits().filter((unit): unit is Unit => !!unit);
+
+		if (resolved.length === 0) {
+			return this.sourceUnit();
+		}
+
+		if (this._units.length <= 1) {
+			return resolved[0];
+		}
+
+		const first = resolved[0];
+
+		if (resolved.every(unit => Units.equals(unit, first))) {
+			return first;
+		}
+
+		return undefined;
+	}
+
+	/**
+	 * Stores a unit for one component or for the whole signal when no
+	 * component is given.
+	 */
+	setUnit(unit: Unit | undefined, component?: string | number): this {
+		this.syncUnitsLength();
+
+		if (component === undefined) {
+			const length = this.array?.length ?? 0;
+
+			if (length <= 1) {
+				this._units = unit !== undefined ? [unit] : [];
+
+				return this;
+			}
+
+			this._units = Array.from({ length }, () => unit);
+
+			return this;
+		}
+
+		const index = this.resolveComponentIndex(component);
+
+		if (index === undefined || index < 0) {
+			return this;
+		}
+
+		while (this._units.length <= index) {
+			this._units.push(undefined);
+		}
+
+		this._units[index] = unit;
+
+		return this;
+	}
+
+	/**
+	 * Replaces the stored unit list.
+	 */
+	setUnits(units: (Unit | undefined)[]): this {
+		this._units = [...units];
+		this.syncUnitsLength();
+
+		return this;
+	}
+
 	sourceUnit(component?: string): Unit | undefined {
 		const value = this.getValue();
 
@@ -813,6 +943,7 @@ export class Signal implements IDataSequence {
 
 		out.cycles = this.cycles ? Array.from(this.cycles) : undefined;
 		out.setValue(cloneValue(this.getValue()), this.frameMap);
+		out.setUnits([...this._units]);
 
 		if (this.property) {
 			out.property = {
@@ -847,7 +978,6 @@ export class Signal implements IDataSequence {
 		out.originalSignal = this.originalSignal;
 		out.component = this.component;
 		out.property = this.property;
-		out.unit = this.unit;
 
 		if (this._resultType) {
 			out.resultType = this._resultType;
@@ -857,12 +987,50 @@ export class Signal implements IDataSequence {
 			out.setValue(this.getValue(), this.frameMap);
 		}
 
+		out.setUnits([...this._units]);
+
 		return out;
 	}
 
 	/**
 	 * Returns true if this signal's value equals the other signal's value (same type, same elements).
 	 */
+	private resolveComponentIndex(component?: string | number): number | undefined {
+		if (component === undefined) {
+			return undefined;
+		}
+
+		if (typeof component === 'number') {
+			return component;
+		}
+
+		const comps = this.components;
+
+		if (!comps) {
+			return undefined;
+		}
+
+		let index = comps.indexOf(component);
+
+		if (index < 0) {
+			index = comps.indexOf(component.toLowerCase());
+		}
+
+		return index >= 0 ? index : undefined;
+	}
+
+	private syncUnitsLength(): void {
+		const length = this.array?.length ?? 0;
+
+		while (this._units.length < length) {
+			this._units.push(undefined);
+		}
+
+		if (this._units.length > length) {
+			this._units.length = length;
+		}
+	}
+
 	equals(other: Signal): boolean {
 		if (!other) {
 			return false;

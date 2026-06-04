@@ -53,7 +53,7 @@ export class DotProductStep extends BaseStep {
 		const dotProduct = VectorSequence.dot(va, vb);
 		const out = this.inputs[0].shallowCopy(false).setValue(dotProduct);
 
-		out.unit = Units.multiply(a.unit, b.unit);
+		out.setUnit(Units.multiply(a.getUnit(), b.getUnit()));
 
 		return out;
 	}

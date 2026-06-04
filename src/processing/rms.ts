@@ -85,11 +85,14 @@ export class RmsStep extends BaseStep {
 		const returnData = Signal.typeFromArray(this.inputs[0].type, res as TypedArray[]);
 		const out = this.inputs[0].shallowCopy(false).setValue(returnData);
 
-		if (a.unit && b.unit && !Units.equals(a.unit, b.unit)) {
-			out.unit = undefined;
+		const aUnit = a.getUnit();
+		const bUnit = b.getUnit();
+
+		if (aUnit && bUnit && !Units.equals(aUnit, bUnit)) {
+			out.clearUnits();
 		}
 		else {
-			out.unit = a.unit ?? b.unit;
+			out.setUnit(aUnit ?? bUnit);
 		}
 
 		return out;

@@ -6,7 +6,7 @@ import { markdownFmt } from '../../utils/template-literal-tags';
 
 import { BaseAlgorithmStep } from './base-algorithm';
 
-const dimensionless = (): Unit => new Unit({});
+const dimensionless = (): Unit => Units.fromName('unitless');
 const angleRad = (): Unit => Units.fromName('rad');
 
 @StepCategory({

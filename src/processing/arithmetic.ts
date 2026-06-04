@@ -2,7 +2,7 @@ import { Marker } from '../models/marker';
 import { PropertyType } from '../models/property';
 import { Segment } from '../models/segment';
 import { Signal, SignalType } from '../models/signal';
-import { Unit, Units } from '../models/unit';
+import { resolveUnits } from '../utils/unit-resolve';
 import { StepCategory, StepClass } from '../step-registry';
 import { Arithmetic, ArithmeticOp } from '../utils/math/arithmetic';
 import { ProcessingError } from '../utils/processing-error';
@@ -190,8 +190,6 @@ export class BaseArithmeticStep extends BaseStep {
 		const out = referenceInput.shallowCopy(false);
 		const originalType = referenceInput.type;
 
-		out.unit = resolveUnit(this.inputs, operation);
-
 		const outValue = Signal.typeFromArray(originalType, [res] as TypedArray[]);
 
 		switch (originalType) {
@@ -219,6 +217,8 @@ export class BaseArithmeticStep extends BaseStep {
 				}
 			}
 		}
+
+		out.setUnits(resolveUnits(this.inputs, operation));
 
 		return out;
 	};
@@ -296,47 +296,3 @@ export class SubtractionStep extends BaseArithmeticStep {
 	}
 }
 
-/**
- * Computes the resulting unit of an arithmetic operation on multiple
- * signal operands.
- *
- * Add / Subtract: when all operands that have a unit share the same
- * unit, that unit is returned. Mixed units or fully-unknown inputs
- * yield `undefined`.
- *
- * Multiply / Divide: operands with an explicit unit are combined via
- * unit algebra. Operands without a unit are treated as unitless for
- * this step (a literal `2` multiplied into an `mm` signal is still
- * `mm`). If no operand has a unit at all, the result is `undefined`.
- */
-const resolveUnit = (inputs: Signal[], operation: ArithmeticOp): Unit | undefined => {
-	const units = inputs.map(input => input?.unit);
-	const anyDefined = units.some(u => !!u);
-
-	if (!anyDefined) {
-		return undefined;
-	}
-
-	switch (operation) {
-		case ArithmeticOp.Add:
-		case ArithmeticOp.Subtract: {
-			const defined = units.filter((u): u is Unit => !!u);
-			const first = defined[0];
-			const allMatch = defined.every(u => Units.equals(u, first));
-
-			return allMatch ? first : undefined;
-		}
-
-		case ArithmeticOp.Multiply: {
-			return Units.multiply(...units.map(u => u ?? Units.fromName('unitless')));
-		}
-
-		case ArithmeticOp.Divide: {
-			const [first, ...rest] = units.map(u => u ?? Units.fromName('unitless'));
-			return rest.reduce((acc, u) => Units.divide(acc, u), first);
-		}
-
-		default:
-			return undefined;
-	}
-};

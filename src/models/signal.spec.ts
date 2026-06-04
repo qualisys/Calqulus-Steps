@@ -991,3 +991,37 @@ test('Signal.sourceUnit - no model metadata', (t) => {
 	t.is(sig.sourceUnit(), undefined);
 	t.is(sig.sourceUnit('x'), undefined);
 });
+
+test('Signal unit helpers - shallowCopy preserves stored units', (t) => {
+	const sig = new Signal(fakeNestedArray, frameRate);
+
+	sig.setUnits([Units.fromName('mm'), Units.fromName('N'), Units.fromName('s'), Units.fromName('Hz')]);
+
+	const copy = sig.shallowCopy();
+
+	t.deepEqual(copy.getUnits().map(unit => unit?.name), ['mm', 'N', 's', 'Hz']);
+});
+
+test('Signal unit helpers - getUnit by component name and index', (t) => {
+	const sig = new Signal(segment, frameRate);
+
+	sig.setUnit(Units.fromName('deg'), 'rx');
+
+	t.is(sig.getUnit('x')?.name, 'mm');
+	t.is(sig.getUnit(3)?.name, 'deg');
+});
+
+test('Signal unit helpers - homogeneous whole signal', (t) => {
+	const sig = new Signal(f32(1, 2, 3), frameRate);
+
+	sig.setUnit(Units.fromName('mm'));
+
+	t.is(sig.getUnit()?.name, 'mm');
+});
+
+test('Signal unit helpers - mixed whole signal returns undefined', (t) => {
+	const sig = new Signal(segment, frameRate);
+
+	t.is(sig.getUnit(), undefined);
+	t.is(sig.getUnit('z')?.name, 'mm');
+});

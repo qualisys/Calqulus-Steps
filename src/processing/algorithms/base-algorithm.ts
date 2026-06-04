@@ -53,7 +53,7 @@ export class BaseAlgorithmStep extends BaseStep {
 			out.setValue(res);
 		}
 
-		out.unit = this.resultUnit(this.inputs[0].unit);
+		out.setUnits(this.inputs[0].getUnits().map(unit => this.resultUnit(unit)));
 
 		return out;
 	}

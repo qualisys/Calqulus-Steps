@@ -60,14 +60,14 @@ export class DistanceStep extends BaseStep {
 		}
 
 		const out = this.inputs[0].shallowCopy(false).setValue(dist);
-		const aUnit = this.inputs[0]?.unit;
-		const bUnit = this.inputs[1]?.unit;
+		const aUnit = this.inputs[0]?.getUnit();
+		const bUnit = this.inputs[1]?.getUnit();
 
 		if (aUnit && bUnit && !Units.equals(aUnit, bUnit)) {
-			out.unit = undefined;
+			out.clearUnits();
 		}
 		else {
-			out.unit = aUnit ?? bUnit;
+			out.setUnit(aUnit ?? bUnit);
 		}
 
 		return out;

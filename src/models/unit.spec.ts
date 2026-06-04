@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { Unit, Units } from './unit';
+import { Units } from './unit';
 
 test('Units - fromName - returns undefined for empty input', (t) => {
 	t.is(Units.fromName(undefined), undefined);
@@ -131,7 +131,7 @@ test('Units - isAngle and isDimensionless', (t) => {
 	t.true(Units.isAngle(Units.fromName('deg')));
 	t.false(Units.isAngle(Units.fromName('mm')));
 
-	t.true(Units.isDimensionless(new Unit({})));
+	t.true(Units.isDimensionless(Units.fromName('unitless')));
 	t.false(Units.isDimensionless(Units.fromName('mm')));
 });
 

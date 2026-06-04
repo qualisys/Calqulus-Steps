@@ -238,3 +238,17 @@ test('Arithmetic - All inputs missing units yields undefined', async (t) => {
 
 	t.is(res.unit, undefined);
 });
+
+test('Arithmetic - DivisionStep - segment divided by component uses per-component units', async (t) => {
+	const position = new Signal(f32(1, 2, 3));
+
+	position.setUnit(Units.fromName('mm'));
+
+	const step = mockStep(DivisionStep, [segment1, position]);
+	const res = await step.process();
+
+	t.is(res.getUnit('x')?.name, 'unitless');
+	t.is(res.getUnit('y')?.name, 'unitless');
+	t.is(res.getUnit('z')?.name, 'unitless');
+	t.is(res.getUnit('rx')?.name, '1/mm');
+});
