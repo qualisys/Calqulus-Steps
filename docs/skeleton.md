@@ -1,6 +1,6 @@
 # Segment and joint names
 ## Skeleton description
-Two skeletons definitions, m1 and m2, are supported in Calqulus. The first skeleton definition (m1) is used in our QTM workflows that are using the Sports marker set, Theia3D and Prisma Pose 1.0.0 , Qualsiys markerless engine. The table below provides a description of this skeleton definition.
+Two skeletons definitions, m1 and m2, are supported in Calqulus. The first skeleton definition (m1) is used in our QTM workflows that are using the Sports marker set, Theia3D and Prisma Pose 1.0.0, Qualsiys markerless engine. The table below provides a description of this skeleton definition.
 ![skeleton names](images/skeleton-m1.png)  
 
 | Number          | Segment                               | Proximal Joint                                             | Distal Joint |
