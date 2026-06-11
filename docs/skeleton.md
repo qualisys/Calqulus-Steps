@@ -43,4 +43,5 @@ The second skeleton definition (m2) is used in our workflows using Prisma Pose 2
 \* These are virtual joints where the external forces and moments will be applied to one or more segment extremities. It is used during the inverse dynamics procedure. For example in gait, this Contact joint is the center of pressure where the foot is in contact with the force plate. It is useful if one wants to access the force plate data such as center of pressure, force and free moment.  
 \** Please note that:
 - LeftToeBase/RightToeBase have no degree-of-freedom and only a visual purpose with no biomechanical meaning.   
-- LeftHindfoot/RightHindfoot, LeftMidfoot/RightMidfoot, LeftForefoot/RightForefoot and LeftHallux/RightHallux are kinematic-only segments. 
+- LeftHindfoot/RightHindfoot, LeftMidfoot/RightMidfoot, LeftForefoot/RightForefoot and LeftHallux/RightHallux are kinematic-only segments.
+- Proximal and distal joints do not need to be specified because these segments are not used in the inverse dynamics procedure. 
