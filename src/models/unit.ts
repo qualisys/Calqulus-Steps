@@ -51,17 +51,6 @@ export class Unit {
 }
 
 /**
- * A stable signature for an exponent map, used as a lookup key for
- * recognizing well-known unit combinations.
- */
-const signature = (exp: UnitExponents): string => {
-	return Object.keys(exp)
-		.sort()
-		.map(k => `${ k }^${ exp[k] }`)
-		.join('*');
-};
-
-/**
  * Removes zero-valued exponents and returns a new object with sorted keys.
  */
 const cleanExponents = (exp: Record<string, number>): Record<string, number> => {

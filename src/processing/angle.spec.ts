@@ -6,7 +6,6 @@ import { PlaneSequence } from '../models/sequence/plane-sequence';
 import { QuaternionSequence } from '../models/sequence/quaternion-sequence';
 import { VectorSequence } from '../models/sequence/vector-sequence';
 import { Signal } from '../models/signal';
-import { Units } from '../models/unit';
 
 import { AngleStep, AngularVelocityStep, JointAngleStep } from './angle';
 import { PlaneStep } from './plane';

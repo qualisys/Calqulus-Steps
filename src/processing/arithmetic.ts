@@ -295,4 +295,3 @@ export class SubtractionStep extends BaseArithmeticStep {
 		return this.calculate(ArithmeticOp.Subtract);
 	}
 }
-
