@@ -538,10 +538,10 @@ test('AngleStep - unwrap - invalid input', async (t) => {
 	t.throws(() => { mockStep(AngleStep, [segWrap1], { unwrap: 'test' }); });
 });
 
-test('AngleStep - unit - segment input defaults to rad', async (t) => {
+test('AngleStep - unit - segment input defaults to deg', async (t) => {
 	const res = await mockStep(AngleStep, [seg1]).process();
 
-	t.is(res.unit?.name, 'rad');
+	t.is(res.unit?.name, 'deg');
 });
 
 test('AngleStep - unit - segment input with exportUnit degrees tagged as deg', async (t) => {
@@ -550,22 +550,22 @@ test('AngleStep - unit - segment input with exportUnit degrees tagged as deg', a
 	t.is(res.unit?.name, 'deg');
 });
 
-test('AngleStep - unit - segment vs segment defaults to rad', async (t) => {
+test('AngleStep - unit - segment vs segment defaults to deg', async (t) => {
 	const res = await mockStep(AngleStep, [seg1, seg2]).process();
 
-	t.is(res.unit?.name, 'rad');
+	t.is(res.unit?.name, 'deg');
 });
 
-test('AngleStep - unit - vector vs vector tagged as rad', async (t) => {
+test('AngleStep - unit - vector vs vector defaults to deg', async (t) => {
 	const res = await mockStep(AngleStep, [vs1x, vs2x]).process();
 
-	t.is(res.unit?.name, 'rad');
+	t.is(res.unit?.name, 'deg');
 });
 
-test('AngleStep - unit - three vectors tagged as rad', async (t) => {
+test('AngleStep - unit - three vectors defaults to deg', async (t) => {
 	const res = await mockStep(AngleStep, [vs1x, vs2x, vs3x]).process();
 
-	t.is(res.unit?.name, 'rad');
+	t.is(res.unit?.name, 'deg');
 });
 
 test('AngularVelocityStep - unit tagged as deg/s', async (t) => {
@@ -578,17 +578,17 @@ test('AngularVelocityStep - unit tagged as deg/s', async (t) => {
 	t.is(res.unit?.name, 'deg/s');
 });
 
-test('JointAngleStep - unit defaults to rad', async (t) => {
+test('JointAngleStep - unit defaults to deg', async (t) => {
 	const res = await mockStep(JointAngleStep, [seg1]).process();
 
-	t.is(res.unit?.name, 'rad');
+	t.is(res.unit?.name, 'deg');
 });
 
-test('AngleStep - segment euler values are radians by default', async (t) => {
-	const resDeg = await mockStep(AngleStep, [seg1], { exportUnit: 'degrees' }).process();
-	const resRad = await mockStep(AngleStep, [seg1]).process();
+test('AngleStep - segment euler values are degrees by default', async (t) => {
+	const resDeg = await mockStep(AngleStep, [seg1]).process();
+	const resRad = await mockStep(AngleStep, [seg1], { exportUnit: 'radians' }).process();
 	const degToRad = Math.PI / 180;
 
-	t.is(resRad.unit?.name, 'rad');
+	t.is(resDeg.unit?.name, 'deg');
 	t.assert(eqish(resDeg.getVectorSequenceValue().x[0] * degToRad, resRad.getVectorSequenceValue().x[0], 1 / 10000));
 });

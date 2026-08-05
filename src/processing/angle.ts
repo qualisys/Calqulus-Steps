@@ -123,9 +123,9 @@ export enum ExportUnit {
 		enum: ['radians', 'degrees'],
 		type: 'String',
 		required: false,
-		default: 'radians',
+		default: 'degrees',
 		description: markdownFmt`
-			Unit for exported angle values. Defaults to ''radians''.
+			Unit for exported angle values. Defaults to ''degrees''.
 
 			Segment and segment–segment Euler angles are computed in degrees
 			internally; they are converted to radians when this option is
@@ -200,7 +200,7 @@ export class AngleStep extends BaseStep {
 	init() {
 		super.init();
 
-		this.exportUnit = ExportUnit.Radians;
+		this.exportUnit = ExportUnit.Degrees;
 
 		const exportUnitInput = this.getPropertyValue<string>('exportUnit', PropertyType.String, false);
 
