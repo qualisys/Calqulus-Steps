@@ -94,6 +94,19 @@ The following options are available on all Angle steps.
 > introduce unexpected artifacts. Please consider filtering the signal(s) 
 > before calculating its angle using unwrap._
 >
+> #### `exportUnit`
+>
+> **Type:** `String`  
+> **Required:** `False`  
+> **Allowed values:** `radians | degrees`  
+> **Default value:** `degrees`  
+>
+> Unit for exported angle values. Defaults to `degrees`.
+>
+> Segment and segment–segment Euler angles are computed in degrees
+> internally; they are converted to radians when this option is
+> `radians`. Vector-based angles are always computed in radians.
+>
 >
 
 
@@ -123,6 +136,7 @@ The following options are available on all Angle steps.
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
 > * [unwrap](#unwrap)
+> * [exportUnit](#exportunit)
 >
 >
 ></details>
@@ -149,11 +163,12 @@ lengths, the returning array will be the maximum length and the
 last value will be repeated for the shorter inputs to fill the gap._
 
 **One input**: `<segment>`   
-Computes the euler angle of the specified segment, in degrees.
+Computes the euler angle of the specified segment. Use `exportUnit`
+to choose radians (default) or degrees in the result.
 
 **Two inputs**: `(<segment>, <segment>) | (<vector>, <vector>)`   
 Given two segments: Computes the relative (euler) angle between 
-the specified segments, in degrees.
+the specified segments. Use `exportUnit` for radians or degrees.
 
 Given two vectors: Computes relative angle between the 
 specified vectors, in radians.
@@ -228,6 +243,7 @@ of the input signals._
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
 > * [unwrap](#unwrap)
+> * [exportUnit](#exportunit)
 >
 >
 ></details>
@@ -304,6 +320,7 @@ A second example when using the Euler/Cardan sequence
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
 > * [unwrap](#unwrap)
+> * [exportUnit](#exportunit)
 >
 >
 ></details>
@@ -365,6 +382,7 @@ three or four inputs.
 > * [project](#project)
 > * [rotationOrder](#rotationorder)
 > * [unwrap](#unwrap)
+> * [exportUnit](#exportunit)
 >
 >
 ></details>
